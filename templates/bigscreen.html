@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3515县域大屏 - 雨虹智慧门店</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        :root { --primary: #1677FF; --yuhong: #E8392B; --gold: #fa8c16; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0a1628; color: #e0e6ed; font-family: -apple-system, "PingFang SC", sans-serif; overflow-x: hidden; }
+        .navbar { background: linear-gradient(135deg, #0d1f3c 0%, #1a2f52 100%); border-bottom: 1px solid rgba(22,119,255,0.3); }
+        .navbar-brand { color: #fff !important; font-weight: 700; }
+        .navbar .badge { background: var(--gold); }
+        .bigscreen-header { text-align: center; padding: 20px 0; background: linear-gradient(180deg, rgba(22,119,255,0.15) 0%, transparent 100%); }
+        .bigscreen-header h2 { font-size: 28px; color: #fff; letter-spacing: 4px; }
+        .bigscreen-header .subtitle { color: rgba(255,255,255,0.5); font-size: 13px; margin-top: 4px; }
+        .kpi-row { display: flex; justify-content: center; gap: 30px; margin: 20px 0; flex-wrap: wrap; }
+        .kpi-item { text-align: center; }
+        .kpi-value { font-size: 36px; font-weight: 800; background: linear-gradient(135deg, #1677FF, #00d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .kpi-label { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+        .panel { background: rgba(13,31,60,0.6); border: 1px solid rgba(22,119,255,0.2); border-radius: 12px; padding: 20px; margin-bottom: 16px; backdrop-filter: blur(10px); }
+        .panel-title { font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+        .panel-title::before { content: ""; width: 3px; height: 14px; background: var(--primary); border-radius: 2px; }
+        .county-card { background: rgba(22,119,255,0.08); border: 1px solid rgba(22,119,255,0.15); border-radius: 8px; padding: 12px; margin-bottom: 8px; transition: all 0.3s; cursor: pointer; }
+        .county-card:hover { background: rgba(22,119,255,0.15); border-color: var(--primary); transform: translateX(4px); }
+        .county-name { font-weight: 600; color: #fff; font-size: 14px; }
+        .county-stat { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+        .ai-insight { background: linear-gradient(135deg, rgba(22,119,255,0.1), rgba(0,212,255,0.05)); border: 1px solid rgba(0,212,255,0.2); border-radius: 12px; padding: 16px; }
+        .ai-insight-title { color: #00d4ff; font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+        .ai-insight-text { color: rgba(255,255,255,0.7); font-size: 13px; line-height: 1.8; }
+        .progress-bar-container { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; margin-top: 4px; }
+        .progress-bar-fill { height: 100%; border-radius: 3px; transition: width 1s; }
+        .scan-demo { text-align: center; padding: 20px; }
+        .scan-code { display: inline-block; width: 120px; height: 120px; background: #fff; border-radius: 12px; margin: 10px 0; display: flex; align-items: center; justify-content: center; font-size: 60px; }
+        .scan-text { color: rgba(255,255,255,0.6); font-size: 12px; }
+        .highlight-box { background: rgba(250,140,22,0.1); border: 1px solid rgba(250,140,22,0.3); border-radius: 8px; padding: 10px 14px; margin: 8px 0; font-size: 13px; color: var(--gold); }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="/"><span style="color:var(--yuhong);">雨虹</span> 3515县域智慧运营大屏</a>
+            {% if mock_mode %}<span class="badge">Demo</span>{% endif %}
+            <span style="color:rgba(255,255,255,0.3); font-size:13px;">与东方雨虹"3515计划"战略绑定</span>
+        </div>
+    </nav>
+
+    <div class="bigscreen-header">
+        <h2>千万县城 · 万亿商机 · AI赋能</h2>
+        <div class="subtitle">基于飞书AI的县域建材零售智慧运营平台 | 2026 AI先锋未来人才大赛</div>
+        <div class="kpi-row">
+            <div class="kpi-item">
+                <div class="kpi-value">507</div>
+                <div class="kpi-label">目标县城</div>
+            </div>
+            <div class="kpi-item">
+                <div class="kpi-value">¥50亿+</div>
+                <div class="kpi-label">目标产值</div>
+            </div>
+            <div class="kpi-item">
+                <div class="kpi-value">29万+</div>
+                <div class="kpi-label">覆盖网点</div>
+            </div>
+            <div class="kpi-item">
+                <div class="kpi-value">8亿</div>
+                <div class="kpi-label">县域人口</div>
+            </div>
+            <div class="kpi-item">
+                <div class="kpi-value">10分钟</div>
+                <div class="kpi-label">AI赋能上手</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid px-4 pb-4">
+        <div class="row g-3">
+            <!-- 左侧：县域门店排行 -->
+            <div class="col-lg-4">
+                <div class="panel">
+                    <div class="panel-title">🏆 县域门店运营排行TOP10</div>
+                    <div id="countyList"></div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-title">📦 县域库存健康度</div>
+                    <canvas id="inventoryChart" height="120"></canvas>
+                </div>
+            </div>
+
+            <!-- 中间：核心指标 -->
+            <div class="col-lg-4">
+                <div class="panel">
+                    <div class="panel-title">📊 3515计划进度看板</div>
+                    <div style="margin-bottom:12px;">
+                        <div class="d-flex justify-content-between" style="font-size:13px;">
+                            <span>已覆盖县城</span><span style="color:#00d4ff;">128 / 507</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width:25.2%; background:linear-gradient(90deg,#1677FF,#00d4ff);"></div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:12px;">
+                        <div class="d-flex justify-content-between" style="font-size:13px;">
+                            <span>AI赋能门店</span><span style="color:#00d4ff;">1,247 / 29,000</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width:4.3%; background:linear-gradient(90deg,#fa8c16,#ffd666);"></div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:12px;">
+                        <div class="d-flex justify-content-between" style="font-size:13px;">
+                            <span>巡检覆盖率</span><span style="color:#00d4ff;">95%</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width:95%; background:linear-gradient(90deg,#52c41a,#95de64);"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="d-flex justify-content-between" style="font-size:13px;">
+                            <span>AI导购覆盖率</span><span style="color:#00d4ff;">68%</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width:68%; background:linear-gradient(90deg,#1677FF,#69b1ff);"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-title">📈 县域销售增长趋势</div>
+                    <canvas id="salesTrendChart" height="140"></canvas>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-title">💡 "一店一码"扫码赋能</div>
+                    <div class="scan-demo">
+                        <div class="scan-code">📱</div>
+                        <div class="scan-text">县域经销商扫码即用<br>飞书aily智能体 + 多维表格看板</div>
+                        <div class="highlight-box" style="text-align:left; margin-top:12px;">
+                            ⚡ 三零理念：零硬件 · 零代码 · 零培训成本
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧：AI洞察 -->
+            <div class="col-lg-4">
+                <div class="panel">
+                    <div class="panel-title">🤖 AI经营洞察</div>
+                    <div class="ai-insight">
+                        <div class="ai-insight-title">⚡ 飞书aily智能体实时分析</div>
+                        <div class="ai-insight-text" id="aiInsight">
+                            <span style="color:#00d4ff;">[县域机会识别]</span><br>
+                            河南新郑县本月销售额环比增长35%，但库存周转天数高达45天（行业平均28天）。<br><br>
+                            <span style="color:#00d4ff;">[AI建议]</span><br>
+                            1. 该县瓷砖胶库存积压，建议启动"买防水送瓷砖胶"组合促销<br>
+                            2. SBS卷材库存预警，建议立即补货80卷<br>
+                            3. 该县工长复购率仅12%，建议启用aily智能体自动跟进
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-info btn-sm w-100 mt-2" onclick="refreshInsight()">刷新AI洞察</button>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-title">🎯 四大模块赋能效果</div>
+                    <div style="font-size:13px;">
+                        <div class="d-flex justify-content-between py-2 border-bottom border-secondary">
+                            <span>🔍 门店巡检效率</span>
+                            <span style="color:#52c41a;">↑ 50%</span>
+                        </div>
+                        <div class="d-flex justify-content-between py-2 border-bottom border-secondary">
+                            <span>🤖 AI导购新员工上手</span>
+                            <span style="color:#52c41a;">30天→7天</span>
+                        </div>
+                        <div class="d-flex justify-content-between py-2 border-bottom border-secondary">
+                            <span>📊 经营决策响应</span>
+                            <span style="color:#52c41a;">2周→实时</span>
+                        </div>
+                        <div class="d-flex justify-content-between py-2 border-bottom border-secondary">
+                            <span>💬 私域客户复购率</span>
+                            <span style="color:#52c41a;">↑ 15%</span>
+                        </div>
+                        <div class="d-flex justify-content-between py-2">
+                            <span>🏪 督导巡检覆盖率</span>
+                            <span style="color:#52c41a;">60%→95%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-title">🔮 飞书AI能力矩阵</div>
+                    <div style="font-size:12px;">
+                        <div class="d-flex justify-content-between py-1">
+                            <span>aily智能体（AI导购+私域）</span>
+                            <span class="badge bg-info">M3</span>
+                        </div>
+                        <div class="d-flex justify-content-between py-1">
+                            <span>多维表格AI（运营分析）</span>
+                            <span class="badge bg-info">M3</span>
+                        </div>
+                        <div class="d-flex justify-content-between py-1">
+                            <span>妙搭低代码（巡检应用）</span>
+                            <span class="badge bg-info">M3</span>
+                        </div>
+                        <div class="d-flex justify-content-between py-1">
+                            <span>智能会议纪要（督导复盘）</span>
+                            <span class="badge bg-success">M4</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 县域门店排行
+        const counties = [
+            {name: "河南新郑市", sales: 86.5, growth: 35, ai: true, rank: 1},
+            {name: "山东沂南县", sales: 78.2, growth: 28, ai: true, rank: 2},
+            {name: "四川广安市", sales: 72.8, growth: 22, ai: true, rank: 3},
+            {name: "湖南邵东市", sales: 65.3, growth: 18, ai: true, rank: 4},
+            {name: "河北正定县", sales: 58.7, growth: 15, ai: false, rank: 5},
+            {name: "安徽肥东县", sales: 52.1, growth: 12, ai: false, rank: 6},
+            {name: "江苏邳州市", sales: 48.6, growth: 10, ai: true, rank: 7},
+            {name: "浙江安吉县", sales: 45.2, growth: 8, ai: false, rank: 8},
+            {name: "湖北仙桃市", sales: 41.8, growth: 6, ai: false, rank: 9},
+            {name: "江西丰城市", sales: 38.5, growth: 4, ai: false, rank: 10}
+        ];
+
+        let countyHTML = '';
+        counties.forEach(c => {
+            const aiBadge = c.ai ? '<span class="badge bg-info ms-1" style="font-size:10px;">AI</span>' : '';
+            countyHTML += `<div class="county-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="county-name">${c.rank}. ${c.name}</span>${aiBadge}
+                    </div>
+                    <div style="color:${c.growth > 15 ? '#52c41a' : '#fa8c16'}; font-size:13px; font-weight:600;">
+                        ${c.growth > 0 ? '↑' : ''} ${c.growth}%
+                    </div>
+                </div>
+                <div class="county-stat">
+                    <span>月销售额: ¥${c.sales}万</span>
+                    <span>${c.ai ? '已AI赋能' : '待AI赋能'}</span>
+                </div>
+            </div>`;
+        });
+        document.getElementById('countyList').innerHTML = countyHTML;
+
+        // 库存健康度图
+        new Chart(document.getElementById('inventoryChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['正常', '预警', '紧急', '积压'],
+                datasets: [{
+                    data: [45, 25, 15, 15],
+                    backgroundColor: ['#52c41a', '#fa8c16', '#ff4d4f', '#1677FF'],
+                    borderWidth: 0
+                }]
+            },
+            options: { plugins: { legend: { position: 'bottom', labels: { color: '#e0e6ed', font: { size: 11 } } } } }
+        });
+
+        // 销售趋势图
+        const months = ['1月','2月','3月','4月','5月','6月'];
+        new Chart(document.getElementById('salesTrendChart'), {
+            type: 'line',
+            data: {
+                labels: months,
+                datasets: [
+                    { label: 'AI赋能门店', data: [120, 145, 180, 220, 268, 320], borderColor: '#00d4ff', backgroundColor: 'rgba(0,212,255,0.1)', fill: true, tension: 0.3 },
+                    { label: '未赋能门店', data: [100, 98, 102, 95, 92, 88], borderColor: 'rgba(255,255,255,0.3)', borderDash: [5,5], fill: false, tension: 0.3 }
+                ]
+            },
+            options: {
+                plugins: { legend: { labels: { color: '#e0e6ed', font: { size: 11 } } } },
+                scales: {
+                    x: { ticks: { color: 'rgba(255,255,255,0.4)' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                    y: { ticks: { color: 'rgba(255,255,255,0.4)' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                }
+            }
+        });
+
+        // AI洞察刷新
+        const insights = [
+            `[县域机会识别]\n河南新郑县本月销售额环比增长35%，但库存周转天数高达45天（行业平均28天）。\n\n[AI建议]\n1. 该县瓷砖胶库存积压，建议启动"买防水送瓷砖胶"组合促销\n2. SBS卷材库存预警，建议立即补货80卷\n3. 该县工长复购率仅12%，建议启用aily智能体自动跟进`,
+            `[督导效率分析]\n华北区域128家县域门店中，AI巡检覆盖率已达95%，但仍有6家门店连续3个月未巡检。\n\n[AI建议]\n1. 对6家未巡检门店自动生成督办任务\n2. 建议采用飞书妙搭移动巡检，店长自拍上传即可\n3. 对巡检得分低于80分的门店启动整改流程`,
+            `[客户洞察]\n山东沂南县工长"虹哥汇"注册数达342人，但活跃率仅28%。\n\n[AI建议]\n1. 启用aily智能体对沉默工长自动发送个性化跟进消息\n2. 推送"雨虹施工方案知识库"提升工长专业能力\n3. 设置复购优惠券，预计可提升活跃率至45%`
+        ];
+        let insightIndex = 0;
+        function refreshInsight() {
+            insightIndex = (insightIndex + 1) % insights.length;
+            document.getElementById('aiInsight').textContent = insights[insightIndex];
+        }
+    </script>
+</body>
+</html>

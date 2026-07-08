@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雨虹智慧门店运营助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        :root { --primary: #1677FF; --yuhong: #E8392B; }
+        body { background: #f0f2f5; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+        .navbar { background: linear-gradient(135deg, var(--primary) 0%, #0958d9 100%); }
+        .navbar-brand { color: #fff !important; font-weight: 700; }
+        .stat-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: transform 0.2s; }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+        .stat-card .icon { font-size: 32px; margin-bottom: 8px; }
+        .stat-card .value { font-size: 28px; font-weight: 700; color: #1a1a1a; }
+        .stat-card .label { font-size: 13px; color: #909399; }
+        .module-card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); height: 100%; transition: all 0.3s; cursor: pointer; border: 2px solid transparent; }
+        .module-card:hover { border-color: var(--primary); transform: translateY(-4px); box-shadow: 0 8px 24px rgba(22,119,255,0.15); }
+        .module-card .module-icon { font-size: 40px; margin-bottom: 12px; }
+        .module-card h5 { color: #1a1a1a; font-weight: 700; }
+        .module-card p { color: #606266; font-size: 14px; line-height: 1.8; }
+        .badge-mock { background: #fff7e6; color: #fa8c16; font-size: 11px; padding: 3px 8px; border-radius: 4px; }
+        .section-title { font-size: 18px; font-weight: 700; margin: 24px 0 16px; color: #1a1a1a; border-left: 4px solid var(--primary); padding-left: 12px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <span style="color:#E8392B;">雨虹</span> 智慧门店运营助手
+            </a>
+            <div class="d-flex align-items-center">
+                {% if mock_mode %}
+                <span class="badge-mock">Demo模拟模式</span>
+                {% endif %}
+                <span class="text-white-50 ms-2" style="font-size:13px;">2026 AI先锋未来人才大赛</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <!-- 数据概览 -->
+        <div class="section-title">数据概览</div>
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="stat-card text-center">
+                    <div class="icon">🏪</div>
+                    <div class="value" id="storeCount">5</div>
+                    <div class="label">覆盖门店</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card text-center">
+                    <div class="icon">📦</div>
+                    <div class="value" id="productCount">8</div>
+                    <div class="label">产品SKU</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card text-center">
+                    <div class="icon">✅</div>
+                    <div class="value" id="passRate">87%</div>
+                    <div class="label">巡检通过率</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card text-center">
+                    <div class="icon">⚡</div>
+                    <div class="value">50%+</div>
+                    <div class="label">效率提升</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 四大核心模块 -->
+        <div class="section-title">四大核心模块</div>
+        <div class="row g-3 mb-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="module-card" onclick="location.href='/inspection'">
+                    <div class="module-icon">🔍</div>
+                    <h5>门店巡检</h5>
+                    <p>AI图像识别 + 移动巡检表单<br>自动检测陈列合规性<br>巡检结果实时同步</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="module-card" onclick="location.href='/guide'">
+                    <div class="module-icon">🤖</div>
+                    <h5>AI导购</h5>
+                    <p>飞书aily产品知识智能体<br>7×24小时专业咨询<br>智能产品推荐</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="module-card" onclick="showDashboard()">
+                    <div class="module-icon">📊</div>
+                    <h5>门店运营</h5>
+                    <p>销售/库存/客流数据分析<br>多维表格AI洞察报告<br>经营优化建议</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="module-card" onclick="showCustomer()">
+                    <div class="module-icon">💬</div>
+                    <h5>私域维护</h5>
+                    <p>客户画像自动构建<br>AI话术推荐与跟进<br>复购预测与分层</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3515大屏入口 -->
+        <div class="section-title">🎯 亮点功能：3515县域智慧运营大屏</div>
+        <div class="stat-card mb-4" style="background: linear-gradient(135deg, #0a1628 0%, #1a2f52 100%); color: #fff; border: 1px solid rgba(22,119,255,0.3); cursor: pointer;" onclick="location.href='/bigscreen'">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h5 style="color: #00d4ff; margin-bottom: 8px;">🏙️ 千万县城 · 万亿商机 · AI赋能</h5>
+                    <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin: 0;">
+                        与东方雨虹"3515计划"507城战略直接绑定<br>
+                        县域门店排行 · AI经营洞察 · 一店一码扫码赋能 · 三零理念（零硬件/零代码/零培训）
+                    </p>
+                </div>
+                <div style="font-size: 40px; opacity: 0.3;">→</div>
+            </div>
+        </div>
+
+        <!-- 运营看板 -->
+        <div class="section-title">运营数据看板（示例门店：北京总部店）</div>
+        <div class="row g-3">
+            <div class="col-lg-8">
+                <div class="stat-card">
+                    <h6 class="mb-3">📈 月销售趋势</h6>
+                    <canvas id="salesChart" height="100"></canvas>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="stat-card">
+                    <h6 class="mb-3">📦 库存预警</h6>
+                    <div id="inventoryAlerts">
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                            <span>SBS卷材</span>
+                            <span class="badge bg-danger">紧急</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                            <span>密封胶</span>
+                            <span class="badge bg-warning text-dark">预警</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                            <span>瓷砖胶</span>
+                            <span class="badge bg-info text-dark">积压</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2">
+                            <span>JS涂料</span>
+                            <span class="badge bg-success">正常</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI洞察报告 -->
+        <div class="section-title">AI经营洞察报告</div>
+        <div class="stat-card mb-4">
+            <div id="insightReport" class="p-3" style="white-space: pre-wrap; font-size: 14px; line-height: 2; color: #606266;">
+                点击下方按钮生成AI经营洞察报告...
+            </div>
+            <button class="btn btn-primary" onclick="generateInsight()">生成AI洞察报告</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 销售趋势图
+        const ctx = document.getElementById('salesChart').getContext('2d');
+        const salesChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 30}, (_, i) => `${i+1}日`),
+                datasets: [{
+                    label: '日销售额(元)',
+                    data: Array.from({length: 30}, () => Math.floor(Math.random() * 17000) + 8000),
+                    borderColor: '#1677FF',
+                    backgroundColor: 'rgba(22,119,255,0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        });
+
+        function showDashboard() { alert('门店运营看板已在上方展示，包含销售趋势、库存预警和AI洞察报告'); }
+        function showCustomer() { alert('私域客户维护模块：客户画像、AI话术推荐、复购预测等功能可通过API调用'); }
+
+        async function generateInsight() {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = '生成中...';
+            try {
+                const resp = await fetch('/api/operation/insight/BJ-001');
+                const data = await resp.json();
+                document.getElementById('insightReport').textContent = data.data.report_content;
+            } catch(e) {
+                document.getElementById('insightReport').textContent = '报告生成失败: ' + e.message;
+            }
+            btn.disabled = false;
+            btn.textContent = '重新生成';
+        }
+    </script>
+</body>
+</html>

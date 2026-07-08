@@ -1,0 +1,62 @@
+[
+  {
+    "id": "BJ-001",
+    "name": "雨虹北京总部店",
+    "region": "华北",
+    "address": "北京市亦庄经济技术开发区科创九街19号院",
+    "type": "品牌专卖店",
+    "area_sqm": 300,
+    "staff_count": 5,
+    "monthly_sales": 380000,
+    "open_date": "2025-12-31",
+    "status": "运营中"
+  },
+  {
+    "id": "SH-003",
+    "name": "雨虹上海南翔服务商超店",
+    "region": "华东",
+    "address": "上海市嘉定区南翔大润发",
+    "type": "商超店",
+    "area_sqm": 80,
+    "staff_count": 3,
+    "monthly_sales": 150000,
+    "open_date": "2025-09-27",
+    "status": "运营中"
+  },
+  {
+    "id": "ZZ-015",
+    "name": "雨虹郑州新郑县域店",
+    "region": "华北",
+    "address": "河南省郑州市新郑市",
+    "type": "分销网点",
+    "area_sqm": 120,
+    "staff_count": 2,
+    "monthly_sales": 85000,
+    "open_date": "2026-04-28",
+    "status": "运营中"
+  },
+  {
+    "id": "GZ-007",
+    "name": "雨虹广州天河专卖店",
+    "region": "华南",
+    "address": "广东省广州市天河区",
+    "type": "品牌专卖店",
+    "area_sqm": 200,
+    "staff_count": 4,
+    "monthly_sales": 220000,
+    "open_date": "2025-06-15",
+    "status": "运营中"
+  },
+  {
+    "id": "CD-004",
+    "name": "雨虹成都锦江社区店",
+    "region": "华西",
+    "address": "四川省成都市锦江区",
+    "type": "社区店",
+    "area_sqm": 100,
+    "staff_count": 3,
+    "monthly_sales": 120000,
+    "open_date": "2026-01-10",
+    "status": "运营中"
+  }
+]

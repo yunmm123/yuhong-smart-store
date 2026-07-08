@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>门店巡检 - 雨虹智慧门店</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root { --primary: #1677FF; }
+        body { background: #f0f2f5; font-family: -apple-system, "PingFang SC", sans-serif; }
+        .navbar { background: linear-gradient(135deg, var(--primary) 0%, #0958d9 100%); }
+        .navbar-brand { color: #fff !important; font-weight: 700; }
+        .card { border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .score-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+        .score-item:last-child { border-bottom: none; }
+        .score-bar { width: 100%; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; }
+        .score-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+        .history-item { padding: 12px; border-radius: 8px; background: #f8f9fa; margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/"><span style="color:#E8392B;">雨虹</span> 门店巡检</a>
+            {% if mock_mode %}<span class="badge bg-warning text-dark">Demo</span>{% endif %}
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <div class="row g-3">
+            <!-- 巡检表单 -->
+            <div class="col-lg-7">
+                <div class="card p-4">
+                    <h5 class="mb-3">📋 门店巡检表单</h5>
+                    <div class="mb-3">
+                        <label class="form-label">门店编号</label>
+                        <select class="form-select" id="storeSelect">
+                            <option value="BJ-001">BJ-001 雨虹北京总部店</option>
+                            <option value="SH-003">SH-003 雨虹上海南翔店</option>
+                            <option value="ZZ-015">ZZ-015 雨虹郑州县域店</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">巡检人</label>
+                        <input type="text" class="form-control" id="inspector" value="张督导">
+                    </div>
+
+                    <div id="scoreItems"></div>
+
+                    <div class="mb-3">
+                        <label class="form-label">备注</label>
+                        <textarea class="form-control" id="notes" rows="2" placeholder="巡检备注..."></textarea>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary flex-grow-1" onclick="submitInspection()">提交巡检结果</button>
+                        <button class="btn btn-outline-primary" onclick="aiDetect()">AI检测陈列</button>
+                    </div>
+                    <div id="submitResult" class="mt-3"></div>
+                </div>
+            </div>
+
+            <!-- 巡检历史与AI报告 -->
+            <div class="col-lg-5">
+                <div class="card p-4 mb-3">
+                    <h5 class="mb-3">📊 巡检分析报告</h5>
+                    <div id="inspectionReport">
+                        <button class="btn btn-outline-primary w-100" onclick="loadReport()">生成分析报告</button>
+                    </div>
+                </div>
+
+                <div class="card p-4">
+                    <h5 class="mb-3">📝 巡检历史</h5>
+                    <div id="historyList">
+                        <button class="btn btn-outline-primary w-100 mb-2" onclick="loadHistory()">加载历史记录</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const items = [
+            {id: "display", name: "产品陈列标准", max: 20},
+            {id: "cleanliness", name: "门店卫生状况", max: 15},
+            {id: "pricing", name: "价签与促销物料", max: 15},
+            {id: "inventory", name: "库存与样品展示", max: 20},
+            {id: "service", name: "服务规范", max: 15},
+            {id: "safety", name: "安全合规", max: 15}
+        ];
+
+        // 渲染评分项
+        items.forEach(item => {
+            document.getElementById('scoreItems').innerHTML += `
+                <div class="mb-3">
+                    <label class="form-label">${item.name} <small class="text-muted">(满分${item.max})</small></label>
+                    <input type="number" class="form-control" id="score_${item.id}" min="0" max="${item.max}" value="${Math.floor(item.max * 0.85)}">
+                </div>`;
+        });
+
+        async function submitInspection() {
+            const scores = {};
+            items.forEach(item => { scores[item.id] = parseInt(document.getElementById(`score_${item.id}`).value); });
+            const data = {
+                store_id: document.getElementById('storeSelect').value,
+                inspector: document.getElementById('inspector').value,
+                scores: scores,
+                notes: document.getElementById('notes').value
+            };
+            const resp = await fetch('/api/inspection/submit', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)});
+            const result = await resp.json();
+            const r = result.data;
+            document.getElementById('submitResult').innerHTML = `
+                <div class="alert ${r.是否通过 === '通过' ? 'alert-success' : 'alert-danger'}">
+                    <strong>巡检结果: ${r.巡检结果}</strong> (总分: ${r.总分}/100)<br>
+                    ${r.是否通过 === '通过' ? '✅ 巡检通过' : '❌ 巡检未通过'}<br>
+                    <small>提交时间: ${r.巡检时间}</small>
+                </div>`;
+        }
+
+        async function aiDetect() {
+            const resp = await fetch('/api/inspection/ai-detect', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({image_description: '门店陈列照片'})});
+            const result = await resp.json();
+            const d = result.data;
+            let html = '<div class="alert alert-info"><strong>AI检测结果</strong><br>';
+            html += `货架利用率: ${(d.shelf_utilization*100).toFixed(0)}%<br>`;
+            html += `价签覆盖率: ${(d.price_tag_coverage*100).toFixed(0)}%<br>`;
+            html += `清洁度评分: ${(d.cleanliness_score*100).toFixed(0)}%<br>`;
+            html += `合规状态: <strong>${d.overall_compliance}</strong><br>`;
+            html += `建议: ${d.ai_suggestion}</div>`;
+            document.getElementById('submitResult').innerHTML = html;
+        }
+
+        async function loadHistory() {
+            const storeId = document.getElementById('storeSelect').value;
+            const resp = await fetch(`/api/inspection/history/${storeId}`);
+            const result = await resp.json();
+            let html = '';
+            result.data.forEach(r => {
+                html += `<div class="history-item">
+                    <div class="d-flex justify-content-between">
+                        <span>${r.巡检时间}</span>
+                        <span class="badge ${r.是否通过 === '通过' ? 'bg-success' : 'bg-danger'}">${r.总分}分</span>
+                    </div>
+                    <small class="text-muted">${r.巡检人} | ${r.巡检结果}</small>
+                </div>`;
+            });
+            document.getElementById('historyList').innerHTML = html || '<p class="text-muted">暂无记录</p>';
+        }
+
+        async function loadReport() {
+            const storeId = document.getElementById('storeSelect').value;
+            const resp = await fetch(`/api/inspection/report/${storeId}`);
+            const result = await resp.json();
+            const r = result.data;
+            if (r.error) { document.getElementById('inspectionReport').innerHTML = `<p class="text-muted">${r.error}</p>`; return; }
+            document.getElementById('inspectionReport').innerHTML = `
+                <div class="text-center mb-3">
+                    <div style="font-size:36px; font-weight:700; color:${r.average_score >= 80 ? '#52c41a' : '#ff4d4f'}">${r.average_score}</div>
+                    <div class="text-muted">平均得分</div>
+                </div>
+                <div class="score-item"><span>巡检次数</span><span>${r.inspection_count}次</span></div>
+                <div class="score-item"><span>通过率</span><span>${r.pass_rate}</span></div>
+                <div class="score-item"><span>趋势</span><span>${r.trend}</span></div>
+                <div class="score-item"><span>薄弱项</span><span class="text-danger">${r.weakest_area}</span></div>
+                <div class="mt-3 p-2 bg-light rounded" style="font-size:13px;">${r.ai_recommendation}</div>`;
+        }
+    </script>
+</body>
+</html>
