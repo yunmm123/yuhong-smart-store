@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo演示脚本 | 2026 AI先锋未来人才大赛 · 东方雨虹命题</title>
+<style>
+  :root {
+    --primary: #1a5fb4;
+    --primary-light: #3584e4;
+    --primary-dark: #0f3d6e;
+    --accent: #2ec27e;
+    --accent-warm: #ff7800;
+    --bg: #f5f7fa;
+    --card-bg: #ffffff;
+    --text: #1d2129;
+    --text-secondary: #4e5969;
+    --text-muted: #86909c;
+    --border: #e5e6eb;
+    --shadow: 0 2px 12px rgba(0,0,0,0.06);
+    --shadow-hover: 0 6px 20px rgba(0,0,0,0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, var(--primary-light) 100%);
+    color: #fff;
+    padding: 48px 40px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    right: -60px; top: -60px;
+    width: 280px; height: 280px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    right: 80px; bottom: -80px;
+    width: 200px; height: 200px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+  .header-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 5px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  .header h1 { font-size: 30px; font-weight: 700; margin-bottom: 10px; letter-spacing: 1px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 820px; }
+  .header-meta {
+    margin-top: 20px;
+    display: flex;
+    gap: 28px;
+    font-size: 13px;
+    opacity: 0.85;
+    flex-wrap: wrap;
+  }
+  .header-meta span::before { content: '● '; color: var(--accent); }
+
+  /* Container */
+  .container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 36px 32px 60px;
+  }
+
+  /* Section */
+  .section {
+    background: var(--card-bg);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+  .section-header {
+    padding: 24px 32px 18px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(to right, #fafbfc, #ffffff);
+  }
+  .section-header h2 {
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-header h2 .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px; height: 34px;
+    background: var(--primary);
+    color: #fff;
+    border-radius: 9px;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .section-header .desc {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-top: 8px;
+    margin-left: 46px;
+  }
+  .section-body { padding: 28px 32px; }
+
+  /* Info banner */
+  .info-banner {
+    background: #f0f6ff;
+    border-left: 4px solid var(--primary);
+    padding: 14px 20px;
+    border-radius: 6px;
+    margin-bottom: 22px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+  .info-banner strong { color: var(--primary); }
+
+  /* Demo tables */
+  .demo-table, .ppt-table, .question-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .demo-table thead, .ppt-table thead, .question-table thead {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: #fff;
+  }
+  .demo-table th, .ppt-table th, .question-table th {
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .demo-table td, .ppt-table td, .question-table td {
+    padding: 13px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .demo-table tbody tr:nth-child(even), .ppt-table tbody tr:nth-child(even), .question-table tbody tr:nth-child(even) {
+    background: #fafbfc;
+  }
+  .demo-table tbody tr:hover, .ppt-table tbody tr:hover, .question-table tbody tr:hover {
+    background: #f0f6ff;
+  }
+  .time-cell {
+    font-weight: 700;
+    color: var(--primary);
+    white-space: nowrap;
+    font-family: "SF Mono", Consolas, monospace;
+  }
+  .highlight-cell {
+    color: var(--accent-warm);
+    font-weight: 600;
+  }
+  .script-cell { color: var(--text-secondary); line-height: 1.75; }
+  .script-cell::before { content: '"'; color: var(--text-muted); }
+  .script-cell::after { content: '"'; color: var(--text-muted); }
+
+  /* Phase tag */
+  .phase-tag {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 8px;
+  }
+  .phase-home { background: #e8f3ff; color: var(--primary); }
+  .phase-screen { background: #f6ffed; color: #389e0d; }
+  .phase-ai { background: #fff7e6; color: #d48806; }
+  .phase-inspect { background: #fff1f0; color: #d4380d; }
+  .phase-report { background: #f9f0ff; color: #722ed1; }
+  .phase-summary { background: #e6fffb; color: #08979c; }
+  .phase-search { background: #fffbe6; color: #d4b106; }
+
+  /* PPT table specific */
+  .ppt-table .page-num {
+    font-weight: 700;
+    color: var(--primary);
+    text-align: center;
+    width: 60px;
+  }
+  .ppt-table .ppt-title { font-weight: 600; width: 180px; }
+
+  /* Question table */
+  .question-table .q-num {
+    font-weight: 700;
+    color: var(--primary);
+    text-align: center;
+    width: 50px;
+  }
+  .difficulty {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .d-hard { background: #fff1f0; color: #d4380d; }
+  .d-mid { background: #fff7e6; color: #d48806; }
+  .d-easy { background: #f6ffed; color: #389e0d; }
+
+  /* Pitch cards */
+  .pitch-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 22px;
+  }
+  .pitch-head {
+    padding: 14px 22px;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .pitch-head .icon {
+    width: 28px; height: 28px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+  .pitch-formal { background: linear-gradient(135deg, #1a5fb4, #3584e4); }
+  .pitch-concise { background: linear-gradient(135deg, #2ec27e, #57d9a0); }
+  .pitch-story { background: linear-gradient(135deg, #ff7800, #ff9d4d); }
+  .pitch-body {
+    padding: 22px 26px;
+    font-size: 15px;
+    line-height: 2;
+    color: var(--text-secondary);
+  }
+  .pitch-body p { margin-bottom: 12px; }
+  .pitch-body p:last-child { margin-bottom: 0; }
+  .pitch-body strong { color: var(--primary); font-weight: 600; }
+  .pitch-body .accent { color: var(--accent-warm); font-weight: 600; }
+  .pitch-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 10px 26px;
+    background: #fafbfc;
+    border-top: 1px solid var(--border);
+  }
+  .pitch-meta span::before { content: '◆ '; }
+
+  /* Timeline visual */
+  .timeline {
+    display: flex;
+    margin-bottom: 26px;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 44px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .timeline-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    padding: 0 6px;
+    line-height: 1.3;
+    position: relative;
+  }
+  .timeline-seg span { position: relative; z-index: 2; }
+  .ts-home { background: linear-gradient(135deg, #3584e4, #62a0ea); flex: 30; }
+  .ts-screen { background: linear-gradient(135deg, #2ec27e, #57d9a0); flex: 40; }
+  .ts-ai { background: linear-gradient(135deg, #ff9d4d, #ffb87a); flex: 40; }
+  .ts-inspect { background: linear-gradient(135deg, #e6667a, #f08e9e); flex: 30; }
+  .ts-report { background: linear-gradient(135deg, #9b6dd7, #b89ae6); flex: 20; }
+  .ts-summary { background: linear-gradient(135deg, #08979c, #36cfc9); flex: 20; }
+  .ts-search { background: linear-gradient(135deg, #d4b106, #ffe58f); flex: 30; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--text-muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    margin-top: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .header { padding: 32px 20px; }
+    .header h1 { font-size: 22px; }
+    .container { padding: 20px 14px 40px; }
+    .section-body { padding: 18px 16px; }
+    .timeline { height: auto; flex-direction: column; }
+    .timeline-seg { padding: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="header-tag">2026 AI先锋未来人才大赛 · 东方雨虹命题</span>
+  <h1>Demo演示脚本 &amp; 答辩准备文档</h1>
+  <p>面向东方雨虹"3515"县域下沉战略的AI赋能平台，涵盖3分钟与5分钟两版Demo脚本、15页答辩PPT大纲、90秒电梯演讲及评委提问预判，为决赛答辩提供全流程准备。</p>
+  <div class="header-meta">
+    <span>3分钟 + 5分钟双版本脚本</span>
+    <span>15页PPT大纲</span>
+    <span>3版电梯演讲</span>
+    <span>TOP10评委提问预判</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ============ 第一部分：3分钟Demo演示脚本 ============ -->
+  <div class="section">
+    <div class="section-header">
+      <h2><span class="num">1</span>3分钟Demo演示脚本（180秒）</h2>
+      <div class="desc">精确到秒的演示流程，覆盖六大核心模块，全程3分钟紧凑呈现产品核心价值。</div>
+    </div>
+    <div class="section-body">
+      <div class="info-banner">
+        演示策略：以"管理者视角"切入，从<strong>首页仪表盘</strong>建立全局认知，经<strong>3515大屏</strong>体现战略价值，<strong>AI导购</strong>与<strong>门店巡检</strong>展示业务闭环，<strong>AI洞察</strong>升华智能决策，最后<strong>总结收尾</strong>点题。节奏紧凑、逻辑递进。
+      </div>
+
+      <!-- 时间轴可视化 -->
+      <div class="timeline">
+        <div class="timeline-seg ts-home"><span>首页仪表盘 30s</span></div>
+        <div class="timeline-seg ts-screen"><span>3515大屏 40s</span></div>
+        <div class="timeline-seg ts-ai"><span>AI导购 40s</span></div>
+        <div class="timeline-seg ts-inspect"><span>门店巡检 30s</span></div>
+        <div class="timeline-seg ts-report"><span>AI洞察 20s</span></div>
+        <div class="timeline-seg ts-summary"><span>总结 20s</span></div>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table class="demo-table">
+          <thead>
+            <tr>
+              <th style="width:110px;">时间</th>
+              <th style="width:170px;">操作</th>
+              <th>解说词</th>
+              <th style="width:200px;">展示亮点</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="time-cell">00:00 - 00:30</td>
+              <td>打开飞书工作台，进入首页仪表盘，鼠标依次划过各数据卡片<span class="phase-tag phase-home">首页</span></td>
+              <td class="script-cell">各位评委好，这是我们为东方雨虹打造的AI赋能平台首页。您看到的仪表盘聚合了县域门店数、活跃店员、本月销售额、巡检完成率等核心指标，管理者一屏掌握全局。所有数据通过飞书多维表格实时同步，零延迟、零开发成本。</td>
+              <td class="highlight-cell">一屏全局可视<br>飞书多维表格实时驱动</td>
+            </tr>
+            <tr>
+              <td class="time-cell">00:30 - 01:10</td>
+              <td>点击进入"3515县域大屏"，展示全国地图分布与县域开拓进度<span class="phase-tag phase-screen">大屏</span></td>
+              <td class="script-cell">这是3515县域战略大屏。地图上每个亮点代表一家门店，深色代表已激活门店。右侧实时显示县域覆盖率、新店增长趋势和重点省份排名。东方雨虹下沉县域最大的挑战是管理半径——我们用这块大屏让总部对全国三千县域一目了然。</td>
+              <td class="highlight-cell">全国县域地图可视化<br>战略执行进度实时追踪</td>
+            </tr>
+            <tr>
+              <td class="time-cell">01:10 - 01:50</td>
+              <td>切换至门店端，演示店员使用AI导购接待客户的全过程<span class="phase-tag phase-ai">AI导购</span></td>
+              <td class="script-cell">现在切到县域门店视角。一位新店员遇到客户咨询屋顶漏水，她打开AI导购输入需求，系统3秒内生成三套方案，包含产品组合、用量估算和报价。即使是入职三天的新人，也能像资深顾问一样专业——这就是AI对县域店员的赋能。</td>
+              <td class="highlight-cell">3秒生成专业方案<br>新人即专家的能力平权</td>
+            </tr>
+            <tr>
+              <td class="time-cell">01:50 - 02:20</td>
+              <td>切换督导视角，演示门店巡检拍照识别与问题提交<span class="phase-tag phase-inspect">巡检</span></td>
+              <td class="script-cell">再看区域督导的巡检场景。督导到店后打开巡检表单，对着货架拍照，AI自动识别出"陈列未按标准分区"并扣分。问题一键提交后自动指派店长整改，设定48小时时限，超时自动升级。过去一整天的巡检复盘，现在闭环只需几分钟。</td>
+              <td class="highlight-cell">拍照即识别即打分<br>问题自动派单闭环</td>
+            </tr>
+            <tr>
+              <td class="time-cell">02:20 - 02:40</td>
+              <td>返回大屏，点击"AI洞察报告"生成按钮<span class="phase-tag phase-report">洞察</span></td>
+              <td class="script-cell">回到管理视角。点击这里，AI基于本周巡检数据自动生成洞察报告：识别出"陈列不规范"是最高频问题，占比35%，并给出专项培训建议。AI不只呈现数据，更给出行动建议——从看见问题到解决问题。</td>
+              <td class="highlight-cell">AI自动生成洞察<br>从数据到决策建议</td>
+            </tr>
+            <tr>
+              <td class="time-cell">02:40 - 03:00</td>
+              <td>回到首页，展示全链路闭环示意，结束演示<span class="phase-tag phase-summary">总结</span></td>
+              <td class="script-cell">总结一下，我们用飞书做底座、用AI做引擎，为东方雨虹构建了从消费者扫码、店员导购、督导巡检到总部决策的完整闭环。县域下沉不再靠人海战术，而是靠AI能力平权。让每个县域门店，都拥有一线城市的专业能力。谢谢各位评委！</td>
+              <td class="highlight-cell">全链路闭环一图呈现<br>点题"AI能力平权"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 第二部分：5分钟完整版演示脚本 ============ -->
+  <div class="section">
+    <div class="section-header">
+      <h2><span class="num">2</span>5分钟完整版演示脚本（300秒）</h2>
+      <div class="desc">在3分钟版本基础上，增加产品搜索与智能推荐深度演示，完整呈现三大角色闭环。</div>
+    </div>
+    <div class="section-body">
+      <div class="info-banner">
+        5分钟版本在3分钟基础上，于AI导购环节后插入<strong>产品搜索</strong>与<strong>智能推荐</strong>深度演示（共60秒），并适度扩展各环节细节，使评委充分理解产品力。适用于复赛/决赛完整答辩场景。
+      </div>
+
+      <!-- 时间轴可视化 -->
+      <div class="timeline">
+        <div class="timeline-seg ts-home"><span>仪表盘 35s</span></div>
+        <div class="timeline-seg ts-screen"><span>3515大屏 40s</span></div>
+        <div class="timeline-seg ts-ai"><span>AI导购 40s</span></div>
+        <div class="timeline-seg ts-search"><span>产品搜索+推荐 60s</span></div>
+        <div class="timeline-seg ts-inspect"><span>门店巡检 40s</span></div>
+        <div class="timeline-seg ts-report"><span>AI洞察 30s</span></div>
+        <div class="timeline-seg ts-summary"><span>总结+Q&A引导 15s</span></div>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table class="demo-table">
+          <thead>
+            <tr>
+              <th style="width:110px;">时间</th>
+              <th style="width:180px;">操作</th>
+              <th>解说词</th>
+              <th style="width:190px;">展示亮点</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="time-cell">00:00 - 00:35</td>
+              <td>进入首页仪表盘，逐项展示核心指标卡片与趋势图<span class="phase-tag phase-home">首页</span></td>
+              <td class="script-cell">各位评委好，欢迎观看东方雨虹AI赋能平台演示。首先是首页仪表盘——上方是县域门店总数、活跃店员数、本月GMV、巡检完成率四大核心指标；下方是销售趋势与门店健康度热力图。所有数据由飞书多维表格实时聚合，管理者打开即见全局，无需任何报表制作。</td>
+              <td class="highlight-cell">四维核心指标<br>健康度热力图</td>
+            </tr>
+            <tr>
+              <td class="time-cell">00:35 - 01:15</td>
+              <td>进入3515县域大屏，展示地图、覆盖率、省份排行<span class="phase-tag phase-screen">大屏</span></td>
+              <td class="script-cell">这是3515县域战略大屏。地图上每个亮点代表一家激活门店，颜色深浅反映活跃度。右侧三个面板分别是县域覆盖率进度条、新店周增长趋势、重点省份门店排行榜。东方雨虹要在三年覆盖3000个县域，最大的挑战是管理半径——这块大屏让总部对全国县域一目了然，哪里需要支援，一看便知。</td>
+              <td class="highlight-cell">全国地图一图掌控<br>战略进度可量化</td>
+            </tr>
+            <tr>
+              <td class="time-cell">01:15 - 01:55</td>
+              <td>切到门店端，演示AI导购对话诊断与方案生成<span class="phase-tag phase-ai">AI导购</span></td>
+              <td class="script-cell">现在切入县域门店视角。这位店员小李入职刚三天，遇到客户咨询屋顶漏水。她打开AI导购，用自然语言描述需求，系统理解后3秒内生成三套方案：经济型、标准型、加强型，每套都包含产品清单、用量估算、施工步骤和参考报价。小李还能把方案卡片一键发给客户。即便是新人，也能像十年老兵一样专业。</td>
+              <td class="highlight-cell">自然语言交互<br>三套方案秒级生成</td>
+            </tr>
+            <tr>
+              <td class="time-cell">01:55 - 02:25</td>
+              <td>在AI导购中演示产品搜索：输入"卫生间防水"查看产品库<span class="phase-tag phase-search">产品搜索</span></td>
+              <td class="script-cell">我们再看产品搜索能力。店员输入"卫生间防水"，系统从上千个SKU中精准检索出相关产品，并按适用场景分类展示：底涂、防水浆料、附加层材料等。每个产品卡片包含规格、用量、施工要点，点击还能查看详细工艺视频。过去店员要翻厚厚的产品手册，现在一句话就能定位。</td>
+              <td class="highlight-cell">千级SKU精准检索<br>场景化分类呈现</td>
+            </tr>
+            <tr>
+              <td class="time-cell">02:25 - 02:55</td>
+              <td>演示智能推荐：上传现场照片，AI推荐产品组合<span class="phase-tag phase-search">智能推荐</span></td>
+              <td class="script-cell">更强大的是智能推荐。店员或消费者上传一张现场照片，AI通过多模态识别判断问题类型——这里是"墙根渗水、防水层老化"，随后自动推荐匹配的产品组合与施工方案，并附上用量计算。从一张照片到一份完整方案，全流程不到10秒。这背后是飞书知识库与多模态模型的深度结合。</td>
+              <td class="highlight-cell">多模态照片识别<br>照片到方案10秒</td>
+            </tr>
+            <tr>
+              <td class="time-cell">02:55 - 03:35</td>
+              <td>切到督导视角，演示巡检拍照识别、打分与提交<span class="phase-tag phase-inspect">巡检</span></td>
+              <td class="script-cell">现在看区域督导的巡检闭环。督导王经理到店后打开AI巡检表单，依次检查陈列、库存、价签、施工工具。她对货架拍照，AI立即识别出"卷材未按标准分区"自动扣分；检查库存台账时发现两款产品缺货，系统自动标记。所有问题拍照即记录，一键提交后自动指派店长整改，设定48小时时限，超时升级到区域总监。整个巡检从过去半天缩短到40分钟。</td>
+              <td class="highlight-cell">拍照即识别即打分<br>自动派单超时升级</td>
+            </tr>
+            <tr>
+              <td class="time-cell">03:35 - 04:05</td>
+              <td>返回大屏，展示AI洞察报告生成与解读<span class="phase-tag phase-report">洞察</span></td>
+              <td class="script-cell">回到管理视角。本周巡检结束后，督导点击生成报告，AI自动汇总8家门店的23个问题，识别出"陈列不规范"占比35%是最高频问题，"库存缺货"次之，并给出两条行动建议：下月开展陈列专项培训、优化热门品补货周期。AI不只告诉管理者"发生了什么"，更告诉"该怎么办"。</td>
+              <td class="highlight-cell">AI自动归因分析<br>从洞察到行动建议</td>
+            </tr>
+            <tr>
+              <td class="time-cell">04:05 - 04:45</td>
+              <td>展示消费者一店一码扫码闭环全流程动画<span class="phase-tag phase-ai">一店一码</span></td>
+              <td class="script-cell">最后看消费者侧。张先生扫码进入一店一码页面，AI导购弹出，上传照片获诊断，一键预约施工，施工中实时收到节点推送，完工获电子质保卡，一个月后AI主动回访。一个扫码动作，串起从诊断到售后的完整闭环——这就是我们为东方雨虹打造的全链路体验。</td>
+              <td class="highlight-cell">扫码即闭环<br>从诊断到售后全贯通</td>
+            </tr>
+            <tr>
+              <td class="time-cell">04:45 - 05:00</td>
+              <td>回到首页，展示闭环总图，结束并引导提问<span class="phase-tag phase-summary">总结</span></td>
+              <td class="script-cell">总结：飞书做底座，AI做引擎，一个平台贯通消费者、店员、督导、总部四类角色。让县域门店拥有一线城市专业能力，让3515战略可执行、可追踪、可优化。感谢各位评委，欢迎提问！</td>
+              <td class="highlight-cell">四角色闭环总图<br>引导进入答辩</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 第三部分：答辩PPT大纲 ============ -->
+  <div class="section">
+    <div class="section-header">
+      <h2><span class="num">3</span>答辩PPT大纲（15页）</h2>
+      <div class="desc">15页答辩演示文稿大纲，从问题洞察到方案价值，逻辑递进、视觉清晰。</div>
+    </div>
+    <div class="section-body">
+      <div style="overflow-x: auto;">
+        <table class="ppt-table">
+          <thead>
+            <tr>
+              <th class="page-num">页码</th>
+              <th class="ppt-title">标题</th>
+              <th>核心内容</th>
+              <th style="width:240px;">视觉建议</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="page-num">P01</td>
+              <td class="ppt-title">封面</td>
+              <td>项目名称"东方雨虹AI赋能平台"、团队名、赛道、日期；一句话定位："让每个县域门店拥有一线城市专业能力"</td>
+              <td>东方雨虹蓝主色背景 + 飞书元素 + 县域地图剪影</td>
+            </tr>
+            <tr>
+              <td class="page-num">P02</td>
+              <td class="ppt-title">行业背景与命题解读</td>
+              <td>防水行业下沉市场现状；东方雨虹3515战略（3年3000县域）核心挑战；命题要求拆解</td>
+              <td>数据图表展示下沉市场规模 + 3515战略时间轴</td>
+            </tr>
+            <tr>
+              <td class="page-num">P03</td>
+              <td class="ppt-title">核心痛点洞察</td>
+              <td>县域店员专业度不足、流动率高；督导管理半径过大；消费者信任缺失；信息断层严重</td>
+              <td>三类用户痛点卡片对比 + 痛点图标</td>
+            </tr>
+            <tr>
+              <td class="page-num">P04</td>
+              <td class="ppt-title">用户旅程地图</td>
+              <td>消费者7触点、店员6触点、督导5触点全旅程；每类用户的痛点与AI切入点</td>
+              <td>横向流程图，三色区分三类用户旅程</td>
+            </tr>
+            <tr>
+              <td class="page-num">P05</td>
+              <td class="ppt-title">解决方案总览</td>
+              <td>"飞书底座 + AI引擎"架构；四大核心模块：一店一码、AI导购、门店巡检、3515大屏；四角色闭环</td>
+              <td>架构图：底层飞书能力 + 中层AI模块 + 上层角色应用</td>
+            </tr>
+            <tr>
+              <td class="page-num">P06</td>
+              <td class="ppt-title">核心模块一：一店一码</td>
+              <td>扫码即连AI导购；多模态诊断；方案推荐；预约施工；闭环追踪；技术实现路径</td>
+              <td>手机扫码动效 + 对话流程截图 + 闭环示意图</td>
+            </tr>
+            <tr>
+              <td class="page-num">P07</td>
+              <td class="ppt-title">核心模块二：AI导购</td>
+              <td>产品知识库构建；自然语言交互；多模态识别；方案秒级生成；新人上手周期缩短数据</td>
+              <td>AI对话界面截图 + 方案卡片 + 效果对比柱状图</td>
+            </tr>
+            <tr>
+              <td class="page-num">P08</td>
+              <td class="ppt-title">核心模块三：门店巡检</td>
+              <td>AI智能排线；拍照即识别即打分；问题自动归类派单；整改超时升级；闭环率提升数据</td>
+              <td>巡检表单截图 + 问题流转流程图 + 闭环率趋势</td>
+            </tr>
+            <tr>
+              <td class="page-num">P09</td>
+              <td class="ppt-title">核心模块四：3515县域大屏</td>
+              <td>全国县域地图可视化；门店激活率；销售热力图；AI洞察报告；战略执行追踪</td>
+              <td>大屏实机截图 + 地图热力图 + 关键指标卡片</td>
+            </tr>
+            <tr>
+              <td class="page-num">P10</td>
+              <td class="ppt-title">飞书能力底座</td>
+              <td>多维表格做数据中枢；智能伙伴做AI入口；IM/日历/审批做协同；云文档做知识沉淀；低代码快速搭建</td>
+              <td>飞书能力矩阵图 + 各模块对应飞书工具映射</td>
+            </tr>
+            <tr>
+              <td class="page-num">P11</td>
+              <td class="ppt-title">技术架构与创新点</td>
+              <td>三层架构：飞书协同层、AI能力层、业务应用层；多模态识别、RAG知识检索、智能排线算法等创新</td>
+              <td>分层架构图 + 创新点标注 + 技术栈列表</td>
+            </tr>
+            <tr>
+              <td class="page-num">P12</td>
+              <td class="ppt-title">业务价值与成效</td>
+              <td>店员上手周期2周→3天；巡检效率提升5倍；缺货率下降40%；客户复购率提升25%；3515进度可视化</td>
+              <td>前后对比数据卡片 + ROI计算 + 趋势上升图</td>
+            </tr>
+            <tr>
+              <td class="page-num">P13</td>
+              <td class="ppt-title">场景故事板</td>
+              <td>三个典型场景浓缩呈现：新店员小李、督导王经理、消费者张先生，体现真实业务闭环</td>
+              <td>三栏故事卡片 + 用户头像 + 关键节点时间线</td>
+            </tr>
+            <tr>
+              <td class="page-num">P14</td>
+              <td class="ppt-title">落地规划与扩展性</td>
+              <td>三阶段落地路径：试点验证→区域复制→全国推广；可扩展至建材全品类；能力开放赋能行业</td>
+              <td>三阶段路线图 + 扩展方向思维导图</td>
+            </tr>
+            <tr>
+              <td class="page-num">P15</td>
+              <td class="ppt-title">总结与致谢</td>
+              <td>核心价值重申："AI能力平权，让县域不再偏远"；团队介绍；联系方式；感谢评委</td>
+              <td>闭环总图 + 团队合影 + 一句话Slogan居中</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 第四部分：90秒电梯演讲 ============ -->
+  <div class="section">
+    <div class="section-header">
+      <h2><span class="num">4</span>90秒电梯演讲</h2>
+      <div class="desc">三个版本适配不同场合：正式版突出价值、简洁版直击要点、故事版打动人心。</div>
+    </div>
+    <div class="section-body">
+
+      <!-- 正式版 -->
+      <div class="pitch-card">
+        <div class="pitch-head pitch-formal">
+          <span class="icon">A</span>版本一：正式版（突出战略价值与商业逻辑）
+        </div>
+        <div class="pitch-body">
+          <p>各位评委好，我是XX团队。东方雨虹正在推进"3515"战略——三年覆盖3000个县域，但县域市场面临一个核心矛盾：<strong>门店在飞速扩张，专业人才却严重短缺</strong>。新店员上手要两周，督导一个人管几十家店，消费者对县域门店缺乏信任。</p>
+          <p>我们的解法是：<strong>用飞书做底座，用AI做引擎，构建一个让县域门店拥有一线城市专业能力的赋能平台</strong>。平台包含四大模块——一店一码让消费者扫码即获专业诊断；AI导购让新店员3秒生成专家级方案；门店巡检让督导拍照即识别即闭环；3515大屏让总部对全国县域一目了然。</p>
+          <p>成效是实打实的：<span class="accent">店员上手周期从2周缩短到3天，巡检效率提升5倍，客户复购率提升25%</span>。我们不只是在做一个工具，而是在构建一种新的下沉模式——让AI成为县域门店的"隐形专家"，让3515战略可执行、可追踪、可优化。谢谢！</p>
+        </div>
+        <div class="pitch-meta">
+          <span>适用：决赛正式答辩开场</span>
+          <span>字数：约380字</span>
+          <span>时长：约90秒</span>
+        </div>
+      </div>
+
+      <!-- 简洁版 -->
+      <div class="pitch-card">
+        <div class="pitch-head pitch-concise">
+          <span class="icon">B</span>版本二：简洁版（直击痛点与方案，适合快速介绍）
+        </div>
+        <div class="pitch-body">
+          <p>一句话：我们用<strong>飞书+AI</strong>，帮东方雨虹解决县域下沉的专业人才短缺问题。</p>
+          <p>痛点很简单——门店开到县城了，但懂防水的人招不到、留不住。消费者不信任，督导管不过来。</p>
+          <p>方案也很简单——四个模块打通四个角色：<strong>消费者扫码获诊断，店员AI当军师，督导拍照即巡检，总部大屏看全国</strong>。全部跑在飞书上，两周搭完，零额外开发成本。</p>
+          <p>结果说话：<span class="accent">新店员3天上手，巡检效率5倍提升，复购率涨25%</span>。让每个县域门店，都有一个AI专家随时在线。这就是我们做的事。谢谢！</p>
+        </div>
+        <div class="pitch-meta">
+          <span>适用：快速路演/投资人简报</span>
+          <span>字数：约250字</span>
+          <span>时长：约60秒</span>
+        </div>
+      </div>
+
+      <!-- 故事版 -->
+      <div class="pitch-card">
+        <div class="pitch-head pitch-story">
+          <span class="icon">C</span>版本三：故事版（以人物故事打动听众，适合公众演讲）
+        </div>
+        <div class="pitch-body">
+          <p>我想讲三个人的故事。</p>
+          <p>第一个是小李，24岁，河南某县城东方雨虹门店的新店员。入职第一天她紧张得说不出话，但打开手机里的<strong>AI导购</strong>，输入客户需求，3秒后一份专业方案就出现在屏幕上——那天她成交了入职第一单。</p>
+          <p>第二个是王经理，一个人管30家县域门店的督导。以前她一周只能巡检5家，现在AI帮她排好最优路线，到店拍照即识别问题，一键提交自动派单——<strong>一周能巡8家，还省了1.5小时车程</strong>。</p>
+          <p>第三个是张先生，家里漏水的普通消费者。他扫了一下门店二维码，拍张照片就知道了问题，约了师傅，施工过程每一步都收到推送，完工还拿到电子质保卡。</p>
+          <p>这三个人，过去互不相识；现在，<span class="accent">一个飞书平台、一套AI能力，把他们连在了一起</span>。这就是我们为东方雨虹做的事——让县城不再偏远，让专业触手可及。谢谢！</p>
+        </div>
+        <div class="pitch-meta">
+          <span>适用：公众演讲/媒体展示</span>
+          <span>字数：约360字</span>
+          <span>时长：约85秒</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ 第五部分：预判评委提问TOP10 ============ -->
+  <div class="section">
+    <div class="section-header">
+      <h2><span class="num">5</span>预判评委提问TOP10</h2>
+      <div class="desc">基于命题要求与产品特点，预判10个高概率评委提问，提前准备回答要点与应对策略。</div>
+    </div>
+    <div class="section-body">
+      <div style="overflow-x: auto;">
+        <table class="question-table">
+          <thead>
+            <tr>
+              <th class="q-num">序号</th>
+              <th style="width:240px;">可能的提问</th>
+              <th>回答要点</th>
+              <th style="width:90px;">难度</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="q-num">Q1</td>
+              <td>你们和市面上其他AI导购方案有什么本质区别？</td>
+              <td>① 我们不是通用客服，而是深度结合防水行业知识库的专家系统；② 多模态识别（照片诊断）是核心差异化，竞品多为纯文本对话；③ 与飞书生态深度绑定，数据闭环天然打通，无需额外系统集成；④ 面向县域店员这一特定人群优化交互，降低使用门槛</td>
+              <td><span class="difficulty d-mid">中等</span></td>
+            </tr>
+            <tr>
+              <td class="q-num">Q2</td>
+              <td>AI方案推荐的准确率如何保证？误判怎么办？</td>
+              <td>① 知识库由东方雨虹官方产品文档+施工规范构建，RAG检索确保基于权威信息；② 设置置信度阈值，低置信度场景自动转人工专家；③ 每条推荐附"方案依据"可追溯；④ 建立"反馈-优化"闭环，店员和消费者反馈持续训练模型；⑤ 初期以"辅助"而非"替代"定位，最终决策权在人</td>
+              <td><span class="difficulty d-hard">较难</span></td>
+            </tr>
+            <tr>
+              <td class="q-num">Q3</td>
+              <td>县域店员年龄偏大、数字化能力弱，如何保证 adoption（采用率）？</td>
+              <td>① 全部基于飞书移动端，店员日常已在用，零额外学习成本；② 交互以"自然语言+拍照"为主，无需记忆操作路径；③ AI入职助手游戏化学习，降低心理门槛；④ 设立"成长值"激励体系，与绩效挂钩；⑤ 试点期配备"种子店员"以老带新扩散；⑥ UI针对县域场景做大字体、简交互优化</td>
+              <td><span class="difficulty d-hard">较难</span></td>
+            </tr>
+            <tr>
+              <td class="q-num">Q4</td>
+              <td>为什么选择飞书作为底座，而不是自建系统？</td>
+              <td>① 飞书多维表格天然适合构建业务数据中枢，无需开发数据库；② 智能伙伴提供AI能力入口，降低模型接入门槛；③ IM/日历/审批/云文档形成协同闭环，避免多系统割裂；④ 低代码特性使平台两周即可搭建上线，满足大赛快速验证需求；⑤ 东方雨虹若已用飞书办公，可零成本嵌入现有工作流</td>
+              <td><span class="difficulty d-mid">中等</span></td>
+            </tr>
+            <tr>
+              <td class="q-num">Q5</td>
+              <td>这些业务数据（销售、库存、客户）从哪里来？是否需要对接ERP？</td>
+              <td>① 门店侧数据通过飞书多维表格录入与沉淀，店员日常操作即产生数据；② 演示版以模拟数据展示能力，生产环境可通过飞书开放API对接东方雨虹现有ERP/CRM；③ 多维表格支持手动导入、API写入、表单采集多通道；④ 建议分阶段：先多维表格轻量跑通，再逐步对接核心系统</td>
+              <td><span class="difficulty d-mid">中等</span></td>
+            </tr>
+            <tr>
+              <td class="q-num">Q6</td>
+              <td>3515大屏的数据实时性如何？能支撑多少门店规模？</td>
+              <td>① 飞书多维表格支持十万级数据行，配合仪表盘可支撑3000县域门店规模；② 数据更新频率取决于录入方式，API对接可达分钟级；③ 大屏采用聚合视图，即使底层数据量大也能流畅渲染；④ 架构上支持分库分表扩展，应对未来增长</td>
+              <td><span class="difficulty d-mid">中等</span></td>
+            </tr>
+            <tr>
+              <td class="q-num">Q7</td>
+              <td>商业落地路径是什么？如何从Demo走向真实部署？</td>
+              <td>① 三阶段：选3-5家标杆县域门店试点验证（1-2月）→ 区域复制到1个省（3-6月）→ 全国推广；② 试点期聚焦"AI导购+巡检"两个高频场景快速验证ROI；③ 与东方雨虹区域团队共建，确保贴合真实业务；④ 建立数据飞轮：用得越多AI越准，形成壁垒</td>
+              <td><span class="difficulty d-hard">较难</span></td>
+            </tr>
+            <tr>
+              <td class="q-num">Q8</td>
+              <td>门店巡检的AI图像识别具体识别哪些内容？准确率多少？</td>
+              <td>① 识别维度：陈列规范（分区、排面）、价签完整性、库存台账比对、施工工具齐备性、店面形象；② 采用预训练视觉模型+防水场景微调；③ 演示版准确率约85%，生产环境持续优化目标95%+；④ 识别结果不直接扣分，而是"提示+人工确认"双保险；⑤ 边界情况支持人工标注回流训练</td>
+              <td><span class="difficulty d-mid">中等</span></td>
+            </tr>
+            <tr>
+              <td class="q-num">Q9</td>
+              <td>这个方案的护城河在哪？竞品容易复制吗？</td>
+              <td>① 行业知识壁垒：防水施工规范、产品搭配逻辑需深度行业积累，非通用AI可替代；② 数据飞轮：巡检与导购数据持续沉淀，越用越准；③ 飞书生态绑定：多维表格+智能伙伴的协同闭环形成切换成本；④ 场景理解：深入县域店员/督导真实工作流，非技术公司难以做到；⑤ 与东方雨虹共建后形成专属定制</td>
+              <td><span class="difficulty d-hard">较难</span></td>
+            </tr>
+            <tr>
+              <td class="q-num">Q10</td>
+              <td>如果只能保留一个功能，你们会保留哪个？为什么？</td>
+              <td>① 会保留<strong>AI导购</strong>。原因：它直接解决县域最大痛点——专业人才短缺，且面向最高频场景（客户接待）；② AI导购是"能力平权"的核心载体，一个功能即可让新人变专家；③ 它同时是数据入口，消费者需求、产品偏好、成交转化都从这里沉淀；④ 其他功能（巡检、大屏）可后续叠加，但AI导购是基石</td>
+              <td><span class="difficulty d-easy">较易</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-banner" style="margin-top: 22px; margin-bottom: 0;">
+        <strong>答辩技巧提示：</strong>回答时遵循"先认同问题价值→给出结构化要点（建议3点）→用数据或案例佐证→回归价值主张"的框架。遇不确定问题坦诚说明边界，不强行编造，体现严谨态度。
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  2026 AI先锋未来人才大赛 · 东方雨虹命题 · Demo演示脚本与答辩准备文档
+</div>
+
+</body>
+</html>

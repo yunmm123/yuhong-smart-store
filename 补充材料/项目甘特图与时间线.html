@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>项目甘特图与时间线 — 2026 AI先锋未来人才大赛 · 东方雨虹命题</title>
+<style>
+  /* ============ 全局基础 ============ */
+  :root{
+    --bg:#eef2f9;
+    --card:#ffffff;
+    --text:#1f2a3a;
+    --muted:#64748b;
+    --border:#e3e8f0;
+    --primary:#2563eb;
+    --primary-dark:#1d4ed8;
+    --shadow:0 1px 2px rgba(15,23,42,.04),0 10px 30px rgba(15,23,42,.07);
+    --radius:14px;
+    /* 模块色 */
+    --c-base:#3b82f6;   /* 基础准备 */
+    --c-platform:#8b5cf6;/* 平台搭建 */
+    --c-inspect:#10b981; /* 门店巡检 */
+    --c-guide:#06b6d4;   /* AI导购 */
+    --c-ops:#f59e0b;     /* 门店运营 */
+    --c-private:#ec4899; /* 私域维护 */
+    --c-screen:#ef4444;  /* 3515大屏 */
+    --c-deploy:#14b8a6;  /* 部署测试 */
+    --c-opt:#6366f1;     /* 优化迭代 */
+    --c-rollout:#a855f7; /* 推广输出 */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Segoe UI",system-ui,-apple-system,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(900px 500px at 100% -5%,rgba(37,99,235,.08),transparent 60%),
+      radial-gradient(800px 500px at -5% 0%,rgba(139,92,246,.07),transparent 55%);
+    background-attachment:fixed;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:40px 24px 80px}
+
+  /* ============ 页头 ============ */
+  .page-head{
+    background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 55%,#4f46e5 100%);
+    color:#fff;border-radius:20px;padding:38px 40px;
+    box-shadow:0 18px 50px rgba(30,58,138,.30);
+    position:relative;overflow:hidden;
+  }
+  .page-head::after{
+    content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;
+    background:radial-gradient(circle,rgba(255,255,255,.18),transparent 70%);
+    border-radius:50%;
+  }
+  .page-head .eyebrow{
+    display:inline-block;font-size:13px;letter-spacing:1px;
+    background:rgba(255,255,255,.18);padding:6px 14px;border-radius:30px;
+    margin-bottom:14px;backdrop-filter:blur(4px);
+  }
+  .page-head h1{font-size:30px;font-weight:700;letter-spacing:.5px;margin-bottom:10px}
+  .page-head p{font-size:15px;opacity:.92;max-width:760px}
+  .page-head .meta{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+  .page-head .meta span{
+    font-size:12.5px;background:rgba(255,255,255,.14);
+    padding:5px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.18);
+  }
+
+  /* ============ 章节通用 ============ */
+  section.card{
+    background:var(--card);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:30px 32px;margin-top:28px;
+    border:1px solid var(--border);
+  }
+  .sec-head{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+  .sec-no{
+    flex:0 0 auto;width:38px;height:38px;border-radius:11px;
+    background:linear-gradient(135deg,var(--primary),#4f46e5);
+    color:#fff;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 14px rgba(37,99,235,.30);
+  }
+  .sec-head h2{font-size:21px;font-weight:700;color:var(--text)}
+  .sec-head .sub{font-size:13px;color:var(--muted);margin-top:2px}
+  .sec-note{font-size:13px;color:var(--muted);margin-top:4px}
+
+  /* ============ 甘特图 ============ */
+  .phase-band{
+    display:grid;grid-template-columns:230px 1fr;gap:12px;margin-bottom:8px;
+  }
+  .phase-band .phases{display:grid;grid-template-columns:20% 40% 20% 20%;}
+  .phase-band .phase{
+    font-size:12px;font-weight:600;color:#fff;padding:7px 10px;text-align:center;border-radius:8px;
+    border:1px solid rgba(255,255,255,.25);
+  }
+  .phase.p1{background:linear-gradient(90deg,#3b82f6,#60a5fa)}
+  .phase.p2{background:linear-gradient(90deg,#8b5cf6,#06b6d4)}
+  .phase.p3{background:linear-gradient(90deg,#14b8a6,#f59e0b)}
+  .phase.p4{background:linear-gradient(90deg,#a855f7,#ec4899)}
+
+  .gantt-head,.gantt-row{
+    display:grid;grid-template-columns:230px 1fr;gap:12px;align-items:center;
+  }
+  .gantt-head{margin-top:6px;}
+  .gantt-head .corner{
+    font-size:12.5px;color:var(--muted);font-weight:600;padding:8px 6px;
+  }
+  .gantt-head .weeks{display:grid;grid-template-columns:repeat(10,1fr);}
+  .gantt-head .week{
+    text-align:center;font-size:12px;font-weight:600;color:#475569;
+    padding:8px 0;border-left:1px solid var(--border);
+  }
+  .gantt-head .week:first-child{border-left:none}
+  .gantt-head .week b{display:block;font-size:13px;color:var(--text)}
+
+  .gantt-body{margin-top:4px}
+  .gantt-row{
+    padding:7px 0;border-top:1px solid #f1f4f9;
+  }
+  .gantt-row:hover{background:#f8fafc}
+  .task-name{
+    display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:600;color:#334155;
+  }
+  .task-name .dot{width:10px;height:10px;border-radius:3px;flex:0 0 auto}
+  .task-name .idx{
+    font-size:11px;color:#94a3b8;font-weight:700;background:#eef2f7;
+    width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+  }
+  .track{
+    position:relative;height:30px;background:#f8fafc;border-radius:8px;
+    border:1px solid #eef2f7;
+    background-image:repeating-linear-gradient(to right,
+      transparent 0,transparent calc(10% - 1px),#e6ebf3 calc(10% - 1px),#e6ebf3 10%);
+  }
+  .bar{
+    position:absolute;top:4px;bottom:4px;border-radius:7px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:600;color:#fff;
+    box-shadow:0 3px 8px rgba(15,23,42,.18);
+    overflow:hidden;white-space:nowrap;
+    background-image:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0));
+  }
+  .bar .bar-label{padding:0 8px;text-shadow:0 1px 1px rgba(0,0,0,.15)}
+
+  /* 甘特图图例 */
+  .legend{
+    display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:22px;padding:16px 18px;
+    background:#f8fafc;border:1px dashed #d7deea;border-radius:12px;
+  }
+  .legend .lg{display:flex;align-items:center;gap:7px;font-size:12.5px;color:#475569}
+  .legend .lg i{width:14px;height:14px;border-radius:4px;display:inline-block}
+
+  /* ============ 里程碑时间线 ============ */
+  .timeline{
+    position:relative;height:390px;margin:18px 4px 6px;
+  }
+  .tl-axis{
+    position:absolute;left:0;right:0;top:50%;height:4px;transform:translateY(-50%);
+    background:linear-gradient(90deg,#bfdbfe,#2563eb,#4f46e5,#a855f7);
+    border-radius:4px;
+  }
+  .tl-weeks{
+    position:absolute;top:0;left:0;right:0;display:grid;grid-template-columns:repeat(10,1fr);
+    border-bottom:1px dashed #e2e8f0;padding-bottom:8px;
+  }
+  .tl-weeks span{text-align:center;font-size:11px;color:var(--muted);font-weight:600}
+  .ms{
+    position:absolute;top:50%;left:0;width:0;height:0;transform:translate(-50%,-50%);
+  }
+  .ms .ms-card{
+    width:170px;background:#fff;border:1px solid var(--border);border-radius:12px;
+    padding:11px 13px;box-shadow:0 8px 22px rgba(15,23,42,.10);
+    position:absolute;left:50%;transform:translateX(-50%);
+  }
+  .ms .ms-card.up{bottom:34px}
+  .ms .ms-card.down{top:34px}
+  .ms .ms-card .ms-tag{
+    display:inline-block;font-size:10.5px;font-weight:700;color:#fff;padding:2px 9px;border-radius:20px;margin-bottom:7px;
+  }
+  .ms .ms-card h4{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:3px;line-height:1.35}
+  .ms .ms-card p{font-size:11.5px;color:var(--muted);line-height:1.5}
+  .ms .ms-card .ms-when{font-size:10.5px;color:#94a3b8;margin-top:6px;font-weight:600}
+  .ms .ms-dot{
+    width:20px;height:20px;border-radius:50%;background:#fff;
+    border:4px solid var(--primary);box-shadow:0 0 0 5px rgba(37,99,235,.15);
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;
+  }
+  .ms .ms-leg{
+    position:absolute;left:50%;transform:translateX(-50%);width:2px;
+  }
+  .ms.up .ms-leg{bottom:0;height:34px;background:linear-gradient(180deg,#cbd5e1,transparent)}
+  .ms.down .ms-leg{top:0;height:34px;background:linear-gradient(0deg,#cbd5e1,transparent)}
+
+  .ms.m1 .ms-tag{background:#3b82f6}.ms.m1 .ms-dot{border-color:#3b82f6}
+  .ms.m2 .ms-tag{background:#06b6d4}.ms.m2 .ms-dot{border-color:#06b6d4}
+  .ms.m3 .ms-tag{background:#10b981}.ms.m3 .ms-dot{border-color:#10b981}
+  .ms.m4 .ms-tag{background:#f59e0b}.ms.m4 .ms-dot{border-color:#f59e0b}
+  .ms.m5 .ms-tag{background:#ec4899}.ms.m5 .ms-dot{border-color:#ec4899}
+  .ms.m6 .ms-tag{background:#a855f7}.ms.m6 .ms-dot{border-color:#a855f7}
+
+  /* ============ KPI 表格 ============ */
+  .kpi-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border)}
+  table.kpi{width:100%;border-collapse:collapse;min-width:760px;background:#fff}
+  table.kpi thead th{
+    background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;
+    font-size:13px;font-weight:600;padding:13px 14px;text-align:left;
+  }
+  table.kpi thead th:first-child{border-top-left-radius:12px}
+  table.kpi thead th:last-child{border-top-right-radius:12px}
+  table.kpi tbody td{
+    padding:13px 14px;font-size:13px;border-bottom:1px solid #eef2f7;vertical-align:middle;
+  }
+  table.kpi tbody tr:nth-child(even){background:#f8fafc}
+  table.kpi tbody tr:hover{background:#eef4ff}
+  table.kpi td.idx{font-weight:700;color:#94a3b8;width:36px}
+  table.kpi td.kpi-name{font-weight:600;color:#1e293b}
+  .pill{
+    display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;
+  }
+  .pill.base{background:#f1f5f9;color:#64748b}
+  .pill.pilot{background:#dbeafe;color:#1d4ed8}
+  .pill.roll{background:#dcfce7;color:#15803d}
+  .meas{color:#64748b;font-size:12.5px}
+  .arrow{color:#cbd5e1;margin:0 4px;font-size:11px}
+
+  /* ============ 风险矩阵 ============ */
+  .matrix-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+  .axis-label{font-size:12.5px;color:var(--muted);font-weight:600}
+  .matrix-frame{display:grid;grid-template-columns:46px 1fr;gap:10px;align-items:stretch}
+  .y-axis{display:grid;grid-template-rows:1fr 1fr;writing-mode:vertical-rl;transform:rotate(180deg);align-items:center;justify-items:center}
+  .y-axis span{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:2px}
+  .matrix-area{display:flex;flex-direction:column}
+  .matrix-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px;flex:1}
+  .quadrant{
+    border-radius:14px;padding:16px 16px 14px;position:relative;
+    border:1px solid rgba(0,0,0,.04);min-height:210px;
+  }
+  .quadrant .q-tag{
+    display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;
+    padding:4px 11px;border-radius:20px;color:#fff;margin-bottom:12px;
+  }
+  .q-high-high{background:linear-gradient(135deg,#fee2e2,#fecaca);border-color:#fca5a5}
+  .q-high-high .q-tag{background:#dc2626}
+  .q-high-low{background:linear-gradient(135deg,#ffedd5,#fed7aa);border-color:#fdba74}
+  .q-high-low .q-tag{background:#ea580c}
+  .q-low-high{background:linear-gradient(135deg,#fef9c3,#fef08a);border-color:#fde047}
+  .q-low-high .q-tag{background:#ca8a04}
+  .q-low-low{background:linear-gradient(135deg,#dcfce7,#bbf7d0);border-color:#86efac}
+  .q-low-low .q-tag{background:#16a34a}
+  .quadrant h4{font-size:13px;font-weight:700;color:#334155;margin-bottom:10px}
+  .risk-item{background:rgba(255,255,255,.7);border-radius:9px;padding:9px 11px;margin-bottom:8px;border:1px solid rgba(0,0,0,.05)}
+  .risk-item:last-child{margin-bottom:0}
+  .risk-item .r-title{font-size:12.5px;font-weight:600;color:#1e293b;display:flex;gap:6px;align-items:flex-start}
+  .risk-item .r-title b{color:#ef4444;flex:0 0 auto}
+  .risk-item .r-fix{font-size:11.5px;color:#5b6573;margin-top:4px;line-height:1.5;padding-left:14px;position:relative}
+  .risk-item .r-fix::before{content:"应对：";position:absolute;left:0;color:#94a3b8;font-weight:600}
+  .x-axis{display:grid;grid-template-columns:1fr 1fr;margin-top:10px}
+  .x-axis span{text-align:center;font-size:12px;font-weight:600;color:var(--muted);letter-spacing:2px}
+
+  /* ============ 页脚 ============ */
+  .page-foot{
+    text-align:center;margin-top:34px;font-size:12.5px;color:var(--muted);
+  }
+  .page-foot .hr{height:1px;background:linear-gradient(90deg,transparent,#cbd5e1,transparent);margin-bottom:14px}
+
+  @media (max-width:760px){
+    .gantt-head,.gantt-row,.phase-band{grid-template-columns:120px 1fr}
+    .task-name{font-size:11.5px}
+    .ms .ms-card{width:140px}
+    .page-head h1{font-size:22px}
+    section.card{padding:22px 16px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 页头 -->
+  <header class="page-head">
+    <span class="eyebrow">2026 AI先锋未来人才大赛 · 东方雨虹命题</span>
+    <h1>项目甘特图与时间线</h1>
+    <p>基于飞书 + aily 智能体构建的“门店智能运营大脑”实施计划可视化，覆盖 10 周开发周期、6 大里程碑、10 项 KPI 目标与 9 类风险应对，确保项目按节点高质量交付。</p>
+    <div class="meta">
+      <span>提交材料 · 项目实施计划</span>
+      <span>周期：10 周</span>
+      <span>团队：东方雨虹命题参赛组</span>
+      <span>版本：v1.0</span>
+    </div>
+  </header>
+
+  <!-- ====== 第一部分：甘特图 ====== -->
+  <section class="card">
+    <div class="sec-head">
+      <div class="sec-no">01</div>
+      <div>
+        <h2>10 周项目甘特图</h2>
+        <div class="sub">按周拆解 12 项核心任务，四大阶段推进：启动准备 → 平台搭建 → 模块开发 → 试点推广</div>
+      </div>
+    </div>
+
+    <!-- 阶段色带 -->
+    <div class="phase-band">
+      <div></div>
+      <div class="phases">
+        <div class="phase p1">启动准备期</div>
+        <div class="phase p2">平台搭建与模块开发期</div>
+        <div class="phase p3">试点部署期</div>
+        <div class="phase p4">优化推广期</div>
+      </div>
+    </div>
+
+    <!-- 表头 -->
+    <div class="gantt-head">
+      <div class="corner">任务 / 周次</div>
+      <div class="weeks">
+        <div class="week"><b>W1</b>第1周</div>
+        <div class="week"><b>W2</b>第2周</div>
+        <div class="week"><b>W3</b>第3周</div>
+        <div class="week"><b>W4</b>第4周</div>
+        <div class="week"><b>W5</b>第5周</div>
+        <div class="week"><b>W6</b>第6周</div>
+        <div class="week"><b>W7</b>第7周</div>
+        <div class="week"><b>W8</b>第8周</div>
+        <div class="week"><b>W9</b>第9周</div>
+        <div class="week"><b>W10</b>第10周</div>
+      </div>
+    </div>
+
+    <!-- 任务行 -->
+    <div class="gantt-body">
+      <!-- 1 -->
+      <div class="gantt-row">
+        <div class="task-name"><span class="idx">1</span><span class="dot" style="background:var(--c-base)"></span>需求确认与环境搭建</div>
+        <div class="track">
+          <div class="bar" style="left:0%;width:20%;background:var(--c-base)"><span class="bar-label">W1–W2</span></div>
+        </div>
+      </div>
+      <!-- 2 -->
+      <div class="gantt-row">
+        <div class="task-name"><span class="idx">2</span><span class="dot" style="background:var(--c-base)"></span>飞书应用创建与 API 配置</div>
+        <div class="track">
+          <div class="bar" style="left:0%;width:20%;background:var(--c-base)"><span class="bar-label">W1–W2</span></div>
+        </div>
+      </div>
+      <!-- 3 -->
+      <div class="gantt-row">
+        <div class="task-name"><span class="idx">3</span><span class="dot" style="background:var(--c-platform)"></span>aily 智能体搭建与知识库导入</div>
+        <div class="track">
+          <div class="bar" style="left:10%;width:20%;background:var(--c-platform)"><span class="bar-label">W2–W3</span></div>
+        </div>
+      </div>
+      <!-- 4 -->
+      <div class="gantt-row">
+        <div class="task-name"><span class="idx">4</span><span class="dot" style="background:var(--c-platform)"></span>多维表格数据表搭建</div>
+        <div class="track">
+          <div class="bar" style="left:10%;width:20%;background:var(--c-platform)"><span class="bar-label">W2–W3</span></div>
+        </div>
+      </div>
+      <!-- 5 -->
+      <div class="gantt-row">
+        <div class="task-name"><span class="idx">5</span><span class="dot" style="background:var(--c-inspect)"></span>门店巡检模块开发</div>
+        <div class="track">
+          <div class="bar" style="left:20%;width:20%;background:var(--c-inspect)"><span class="bar-label">W3–W4</span></div>
+        </div>
+      </div>
+      <!-- 6 -->
+      <div class="gantt-row">
+        <div class="task-name"><span class="idx">6</span><span class="dot" style="background:var(--c-guide)"></span>AI 导购模块开发</div>
+        <div class="track">
+          <div class="bar" style="left:20%;width:30%;background:var(--c-guide)"><span class="bar-label">W3–W5</span></div>
+        </div>
+      </div>
+      <!-- 7 -->
+      <div class="gantt-row">
+        <div class="task-name"><span class="idx">7</span><span class="dot" style="background:var(--c-ops)"></span>门店运营模块开发</div>
+        <div class="track">
+          <div class="bar" style="left:40%;width:20%;background:var(--c-ops)"><span class="bar-label">W5–W6</span></div>
+        </div>
+      </div>
+      <!-- 8 -->
+      <div class="gantt-row">
+        <div class="task-name"><span class="idx">8</span><span class="dot" style="background:var(--c-private)"></span>私域客户维护模块开发</div>
+        <div class="track">
+          <div class="bar" style="left:40%;width:20%;background:var(--c-private)"><span class="bar-label">W5–W6</span></div>
+        </div>
+      </div>
+      <!-- 9 -->
+      <div class="gantt-row">
+        <div class="task-name"><span class="idx">9</span><span class="dot" style="background:var(--c-screen)"></span>3515 县域大屏开发</div>
+        <div class="track">
+          <div class="bar" style="left:50%;width:20%;background:var(--c-screen)"><span class="bar-label">W6–W7</span></div>
+        </div>
+      </div>
+      <!-- 10 -->
+      <div class="gantt-row">
+        <div class="task-name"><span class="idx">10</span><span class="dot" style="background:var(--c-deploy)"></span>试点门店部署测试</div>
+        <div class="track">
+          <div class="bar" style="left:60%;width:20%;background:var(--c-deploy)"><span class="bar-label">W7–W8</span></div>
+        </div>
+      </div>
+      <!-- 11 -->
+      <div class="gantt-row">
+        <div class="task-name"><span class="idx">11</span><span class="dot" style="background:var(--c-opt)"></span>数据收集与优化迭代</div>
+        <div class="track">
+          <div class="bar" style="left:70%;width:20%;background:var(--c-opt)"><span class="bar-label">W8–W9</span></div>
+        </div>
+      </div>
+      <!-- 12 -->
+      <div class="gantt-row">
+        <div class="task-name"><span class="idx">12</span><span class="dot" style="background:var(--c-rollout)"></span>推广方案与文档输出</div>
+        <div class="track">
+          <div class="bar" style="left:80%;width:20%;background:var(--c-rollout)"><span class="bar-label">W9–W10</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 图例 -->
+    <div class="legend">
+      <div class="lg"><i style="background:var(--c-base)"></i>基础准备</div>
+      <div class="lg"><i style="background:var(--c-platform)"></i>平台搭建</div>
+      <div class="lg"><i style="background:var(--c-inspect)"></i>门店巡检模块</div>
+      <div class="lg"><i style="background:var(--c-guide)"></i>AI 导购模块</div>
+      <div class="lg"><i style="background:var(--c-ops)"></i>门店运营模块</div>
+      <div class="lg"><i style="background:var(--c-private)"></i>私域维护模块</div>
+      <div class="lg"><i style="background:var(--c-screen)"></i>3515 县域大屏</div>
+      <div class="lg"><i style="background:var(--c-deploy)"></i>部署测试</div>
+      <div class="lg"><i style="background:var(--c-opt)"></i>优化迭代</div>
+      <div class="lg"><i style="background:var(--c-rollout)"></i>推广输出</div>
+    </div>
+  </section>
+
+  <!-- ====== 第二部分：里程碑 ====== -->
+  <section class="card">
+    <div class="sec-head">
+      <div class="sec-no">02</div>
+      <div>
+        <h2>关键里程碑节点</h2>
+        <div class="sub">6 个里程碑贯穿全周期，每个节点均为可交付成果检验关卡</div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-axis">
+        <div class="tl-weeks">
+          <span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span>
+          <span>W6</span><span>W7</span><span>W8</span><span>W9</span><span>W10</span>
+        </div>
+
+        <!-- M1 第2周末 -->
+        <div class="ms m1 up" style="left:20%">
+          <div class="ms-card up">
+            <span class="ms-tag">M1 · 第2周末</span>
+            <h4>环境搭建完成</h4>
+            <p>飞书应用、API 权限、aily 智能体与多维表格基础环境就绪，具备开发条件。</p>
+            <div class="ms-when">完成节点：W2 周末</div>
+          </div>
+          <div class="ms-leg"></div>
+          <div class="ms-dot"></div>
+        </div>
+
+        <!-- M2 第4周末 -->
+        <div class="ms m2 down" style="left:40%">
+          <div class="ms-dot"></div>
+          <div class="ms-leg"></div>
+          <div class="ms-card down">
+            <span class="ms-tag">M2 · 第4周末</span>
+            <h4>巡检 + 导购模块上线</h4>
+            <p>门店巡检、AI 导购两大核心模块完成开发并完成内部联调验证。</p>
+            <div class="ms-when">完成节点：W4 周末</div>
+          </div>
+        </div>
+
+        <!-- M3 第6周末 -->
+        <div class="ms m3 up" style="left:60%">
+          <div class="ms-card up">
+            <span class="ms-tag">M3 · 第6周末</span>
+            <h4>四模块全部开发完成</h4>
+            <p>巡检、导购、运营、私域四大业务模块全部交付，进入集成测试阶段。</p>
+            <div class="ms-when">完成节点：W6 周末</div>
+          </div>
+          <div class="ms-leg"></div>
+          <div class="ms-dot"></div>
+        </div>
+
+        <!-- M4 第7周末 -->
+        <div class="ms m4 down" style="left:70%">
+          <div class="ms-dot"></div>
+          <div class="ms-leg"></div>
+          <div class="ms-card down">
+            <span class="ms-tag">M4 · 第7周末</span>
+            <h4>3515 大屏上线</h4>
+            <p>3515 县域市场数据大屏完成开发与数据接入，实现可视化看板。</p>
+            <div class="ms-when">完成节点：W7 周末</div>
+          </div>
+        </div>
+
+        <!-- M5 第8周末 -->
+        <div class="ms m5 up" style="left:80%">
+          <div class="ms-card up">
+            <span class="ms-tag">M5 · 第8周末</span>
+            <h4>试点门店运行</h4>
+            <p>首批试点门店完成部署并稳定运行，全链路业务闭环验证通过。</p>
+            <div class="ms-when">完成节点：W8 周末</div>
+          </div>
+          <div class="ms-leg"></div>
+          <div class="ms-dot"></div>
+        </div>
+
+        <!-- M6 第10周末 -->
+        <div class="ms m6 down" style="left:96%">
+          <div class="ms-dot"></div>
+          <div class="ms-leg"></div>
+          <div class="ms-card down" style="transform:translateX(-86%)">
+            <span class="ms-tag">M6 · 第10周末</span>
+            <h4>推广方案输出</h4>
+            <p>完成优化迭代并输出规模化推广方案、操作手册与培训资料。</p>
+            <div class="ms-when">完成节点：W10 周末</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sec-note">说明：里程碑按完成时点（周末）标注于时间轴，上下交错排布以提升可读性。</div>
+  </section>
+
+  <!-- ====== 第三部分：KPI 追踪表 ====== -->
+  <section class="card">
+    <div class="sec-head">
+      <div class="sec-no">03</div>
+      <div>
+        <h2>KPI 目标追踪表</h2>
+        <div class="sub">10 项核心指标，从基线到试点再到全面推广，量化项目价值</div>
+      </div>
+    </div>
+
+    <div class="kpi-wrap">
+      <table class="kpi">
+        <thead>
+          <tr>
+            <th style="width:40px">#</th>
+            <th>指标</th>
+            <th>基线值</th>
+            <th>试点目标</th>
+            <th>推广目标</th>
+            <th>衡量方式</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="idx">1</td>
+            <td class="kpi-name">巡检覆盖率</td>
+            <td><span class="pill base">40%</span></td>
+            <td><span class="pill pilot">90%</span></td>
+            <td><span class="pill roll">98%</span></td>
+            <td class="meas">系统记录已巡检门店数 / 门店总数</td>
+          </tr>
+          <tr>
+            <td class="idx">2</td>
+            <td class="kpi-name">督导效率</td>
+            <td><span class="pill base">8 家/天</span></td>
+            <td><span class="pill pilot">20 家/天</span></td>
+            <td><span class="pill roll">30 家/天</span></td>
+            <td class="meas">单督导日均巡检门店数</td>
+          </tr>
+          <tr>
+            <td class="idx">3</td>
+            <td class="kpi-name">新员工上手周期</td>
+            <td><span class="pill base">30 天</span></td>
+            <td><span class="pill pilot">14 天</span></td>
+            <td><span class="pill roll">7 天</span></td>
+            <td class="meas">新员工独立上岗所需天数</td>
+          </tr>
+          <tr>
+            <td class="idx">4</td>
+            <td class="kpi-name">导购转化率</td>
+            <td><span class="pill base">12%</span></td>
+            <td><span class="pill pilot">22%</span></td>
+            <td><span class="pill roll">28%</span></td>
+            <td class="meas">AI 推荐后成交订单数 / 咨询总数</td>
+          </tr>
+          <tr>
+            <td class="idx">5</td>
+            <td class="kpi-name">库存周转率</td>
+            <td><span class="pill base">4 次/年</span></td>
+            <td><span class="pill pilot">6 次/年</span></td>
+            <td><span class="pill roll">8 次/年</span></td>
+            <td class="meas">年度库存周转次数</td>
+          </tr>
+          <tr>
+            <td class="idx">6</td>
+            <td class="kpi-name">客户复购率</td>
+            <td><span class="pill base">18%</span></td>
+            <td><span class="pill pilot">30%</span></td>
+            <td><span class="pill roll">38%</span></td>
+            <td class="meas">半年内二次购买客户占比</td>
+          </tr>
+          <tr>
+            <td class="idx">7</td>
+            <td class="kpi-name">私域活跃度</td>
+            <td><span class="pill base">15%</span></td>
+            <td><span class="pill pilot">45%</span></td>
+            <td><span class="pill roll">60%</span></td>
+            <td class="meas">企微社群周活跃用户 / 总用户数</td>
+          </tr>
+          <tr>
+            <td class="idx">8</td>
+            <td class="kpi-name">问题闭环率</td>
+            <td><span class="pill base">55%</span></td>
+            <td><span class="pill pilot">88%</span></td>
+            <td><span class="pill roll">95%</span></td>
+            <td class="meas">48 小时内闭环解决的问题占比</td>
+          </tr>
+          <tr>
+            <td class="idx">9</td>
+            <td class="kpi-name">单店营收增量</td>
+            <td><span class="pill base">0%</span></td>
+            <td><span class="pill pilot">+12%</span></td>
+            <td><span class="pill roll">+20%</span></td>
+            <td class="meas">同比营收增长率</td>
+          </tr>
+          <tr>
+            <td class="idx">10</td>
+            <td class="kpi-name">AI 使用率</td>
+            <td><span class="pill base">0%</span></td>
+            <td><span class="pill pilot">75%</span></td>
+            <td><span class="pill roll">92%</span></td>
+            <td class="meas">日活使用 AI 工具的店员占比</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sec-note">注：基线值为项目启动前现状调研数据；试点目标针对首批试点门店；推广目标面向规模化部署后全部门店。</div>
+  </section>
+
+  <!-- ====== 第四部分：风险矩阵 ====== -->
+  <section class="card">
+    <div class="sec-head">
+      <div class="sec-no">04</div>
+      <div>
+        <h2>风险评估矩阵</h2>
+        <div class="sub">以“影响 × 概率”二维矩阵识别 9 类风险，每项配套应对措施</div>
+      </div>
+    </div>
+
+    <div class="matrix-head">
+      <div class="axis-label">↑ 影响程度（高 → 低）</div>
+      <div class="axis-label">概率程度（低 → 高）→</div>
+    </div>
+
+    <div class="matrix-frame">
+      <div class="y-axis">
+        <span>高影响</span>
+        <span>低影响</span>
+      </div>
+      <div class="matrix-area">
+        <div class="matrix-grid">
+          <!-- 高影响 低概率：橙 -->
+          <div class="quadrant q-high-low">
+            <span class="q-tag">高影响 · 低概率</span>
+            <h4>需重点防范的灰犀牛</h4>
+            <div class="risk-item">
+              <div class="r-title"><b>R4</b>数据安全与隐私合规风险</div>
+              <div class="r-fix">数据分级加密、最小权限原则、定期安全审计与合规备案</div>
+            </div>
+            <div class="risk-item">
+              <div class="r-title"><b>R5</b>核心开发人员流失致项目延期</div>
+              <div class="r-fix">关键模块文档沉淀、A/B 角备份、定期知识共享会</div>
+            </div>
+          </div>
+          <!-- 高影响 高概率：红 -->
+          <div class="quadrant q-high-high">
+            <span class="q-tag">高影响 · 高概率</span>
+            <h4>重点管控 · 资源优先保障</h4>
+            <div class="risk-item">
+              <div class="r-title"><b>R1</b>飞书 API 调用频次超限 / 稳定性波动</div>
+              <div class="r-fix">申请更高 QPS 配额、本地缓存 + 退避重试、关键接口降级方案</div>
+            </div>
+            <div class="risk-item">
+              <div class="r-title"><b>R2</b>门店网络不稳定致数据上传失败</div>
+              <div class="r-fix">离线缓存 + 断点续传、4G 备份网络、数据同步校验机制</div>
+            </div>
+            <div class="risk-item">
+              <div class="r-title"><b>R3</b>店员对新系统接受度低、学习曲线长</div>
+              <div class="r-fix">分层培训 + 操作视频、激励机制、试点期现场驻点辅导</div>
+            </div>
+          </div>
+          <!-- 低影响 低概率：绿 -->
+          <div class="quadrant q-low-low">
+            <span class="q-tag">低影响 · 低概率</span>
+            <h4>常规监控即可</h4>
+            <div class="risk-item">
+              <div class="r-title"><b>R8</b>终端设备（平板/手机）兼容性问题</div>
+              <div class="r-fix">主流机型兼容测试、响应式适配、建立设备标准清单</div>
+            </div>
+            <div class="risk-item">
+              <div class="r-title"><b>R9</b>第三方服务（短信/支付）临时不可用</div>
+              <div class="r-fix">多服务商冗余、异步重试、故障时降级提示</div>
+            </div>
+          </div>
+          <!-- 低影响 高概率：黄 -->
+          <div class="quadrant q-low-high">
+            <span class="q-tag">低影响 · 高概率</span>
+            <h4>常态化管理</h4>
+            <div class="risk-item">
+              <div class="r-title"><b>R6</b>知识库内容需持续更新维护</div>
+              <div class="r-fix">设立内容运营专员、建立更新 SOP、版本化管理</div>
+            </div>
+            <div class="risk-item">
+              <div class="r-title"><b>R7</b>多维表格字段需求频繁变更</div>
+              <div class="r-fix">字段变更评审流程、预留扩展字段、配置化管理</div>
+            </div>
+          </div>
+        </div>
+        <div class="x-axis">
+          <span>低概率</span>
+          <span>高概率</span>
+        </div>
+      </div>
+    </div>
+    <div class="sec-note">矩阵布局：左上=高影响低概率（橙）、右上=高影响高概率（红）、左下=低影响低概率（绿）、右下=低影响高概率（黄）。</div>
+  </section>
+
+  <footer class="page-foot">
+    <div class="hr"></div>
+    2026 AI先锋未来人才大赛 · 东方雨虹命题 ｜ 项目实施计划可视化材料 ｜ 共 4 部分：甘特图 · 里程碑 · KPI · 风险矩阵
+  </footer>
+
+</div>
+</body>
+</html>

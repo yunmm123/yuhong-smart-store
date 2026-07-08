@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>竞品可视化对比矩阵 | 雨虹智慧门店</title>
+<style>
+  :root{
+    --ink:#1e293b;
+    --ink-soft:#475569;
+    --ink-mute:#64748b;
+    --line:#e2e8f0;
+    --line-strong:#cbd5e1;
+    --bg:#f8fafc;
+    --card:#ffffff;
+    --brand:#dc2626;
+    --brand-soft:#fef2f2;
+    --green:#16a34a;
+    --green-bg:#dcfce7;
+    --amber:#d97706;
+    --amber-bg:#fef3c7;
+    --red:#dc2626;
+    --red-bg:#fee2e2;
+    --blue:#2563eb;
+    --purple:#7c3aed;
+    --teal:#0d9488;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Source Han Sans SC","Noto Sans CJK SC",sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.7;
+    font-size:15px;
+    padding:32px 20px 64px;
+  }
+  .wrap{max-width:1080px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 3px rgba(15,23,42,.04);overflow:hidden;}
+  /* Header */
+  .doc-head{
+    padding:34px 44px 30px;
+    background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%);
+    border-bottom:1px solid var(--line);
+  }
+  .doc-tag{
+    display:inline-block;font-size:12px;letter-spacing:.06em;
+    color:var(--brand);background:var(--brand-soft);
+    border:1px solid #fecaca;border-radius:999px;
+    padding:4px 14px;margin-bottom:14px;font-weight:600;
+  }
+  .doc-head h1{font-size:26px;font-weight:700;letter-spacing:.01em;color:var(--ink);}
+  .doc-head .sub{margin-top:8px;color:var(--ink-soft);font-size:14.5px;}
+  .doc-meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:16px;font-size:13px;color:var(--ink-mute);}
+  .doc-meta span b{color:var(--ink-soft);font-weight:600;}
+  /* Sections */
+  section{padding:38px 44px;border-bottom:1px solid var(--line);}
+  section:last-child{border-bottom:none;}
+  .sec-title{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+  .sec-num{
+    flex:0 0 auto;width:30px;height:30px;border-radius:8px;
+    background:var(--brand);color:#fff;font-weight:700;font-size:15px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .sec-title h2{font-size:20px;font-weight:700;color:var(--ink);}
+  .sec-desc{color:var(--ink-mute);font-size:13.5px;margin:4px 0 24px 42px;}
+
+  /* Part 1 radar */
+  .radar-layout{display:flex;flex-wrap:wrap;gap:28px;align-items:center;}
+  .radar-box{flex:1 1 460px;min-width:0;}
+  .radar-box svg{width:100%;height:auto;display:block;}
+  .legend{flex:1 1 240px;min-width:220px;}
+  .legend h4{font-size:13px;color:var(--ink-mute);font-weight:600;margin-bottom:12px;letter-spacing:.04em;}
+  .legend ul{list-style:none;}
+  .legend li{
+    display:flex;align-items:center;gap:10px;padding:8px 10px;
+    border-radius:8px;font-size:14px;margin-bottom:6px;border:1px solid transparent;
+  }
+  .legend li.ours{background:var(--brand-soft);border-color:#fecaca;font-weight:600;}
+  .swatch{width:14px;height:14px;border-radius:4px;flex:0 0 auto;border:1px solid rgba(0,0,0,.08);}
+  .legend .score{margin-left:auto;color:var(--ink-mute);font-size:12.5px;font-variant-numeric:tabular-nums;}
+  .legend li.ours .score{color:var(--brand);}
+  .radar-note{margin-top:18px;font-size:12.5px;color:var(--ink-mute);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 16px;}
+  .radar-note b{color:var(--ink-soft);}
+
+  /* Part 2 matrix */
+  .matrix-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;}
+  table.matrix{width:100%;border-collapse:collapse;font-size:13.5px;min-width:760px;}
+  table.matrix th,table.matrix td{padding:11px 12px;text-align:center;border-bottom:1px solid var(--line);border-right:1px solid var(--line);}
+  table.matrix th:last-child,table.matrix td:last-child{border-right:none;}
+  table.matrix thead th{
+    background:#f1f5f9;color:var(--ink-soft);font-weight:600;font-size:12.5px;
+    position:sticky;top:0;letter-spacing:.02em;
+  }
+  table.matrix thead th.ours{background:var(--brand-soft);color:var(--brand);}
+  table.matrix tbody tr:nth-child(even){background:#fafbfc;}
+  table.matrix tbody td.feat{text-align:left;font-weight:600;color:var(--ink);background:#f8fafc;}
+  table.matrix tbody td.ours-col{background:var(--brand-soft);}
+  .badge{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-weight:700;font-size:14px;}
+  .badge.yes{background:var(--green-bg);color:var(--green);}
+  .badge.part{background:var(--amber-bg);color:var(--amber);}
+  .badge.no{background:var(--red-bg);color:var(--red);}
+  .matrix-legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-size:13px;color:var(--ink-soft);}
+  .matrix-legend .item{display:flex;align-items:center;gap:8px;}
+  .summary-bar{
+    display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;
+  }
+  .stat{
+    flex:1 1 150px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px 16px;
+  }
+  .stat .k{font-size:12px;color:var(--ink-mute);}
+  .stat .v{font-size:22px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;margin-top:2px;}
+  .stat.ours .v{color:var(--brand);}
+  .stat .v small{font-size:13px;color:var(--ink-mute);font-weight:500;}
+
+  /* Part 3 cards */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .card{
+    border:1px solid var(--line);border-radius:14px;padding:24px 22px;
+    background:linear-gradient(180deg,#ffffff 0%,#fcfdfe 100%);
+    position:relative;overflow:hidden;
+  }
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--brand);}
+  .card .idx{font-size:12px;font-weight:700;color:var(--brand);letter-spacing:.08em;}
+  .card h3{font-size:17px;font-weight:700;margin:6px 0 4px;color:var(--ink);}
+  .card .tag{display:inline-block;font-size:11.5px;color:var(--ink-mute);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 8px;margin-bottom:12px;}
+  .card p{font-size:13.5px;color:var(--ink-soft);margin-bottom:14px;}
+  .card ul{list-style:none;}
+  .card ul li{font-size:13px;color:var(--ink-soft);padding:5px 0 5px 20px;position:relative;border-top:1px dashed var(--line);}
+  .card ul li:first-child{border-top:none;}
+  .card ul li::before{content:"";position:absolute;left:4px;top:13px;width:8px;height:8px;border-radius:50%;background:var(--brand);opacity:.85;}
+  .card ul li b{color:var(--ink);font-weight:600;}
+  .card .vs{margin-top:14px;font-size:12px;color:var(--ink-mute);background:var(--bg);border-radius:8px;padding:10px 12px;border:1px solid var(--line);}
+  .card .vs b{color:var(--brand);}
+
+  footer{padding:22px 44px;background:#f8fafc;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-mute);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+
+  @media (max-width:720px){
+    body{padding:14px 8px 40px;}
+    section{padding:26px 18px;}
+    .doc-head{padding:24px 18px;}
+    .cards{grid-template-columns:1fr;}
+  }
+  @media print{
+    body{background:#fff;padding:0;font-size:12px;}
+    .wrap{border:none;box-shadow:none;border-radius:0;max-width:none;}
+    section{break-inside:avoid;padding:22px 28px;}
+    .card,.stat{break-inside:avoid;}
+    .matrix-scroll{overflow:visible;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="doc-head">
+    <span class="doc-tag">2026 AI先锋未来人才大赛 · 东方雨虹命题</span>
+    <h1>竞品可视化对比矩阵</h1>
+    <div class="sub">雨虹智慧门店 · 六大方案能力雷达对比 / 二十项功能覆盖矩阵 / 差异化优势总结</div>
+    <div class="doc-meta">
+      <span><b>提交方：</b>雨虹智慧门店项目组</span>
+      <span><b>文档版本：</b>V1.0</span>
+      <span><b>对比对象：</b>6 套行业方案</span>
+      <span><b>评估维度：</b>6 项核心能力 / 20 项功能点</span>
+    </div>
+  </div>
+
+  <!-- Part 1 -->
+  <section>
+    <div class="sec-title">
+      <div class="sec-num">1</div>
+      <h2>竞品能力雷达图对比</h2>
+    </div>
+    <p class="sec-desc">从门店巡检、AI导购、数据分析、私域运营、建材专业、低门槟能力六个维度对 6 套方案进行 0–10 分量化评估，我方方案（雨虹智慧门店）以红色突出呈现。</p>
+
+    <div class="radar-layout">
+      <div class="radar-box">
+        <svg viewBox="0 0 700 620" role="img" aria-label="竞品能力雷达图">
+          <!-- grid hexagons -->
+          <g fill="none" stroke="#e2e8f0" stroke-width="1">
+            <polygon points="350,296 388.1,318 388.1,362 350,384 311.9,362 311.9,318"/>
+            <polygon points="350,252 426.2,296 426.2,384 350,428 273.8,384 273.8,296"/>
+            <polygon points="350,208 464.3,234 464.3,446 350,472 235.7,446 235.7,234"/>
+            <polygon points="350,164 502.4,252 502.4,428 350,516 197.6,428 197.6,252"/>
+            <polygon points="350,120 540.5,230 540.5,450 350,560 159.5,450 159.5,230" stroke="#cbd5e1"/>
+          </g>
+          <!-- axes -->
+          <g stroke="#cbd5e1" stroke-width="1">
+            <line x1="350" y1="340" x2="350" y2="120"/>
+            <line x1="350" y1="340" x2="540.5" y2="230"/>
+            <line x1="350" y1="340" x2="540.5" y2="450"/>
+            <line x1="350" y1="340" x2="350" y2="560"/>
+            <line x1="350" y1="340" x2="159.5" y2="450"/>
+            <line x1="350" y1="340" x2="159.5" y2="230"/>
+          </g>
+          <!-- scale labels -->
+          <g fill="#94a3b8" font-size="11" font-family="inherit">
+            <text x="356" y="300">2</text>
+            <text x="356" y="256">4</text>
+            <text x="356" y="212">6</text>
+            <text x="356" y="168">8</text>
+            <text x="356" y="124">10</text>
+          </g>
+          <!-- competitor polygons -->
+          <polygon points="350,142 445.3,285 483.4,417 350,428 292.8,373 254.7,285" fill="#64748b" fill-opacity="0.05" stroke="#64748b" stroke-width="1.4" stroke-opacity="0.85"/>
+          <polygon points="350,164 426.2,296 483.4,417 350,406 292.8,373 273.8,296" fill="#2563eb" fill-opacity="0.05" stroke="#2563eb" stroke-width="1.4" stroke-opacity="0.85"/>
+          <polygon points="350,186 464.3,274 464.3,406 350,450 311.9,362 235.7,274" fill="#7c3aed" fill-opacity="0.05" stroke="#7c3aed" stroke-width="1.4" stroke-opacity="0.85"/>
+          <polygon points="350,274 464.3,274 445.3,395 350,516 311.9,362 216.6,263" fill="#0d9488" fill-opacity="0.05" stroke="#0d9488" stroke-width="1.4" stroke-opacity="0.85"/>
+          <polygon points="350,252 464.3,274 521.5,439 350,450 311.9,362 292.8,307" fill="#d97706" fill-opacity="0.05" stroke="#d97706" stroke-width="1.4" stroke-opacity="0.85"/>
+          <!-- ours polygon -->
+          <polygon points="350,142 521.5,241 521.5,439 350,516 159.5,450 178.5,241" fill="#dc2626" fill-opacity="0.16" stroke="#dc2626" stroke-width="2.6"/>
+          <!-- ours points -->
+          <g fill="#dc2626" stroke="#fff" stroke-width="1.6">
+            <circle cx="350" cy="142" r="4.5"/>
+            <circle cx="521.5" cy="241" r="4.5"/>
+            <circle cx="521.5" cy="439" r="4.5"/>
+            <circle cx="350" cy="516" r="4.5"/>
+            <circle cx="159.5" cy="450" r="4.5"/>
+            <circle cx="178.5" cy="241" r="4.5"/>
+          </g>
+          <!-- axis labels -->
+          <g fill="#1e293b" font-size="14.5" font-weight="600" font-family="inherit">
+            <text x="350" y="104" text-anchor="middle">门店巡检</text>
+            <text x="556" y="224" text-anchor="start">AI导购</text>
+            <text x="556" y="464" text-anchor="start">数据分析</text>
+            <text x="350" y="584" text-anchor="middle">私域运营</text>
+            <text x="144" y="464" text-anchor="end">建材专业</text>
+            <text x="144" y="224" text-anchor="end">低门槟能力</text>
+          </g>
+          <!-- center dot -->
+          <circle cx="350" cy="340" r="2.5" fill="#94a3b8"/>
+        </svg>
+      </div>
+
+      <div class="legend">
+        <h4>方案对照与综合得分</h4>
+        <ul>
+          <li>
+            <span class="swatch" style="background:#dc2626"></span>雨虹智慧门店（我方）
+            <span class="score">综合 9.0</span>
+          </li>
+          <li>
+            <span class="swatch" style="background:#64748b"></span>海鼎AI巡检
+            <span class="score">综合 5.5</span>
+          </li>
+          <li>
+            <span class="swatch" style="background:#2563eb"></span>大华云睿
+            <span class="score">综合 4.8</span>
+          </li>
+          <li>
+            <span class="swatch" style="background:#7c3aed"></span>InfiSight
+            <span class="score">综合 5.3</span>
+          </li>
+          <li>
+            <span class="swatch" style="background:#0d9488"></span>微伴AI
+            <span class="score">综合 5.2</span>
+          </li>
+          <li>
+            <span class="swatch" style="background:#d97706"></span>帆软导购
+            <span class="score">综合 4.8</span>
+          </li>
+        </ul>
+        <div class="radar-note">
+          <b>评分说明：</b>六维度满分各 10 分，综合得分为六维均分。我方方案在「建材专业」与「低门槟能力」两项形成绝对领先，在其余四项与行业最强者持平或超越，是唯一无明显短板的全能型方案。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Part 2 -->
+  <section>
+    <div class="sec-title">
+      <div class="sec-num">2</div>
+      <h2>功能覆盖矩阵表</h2>
+    </div>
+    <p class="sec-desc">以 20 项核心功能点为行、6 套方案为列展开覆盖度对比。绿色 ✓ 表示已支持，黄色 △ 表示部分支持，红色 ✗ 表示不支持。</p>
+
+    <div class="matrix-scroll">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th style="text-align:left;width:24%">功能点</th>
+            <th>海鼎AI巡检</th>
+            <th>大华云睿</th>
+            <th>InfiSight</th>
+            <th>微伴AI</th>
+            <th>帆软导购</th>
+            <th class="ours">雨虹智慧门店</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="feat">移动巡检</td><td><span class="badge yes">✓</span></td><td><span class="badge part">△</span></td><td><span class="badge yes">✓</span></td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">AI图像识别</td><td><span class="badge yes">✓</span></td><td><span class="badge yes">✓</span></td><td><span class="badge yes">✓</span></td><td><span class="badge no">✗</span></td><td><span class="badge part">△</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">产品知识问答</td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td><span class="badge part">△</span></td><td><span class="badge part">△</span></td><td><span class="badge no">✗</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">施工方案推荐</td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">客户偏好记忆</td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td><span class="badge part">△</span></td><td><span class="badge yes">✓</span></td><td><span class="badge no">✗</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">销售数据分析</td><td><span class="badge part">△</span></td><td><span class="badge part">△</span></td><td><span class="badge yes">✓</span></td><td><span class="badge part">△</span></td><td><span class="badge yes">✓</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">库存预警</td><td><span class="badge yes">✓</span></td><td><span class="badge no">✗</span></td><td><span class="badge yes">✓</span></td><td><span class="badge no">✗</span></td><td><span class="badge yes">✓</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">客流分析</td><td><span class="badge yes">✓</span></td><td><span class="badge yes">✓</span></td><td><span class="badge yes">✓</span></td><td><span class="badge part">△</span></td><td><span class="badge part">△</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">AI经营报告</td><td><span class="badge part">△</span></td><td><span class="badge part">△</span></td><td><span class="badge yes">✓</span></td><td><span class="badge part">△</span></td><td><span class="badge yes">✓</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">客户画像</td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td><span class="badge part">△</span></td><td><span class="badge yes">✓</span></td><td><span class="badge part">△</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">AI话术推荐</td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td><span class="badge yes">✓</span></td><td><span class="badge no">✗</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">跟进任务自动化</td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td><span class="badge part">△</span></td><td><span class="badge yes">✓</span></td><td><span class="badge no">✗</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">复购预测</td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td><span class="badge part">△</span></td><td><span class="badge yes">✓</span></td><td><span class="badge part">△</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">建材专业知识</td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">零硬件部署</td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td><span class="badge part">△</span></td><td><span class="badge yes">✓</span></td><td><span class="badge yes">✓</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">零代码搭建</td><td><span class="badge part">△</span></td><td><span class="badge no">✗</span></td><td><span class="badge yes">✓</span></td><td><span class="badge part">△</span></td><td><span class="badge yes">✓</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">多维度看板</td><td><span class="badge yes">✓</span></td><td><span class="badge yes">✓</span></td><td><span class="badge yes">✓</span></td><td><span class="badge part">△</span></td><td><span class="badge yes">✓</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">一店一码闭环</td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td><span class="badge part">△</span></td><td><span class="badge no">✗</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">县域适配</td><td><span class="badge part">△</span></td><td><span class="badge no">✗</span></td><td><span class="badge part">△</span></td><td><span class="badge part">△</span></td><td><span class="badge no">✗</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+          <tr><td class="feat">飞书生态原生</td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td><span class="badge no">✗</span></td><td><span class="badge part">△</span></td><td><span class="badge part">△</span></td><td class="ours-col"><span class="badge yes">✓</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="matrix-legend">
+      <div class="item"><span class="badge yes">✓</span> 已支持</div>
+      <div class="item"><span class="badge part">△</span> 部分支持</div>
+      <div class="item"><span class="badge no">✗</span> 不支持</div>
+      <div class="item" style="margin-left:auto;color:var(--ink-mute)">统计口径：以各方案公开产品能力 + 行业落地案例为依据</div>
+    </div>
+
+    <div class="summary-bar">
+      <div class="stat ours"><div class="k">雨虹智慧门店 覆盖度</div><div class="v">20<small> / 20 全覆盖</small></div></div>
+      <div class="stat"><div class="k">InfiSight 覆盖度</div><div class="v">15<small> / 20</small></div></div>
+      <div class="stat"><div class="k">微伴AI 覆盖度</div><div class="v">15<small> / 20</small></div></div>
+      <div class="stat"><div class="k">帆软导购 覆盖度</div><div class="v">11<small> / 20</small></div></div>
+      <div class="stat"><div class="k">海鼎AI巡检 覆盖度</div><div class="v">9<small> / 20</small></div></div>
+      <div class="stat"><div class="k">大华云睿 覆盖度</div><div class="v">6<small> / 20</small></div></div>
+    </div>
+    <p style="margin-top:10px;font-size:12px;color:var(--ink-mute);">注：覆盖度统计口径为「已支持 + 部分支持」功能数，体现方案整体可触达范围；其中雨虹智慧门店为 20 项全量已支持。</p>
+  </section>
+
+  <!-- Part 3 -->
+  <section>
+    <div class="sec-title">
+      <div class="sec-num">3</div>
+      <h2>差异化优势总结</h2>
+    </div>
+    <p class="sec-desc">竞品或在巡检、或在 BI、或在私域单点突破，但无人同时具备「行业垂直知识 + 飞书生态低门槛 + 一店一码闭环」三重能力。以下为我方三大核心差异化优势。</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="idx">优势 01</div>
+        <h3>建材行业垂直深耕</h3>
+        <span class="tag">行业知识壁垒</span>
+        <p>依托东方雨虹防水/涂料/瓷砖胶领域知识沉淀，构建行业唯一的专业知识库与施工方案引擎，让 AI 真正"懂建材"。</p>
+        <ul>
+          <li><b>产品知识问答</b>：基于雨虹产品手册的精准 RAG 问答</li>
+          <li><b>施工方案推荐</b>：按户型/部位/工艺自动生成施工方案</li>
+          <li><b>建材专业知识</b>：竞品普遍缺失的硬壁垒能力</li>
+        </ul>
+        <div class="vs">对比竞品：5 家竞品在「建材专业」维度均 ≤2 分，<b>仅我方独有</b>。</div>
+      </div>
+
+      <div class="card">
+        <div class="idx">优势 02</div>
+        <h3>飞书原生 · 零门槛</h3>
+        <span class="tag">落地部署壁垒</span>
+        <p>纯飞书小程序形态，零硬件、零代码、3 天上线，深度嵌入 IM/文档/审批/多维表格，完美匹配县域门店低数字素养现状。</p>
+        <ul>
+          <li><b>零硬件部署</b>：一部手机即可完成巡检与导购</li>
+          <li><b>零代码搭建</b>：表单/流程可视化拖拽配置</li>
+          <li><b>县域适配</b>：弱网可用、大字简洁、语音交互</li>
+        </ul>
+        <div class="vs">对比竞品：大华/海鼎依赖摄像头硬件，<b>部署成本高、周期长</b>，难以渗透县域。</div>
+      </div>
+
+      <div class="card">
+        <div class="idx">优势 03</div>
+        <h3>一店一码全链闭环</h3>
+        <span class="tag">运营价值壁垒</span>
+        <p>从"一店一码"引流、私域沉淀、AI 导购转化，到复购预测与跟进自动化，形成行业首个端到端营销运营闭环。</p>
+        <ul>
+          <li><b>一店一码闭环</b>：扫码即沉淀，归因到店到人</li>
+          <li><b>私域运营</b>：画像 + 话术 + 跟进任务自动化</li>
+          <li><b>复购预测</b>：基于历史的复购概率与时机推荐</li>
+        </ul>
+        <div class="vs">对比竞品：巡检类无运营、私域类无巡检，<b>唯我方打通全链路</b>。</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>2026 AI先锋未来人才大赛 · 东方雨虹命题提交材料 · 竞品可视化对比矩阵</span>
+    <span>雨虹智慧门店项目组 · 内部资料</span>
+  </footer>
+
+</div>
+</body>
+</html>

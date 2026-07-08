@@ -4,6 +4,38 @@
 > 基于飞书AI能力构建的建材零售门店智慧运营一体化解决方案
 > 核心理念：让县域"夫妻店"10分钟拥有AI能力——零硬件、零代码、零培训成本
 
+---
+
+## 评委快速入口（补充材料）
+
+> 以下HTML文件可直接在浏览器中打开查看，建议从「材料总目录」开始浏览。
+
+| 序号 | 材料名称 | 文件路径 | 说明 |
+|:---:|---------|---------|------|
+| 0 | **材料总目录** | `补充材料/材料总目录.html` | 所有提交材料的导航入口 |
+| 1 | **综合补充材料报告** | `补充材料/yuhong-submission/yuhong-submission.html` | 含ECharts图表、行业研究、竞品分析、技术架构、数据分析样本、参考资料 |
+| 2 | 技术架构图集 | `补充材料/技术架构图集.html` | 5张SVG架构图（五层架构、四模块流转、飞书AI矩阵、3515推广路线、一店一码闭环） |
+| 3 | 竞品对比矩阵 | `补充材料/竞品对比矩阵.html` | 雷达图对比6家方案、20功能点覆盖矩阵 |
+| 4 | 产品需求文档PRD | `补充材料/产品需求文档PRD.html` | 5类用户角色、20条功能需求、10个KPI |
+| 5 | 用户故事地图 | `补充材料/用户故事地图.html` | 3类用户18个触点旅程、30条用户故事 |
+| 6 | Demo演示脚本 | `补充材料/Demo演示脚本.html` | 3分钟/5分钟Demo脚本、15页PPT大纲、10个预判问答 |
+| 7 | 项目甘特图与时间线 | `补充材料/项目甘特图与时间线.html` | 10周甘特图、6个里程碑、9项风险评估 |
+| 8 | 研究笔记与调研记录 | `补充材料/研究笔记与调研记录.html` | 7个阶段调研过程，含数据来源标注 |
+| 9 | 相关项目经验说明 | `补充材料/相关项目经验与技术能力说明.html` | 代码统计、技术栈、核心功能、文件结构 |
+
+## 技术文档（Markdown格式）
+
+| 文档 | 路径 | 内容 |
+|------|------|------|
+| 行业研究与竞品分析报告 | `docs/01_行业研究与竞品分析报告.md` | 3515计划分析、5家竞品对比、市场空白识别 |
+| 技术方案架构设计文档 | `docs/02_技术方案架构设计文档.md` | 五层架构、16个架构图、API对接方案 |
+| 用户需求调研报告 | `docs/03_用户需求调研报告.md` | 三类用户痛点、需求优先级矩阵 |
+| 实施路线图与里程碑 | `docs/04_实施路线图与里程碑.md` | 10周计划、KPI体系、风险应对 |
+| 差异化竞争策略与12强攻略 | `docs/05_差异化竞争策略与12强攻略.md` | 四大差异化武器、评审对标、预判问答 |
+| 飞书AI实操配置手册 | `docs/06_飞书AI实操配置手册.md` | 手把手搭建aily智能体+多维表格 |
+
+---
+
 ## 项目简介
 
 本项目与东方雨虹"3515计划"（3年覆盖507个县城、产值超50亿）战略直接绑定，针对县域建材零售门店痛点，基于飞书AI生态构建四大核心模块 + 1个3515县域大屏：
@@ -18,44 +50,48 @@
 
 ```
 yuhong-smart-store/
-├── README.md                    # 项目说明
-├── requirements.txt             # Python依赖
-├── run.sh                       # 启动脚本
-├── .env.example                 # 环境变量示例
-├── GitHub搭建教程.md            # 手把手GitHub上传教程
-├── 补充材料汇总说明.md          # 材料导航和使用指南
-├── docs/                        # 项目文档（6份，共约4000行）
+├── README.md                              # 项目说明（含评委材料导航）
+├── requirements.txt                       # Python依赖
+├── run.sh                                # 启动脚本
+├── .env.example                          # 环境变量示例
+├── 补充材料/                              # ★ 评委查看的HTML材料
+│   ├── 材料总目录.html                    # 材料导航入口
+│   ├── yuhong-submission/                # 综合补充材料报告
+│   ├── 技术架构图集.html
+│   ├── 竞品对比矩阵.html
+│   ├── 产品需求文档PRD.html
+│   ├── 用户故事地图.html
+│   ├── Demo演示脚本.html
+│   ├── 项目甘特图与时间线.html
+│   ├── 研究笔记与调研记录.html
+│   └── 相关项目经验与技术能力说明.html
+├── docs/                                  # 技术文档（6份Markdown）
 │   ├── 01_行业研究与竞品分析报告.md
 │   ├── 02_技术方案架构设计文档.md
 │   ├── 03_用户需求调研报告.md
 │   ├── 04_实施路线图与里程碑.md
 │   ├── 05_差异化竞争策略与12强攻略.md
 │   └── 06_飞书AI实操配置手册.md
-├── src/                         # 源代码
-│   ├── app.py                   # Flask主应用（含5个页面路由+16个API）
-│   ├── config.py                # 配置文件
-│   ├── modules/                 # 核心业务模块
-│   │   ├── store_inspection.py  # 门店巡检模块
-│   │   ├── ai_shopping_guide.py # AI导购模块
-│   │   ├── store_operation.py   # 门店运营模块
-│   │   └── customer_relation.py # 私域客户维护模块
-│   ├── api/                     # 飞书API封装
-│   │   ├── feishu_bitable.py    # 多维表格API
-│   │   └── feishu_aily.py       # aily智能体API
-│   └── utils/                   # 工具函数
-│       └── helpers.py
-├── templates/                   # 前端页面模板
-│   ├── index.html               # 首页/仪表盘
-│   ├── inspection.html          # 门店巡检页面
-│   ├── guide.html               # AI导购页面
-│   └── bigscreen.html           # 3515县域大屏（亮点功能）
-├── data/                        # 模拟数据
-│   ├── products.json            # 产品知识库
-│   ├── stores.json              # 门店数据
-│   └── inspection_records.json  # 巡检记录
-├── static/                      # 静态资源
-├── requirements.txt             # Python依赖
-└── run.sh                       # 启动脚本
+├── src/                                   # 源代码
+│   ├── app.py                            # Flask主应用（5页面+16API）
+│   ├── config.py                         # 配置文件
+│   ├── api/                              # 飞书API封装
+│   │   ├── feishu_bitable.py             # 多维表格API
+│   │   └── feishu_aily.py               # aily智能体API
+│   └── modules/                          # 核心业务模块
+│       ├── store_inspection.py           # 门店巡检
+│       ├── ai_shopping_guide.py          # AI导购
+│       ├── store_operation.py            # 门店运营
+│       └── customer_relation.py          # 私域客户维护
+├── templates/                             # 前端页面
+│   ├── index.html                        # 首页仪表盘
+│   ├── inspection.html                   # 门店巡检页面
+│   ├── guide.html                        # AI导购页面
+│   └── bigscreen.html                    # 3515县域大屏
+└── data/                                  # 模拟数据
+    ├── products.json                     # 8款产品知识库
+    ├── stores.json                       # 5家门店数据
+    └── inspection_records.json           # 8条巡检记录
 ```
 
 ## 快速开始
@@ -68,20 +104,16 @@ yuhong-smart-store/
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/你的用户名/yuhong-smart-store.git
+git clone https://github.com/yunmm123/yuhong-smart-store.git
 cd yuhong-smart-store
 
 # 2. 安装依赖
 pip install -r requirements.txt
 
-# 3. 配置飞书API密钥（可选，不配置则使用模拟数据）
-cp src/config.example.py src/config.py
-# 编辑 config.py 填入你的飞书应用凭证
-
-# 4. 启动应用
+# 3. 启动应用（无需配置API，自动使用模拟数据）
 python src/app.py
 
-# 5. 打开浏览器访问
+# 4. 打开浏览器访问
 # http://localhost:5000
 ```
 
@@ -97,33 +129,7 @@ python src/app.py
 | Chart.js | 数据可视化 | 门店运营看板 |
 | Bootstrap 5 | 前端UI | 响应式设计 |
 
-## 核心功能演示
-
-### 1. 门店巡检模块
-- 移动端巡检表单（陈列标准、卫生状况、价签准确等）
-- AI图像识别自动检测陈列合规性
-- 巡检结果自动同步至多维表格
-
-### 2. AI导购模块
-- 产品知识智能问答（防水材料选型、施工方案等）
-- 基于客户需求的智能推荐
-- 施工工艺视频自动推送
-
-### 3. 门店运营看板
-- 实时销售数据分析
-- 库存周转预警
-- 客流热力图
-- 经营洞察AI报告
-
-### 4. 私域客户维护
-- 客户画像自动构建
-- AI话术推荐
-- 跟进任务自动生成
-- 复购预测
-
 ## 飞书AI能力对接说明
-
-本项目设计了与飞书AI能力的完整对接方案：
 
 | 模块 | 飞书能力 | 对接方式 |
 |------|---------|---------|
@@ -132,14 +138,11 @@ python src/app.py
 | 门店运营 | 多维表格AI | AI字段 + 数据分析工作流 |
 | 私域维护 | aily + 多维表格 | 客户管理表 + 自动化跟进 |
 
-详见 `docs/02_技术方案架构设计文档.md`
-
 ## 赛事信息
 
 - **赛事名称**: 2026 AI先锋未来人才大赛
 - **企业命题**: 东方雨虹 - 借助飞书AI打造零售门店智慧运营助手
-- **赛道**: AI + 营销推广
-- **区域**: 华北
+- **GitHub仓库**: https://github.com/yunmm123/yuhong-smart-store
 
 ## License
 

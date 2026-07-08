@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>相关项目经验与技术能力说明 - 雨虹智慧门店运营助手</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f5f7fa;
+            color: #2c3e50;
+            line-height: 1.9;
+            padding: 20px;
+        }
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #1677FF 0%, #0958d9 100%);
+            color: #fff;
+            padding: 32px 28px;
+        }
+        .header h1 { font-size: 24px; margin-bottom: 8px; }
+        .header .subtitle { font-size: 14px; opacity: 0.85; }
+        .content { padding: 32px 28px; }
+        h2 {
+            font-size: 18px;
+            color: #1677FF;
+            margin: 28px 0 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e8f0ff;
+        }
+        h3 {
+            font-size: 15px;
+            color: #1a1a1a;
+            margin: 20px 0 10px;
+        }
+        p { font-size: 14px; color: #5a6273; margin-bottom: 12px; line-height: 2; }
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .tech-card {
+            background: #f8fafe;
+            border: 1px solid #e8f0ff;
+            border-radius: 8px;
+            padding: 14px;
+        }
+        .tech-card .tech-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1677FF;
+            margin-bottom: 4px;
+        }
+        .tech-card .tech-desc {
+            font-size: 12px;
+            color: #909399;
+        }
+        .code-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .stat-box {
+            background: linear-gradient(135deg, #f0f5ff 0%, #e6f7ff 100%);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        .stat-box .num {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1677FF;
+        }
+        .stat-box .label {
+            font-size: 12px;
+            color: #909399;
+            margin-top: 4px;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        .feature-list li {
+            padding: 10px 16px;
+            margin-bottom: 8px;
+            background: #f8fafe;
+            border-left: 3px solid #1677FF;
+            border-radius: 0 6px 6px 0;
+            font-size: 14px;
+            color: #5a6273;
+        }
+        .feature-list li strong { color: #1677FF; }
+        .highlight-box {
+            background: linear-gradient(135deg, #fffbe6 0%, #fff7e6 100%);
+            border: 1px solid #ffe58f;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 16px 0;
+        }
+        .highlight-box .title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fa8c16;
+            margin-bottom: 8px;
+        }
+        .highlight-box .content-text {
+            font-size: 13px;
+            color: #8c6e2a;
+            line-height: 1.8;
+        }
+        .file-tree {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: "JetBrains Mono", "Fira Code", monospace;
+            font-size: 12px;
+            line-height: 1.8;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+        .file-tree .dir { color: #569cd6; }
+        .file-tree .file { color: #dcdcaa; }
+        .file-tree .comment { color: #6a9955; }
+        .github-link {
+            display: inline-block;
+            background: #1677FF;
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 16px 0;
+        }
+        .footer {
+            text-align: center;
+            padding: 16px;
+            font-size: 12px;
+            color: #909399;
+            border-top: 1px solid #f0f0f0;
+        }
+        @media (max-width: 600px) {
+            .code-stats { grid-template-columns: repeat(2, 1fr); }
+            .tech-stack { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>相关项目经验与技术能力说明</h1>
+            <div class="subtitle">雨虹智慧门店运营助手 — GitHub开源项目技术说明</div>
+        </div>
+
+        <div class="content">
+            <h2>一、项目概述</h2>
+            <p>
+                本项目是为2026 AI先锋未来人才大赛东方雨虹企业命题开发的完整可运行Demo原型。项目基于飞书AI生态，
+                构建了一套面向建材零售县域门店的智慧运营一体化解决方案，涵盖门店巡检、AI导购、门店运营、私域维护
+                四大核心模块及3515县域大屏亮点功能。
+            </p>
+            <div class="highlight-box">
+                <div class="title">项目亮点</div>
+                <div class="content-text">
+                    不同于大多数参赛队伍仅提供PPT方案，本项目开发了完整可运行的Web应用，包含5个页面、16个API接口、
+                    4大业务模块，并对接了飞书开放平台API（多维表格+aily智能体）。未配置API密钥时自动使用模拟数据模式，开箱即用。
+                </div>
+            </div>
+
+            <h2>二、代码规模与统计</h2>
+            <div class="code-stats">
+                <div class="stat-box">
+                    <div class="num">5</div>
+                    <div class="label">Web页面</div>
+                </div>
+                <div class="stat-box">
+                    <div class="num">16</div>
+                    <div class="label">API接口</div>
+                </div>
+                <div class="stat-box">
+                    <div class="num">4</div>
+                    <div class="label">业务模块</div>
+                </div>
+                <div class="stat-box">
+                    <div class="num">6</div>
+                    <div class="label">技术文档</div>
+                </div>
+            </div>
+
+            <h2>三、技术栈</h2>
+            <div class="tech-stack">
+                <div class="tech-card">
+                    <div class="tech-name">Python + Flask</div>
+                    <div class="tech-desc">后端Web框架，提供页面路由和RESTful API</div>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-name">飞书开放平台API</div>
+                    <div class="tech-desc">多维表格CRUD + aily智能体会话与消息</div>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-name">飞书aily</div>
+                    <div class="tech-desc">AI对话与推荐，支持记忆能力</div>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-name">多维表格AI</div>
+                    <div class="tech-desc">数据分析字段，自动生成经营洞察</div>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-name">Bootstrap 5</div>
+                    <div class="tech-desc">响应式前端UI框架</div>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-name">Chart.js</div>
+                    <div class="tech-desc">数据可视化图表库</div>
+                </div>
+            </div>
+
+            <h2>四、核心功能模块</h2>
+            <ul class="feature-list">
+                <li><strong>门店巡检模块</strong> — 6项检查标准、AI陈列检测、巡检历史记录、分析报告生成。对接飞书妙搭低代码搭建移动巡检应用</li>
+                <li><strong>AI导购模块</strong> — 产品搜索、AI咨询（模拟+真实aily）、智能推荐、施工指南。导入8款东方雨虹产品知识库</li>
+                <li><strong>门店运营模块</strong> — 销售仪表盘、库存分析、客流分析、AI洞察报告。多维表格AI字段自动分析</li>
+                <li><strong>私域客户维护模块</strong> — 客户画像、AI话术推荐、跟进任务自动化、客户分层与复购预测</li>
+                <li><strong>3515县域大屏（亮点）</strong> — 县域门店排行、AI经营洞察、一店一码演示、进度看板。深色科技风可视化</li>
+            </ul>
+
+            <h2>五、项目文件结构</h2>
+            <div class="file-tree">
+<span class="dir">yuhong-smart-store/</span>
+├── <span class="file">README.md</span>                          <span class="comment"># 项目说明</span>
+├── <span class="file">requirements.txt</span>                   <span class="comment"># Python依赖</span>
+├── <span class="file">run.sh</span>                             <span class="comment"># 启动脚本</span>
+├── <span class="file">.env.example</span>                       <span class="comment"># 环境变量示例</span>
+├── <span class="file">GitHub搭建教程.md</span>                  <span class="comment"># 9步上传GitHub教程</span>
+├── <span class="file">补充材料汇总说明.md</span>                <span class="comment"># 材料导航</span>
+├── <span class="dir">docs/</span>                               <span class="comment"># 6份技术文档（约4000行）</span>
+│   ├── <span class="file">01_行业研究与竞品分析报告.md</span>    <span class="comment"># ~400行</span>
+│   ├── <span class="file">02_技术方案架构设计文档.md</span>      <span class="comment"># ~1000行，16个架构图</span>
+│   ├── <span class="file">03_用户需求调研报告.md</span>         <span class="comment"># ~300行</span>
+│   ├── <span class="file">04_实施路线图与里程碑.md</span>        <span class="comment"># ~300行</span>
+│   ├── <span class="file">05_差异化竞争策略与12强攻略.md</span>  <span class="comment"># ~500行</span>
+│   └── <span class="file">06_飞书AI实操配置手册.md</span>       <span class="comment"># ~880行</span>
+├── <span class="dir">src/</span>
+│   ├── <span class="file">app.py</span>                         <span class="comment"># Flask主应用（5页面+16API）</span>
+│   ├── <span class="file">config.py</span>                      <span class="comment"># 配置文件</span>
+│   ├── <span class="dir">api/</span>
+│   │   ├── <span class="file">feishu_bitable.py</span>          <span class="comment"># 多维表格API封装</span>
+│   │   └── <span class="file">feishu_aily.py</span>             <span class="comment"># aily智能体API封装</span>
+│   └── <span class="dir">modules/</span>
+│       ├── <span class="file">store_inspection.py</span>        <span class="comment"># 门店巡检模块</span>
+│       ├── <span class="file">ai_shopping_guide.py</span>       <span class="comment"># AI导购模块</span>
+│       ├── <span class="file">store_operation.py</span>         <span class="comment"># 门店运营模块</span>
+│       └── <span class="file">customer_relation.py</span>       <span class="comment"># 私域客户维护模块</span>
+├── <span class="dir">templates/</span>
+│   ├── <span class="file">index.html</span>                     <span class="comment"># 首页仪表盘</span>
+│   ├── <span class="file">inspection.html</span>                <span class="comment"># 门店巡检页面</span>
+│   ├── <span class="file">guide.html</span>                     <span class="comment"># AI导购页面</span>
+│   └── <span class="file">bigscreen.html</span>                 <span class="comment"># 3515县域大屏</span>
+└── <span class="dir">data/</span>
+    ├── <span class="file">products.json</span>                  <span class="comment"># 8款产品知识库</span>
+    ├── <span class="file">stores.json</span>                    <span class="comment"># 5家门店数据</span>
+    └── <span class="file">inspection_records.json</span>        <span class="comment"># 8条巡检记录</span>
+            </div>
+
+            <h2>六、技术能力展示</h2>
+            <ul class="feature-list">
+                <li><strong>API对接能力</strong> — 完整封装飞书多维表格API（token获取、记录CRUD、批量操作、字段创建）和aily智能体API（会话创建、消息发送）</li>
+                <li><strong>系统架构设计</strong> — 五层架构（数据层→API层→业务模块层→应用层→展示层），模块化设计支持从5店试点→507城→29万网点三步推广</li>
+                <li><strong>模拟数据模式</strong> — 智能检测是否配置了飞书API密钥，未配置时自动切换模拟数据，确保Demo开箱即用</li>
+                <li><strong>数据可视化</strong> — 销售趋势图、库存预警、巡检通过率、县域门店排行等多种图表展示</li>
+                <li><strong>产品知识库</strong> — 完整的8款东方雨虹产品数据（JS防水涂料、聚氨酯、SBS卷材、瓷砖胶、密封胶、美缝剂、透明防水胶、修缮砂浆）</li>
+            </ul>
+
+            <h2>七、GitHub仓库</h2>
+            <p>项目已开源至GitHub，包含完整源代码、技术文档和可运行Demo：</p>
+            <a href="#" class="github-link">https://github.com/你的用户名/yuhong-smart-store</a>
+            <p style="font-size:12px; color:#909399;">（上传后替换"你的用户名"为实际GitHub用户名）</p>
+
+            <div class="highlight-box">
+                <div class="title">如何运行</div>
+                <div class="content-text" style="font-family:monospace;">
+                    git clone https://github.com/你的用户名/yuhong-smart-store.git<br>
+                    cd yuhong-smart-store<br>
+                    pip install -r requirements.txt<br>
+                    python src/app.py<br>
+                    # 打开浏览器访问 http://localhost:5000
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            智虹先锋队 · 2026 AI先锋未来人才大赛 · 东方雨虹企业命题
+        </div>
+    </div>
+</body>
+</html>

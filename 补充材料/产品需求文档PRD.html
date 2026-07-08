@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>产品需求文档 PRD | 雨虹智慧门店</title>
+<style>
+  :root{
+    --ink:#1e293b;
+    --ink-soft:#475569;
+    --ink-mute:#64748b;
+    --line:#e2e8f0;
+    --line-strong:#cbd5e1;
+    --bg:#f8fafc;
+    --card:#ffffff;
+    --brand:#1d4ed8;
+    --brand-soft:#eff4ff;
+    --brand-line:#bfdbfe;
+    --p0:#dc2626;
+    --p0-bg:#fee2e2;
+    --p1:#d97706;
+    --p1-bg:#fef3c7;
+    --p2:#2563eb;
+    --p2-bg:#dbeafe;
+    --accent:#0d9488;
+    --accent-bg:#ccfbf1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Source Han Sans SC","Noto Sans CJK SC",sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.7;
+    font-size:15px;
+    padding:32px 20px 64px;
+  }
+  .wrap{max-width:1120px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 3px rgba(15,23,42,.04);overflow:hidden;}
+  /* Header */
+  .doc-head{
+    padding:36px 48px 32px;
+    background:linear-gradient(180deg,#ffffff 0%,#f5f8ff 100%);
+    border-bottom:1px solid var(--line);
+  }
+  .doc-tag{
+    display:inline-block;font-size:12px;letter-spacing:.06em;
+    color:var(--brand);background:var(--brand-soft);
+    border:1px solid var(--brand-line);border-radius:999px;
+    padding:4px 14px;margin-bottom:14px;font-weight:600;
+  }
+  .doc-head h1{font-size:27px;font-weight:700;letter-spacing:.01em;color:var(--ink);}
+  .doc-head .sub{margin-top:8px;color:var(--ink-soft);font-size:14.5px;}
+  .doc-meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:16px;font-size:13px;color:var(--ink-mute);}
+  .doc-meta span b{color:var(--ink-soft);font-weight:600;}
+  .toc{
+    margin-top:20px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 18px;
+    display:flex;flex-wrap:wrap;gap:6px 10px;font-size:13px;
+  }
+  .toc b{color:var(--ink-mute);font-weight:600;margin-right:6px;}
+  .toc a{color:var(--brand);text-decoration:none;padding:3px 10px;border-radius:6px;background:var(--brand-soft);}
+  .toc a:hover{background:var(--brand-line);}
+
+  /* Sections */
+  section{padding:38px 48px;border-bottom:1px solid var(--line);}
+  section:last-child{border-bottom:none;}
+  .sec-title{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+  .sec-num{
+    flex:0 0 auto;width:30px;height:30px;border-radius:8px;
+    background:var(--brand);color:#fff;font-weight:700;font-size:15px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .sec-title h2{font-size:20px;font-weight:700;color:var(--ink);}
+  .sec-desc{color:var(--ink-mute);font-size:13.5px;margin:4px 0 22px 42px;}
+
+  /* Overview */
+  .overview-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:8px;}
+  .ov-item{border:1px solid var(--line);border-radius:12px;padding:18px 20px;background:#fff;}
+  .ov-item.full{grid-column:1/-1;}
+  .ov-item .k{font-size:12px;color:var(--brand);font-weight:700;letter-spacing:.05em;margin-bottom:6px;}
+  .ov-item .v{font-size:15px;color:var(--ink);font-weight:600;}
+  .ov-item .vd{font-size:13.5px;color:var(--ink-soft);font-weight:400;margin-top:4px;line-height:1.65;}
+
+  /* Tables */
+  .tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;}
+  table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:760px;}
+  table.tbl th,table.tbl td{padding:11px 13px;text-align:left;border-bottom:1px solid var(--line);border-right:1px solid var(--line);vertical-align:top;}
+  table.tbl th:last-child,table.tbl td:last-child{border-right:none;}
+  table.tbl thead th{
+    background:#f1f5f9;color:var(--ink-soft);font-weight:600;font-size:12.5px;letter-spacing:.02em;
+    position:sticky;top:0;white-space:nowrap;
+  }
+  table.tbl tbody tr:nth-child(even){background:#fafbfc;}
+  table.tbl tbody td.c{text-align:center;vertical-align:middle;}
+  table.tbl tbody td code{background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:12px;font-family:"SF Mono",Consolas,Menlo,monospace;color:var(--ink-soft);}
+  .pri{display:inline-flex;align-items:center;justify-content:center;min-width:34px;padding:2px 8px;border-radius:6px;font-weight:700;font-size:12px;letter-spacing:.03em;}
+  .pri.p0{background:var(--p0-bg);color:var(--p0);}
+  .pri.p1{background:var(--p1-bg);color:var(--p1);}
+  .pri.p2{background:var(--p2-bg);color:var(--p2);}
+  .mod{display:inline-block;font-size:11.5px;color:var(--accent);background:var(--accent-bg);border:1px solid #99f6e4;border-radius:5px;padding:1px 7px;font-weight:600;white-space:nowrap;}
+  .fr-id{font-weight:700;color:var(--brand);font-family:"SF Mono",Consolas,Menlo,monospace;font-size:12.5px;white-space:nowrap;}
+
+  /* Role cards */
+  .role-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+  .role{border:1px solid var(--line);border-radius:12px;padding:16px 14px;background:linear-gradient(180deg,#fff 0%,#fbfdff 100%);position:relative;}
+  .role .ic{width:34px;height:34px;border-radius:9px;background:var(--brand-soft);color:var(--brand);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;margin-bottom:10px;border:1px solid var(--brand-line);}
+  .role h4{font-size:15px;color:var(--ink);margin-bottom:4px;}
+  .role .who{font-size:12px;color:var(--ink-mute);margin-bottom:10px;}
+  .role .lbl{font-size:11px;color:var(--brand);font-weight:700;margin-top:8px;margin-bottom:2px;letter-spacing:.04em;}
+  .role .txt{font-size:12.5px;color:var(--ink-soft);line-height:1.6;}
+
+  /* Version timeline */
+  .ver-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .ver{border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+  .ver .vh{padding:16px 20px;color:#fff;}
+  .ver.v1 .vh{background:linear-gradient(135deg,#1d4ed8,#3b82f6);}
+  .ver.v15 .vh{background:linear-gradient(135deg,#0d9488,#14b8a6);}
+  .ver.v2 .vh{background:linear-gradient(135deg,#7c3aed,#a855f7);}
+  .ver .vh .tag{font-size:11px;opacity:.85;letter-spacing:.05em;font-weight:600;}
+  .ver .vh h3{font-size:18px;margin-top:2px;}
+  .ver .vh .when{font-size:12.5px;opacity:.9;margin-top:4px;}
+  .ver .vb{padding:16px 20px;}
+  .ver .vb .goal{font-size:12.5px;color:var(--ink-mute);margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed var(--line);}
+  .ver .vb ul{list-style:none;}
+  .ver .vb li{font-size:13px;color:var(--ink-soft);padding:4px 0 4px 18px;position:relative;}
+  .ver .vb li::before{content:"";position:absolute;left:2px;top:11px;width:7px;height:7px;border-radius:50%;background:var(--brand);opacity:.7;}
+  .ver.v15 .vb li::before{background:var(--accent);}
+  .ver.v2 .vb li::before{background:#7c3aed;}
+
+  .note-box{margin-top:16px;font-size:12.5px;color:var(--ink-soft);background:var(--brand-soft);border:1px solid var(--brand-line);border-radius:10px;padding:12px 16px;}
+  .note-box b{color:var(--brand);}
+
+  .legend-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px;font-size:12.5px;color:var(--ink-soft);}
+  .legend-row .item{display:flex;align-items:center;gap:6px;}
+
+  footer{padding:22px 48px;background:#f8fafc;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-mute);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+
+  @media (max-width:860px){
+    .overview-grid,.role-grid,.ver-grid{grid-template-columns:1fr;}
+    .role-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:560px){
+    body{padding:14px 8px 40px;}
+    section{padding:26px 18px;}
+    .doc-head{padding:24px 18px;}
+    .role-grid{grid-template-columns:1fr;}
+  }
+  @media print{
+    body{background:#fff;padding:0;font-size:12px;}
+    .wrap{border:none;box-shadow:none;border-radius:0;max-width:none;}
+    section{break-inside:avoid;padding:22px 30px;}
+    .tbl-scroll{overflow:visible;}
+    .role,.ver,.ov-item{break-inside:avoid;}
+    .toc{display:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="doc-head">
+    <span class="doc-tag">2026 AI先锋未来人才大赛 · 东方雨虹命题</span>
+    <h1>产品需求文档（PRD）</h1>
+    <div class="sub">雨虹智慧门店 Yuhong Smart Store · 基于飞书AI的建材县域门店数智化运营平台</div>
+    <div class="doc-meta">
+      <span><b>文档版本：</b>V1.0</span>
+      <span><b>编写方：</b>雨虹智慧门店项目组</span>
+      <span><b>状态：</b>评审通过</span>
+      <span><b>更新日期：</b>2026-07</span>
+    </div>
+    <div class="toc">
+      <b>目录</b>
+      <a href="#s1">1 产品概述</a>
+      <a href="#s2">2 用户角色定义</a>
+      <a href="#s3">3 功能需求清单</a>
+      <a href="#s4">4 非功能需求</a>
+      <a href="#s5">5 飞书AI能力映射</a>
+      <a href="#s6">6 版本规划</a>
+      <a href="#s7">7 数据指标定义</a>
+    </div>
+  </div>
+
+  <!-- 1 产品概述 -->
+  <section id="s1">
+    <div class="sec-title">
+      <div class="sec-num">1</div>
+      <h2>产品概述</h2>
+    </div>
+    <p class="sec-desc">明确产品定位、目标用户与核心价值主张，作为后续需求设计的纲领。</p>
+
+    <div class="overview-grid">
+      <div class="ov-item">
+        <div class="k">产品名称</div>
+        <div class="v">雨虹智慧门店（Yuhong Smart Store）</div>
+        <div class="vd">内部代号 YSS，面向东方雨虹分销网络的县域门店数智化 SaaS。</div>
+      </div>
+      <div class="ov-item">
+        <div class="k">产品定位</div>
+        <div class="v">飞书AI驱动的建材县域门店"AI店长"</div>
+        <div class="vd">巡检、导购、分析、私域运营一体化，零硬件零代码、3天上线。</div>
+      </div>
+      <div class="ov-item full">
+        <div class="k">目标用户</div>
+        <div class="v">东方雨虹县域建材经销商门店（约2万家分销终端）</div>
+        <div class="vd">核心使用者为县域店员与县域经销商，管理视角覆盖区域督导与总部管理者，最终服务于进店消费者。门店普遍存在"数字素养低、人员流动快、专业能力弱、私域无沉淀"四类痛点。</div>
+      </div>
+      <div class="ov-item full">
+        <div class="k">核心价值主张</div>
+        <div class="v">让县域门店零门槛拥有一个"懂建材、会巡检、能卖货、看数据"的 AI 店长</div>
+        <div class="vd">依托东方雨虹行业知识沉淀 + 飞书生态原生能力，以一部手机实现"巡检—导购—分析—私域"全链闭环，把一线城市数字化能力下沉到县域，让每一家夫妻店都能用上 AI。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 用户角色定义 -->
+  <section id="s2">
+    <div class="sec-title">
+      <div class="sec-num">2</div>
+      <h2>用户角色定义</h2>
+    </div>
+    <p class="sec-desc">定义 5 类核心用户角色的画像、诉求与关键功能，作为权限与功能设计的依据。</p>
+
+    <div class="role-grid">
+      <div class="role">
+        <div class="ic">消</div>
+        <h4>消费者</h4>
+        <div class="who">终端购建材用户</div>
+        <div class="lbl">核心诉求</div>
+        <div class="txt">选品省心、施工放心、售后有保障。</div>
+        <div class="lbl">关键功能</div>
+        <div class="txt">一店一码引流、产品知识问答、施工方案推荐。</div>
+        <div class="lbl">使用频率</div>
+        <div class="txt">低频（装修周期）。</div>
+      </div>
+      <div class="role">
+        <div class="ic">员</div>
+        <h4>县域店员</h4>
+        <div class="who">门店导购/店长</div>
+        <div class="lbl">核心诉求</div>
+        <div class="txt">少记多卖、操作简单、不增加负担。</div>
+        <div class="lbl">关键功能</div>
+        <div class="txt">移动巡检、AI话术推荐、产品知识问答、跟进任务。</div>
+        <div class="lbl">使用频率</div>
+        <div class="txt">高频（每日）。</div>
+      </div>
+      <div class="role">
+        <div class="ic">商</div>
+        <h4>县域经销商</h4>
+        <div class="who">门店老板/进货决策者</div>
+        <div class="lbl">核心诉求</div>
+        <div class="txt">看清经营、控库存、提复购、降成本。</div>
+        <div class="lbl">关键功能</div>
+        <div class="txt">销售数据分析、库存预警、AI经营报告、复购预测。</div>
+        <div class="lbl">使用频率</div>
+        <div class="txt">中频（每日/每周）。</div>
+      </div>
+      <div class="role">
+        <div class="ic">督</div>
+        <h4>区域督导</h4>
+        <div class="who">片区巡店/赋能者</div>
+        <div class="lbl">核心诉求</div>
+        <div class="txt">巡店提效、问题闭环、对标排名。</div>
+        <div class="lbl">关键功能</div>
+        <div class="txt">移动巡检、整改闭环、多维度看板、门店对标。</div>
+        <div class="lbl">使用频率</div>
+        <div class="txt">中高频（每周）。</div>
+      </div>
+      <div class="role">
+        <div class="ic">总</div>
+        <h4>总部管理者</h4>
+        <div class="who">雨虹总部运营/决策者</div>
+        <div class="lbl">核心诉求</div>
+        <div class="txt">网络洞察、策略下达、风险预警。</div>
+        <div class="lbl">关键功能</div>
+        <div class="txt">全网络看板、AI经营报告、门店活跃率、复购大盘。</div>
+        <div class="lbl">使用频率</div>
+        <div class="txt">低中频（每周/每月）。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 功能需求清单 -->
+  <section id="s3">
+    <div class="sec-title">
+      <div class="sec-num">3</div>
+      <h2>功能需求清单</h2>
+    </div>
+    <p class="sec-desc">共 20 项功能需求，按模块归组，优先级 P0 为 MVP 必备、P1 为 V1.5、P2 为 V2.0。</p>
+
+    <div class="legend-row">
+      <div class="item"><span class="pri p0">P0</span> MVP 必备</div>
+      <div class="item"><span class="pri p1">P1</span> V1.5</div>
+      <div class="item"><span class="pri p2">P2</span> V2.0</div>
+    </div>
+
+    <div class="tbl-scroll">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th style="width:64px">编号</th>
+            <th style="width:84px">模块</th>
+            <th style="width:130px">功能名称</th>
+            <th style="width:56px">优先级</th>
+            <th>描述</th>
+            <th style="width:240px">验收标准</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="fr-id">FR-01</td><td><span class="mod">门店巡检</span></td><td>移动巡检任务</td><td class="c"><span class="pri p0">P0</span></td><td>店员通过飞书接收巡检任务，到店扫码签到并按检查项逐项执行。</td><td>任务下发至店员飞书IM；签到定位误差≤50m；检查项可逐项拍照记录，完成后自动归档。</td></tr>
+          <tr><td class="fr-id">FR-02</td><td><span class="mod">门店巡检</span></td><td>AI图像识别整改</td><td class="c"><span class="pri p0">P0</span></td><td>拍照后AI自动识别陈列、价签、卫生等问题并生成整改单。</td><td>识别准确率≥90%；问题分类≤8类；整改单自动派发责任人并跟踪闭环。</td></tr>
+          <tr><td class="fr-id">FR-03</td><td><span class="mod">AI导购</span></td><td>产品知识问答</td><td class="c"><span class="pri p0">P0</span></td><td>基于雨虹产品知识库的智能问答，支持自然语言提问。</td><td>响应≤3s；Top3召回准确率≥95%；无答案时引导转人工。</td></tr>
+          <tr><td class="fr-id">FR-04</td><td><span class="mod">AI导购</span></td><td>施工方案推荐</td><td class="c"><span class="pri p1">P1</span></td><td>根据户型/部位/工艺自动生成防水施工方案与用料清单。</td><td>支持≥6类施工场景；方案可导出PDF；用料量误差≤5%。</td></tr>
+          <tr><td class="fr-id">FR-05</td><td><span class="mod">AI导购</span></td><td>客户偏好记忆</td><td class="c"><span class="pri p1">P1</span></td><td>记录并结构化客户画像与历史偏好，辅助复购转化。</td><td>客户标签≥20维；偏好跨会话保留；授权后可被导购引用。</td></tr>
+          <tr><td class="fr-id">FR-06</td><td><span class="mod">数据分析</span></td><td>销售数据分析</td><td class="c"><span class="pri p0">P0</span></td><td>多维销售数据穿透分析（品类/门店/时段/导购）。</td><td>下钻层数≥3层；数据T+1更新；支持同比环比。</td></tr>
+          <tr><td class="fr-id">FR-07</td><td><span class="mod">数据分析</span></td><td>库存预警</td><td class="c"><span class="pri p0">P0</span></td><td>库存阈值预警与智能补货建议。</td><td>阈值可配置；预警延迟≤1h；补货建议准确率≥85%。</td></tr>
+          <tr><td class="fr-id">FR-08</td><td><span class="mod">数据分析</span></td><td>客流分析</td><td class="c"><span class="pri p1">P1</span></td><td>进店客流统计与转化漏斗分析。</td><td>客流统计误差≤10%；漏斗层级≥4层；支持时段对比。</td></tr>
+          <tr><td class="fr-id">FR-09</td><td><span class="mod">数据分析</span></td><td>AI经营报告</td><td class="c"><span class="pri p1">P1</span></td><td>自动生成日报/周报/月报并推送至飞书。</td><td>生成耗时≤2min；含关键指标与异常归因；支持定时推送。</td></tr>
+          <tr><td class="fr-id">FR-10</td><td><span class="mod">私域运营</span></td><td>客户画像</td><td class="c"><span class="pri p1">P1</span></td><td>多维客户标签画像与分群运营。</td><td>标签体系≥30项；分群可自定义；画像可导出。</td></tr>
+          <tr><td class="fr-id">FR-11</td><td><span class="mod">AI导购</span></td><td>AI话术推荐</td><td class="c"><span class="pri p1">P1</span></td><td>根据客户意图实时推荐销售话术与异议处理。</td><td>话术库≥200条；推荐响应≤2s；支持场景化匹配。</td></tr>
+          <tr><td class="fr-id">FR-12</td><td><span class="mod">私域运营</span></td><td>跟进任务自动化</td><td class="c"><span class="pri p1">P1</span></td><td>根据客户行为自动生成跟进任务并提醒店员。</td><td>生成规则可配置；提醒触达率≥98%；闭环可追溯。</td></tr>
+          <tr><td class="fr-id">FR-13</td><td><span class="mod">私域运营</span></td><td>复购预测</td><td class="c"><span class="pri p2">P2</span></td><td>基于客户历史预测复购概率与最佳触达时机。</td><td>AUC≥0.8；预测周期≥30天；输出Top复购客户名单。</td></tr>
+          <tr><td class="fr-id">FR-14</td><td><span class="mod">AI导购</span></td><td>建材专业知识</td><td class="c"><span class="pri p0">P0</span></td><td>防水/涂料/瓷砖胶专业知识库与施工规范。</td><td>覆盖≥3大品类；知识更新周期≤7天；支持图文/视频。</td></tr>
+          <tr><td class="fr-id">FR-15</td><td><span class="mod">平台基座</span></td><td>零硬件部署</td><td class="c"><span class="pri p0">P0</span></td><td>纯飞书小程序形态，无需额外硬件投入。</td><td>部署仅需手机+飞书；0硬件成本；3天完成单店上线。</td></tr>
+          <tr><td class="fr-id">FR-16</td><td><span class="mod">平台基座</span></td><td>零代码搭建</td><td class="c"><span class="pri p1">P1</span></td><td>表单/流程/看板可视化拖拽配置。</td><td>配置无需写代码；搭建1个表单≤30min；支持模板复用。</td></tr>
+          <tr><td class="fr-id">FR-17</td><td><span class="mod">数据分析</span></td><td>多维度看板</td><td class="c"><span class="pri p1">P1</span></td><td>可配置的多维度数据看板，按角色定制。</td><td>看板组件≥10种；支持角色定制；刷新≤5s。</td></tr>
+          <tr><td class="fr-id">FR-18</td><td><span class="mod">私域运营</span></td><td>一店一码闭环</td><td class="c"><span class="pri p1">P1</span></td><td>每店专属二维码，扫码引流到私域并归因到店到人。</td><td>一店一码生成≤1min；扫码即沉淀；归因准确率100%。</td></tr>
+          <tr><td class="fr-id">FR-19</td><td><span class="mod">平台基座</span></td><td>县域适配</td><td class="c"><span class="pri p0">P0</span></td><td>适配低数字素养与弱网环境。</td><td>弱网离线可用≥2h；大字简洁模式；支持语音输入。</td></tr>
+          <tr><td class="fr-id">FR-20</td><td><span class="mod">平台基座</span></td><td>飞书生态原生</td><td class="c"><span class="pri p0">P0</span></td><td>深度集成飞书IM/文档/审批/多维表格/日历。</td><td>单点登录；消息/审批/文档原生互通；全程无跳转体验。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box"><b>需求统计：</b>P0 共 9 项（MVP）、P1 共 10 项（V1.5）、P2 共 1 项（V2.0）。模块分布：门店巡检 2、AI导购 6、数据分析 5、私域运营 4、平台基座 3。</div>
+  </section>
+
+  <!-- 4 非功能需求 -->
+  <section id="s4">
+    <div class="sec-title">
+      <div class="sec-num">4</div>
+      <h2>非功能需求</h2>
+    </div>
+    <p class="sec-desc">从性能、安全、可用性、兼容性、可扩展性五个维度定义系统质量目标。</p>
+
+    <div class="tbl-scroll">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th style="width:110px">类别</th>
+            <th style="width:300px">指标要求</th>
+            <th>验收标准 / 说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="mod">性能</span></td>
+            <td>核心接口 P99 响应 ≤ 500ms；问答响应 ≤ 3s；支持 5000 门店并发在线。</td>
+            <td>压测在 5000 并发下 P99 ≤ 500ms；图片识别单张 ≤ 2s；报告生成 ≤ 2min。</td>
+          </tr>
+          <tr>
+            <td><span class="mod">安全</span></td>
+            <td>HTTPS 全链加密；敏感字段脱敏；RBAC 权限分级；数据不出飞书租户。</td>
+            <td>符合等保二级；客户手机号/身份证脱敏展示；按角色五级权限；日志留存≥180天。</td>
+          </tr>
+          <tr>
+            <td><span class="mod">可用性</span></td>
+            <td>系统可用性 ≥ 99.9%；RTO ≤ 30min；RPO ≤ 5min；7×24 监控告警。</td>
+            <td>双可用区部署；关键服务熔断降级；故障 5min 内告警触达值班人。</td>
+          </tr>
+          <tr>
+            <td><span class="mod">兼容性</span></td>
+            <td>飞书全端一致体验；兼容飞书 7.0+；适配低端安卓机。</td>
+            <td>iOS/Android/PC/Web 四端 UI 一致；2GB 内存安卓机流畅运行；弱网降级可用。</td>
+          </tr>
+          <tr>
+            <td><span class="mod">可扩展性</span></td>
+            <td>模块化微服务；水平扩容；新增门店 ≤ 1 天接入；开放 API。</td>
+            <td>巡检/导购/分析/私域四域解耦；提供 OpenAPI 供 ERP/CRM 集成；插件化知识库扩展。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 5 飞书AI能力映射 -->
+  <section id="s5">
+    <div class="sec-title">
+      <div class="sec-num">5</div>
+      <h2>飞书AI能力映射</h2>
+    </div>
+    <p class="sec-desc">将每项功能点映射到所调用的飞书AI能力与集成方式，体现"飞书生态原生"的差异化。</p>
+
+    <div class="tbl-scroll">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th style="width:160px">功能点</th>
+            <th style="width:200px">飞书AI能力</th>
+            <th style="width:150px">调用方式</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>移动巡检任务</td><td>多维表格 + 任务卡片消息 + 审批流</td><td><code>多维表格API</code></td><td>任务以多维表格为数据底座，卡片消息下发到店员，整改走审批流闭环。</td></tr>
+          <tr><td>AI图像识别整改</td><td>飞书多模态大模型（视觉理解）+ 智能伙伴</td><td><code>智能伙伴</code></td><td>拍照触发视觉模型识别陈列/价签问题，智能伙伴生成整改建议。</td></tr>
+          <tr><td>产品知识问答</td><td>飞书智能伙伴（知识库 RAG）</td><td><code>智能伙伴</code></td><td>接入雨虹产品手册知识库，RAG 检索生成精准回答。</td></tr>
+          <tr><td>施工方案推荐</td><td>智能伙伴 + 文档AI</td><td><code>智能伙伴</code></td><td>智能伙伴按场景生成方案，文档AI排版输出可下载PDF。</td></tr>
+          <tr><td>客户偏好记忆</td><td>多维表格AI字段 + 智能伙伴记忆</td><td><code>多维表格AI字段</code></td><td>AI字段自动抽取偏好标签，智能伙伴跨会话持久记忆。</td></tr>
+          <tr><td>销售数据分析</td><td>多维表格AI字段 + 智能伙伴分析</td><td><code>多维表格AI字段</code></td><td>AI字段归因分析，智能伙伴支持自然语言问数。</td></tr>
+          <tr><td>库存预警</td><td>多维表格自动化 + 卡片消息告警</td><td><code>自动化触发器</code></td><td>阈值触发自动化，卡片消息推送到经销商群。</td></tr>
+          <tr><td>客流分析</td><td>多维表格AI字段 + 仪表盘</td><td><code>多维表格AI字段</code></td><td>客流数据AI清洗归因，仪表盘呈现漏斗与时段对比。</td></tr>
+          <tr><td>AI经营报告</td><td>飞书文档AI + 智能伙伴生成</td><td><code>文档AI</code></td><td>智能伙伴汇总数据，文档AI生成结构化报告并定时推送。</td></tr>
+          <tr><td>客户画像</td><td>多维表格AI字段（自动打标）</td><td><code>多维表格AI字段</code></td><td>AI字段自动生成30+标签，支持自定义分群。</td></tr>
+          <tr><td>AI话术推荐</td><td>飞书智能伙伴（实时推荐）</td><td><code>智能伙伴</code></td><td>识别客户意图，实时下发话术卡片到店员会话。</td></tr>
+          <tr><td>跟进任务自动化</td><td>多维表格自动化 + 日历/任务</td><td><code>自动化触发器</code></td><td>行为触发自动建任务，写入飞书任务与日历提醒。</td></tr>
+          <tr><td>复购预测</td><td>智能伙伴预测 + 多维表格</td><td><code>智能伙伴</code></td><td>智能伙伴基于历史预测复购概率，输出名单至多维表格。</td></tr>
+          <tr><td>建材专业知识</td><td>飞书知识库 + 智能伙伴 RAG</td><td><code>知识库</code></td><td>专业知识沉淀于飞书知识库，智能伙伴检索增强问答。</td></tr>
+          <tr><td>零硬件部署</td><td>飞书小程序容器</td><td><code>小程序</code></td><td>全部能力承载于飞书小程序，无需任何硬件。</td></tr>
+          <tr><td>零代码搭建</td><td>飞书低代码（Aily / 多维表格）</td><td><code>Aily低代码</code></td><td>表单/流程/看板拖拽配置，业务方可自助搭建。</td></tr>
+          <tr><td>多维度看板</td><td>多维表格仪表盘</td><td><code>仪表盘</code></td><td>原生仪表盘组件，按角色定制数据看板。</td></tr>
+          <tr><td>一店一码闭环</td><td>飞书小程序 + 多维表格 + 智能伙伴归因</td><td><code>小程序</code></td><td>扫码进小程序沉淀客户，归因数据回写多维表格。</td></tr>
+          <tr><td>县域适配</td><td>飞书小程序 + 妙记语音转写</td><td><code>妙记</code></td><td>大字简洁模式 + 语音输入，妙记转写降低打字门槛。</td></tr>
+          <tr><td>飞书生态原生</td><td>飞书开放平台全栈能力</td><td><code>开放平台</code></td><td>单点登录 + IM/文档/审批/日历原生互通，无跳转体验。</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 6 版本规划 -->
+  <section id="s6">
+    <div class="sec-title">
+      <div class="sec-num">6</div>
+      <h2>版本规划</h2>
+    </div>
+    <p class="sec-desc">三阶段递进：V1.0 验证 MVP 闭环、V1.5 补齐运营与分析、V2.0 智能预测与全域驾驶舱。</p>
+
+    <div class="ver-grid">
+      <div class="ver v1">
+        <div class="vh">
+          <div class="tag">MVP · 0–3 个月</div>
+          <h3>V1.0 基础闭环</h3>
+          <div class="when">目标：跑通"巡检 + 问答 + 数据"最小闭环</div>
+        </div>
+        <div class="vb">
+          <div class="goal">交付 9 项 P0 功能，单店 3 天上线，首批 50 家县域门店试点。</div>
+          <ul>
+            <li>移动巡检任务</li>
+            <li>AI图像识别整改</li>
+            <li>产品知识问答</li>
+            <li>建材专业知识库</li>
+            <li>销售数据分析</li>
+            <li>库存预警</li>
+            <li>零硬件部署</li>
+            <li>飞书生态原生集成</li>
+            <li>县域适配（弱网/大字/语音）</li>
+          </ul>
+        </div>
+      </div>
+      <div class="ver v15">
+        <div class="vh">
+          <div class="tag">运营增强 · 4–6 个月</div>
+          <h3>V1.5 导购与私域</h3>
+          <div class="when">目标：补齐 AI 导购与私域运营全链</div>
+        </div>
+        <div class="vb">
+          <div class="goal">交付 10 项 P1 功能，扩展至 500 家门店，复购率提升试点验证。</div>
+          <ul>
+            <li>施工方案推荐</li>
+            <li>客户偏好记忆</li>
+            <li>AI话术推荐</li>
+            <li>客户画像与分群</li>
+            <li>跟进任务自动化</li>
+            <li>AI经营报告</li>
+            <li>多维度看板</li>
+            <li>一店一码闭环</li>
+            <li>零代码搭建</li>
+            <li>客流分析</li>
+          </ul>
+        </div>
+      </div>
+      <div class="ver v2">
+        <div class="vh">
+          <div class="tag">智能预测 · 7–12 个月</div>
+          <h3>V2.0 全域智能</h3>
+          <div class="when">目标：AI预测 + 全网驾驶舱，规模化至 2000+ 门店</div>
+        </div>
+        <div class="vb">
+          <div class="goal">交付 P2 与高阶能力，形成"预测—决策—执行"智能化闭环。</div>
+          <ul>
+            <li>复购预测（P2）</li>
+            <li>智能补货建议</li>
+            <li>区域督导驾驶舱</li>
+            <li>总部全网洞察看板</li>
+            <li>AI自动外呼回访</li>
+            <li>三方 ERP/CRM 集成开放</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 数据指标定义 -->
+  <section id="s7">
+    <div class="sec-title">
+      <div class="sec-num">7</div>
+      <h2>数据指标定义</h2>
+    </div>
+    <p class="sec-desc">定义 10 个核心数据指标的口径与计算方式，作为效果度量与迭代依据。</p>
+
+    <div class="tbl-scroll">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th style="width:36px">#</th>
+            <th style="width:140px">指标名称</th>
+            <th style="width:240px">定义</th>
+            <th style="width:230px">计算方式</th>
+            <th style="width:90px">目标值</th>
+            <th>负责角色</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="c">1</td><td>巡检完成率</td><td>计划巡检任务中被按时完成的比例</td><td>已完成巡检任务数 ÷ 计划巡检任务数 ×100%</td><td class="c">≥ 95%</td><td>区域督导</td></tr>
+          <tr><td class="c">2</td><td>整改闭环率</td><td>发现问题最终整改闭环的比例</td><td>已闭环整改单数 ÷ 生成整改单总数 ×100%</td><td class="c">≥ 90%</td><td>区域督导</td></tr>
+          <tr><td class="c">3</td><td>AI问答解决率</td><td>无需转人工即由AI解决的问答占比</td><td>AI直接解决会话数 ÷ 总问答会话数 ×100%</td><td class="c">≥ 80%</td><td>总部运营</td></tr>
+          <tr><td class="c">4</td><td>门店活跃率</td><td>周内有效使用产品的门店占比</td><td>周活跃门店数 ÷ 在册门店总数 ×100%</td><td class="c">≥ 70%</td><td>总部运营</td></tr>
+          <tr><td class="c">5</td><td>客户沉淀率</td><td>进店扫码客户沉淀至私域的比例</td><td>沉淀至私域客户数 ÷ 进店扫码客户数 ×100%</td><td class="c">≥ 60%</td><td>县域经销商</td></tr>
+          <tr><td class="c">6</td><td>复购率</td><td>首次购买客户30天内再次购买的比例</td><td>30天内复购客户数 ÷ 首次购买客户数 ×100%</td><td class="c">≥ 25%</td><td>县域经销商</td></tr>
+          <tr><td class="c">7</td><td>库存周转天数</td><td>库存资金周转一次所需天数</td><td>平均库存金额 ÷ 日均销售成本</td><td class="c">≤ 30 天</td><td>县域经销商</td></tr>
+          <tr><td class="c">8</td><td>跟进任务完成率</td><td>系统生成的跟进任务按时完成比例</td><td>按时完成跟进任务数 ÷ 生成跟进任务总数 ×100%</td><td class="c">≥ 85%</td><td>县域店员</td></tr>
+          <tr><td class="c">9</td><td>报告生成时效</td><td>AI经营报告从生成到送达的平均耗时</td><td>Σ(报告送达时间−触发时间) ÷ 报告数</td><td class="c">≤ 2 min</td><td>总部运营</td></tr>
+          <tr><td class="c">10</td><td>人效提升率</td><td>上线后门店人均产出提升幅度</td><td>(上线后人均月产出 − 上线前) ÷ 上线前人均月产出 ×100%</td><td class="c">≥ 20%</td><td>县域经销商</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box"><b>指标分层：</b>1–2 衡量巡检执行力，3–4 衡量产品采纳度，5–6 衡量私域与复购价值，7–8 衡量经营效率，9–10 衡量平台效能与商业回报。</div>
+  </section>
+
+  <footer>
+    <span>2026 AI先锋未来人才大赛 · 东方雨虹命题提交材料 · 产品需求文档 PRD</span>
+    <span>雨虹智慧门店项目组 · V1.0 · 内部资料</span>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>技术架构图集 · 2026 AI先锋未来人才大赛 · 东方雨虹命题</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    background: #0a1628;
+    color: #ffffff;
+    font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+  body {
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(0, 120, 212, 0.18) 0%, transparent 45%),
+      radial-gradient(ellipse at 80% 100%, rgba(0, 199, 172, 0.12) 0%, transparent 45%),
+      #0a1628;
+    min-height: 100vh;
+  }
+  .container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+  /* 页头 */
+  .header {
+    text-align: center;
+    margin-bottom: 56px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    position: relative;
+  }
+  .header::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -1px;
+    transform: translateX(-50%);
+    width: 160px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00c7ac, #0078d4, transparent);
+  }
+  .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border: 1px solid rgba(0, 199, 172, 0.5);
+    border-radius: 20px;
+    color: #00c7ac;
+    font-size: 13px;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    background: rgba(0, 199, 172, 0.06);
+  }
+  .header h1 {
+    font-size: 38px;
+    font-weight: 700;
+    background: linear-gradient(120deg, #ffffff 0%, #7fd8ff 60%, #00c7ac 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 3px;
+    margin-bottom: 14px;
+  }
+  .header .subtitle {
+    color: #8aa4c0;
+    font-size: 16px;
+    letter-spacing: 1px;
+  }
+
+  /* 图块 */
+  .diagram {
+    background: linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 40px 36px;
+    margin-bottom: 48px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+    position: relative;
+    overflow: hidden;
+  }
+  .diagram::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, #0078d4, #00c7ac, transparent);
+  }
+  .diagram-head {
+    margin-bottom: 28px;
+  }
+  .diagram-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .diagram-title .num {
+    flex-shrink: 0;
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #0078d4, #00c7ac);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    color: #061427;
+    box-shadow: 0 4px 14px rgba(0,120,212,0.4);
+  }
+  .diagram-title h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 1px;
+  }
+  .diagram-desc {
+    color: #9fb4cc;
+    font-size: 14.5px;
+    padding-left: 54px;
+    line-height: 1.7;
+  }
+  .svg-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .svg-wrap svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* 页脚 */
+  .footer {
+    text-align: center;
+    margin-top: 60px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    color: #6b86a3;
+    font-size: 14px;
+    letter-spacing: 2px;
+  }
+  .footer .line1 {
+    color: #9fb4cc;
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+  .footer .line2 {
+    font-size: 13px;
+    color: #5d7a9c;
+  }
+
+  @media (max-width: 720px) {
+    .container { padding: 28px 14px 60px; }
+    .header h1 { font-size: 26px; }
+    .diagram { padding: 24px 14px; }
+    .diagram-title h2 { font-size: 19px; }
+    .diagram-desc { padding-left: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">TECHNICAL ARCHITECTURE ATLAS</div>
+    <h1>技术架构可视化图集</h1>
+    <div class="subtitle">东方雨虹 · 智虹先锋队 · 飞书AI全链路解决方案</div>
+  </div>
+
+  <!-- ============ 图1：系统总体五层架构图 ============ -->
+  <div class="diagram">
+    <div class="diagram-head">
+      <div class="diagram-title">
+        <div class="num">01</div>
+        <h2>系统总体五层架构图</h2>
+      </div>
+      <div class="diagram-desc">系统采用自上而下的五层架构设计，以飞书生态为底座，向上贯通数据层、AI能力层、应用层与用户层，实现从终端用户到平台能力的全链路打通，构建覆盖"人-货-场-服务"的完整闭环。</div>
+    </div>
+    <div class="svg-wrap">
+      <svg viewBox="0 0 1080 640" width="1080" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="L1" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#e74c3c"/><stop offset="100%" stop-color="#c0392b"/>
+          </linearGradient>
+          <linearGradient id="L2" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#f39c12"/><stop offset="100%" stop-color="#e67e22"/>
+          </linearGradient>
+          <linearGradient id="L3" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#00c7ac"/><stop offset="100%" stop-color="#00a890"/>
+          </linearGradient>
+          <linearGradient id="L4" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#0078d4"/><stop offset="100%" stop-color="#005a9e"/>
+          </linearGradient>
+          <linearGradient id="L5" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#8e44ad"/><stop offset="100%" stop-color="#6c3483"/>
+          </linearGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+
+        <!-- 左侧层级标签 -->
+        <text x="20" y="80" fill="#5d7a9c" font-size="12" letter-spacing="2">LAYER 01</text>
+        <text x="20" y="195" fill="#5d7a9c" font-size="12" letter-spacing="2">LAYER 02</text>
+        <text x="20" y="310" fill="#5d7a9c" font-size="12" letter-spacing="2">LAYER 03</text>
+        <text x="20" y="425" fill="#5d7a9c" font-size="12" letter-spacing="2">LAYER 04</text>
+        <text x="20" y="540" fill="#5d7a9c" font-size="12" letter-spacing="2">LAYER 05</text>
+
+        <!-- 第1层 用户层 -->
+        <rect x="100" y="30" width="940" height="100" rx="12" fill="url(#L1)" opacity="0.92"/>
+        <rect x="100" y="30" width="940" height="100" rx="12" fill="none" stroke="#ff7b6b" stroke-width="1.5" opacity="0.7"/>
+        <text x="125" y="68" fill="#fff" font-size="20" font-weight="700">用户层</text>
+        <text x="125" y="92" fill="#ffe5e0" font-size="12" opacity="0.85">User Layer · 触达终端</text>
+        <g font-size="13.5" fill="#fff">
+          <rect x="300" y="55" width="150" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="375" y="85" text-anchor="middle">C端消费者</text>
+          <rect x="465" y="55" width="150" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="540" y="85" text-anchor="middle">门店店长</text>
+          <rect x="630" y="55" width="150" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="705" y="85" text-anchor="middle">区域督导</text>
+          <rect x="795" y="55" width="150" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="870" y="85" text-anchor="middle">总部运营</text>
+        </g>
+
+        <!-- 连接箭头 1->2 -->
+        <g stroke="#3a5878" stroke-width="1.5" fill="none" opacity="0.6">
+          <path d="M540 130 L540 145" marker-end="url(#arr2)"/>
+        </g>
+        <defs>
+          <marker id="arr2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 z" fill="#3a5878"/>
+          </marker>
+        </defs>
+
+        <!-- 第2层 应用层 -->
+        <rect x="100" y="145" width="940" height="100" rx="12" fill="url(#L2)" opacity="0.92"/>
+        <rect x="100" y="145" width="940" height="100" rx="12" fill="none" stroke="#ffb84d" stroke-width="1.5" opacity="0.7"/>
+        <text x="125" y="183" fill="#fff" font-size="20" font-weight="700">应用层</text>
+        <text x="125" y="207" fill="#fff3df" font-size="12" opacity="0.9">Application Layer · 业务四大模块</text>
+        <g font-size="13.5" fill="#fff">
+          <rect x="300" y="170" width="150" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="375" y="200" text-anchor="middle">门店巡检</text>
+          <rect x="465" y="170" width="150" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="540" y="200" text-anchor="middle">AI 导购</text>
+          <rect x="630" y="170" width="150" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="705" y="200" text-anchor="middle">门店运营</text>
+          <rect x="795" y="170" width="150" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="870" y="200" text-anchor="middle">私域维护</text>
+        </g>
+
+        <!-- 连接箭头 2->3 -->
+        <g stroke="#3a5878" stroke-width="1.5" fill="none" opacity="0.6">
+          <path d="M540 245 L540 260" marker-end="url(#arr2)"/>
+        </g>
+
+        <!-- 第3层 AI能力层 -->
+        <rect x="100" y="260" width="940" height="100" rx="12" fill="url(#L3)" opacity="0.92"/>
+        <rect x="100" y="260" width="940" height="100" rx="12" fill="none" stroke="#3fffd8" stroke-width="1.5" opacity="0.7"/>
+        <text x="125" y="298" fill="#fff" font-size="20" font-weight="700">AI 能力层</text>
+        <text x="125" y="322" fill="#d8fff5" font-size="12" opacity="0.9">AI Capability Layer · 智能引擎中枢</text>
+        <g font-size="13.5" fill="#fff">
+          <rect x="300" y="285" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="367" y="315" text-anchor="middle">aily 智能体</text>
+          <rect x="445" y="285" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="512" y="315" text-anchor="middle">知识库</text>
+          <rect x="590" y="285" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="657" y="315" text-anchor="middle">多维分析</text>
+          <rect x="735" y="285" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="802" y="315" text-anchor="middle">智能问答</text>
+          <rect x="880" y="285" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="947" y="315" text-anchor="middle">流程自动化</text>
+        </g>
+
+        <!-- 连接箭头 3->4 -->
+        <g stroke="#3a5878" stroke-width="1.5" fill="none" opacity="0.6">
+          <path d="M540 360 L540 375" marker-end="url(#arr2)"/>
+        </g>
+
+        <!-- 第4层 数据层 -->
+        <rect x="100" y="375" width="940" height="100" rx="12" fill="url(#L4)" opacity="0.92"/>
+        <rect x="100" y="375" width="940" height="100" rx="12" fill="none" stroke="#4da3ff" stroke-width="1.5" opacity="0.7"/>
+        <text x="125" y="413" fill="#fff" font-size="20" font-weight="700">数据层</text>
+        <text x="125" y="437" fill="#dceeff" font-size="12" opacity="0.9">Data Layer · 统一数据底座</text>
+        <g font-size="13.5" fill="#fff">
+          <rect x="300" y="400" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="367" y="430" text-anchor="middle">门店数据</text>
+          <rect x="445" y="400" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="512" y="430" text-anchor="middle">商品数据</text>
+          <rect x="590" y="400" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="657" y="430" text-anchor="middle">用户数据</text>
+          <rect x="735" y="400" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="802" y="430" text-anchor="middle">施工数据</text>
+          <rect x="880" y="400" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="947" y="430" text-anchor="middle">知识文档</text>
+        </g>
+
+        <!-- 连接箭头 4->5 -->
+        <g stroke="#3a5878" stroke-width="1.5" fill="none" opacity="0.6">
+          <path d="M540 475 L540 490" marker-end="url(#arr2)"/>
+        </g>
+
+        <!-- 第5层 飞书生态层 -->
+        <rect x="100" y="490" width="940" height="100" rx="12" fill="url(#L5)" opacity="0.92"/>
+        <rect x="100" y="490" width="940" height="100" rx="12" fill="none" stroke="#b98cdb" stroke-width="1.5" opacity="0.7"/>
+        <text x="125" y="528" fill="#fff" font-size="20" font-weight="700">飞书生态层</text>
+        <text x="125" y="552" fill="#f0e0ff" font-size="12" opacity="0.9">Feishu Ecosystem · 平台基础设施</text>
+        <g font-size="13.5" fill="#fff">
+          <rect x="300" y="515" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="367" y="545" text-anchor="middle">开放平台</text>
+          <rect x="445" y="515" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="512" y="545" text-anchor="middle">多维表格</text>
+          <rect x="590" y="515" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="657" y="545" text-anchor="middle">消息推送</text>
+          <rect x="735" y="515" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="802" y="545" text-anchor="middle">审批流程</text>
+          <rect x="880" y="515" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="947" y="545" text-anchor="middle">日历日程</text>
+        </g>
+
+        <!-- 右侧纵向贯穿指示 -->
+        <g opacity="0.5">
+          <line x1="1050" y1="60" x2="1050" y2="565" stroke="#2a4a6a" stroke-width="1" stroke-dasharray="4 4"/>
+          <circle cx="1050" cy="60" r="3" fill="#e74c3c"/>
+          <circle cx="1050" cy="195" r="3" fill="#f39c12"/>
+          <circle cx="1050" cy="310" r="3" fill="#00c7ac"/>
+          <circle cx="1050" cy="425" r="3" fill="#0078d4"/>
+          <circle cx="1050" cy="540" r="3" fill="#8e44ad"/>
+        </g>
+        <text x="1066" y="315" fill="#5d7a9c" font-size="11" transform="rotate(90 1066 315)" text-anchor="middle">全链路贯通 · 数据双向流转</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ============ 图2：四大模块数据流转图 ============ -->
+  <div class="diagram">
+    <div class="diagram-head">
+      <div class="diagram-title">
+        <div class="num">02</div>
+        <h2>四大模块数据流转图</h2>
+      </div>
+      <div class="diagram-desc">四大业务模块以循环驱动方式协同运转：门店巡检采集一线数据，AI导购沉淀消费需求，门店运营优化经营效率，私域维护实现用户复购，最终数据回流形成业务飞轮，持续自我强化。</div>
+    </div>
+    <div class="svg-wrap">
+      <svg viewBox="0 0 1080 620" width="1080" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrowG" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="#00c7ac"/>
+          </marker>
+          <radialGradient id="centerG" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#00c7ac" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#00c7ac" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- 中心 -->
+        <circle cx="540" cy="310" r="170" fill="url(#centerG)"/>
+        <circle cx="540" cy="310" r="90" fill="rgba(0,199,172,0.08)" stroke="#00c7ac" stroke-width="1.5" stroke-dasharray="3 4"/>
+        <text x="540" y="300" text-anchor="middle" fill="#00c7ac" font-size="16" font-weight="700">数据飞轮</text>
+        <text x="540" y="322" text-anchor="middle" fill="#9fb4cc" font-size="12">Data Flywheel</text>
+        <text x="540" y="342" text-anchor="middle" fill="#5d7a9c" font-size="11">持续自我强化</text>
+
+        <!-- 顺时针弧线箭头（四个模块之间） -->
+        <g fill="none" stroke="#00c7ac" stroke-width="2.5" opacity="0.85">
+          <!-- 门店巡检(左上) -> AI导购(右上) -->
+          <path d="M 360 200 Q 540 120 720 200" marker-end="url(#arrowG)"/>
+          <!-- AI导购(右上) -> 门店运营(右下) -->
+          <path d="M 780 260 Q 860 420 720 460" marker-end="url(#arrowG)"/>
+          <!-- 门店运营(右下) -> 私域维护(左下) -->
+          <path d="M 540 480 Q 360 560 300 460" marker-end="url(#arrowG)"/>
+          <!-- 私域维护(左下) -> 门店巡检(左上) -->
+          <path d="M 300 360 Q 220 260 360 200" marker-end="url(#arrowG)"/>
+        </g>
+
+        <!-- 数据流标签 -->
+        <g fill="#7fd8ff" font-size="12" text-anchor="middle">
+          <rect x="490" y="128" width="100" height="22" rx="11" fill="#0a1628" stroke="#0078d4" stroke-width="1"/>
+          <text x="540" y="143">巡检数据</text>
+          <rect x="820" y="330" width="100" height="22" rx="11" fill="#0a1628" stroke="#0078d4" stroke-width="1"/>
+          <text x="870" y="345">消费需求</text>
+          <rect x="360" y="528" width="100" height="22" rx="11" fill="#0a1628" stroke="#0078d4" stroke-width="1"/>
+          <text x="410" y="543">经营画像</text>
+          <rect x="160" y="330" width="100" height="22" rx="11" fill="#0a1628" stroke="#0078d4" stroke-width="1"/>
+          <text x="210" y="345">复购回流</text>
+        </g>
+
+        <!-- 模块1：门店巡检（左上） -->
+        <g>
+          <rect x="180" y="150" width="180" height="120" rx="14" fill="#1a2c44" stroke="#e67e22" stroke-width="2"/>
+          <circle cx="210" cy="180" r="16" fill="#e67e22"/>
+          <text x="210" y="186" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">1</text>
+          <text x="236" y="186" fill="#fff" font-size="16" font-weight="700">门店巡检</text>
+          <line x1="196" y1="202" x2="344" y2="202" stroke="#2a4a6a" stroke-width="1"/>
+          <text x="196" y="222" fill="#9fb4cc" font-size="11.5">输入：门店现场图像/位置</text>
+          <text x="196" y="240" fill="#9fb4cc" font-size="11.5">处理：AI 识别陈列合规</text>
+          <text x="196" y="258" fill="#7fd8ff" font-size="11.5">输出：巡检报告 + 评分</text>
+        </g>
+
+        <!-- 模块2：AI导购（右上） -->
+        <g>
+          <rect x="720" y="150" width="180" height="120" rx="14" fill="#1a2c44" stroke="#00c7ac" stroke-width="2"/>
+          <circle cx="750" cy="180" r="16" fill="#00c7ac"/>
+          <text x="750" y="186" text-anchor="middle" fill="#061427" font-size="14" font-weight="700">2</text>
+          <text x="776" y="186" fill="#fff" font-size="16" font-weight="700">AI 导购</text>
+          <line x1="736" y1="202" x2="884" y2="202" stroke="#2a4a6a" stroke-width="1"/>
+          <text x="736" y="222" fill="#9fb4cc" font-size="11.5">输入：消费者咨询问题</text>
+          <text x="736" y="240" fill="#9fb4cc" font-size="11.5">处理：aily 知识检索匹配</text>
+          <text x="736" y="258" fill="#7fd8ff" font-size="11.5">输出：产品推荐 + 方案</text>
+        </g>
+
+        <!-- 模块3：门店运营（右下） -->
+        <g>
+          <rect x="720" y="380" width="180" height="120" rx="14" fill="#1a2c44" stroke="#0078d4" stroke-width="2"/>
+          <circle cx="750" cy="410" r="16" fill="#0078d4"/>
+          <text x="750" y="416" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">3</text>
+          <text x="776" y="416" fill="#fff" font-size="16" font-weight="700">门店运营</text>
+          <line x1="736" y1="432" x2="884" y2="432" stroke="#2a4a6a" stroke-width="1"/>
+          <text x="736" y="452" fill="#9fb4cc" font-size="11.5">输入：销售/库存/巡检</text>
+          <text x="736" y="470" fill="#9fb4cc" font-size="11.5">处理：多维分析 + 预警</text>
+          <text x="736" y="488" fill="#7fd8ff" font-size="11.5">输出：经营建议 + 任务</text>
+        </g>
+
+        <!-- 模块4：私域维护（左下） -->
+        <g>
+          <rect x="180" y="380" width="180" height="120" rx="14" fill="#1a2c44" stroke="#8e44ad" stroke-width="2"/>
+          <circle cx="210" cy="410" r="16" fill="#8e44ad"/>
+          <text x="210" y="416" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">4</text>
+          <text x="236" y="416" fill="#fff" font-size="16" font-weight="700">私域维护</text>
+          <line x1="196" y1="432" x2="344" y2="432" stroke="#2a4a6a" stroke-width="1"/>
+          <text x="196" y="452" fill="#9fb4cc" font-size="11.5">输入：用户标签/行为</text>
+          <text x="196" y="470" fill="#9fb4cc" font-size="11.5">处理：分群 + 自动触达</text>
+          <text x="196" y="488" fill="#7fd8ff" font-size="11.5">输出：复购转化 + 留存</text>
+        </g>
+
+        <!-- 底部图例 -->
+        <g transform="translate(180,560)">
+          <rect x="0" y="0" width="720" height="42" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
+          <text x="20" y="26" fill="#9fb4cc" font-size="12">流转方向：</text>
+          <line x1="92" y1="21" x2="132" y2="21" stroke="#00c7ac" stroke-width="2.5" marker-end="url(#arrowG)"/>
+          <text x="148" y="26" fill="#7fd8ff" font-size="12">数据正向流转</text>
+          <circle cx="290" cy="21" r="6" fill="#7fd8ff"/>
+          <text x="304" y="26" fill="#9fb4cc" font-size="12">模块输出</text>
+          <circle cx="400" cy="21" r="6" fill="#9fb4cc"/>
+          <text x="414" y="26" fill="#9fb4cc" font-size="12">模块输入</text>
+          <circle cx="520" cy="21" r="9" fill="none" stroke="#00c7ac" stroke-width="1.5" stroke-dasharray="3 4"/>
+          <text x="540" y="26" fill="#9fb4cc" font-size="12">数据飞轮 · 持续闭环强化</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ============ 图3：飞书AI能力对接矩阵 ============ -->
+  <div class="diagram">
+    <div class="diagram-head">
+      <div class="diagram-title">
+        <div class="num">03</div>
+        <h2>飞书AI能力对接矩阵</h2>
+      </div>
+      <div class="diagram-desc">矩阵展示四大业务模块与五种飞书AI核心能力的对接关系。绿色圆点表示已完成对接并投入使用的能力，灰色圆点表示规划中或暂未对接的能力，清晰呈现能力覆盖度与待拓展空间。</div>
+    </div>
+    <div class="svg-wrap">
+      <svg viewBox="0 0 1080 560" width="1080" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="greenDot" cx="35%" cy="35%" r="65%">
+            <stop offset="0%" stop-color="#5dffce"/>
+            <stop offset="100%" stop-color="#00a877"/>
+          </radialGradient>
+        </defs>
+
+        <!-- 表头背景 -->
+        <rect x="160" y="40" width="900" height="70" rx="10" fill="rgba(0,120,212,0.12)" stroke="#0078d4" stroke-width="1"/>
+        <text x="80" y="80" text-anchor="middle" fill="#7fd8ff" font-size="13" font-weight="700">业务模块</text>
+        <text x="80" y="98" text-anchor="middle" fill="#5d7a9c" font-size="11">\ 飞书能力</text>
+
+        <!-- 列标题 5种能力 -->
+        <g fill="#fff" font-size="14" font-weight="600" text-anchor="middle">
+          <text x="270" y="72">aily</text>
+          <text x="270" y="92" fill="#9fb4cc" font-size="11" font-weight="400">智能体</text>
+          <text x="430" y="72">多维表格</text>
+          <text x="430" y="92" fill="#9fb4cc" font-size="11" font-weight="400">Bitable</text>
+          <text x="590" y="72">知识库</text>
+          <text x="590" y="92" fill="#9fb4cc" font-size="11" font-weight="400">Wiki</text>
+          <text x="750" y="72">消息推送</text>
+          <text x="750" y="92" fill="#9fb4cc" font-size="11" font-weight="400">Message</text>
+          <text x="910" y="72">审批流程</text>
+          <text x="910" y="92" fill="#9fb4cc" font-size="11" font-weight="400">Approval</text>
+        </g>
+
+        <!-- 列分隔虚线 -->
+        <g stroke="#2a4a6a" stroke-width="1" stroke-dasharray="3 4" opacity="0.6">
+          <line x1="350" y1="120" x2="350" y2="480"/>
+          <line x1="510" y1="120" x2="510" y2="480"/>
+          <line x1="670" y1="120" x2="670" y2="480"/>
+          <line x1="830" y1="120" x2="830" y2="480"/>
+        </g>
+
+        <!-- 行1：门店巡检 -->
+        <g>
+          <rect x="20" y="130" width="1040" height="80" rx="6" fill="rgba(230,126,34,0.05)"/>
+          <rect x="20" y="130" width="135" height="80" rx="6" fill="rgba(230,126,34,0.18)" stroke="#e67e22" stroke-width="1.5"/>
+          <text x="87" y="165" text-anchor="middle" fill="#ffb84d" font-size="15" font-weight="700">门店巡检</text>
+          <text x="87" y="186" text-anchor="middle" fill="#9fb4cc" font-size="11">Store Audit</text>
+          <!-- aily: 已对接 -->
+          <circle cx="270" cy="170" r="14" fill="url(#greenDot)"/><circle cx="266" cy="166" r="4" fill="#fff" opacity="0.6"/>
+          <!-- 多维表格: 已对接 -->
+          <circle cx="430" cy="170" r="14" fill="url(#greenDot)"/><circle cx="426" cy="166" r="4" fill="#fff" opacity="0.6"/>
+          <!-- 知识库: 未对接 -->
+          <circle cx="590" cy="170" r="14" fill="rgba(255,255,255,0.08)" stroke="#3a5878" stroke-width="1.5"/>
+          <!-- 消息推送: 已对接 -->
+          <circle cx="750" cy="170" r="14" fill="url(#greenDot)"/><circle cx="746" cy="166" r="4" fill="#fff" opacity="0.6"/>
+          <!-- 审批流程: 未对接 -->
+          <circle cx="910" cy="170" r="14" fill="rgba(255,255,255,0.08)" stroke="#3a5878" stroke-width="1.5"/>
+        </g>
+
+        <!-- 行2：AI导购 -->
+        <g>
+          <rect x="20" y="220" width="1040" height="80" rx="6" fill="rgba(0,199,172,0.05)"/>
+          <rect x="20" y="220" width="135" height="80" rx="6" fill="rgba(0,199,172,0.18)" stroke="#00c7ac" stroke-width="1.5"/>
+          <text x="87" y="255" text-anchor="middle" fill="#3fffd8" font-size="15" font-weight="700">AI 导购</text>
+          <text x="87" y="276" text-anchor="middle" fill="#9fb4cc" font-size="11">AI Shopping</text>
+          <circle cx="270" cy="260" r="14" fill="url(#greenDot)"/><circle cx="266" cy="256" r="4" fill="#fff" opacity="0.6"/>
+          <circle cx="430" cy="260" r="14" fill="rgba(255,255,255,0.08)" stroke="#3a5878" stroke-width="1.5"/>
+          <circle cx="590" cy="260" r="14" fill="url(#greenDot)"/><circle cx="586" cy="256" r="4" fill="#fff" opacity="0.6"/>
+          <circle cx="750" cy="260" r="14" fill="url(#greenDot)"/><circle cx="746" cy="256" r="4" fill="#fff" opacity="0.6"/>
+          <circle cx="910" cy="260" r="14" fill="rgba(255,255,255,0.08)" stroke="#3a5878" stroke-width="1.5"/>
+        </g>
+
+        <!-- 行3：门店运营 -->
+        <g>
+          <rect x="20" y="310" width="1040" height="80" rx="6" fill="rgba(0,120,212,0.05)"/>
+          <rect x="20" y="310" width="135" height="80" rx="6" fill="rgba(0,120,212,0.18)" stroke="#0078d4" stroke-width="1.5"/>
+          <text x="87" y="345" text-anchor="middle" fill="#4da3ff" font-size="15" font-weight="700">门店运营</text>
+          <text x="87" y="366" text-anchor="middle" fill="#9fb4cc" font-size="11">Operations</text>
+          <circle cx="270" cy="350" r="14" fill="url(#greenDot)"/><circle cx="266" cy="346" r="4" fill="#fff" opacity="0.6"/>
+          <circle cx="430" cy="350" r="14" fill="url(#greenDot)"/><circle cx="426" cy="346" r="4" fill="#fff" opacity="0.6"/>
+          <circle cx="590" cy="350" r="14" fill="url(#greenDot)"/><circle cx="586" cy="346" r="4" fill="#fff" opacity="0.6"/>
+          <circle cx="750" cy="350" r="14" fill="url(#greenDot)"/><circle cx="746" cy="346" r="4" fill="#fff" opacity="0.6"/>
+          <circle cx="910" cy="350" r="14" fill="url(#greenDot)"/><circle cx="906" cy="346" r="4" fill="#fff" opacity="0.6"/>
+        </g>
+
+        <!-- 行4：私域维护 -->
+        <g>
+          <rect x="20" y="400" width="1040" height="80" rx="6" fill="rgba(142,68,173,0.05)"/>
+          <rect x="20" y="400" width="135" height="80" rx="6" fill="rgba(142,68,173,0.18)" stroke="#8e44ad" stroke-width="1.5"/>
+          <text x="87" y="435" text-anchor="middle" fill="#b98cdb" font-size="15" font-weight="700">私域维护</text>
+          <text x="87" y="456" text-anchor="middle" fill="#9fb4cc" font-size="11">Private Domain</text>
+          <circle cx="270" cy="440" r="14" fill="url(#greenDot)"/><circle cx="266" cy="436" r="4" fill="#fff" opacity="0.6"/>
+          <circle cx="430" cy="440" r="14" fill="url(#greenDot)"/><circle cx="426" cy="436" r="4" fill="#fff" opacity="0.6"/>
+          <circle cx="590" cy="440" r="14" fill="rgba(255,255,255,0.08)" stroke="#3a5878" stroke-width="1.5"/>
+          <circle cx="750" cy="440" r="14" fill="url(#greenDot)"/><circle cx="746" cy="436" r="4" fill="#fff" opacity="0.6"/>
+          <circle cx="910" cy="440" r="14" fill="rgba(255,255,255,0.08)" stroke="#3a5878" stroke-width="1.5"/>
+        </g>
+
+        <!-- 统计行 -->
+        <g transform="translate(20,500)">
+          <rect x="0" y="0" width="1040" height="44" rx="8" fill="rgba(0,199,172,0.08)" stroke="#00c7ac" stroke-width="1" opacity="0.6"/>
+          <text x="20" y="28" fill="#7fd8ff" font-size="13" font-weight="600">能力对接覆盖率统计：</text>
+          <text x="200" y="28" fill="#5dffce" font-size="13" font-weight="700">14 / 20</text>
+          <text x="252" y="28" fill="#9fb4cc" font-size="12">（70%）</text>
+          <text x="330" y="28" fill="#9fb4cc" font-size="12">·</text>
+          <text x="350" y="28" fill="#9fb4cc" font-size="12">aily 4/4</text>
+          <text x="450" y="28" fill="#9fb4cc" font-size="12">·</text>
+          <text x="470" y="28" fill="#9fb4cc" font-size="12">多维表格 3/4</text>
+          <text x="580" y="28" fill="#9fb4cc" font-size="12">·</text>
+          <text x="600" y="28" fill="#9fb4cc" font-size="12">知识库 2/4</text>
+          <text x="690" y="28" fill="#9fb4cc" font-size="12">·</text>
+          <text x="710" y="28" fill="#9fb4cc" font-size="12">消息推送 4/4</text>
+          <text x="820" y="28" fill="#9fb4cc" font-size="12">·</text>
+          <text x="840" y="28" fill="#9fb4cc" font-size="12">审批流程 1/4</text>
+        </g>
+
+        <!-- 图例（移到表头右侧空隙，这里放右上） -->
+        <g transform="translate(940,18)">
+          <circle cx="0" cy="6" r="7" fill="url(#greenDot)"/>
+          <text x="14" y="10" fill="#5dffce" font-size="11">已对接</text>
+          <circle cx="80" cy="6" r="7" fill="rgba(255,255,255,0.08)" stroke="#3a5878" stroke-width="1.5"/>
+          <text x="94" y="10" fill="#9fb4cc" font-size="11">未对接</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ============ 图4：3515计划推广路线图 ============ -->
+  <div class="diagram">
+    <div class="diagram-head">
+      <div class="diagram-title">
+        <div class="num">04</div>
+        <h2>3515计划推广路线图</h2>
+      </div>
+      <div class="diagram-desc">"3515计划"以阶梯式递进策略分四阶段铺开：从试点5店验证模式，到区域50店复制流程，再到507城规模扩张，最终覆盖全国29万网点，实现飞书AI能力在东方雨虹渠道网络的全面落地。</div>
+    </div>
+    <div class="svg-wrap">
+      <svg viewBox="0 0 1080 560" width="1080" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="step1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#e67e22"/><stop offset="100%" stop-color="#c0651a"/>
+          </linearGradient>
+          <linearGradient id="step2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#00c7ac"/><stop offset="100%" stop-color="#008f7a"/>
+          </linearGradient>
+          <linearGradient id="step3" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0078d4"/><stop offset="100%" stop-color="#005a9e"/>
+          </linearGradient>
+          <linearGradient id="step4" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#8e44ad"/><stop offset="100%" stop-color="#5e2d77"/>
+          </linearGradient>
+          <marker id="stepArr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="#00c7ac"/>
+          </marker>
+        </defs>
+
+        <!-- 地平线 -->
+        <line x1="40" y1="500" x2="1040" y2="500" stroke="#2a4a6a" stroke-width="1.5"/>
+        <g fill="#3a5878" font-size="11">
+          <text x="50" y="520">推广规模</text>
+          <text x="1020" y="520" text-anchor="end">时间推进 →</text>
+        </g>
+
+        <!-- 阶段1：试点5店 -->
+        <g>
+          <rect x="70" y="400" width="210" height="100" rx="10" fill="url(#step1)" opacity="0.92"/>
+          <rect x="70" y="400" width="210" height="100" rx="10" fill="none" stroke="#ffb84d" stroke-width="1.5" opacity="0.7"/>
+          <text x="175" y="430" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">阶段一 · 试点验证</text>
+          <text x="175" y="455" text-anchor="middle" fill="#ffe5cc" font-size="22" font-weight="700">5 店</text>
+          <text x="175" y="478" text-anchor="middle" fill="#ffe5cc" font-size="11.5" opacity="0.9">2026年 Q1 · 模式跑通</text>
+          <!-- 顶部标签 -->
+          <rect x="100" y="350" width="150" height="38" rx="6" fill="#1a2c44" stroke="#e67e22" stroke-width="1"/>
+          <text x="175" y="367" text-anchor="middle" fill="#ffb84d" font-size="11">目标</text>
+          <text x="175" y="382" text-anchor="middle" fill="#9fb4cc" font-size="11">验证四大模块闭环</text>
+          <!-- 连接 -->
+          <line x1="175" y1="388" x2="175" y2="400" stroke="#e67e22" stroke-width="1.5"/>
+        </g>
+
+        <!-- 上升箭头 1->2 -->
+        <path d="M 285 440 L 320 380" fill="none" stroke="#00c7ac" stroke-width="2.5" marker-end="url(#stepArr)" stroke-dasharray="5 3"/>
+
+        <!-- 阶段2：区域50店 -->
+        <g>
+          <rect x="325" y="310" width="210" height="100" rx="10" fill="url(#step2)" opacity="0.92"/>
+          <rect x="325" y="310" width="210" height="100" rx="10" fill="none" stroke="#3fffd8" stroke-width="1.5" opacity="0.7"/>
+          <text x="430" y="340" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">阶段二 · 区域复制</text>
+          <text x="430" y="365" text-anchor="middle" fill="#d8fff5" font-size="22" font-weight="700">50 店</text>
+          <text x="430" y="388" text-anchor="middle" fill="#d8fff5" font-size="11.5" opacity="0.9">2026年 Q2 · 流程标准化</text>
+          <rect x="355" y="260" width="150" height="38" rx="6" fill="#1a2c44" stroke="#00c7ac" stroke-width="1"/>
+          <text x="430" y="277" text-anchor="middle" fill="#3fffd8" font-size="11">目标</text>
+          <text x="430" y="292" text-anchor="middle" fill="#9fb4cc" font-size="11">SOP固化+团队培训</text>
+          <line x1="430" y1="298" x2="430" y2="310" stroke="#00c7ac" stroke-width="1.5"/>
+        </g>
+
+        <!-- 上升箭头 2->3 -->
+        <path d="M 540 350 L 575 290" fill="none" stroke="#00c7ac" stroke-width="2.5" marker-end="url(#stepArr)" stroke-dasharray="5 3"/>
+
+        <!-- 阶段3：507城 -->
+        <g>
+          <rect x="580" y="220" width="210" height="100" rx="10" fill="url(#step3)" opacity="0.92"/>
+          <rect x="580" y="220" width="210" height="100" rx="10" fill="none" stroke="#4da3ff" stroke-width="1.5" opacity="0.7"/>
+          <text x="685" y="250" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">阶段三 · 规模扩张</text>
+          <text x="685" y="275" text-anchor="middle" fill="#dceeff" font-size="22" font-weight="700">507 城</text>
+          <text x="685" y="298" text-anchor="middle" fill="#dceeff" font-size="11.5" opacity="0.9">2026年 Q3-Q4 · 全国地级市</text>
+          <rect x="610" y="170" width="150" height="38" rx="6" fill="#1a2c44" stroke="#0078d4" stroke-width="1"/>
+          <text x="685" y="187" text-anchor="middle" fill="#4da3ff" font-size="11">目标</text>
+          <text x="685" y="202" text-anchor="middle" fill="#9fb4cc" font-size="11">覆盖地级市网络</text>
+          <line x1="685" y1="208" x2="685" y2="220" stroke="#0078d4" stroke-width="1.5"/>
+        </g>
+
+        <!-- 上升箭头 3->4 -->
+        <path d="M 795 260 L 830 200" fill="none" stroke="#00c7ac" stroke-width="2.5" marker-end="url(#stepArr)" stroke-dasharray="5 3"/>
+
+        <!-- 阶段4：全国29万网点 -->
+        <g>
+          <rect x="835" y="130" width="210" height="100" rx="10" fill="url(#step4)" opacity="0.92"/>
+          <rect x="835" y="130" width="210" height="100" rx="10" fill="none" stroke="#b98cdb" stroke-width="1.5" opacity="0.7"/>
+          <text x="940" y="160" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">阶段四 · 全面覆盖</text>
+          <text x="940" y="185" text-anchor="middle" fill="#f0e0ff" font-size="22" font-weight="700">29 万网点</text>
+          <text x="940" y="208" text-anchor="middle" fill="#f0e0ff" font-size="11.5" opacity="0.9">2027年 · 全渠道生态</text>
+          <rect x="865" y="80" width="150" height="38" rx="6" fill="#1a2c44" stroke="#8e44ad" stroke-width="1"/>
+          <text x="940" y="97" text-anchor="middle" fill="#b98cdb" font-size="11">目标</text>
+          <text x="940" y="112" text-anchor="middle" fill="#9fb4cc" font-size="11">全渠道AI赋能</text>
+          <line x1="940" y1="118" x2="940" y2="130" stroke="#8e44ad" stroke-width="1.5"/>
+          <!-- 旗帜 -->
+          <g transform="translate(940,60)">
+            <line x1="0" y1="0" x2="0" y2="20" stroke="#fff" stroke-width="1.5"/>
+            <path d="M0 2 L18 7 L0 12 Z" fill="#00c7ac"/>
+          </g>
+        </g>
+
+        <!-- 增长曲线（虚线连接四个阶段顶部） -->
+        <path d="M 175 350 Q 430 260 430 260 Q 685 170 685 170 Q 940 80 940 80"
+              fill="none" stroke="#00c7ac" stroke-width="1.5" stroke-dasharray="2 4" opacity="0.5"/>
+
+        <!-- 左侧纵轴刻度 -->
+        <g fill="#5d7a9c" font-size="10" text-anchor="end">
+          <text x="62" y="510">0</text>
+          <text x="62" y="410">5</text>
+          <text x="62" y="320">50</text>
+          <text x="62" y="230">507</text>
+          <text x="62" y="140">29万</text>
+        </g>
+        <line x1="66" y1="135" x2="66" y2="500" stroke="#2a4a6a" stroke-width="1" stroke-dasharray="3 4"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ============ 图5：一店一码服务闭环图 ============ -->
+  <div class="diagram">
+    <div class="diagram-head">
+      <div class="diagram-title">
+        <div class="num">05</div>
+        <h2>一店一码服务闭环图</h2>
+      </div>
+      <div class="diagram-desc">每家门店配置专属二维码，消费者扫码后进入由飞书AI驱动的服务闭环：从aily咨询、产品推荐、施工预约、进度追踪到售后评价，七个环节无缝衔接，评价数据回流反哺知识库，形成持续优化的服务飞轮。</div>
+    </div>
+    <div class="svg-wrap">
+      <svg viewBox="0 0 1080 660" width="1080" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="ringArr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="#00c7ac"/>
+          </marker>
+          <radialGradient id="ringCenter" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#00c7ac" stop-opacity="0.2"/>
+            <stop offset="100%" stop-color="#00c7ac" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- 中心圆 -->
+        <circle cx="540" cy="330" r="130" fill="url(#ringCenter)"/>
+        <circle cx="540" cy="330" r="85" fill="rgba(0,199,172,0.06)" stroke="#00c7ac" stroke-width="1.5"/>
+        <!-- 二维码图案（中心） -->
+        <g transform="translate(505,295)">
+          <rect x="0" y="0" width="70" height="70" rx="6" fill="#0a1628" stroke="#00c7ac" stroke-width="1.5"/>
+          <rect x="8" y="8" width="18" height="18" fill="#00c7ac"/>
+          <rect x="44" y="8" width="18" height="18" fill="#00c7ac"/>
+          <rect x="8" y="44" width="18" height="18" fill="#00c7ac"/>
+          <rect x="32" y="12" width="6" height="6" fill="#3a5878"/>
+          <rect x="44" y="32" width="6" height="6" fill="#3a5878"/>
+          <rect x="32" y="32" width="6" height="6" fill="#3a5878"/>
+          <rect x="38" y="44" width="6" height="6" fill="#3a5878"/>
+          <rect x="56" y="44" width="6" height="6" fill="#3a5878"/>
+        </g>
+        <text x="540" y="390" text-anchor="middle" fill="#00c7ac" font-size="14" font-weight="700">一店一码</text>
+        <text x="540" y="408" text-anchor="middle" fill="#9fb4cc" font-size="11">One Store One Code</text>
+
+        <!-- 7个环节沿圆环分布，半径220，中心540,330 -->
+        <!-- 角度从顶部开始顺时针：0,-90 / -90+360/7... 用度计算 -->
+        <!-- 7个点角度（顺时针，0=正上）：51.4度间隔
+             节点0 扫码: 顶部 (540,110)
+             节点1 aily咨询: 右上
+             节点2 产品推荐: 右
+             节点3 施工预约: 右下
+             节点4 进度追踪: 左下
+             节点5 售后评价: 左
+             节点6 回到扫码(数据回流): 左上
+        -->
+
+        <!-- 环形外圈虚线 -->
+        <circle cx="540" cy="330" r="220" fill="none" stroke="#2a4a6a" stroke-width="1.5" stroke-dasharray="4 5" opacity="0.6"/>
+
+        <!-- 顺时针连接弧线 (7段) -->
+        <g fill="none" stroke="#00c7ac" stroke-width="2.5" opacity="0.8">
+          <!-- 用大圆弧近似，每段约51.4度 -->
+          <path d="M 580 115 A 220 220 0 0 1 740 175" marker-end="url(#ringArr)"/>
+          <path d="M 765 215 A 220 220 0 0 1 790 380" marker-end="url(#ringArr)"/>
+          <path d="M 770 425 A 220 220 0 0 1 640 535" marker-end="url(#ringArr)"/>
+          <path d="M 590 548 A 220 220 0 0 1 410 530" marker-end="url(#ringArr)"/>
+          <path d="M 370 505 A 220 220 0 0 1 290 380" marker-end="url(#ringArr)"/>
+          <path d="M 295 335 A 220 220 0 0 1 340 195" marker-end="url(#ringArr)"/>
+          <path d="M 380 155 A 220 220 0 0 1 500 113" marker-end="url(#ringArr)"/>
+        </g>
+
+        <!-- 节点1：消费者扫码（顶部） (540,110) -->
+        <g>
+          <circle cx="540" cy="110" r="42" fill="#1a2c44" stroke="#e67e22" stroke-width="2.5"/>
+          <text x="540" y="100" text-anchor="middle" fill="#ffb84d" font-size="12" font-weight="700">①</text>
+          <text x="540" y="118" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">消费者</text>
+          <text x="540" y="134" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">扫码</text>
+          <!-- 飞书能力标注 -->
+          <rect x="478" y="48" width="124" height="22" rx="11" fill="#0a1628" stroke="#e67e22" stroke-width="1"/>
+          <text x="540" y="63" text-anchor="middle" fill="#ffb84d" font-size="11">飞书开放平台</text>
+        </g>
+
+        <!-- 节点2：aily咨询（右上） -->
+        <g>
+          <circle cx="740" cy="175" r="42" fill="#1a2c44" stroke="#00c7ac" stroke-width="2.5"/>
+          <text x="740" y="165" text-anchor="middle" fill="#3fffd8" font-size="12" font-weight="700">②</text>
+          <text x="740" y="183" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">aily</text>
+          <text x="740" y="199" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">智能咨询</text>
+          <rect x="678" y="113" width="124" height="22" rx="11" fill="#0a1628" stroke="#00c7ac" stroke-width="1"/>
+          <text x="740" y="128" text-anchor="middle" fill="#3fffd8" font-size="11">aily 智能体</text>
+        </g>
+
+        <!-- 节点3：产品推荐（右） -->
+        <g>
+          <circle cx="785" cy="400" r="42" fill="#1a2c44" stroke="#0078d4" stroke-width="2.5"/>
+          <text x="785" y="390" text-anchor="middle" fill="#4da3ff" font-size="12" font-weight="700">③</text>
+          <text x="785" y="408" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">产品</text>
+          <text x="785" y="424" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">推荐</text>
+          <rect x="723" y="448" width="124" height="22" rx="11" fill="#0a1628" stroke="#0078d4" stroke-width="1"/>
+          <text x="785" y="463" text-anchor="middle" fill="#4da3ff" font-size="11">知识库检索</text>
+        </g>
+
+        <!-- 节点4：施工预约（右下） -->
+        <g>
+          <circle cx="615" cy="540" r="42" fill="#1a2c44" stroke="#8e44ad" stroke-width="2.5"/>
+          <text x="615" y="530" text-anchor="middle" fill="#b98cdb" font-size="12" font-weight="700">④</text>
+          <text x="615" y="548" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">施工</text>
+          <text x="615" y="564" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">预约</text>
+          <rect x="553" y="588" width="124" height="22" rx="11" fill="#0a1628" stroke="#8e44ad" stroke-width="1"/>
+          <text x="615" y="603" text-anchor="middle" fill="#b98cdb" font-size="11">审批流程</text>
+        </g>
+
+        <!-- 节点5：进度追踪（左下） -->
+        <g>
+          <circle cx="385" cy="540" r="42" fill="#1a2c44" stroke="#f39c12" stroke-width="2.5"/>
+          <text x="385" y="530" text-anchor="middle" fill="#ffb84d" font-size="12" font-weight="700">⑤</text>
+          <text x="385" y="548" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">进度</text>
+          <text x="385" y="564" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">追踪</text>
+          <rect x="323" y="588" width="124" height="22" rx="11" fill="#0a1628" stroke="#f39c12" stroke-width="1"/>
+          <text x="385" y="603" text-anchor="middle" fill="#ffb84d" font-size="11">消息推送+日历</text>
+        </g>
+
+        <!-- 节点6：售后评价（左） -->
+        <g>
+          <circle cx="295" cy="400" r="42" fill="#1a2c44" stroke="#00c7ac" stroke-width="2.5"/>
+          <text x="295" y="390" text-anchor="middle" fill="#3fffd8" font-size="12" font-weight="700">⑥</text>
+          <text x="295" y="408" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">售后</text>
+          <text x="295" y="424" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">评价</text>
+          <rect x="233" y="448" width="124" height="22" rx="11" fill="#0a1628" stroke="#00c7ac" stroke-width="1"/>
+          <text x="295" y="463" text-anchor="middle" fill="#3fffd8" font-size="11">多维表格</text>
+        </g>
+
+        <!-- 节点7：数据回流（左上） -->
+        <g>
+          <circle cx="340" cy="175" r="42" fill="#1a2c44" stroke="#e74c3c" stroke-width="2.5"/>
+          <text x="340" y="165" text-anchor="middle" fill="#ff7b6b" font-size="12" font-weight="700">⑦</text>
+          <text x="340" y="183" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">数据</text>
+          <text x="340" y="199" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">回流</text>
+          <rect x="278" y="113" width="124" height="22" rx="11" fill="#0a1628" stroke="#e74c3c" stroke-width="1"/>
+          <text x="340" y="128" text-anchor="middle" fill="#ff7b6b" font-size="11">多维分析</text>
+        </g>
+
+        <!-- 底部说明条 -->
+        <g transform="translate(150,635)">
+          <rect x="0" y="0" width="780" height="0" fill="none"/>
+          <text x="390" y="0" text-anchor="middle" fill="#7fd8ff" font-size="13">闭环方向：① 扫码 → ② aily咨询 → ③ 产品推荐 → ④ 施工预约 → ⑤ 进度追踪 → ⑥ 售后评价 → ⑦ 数据回流 → ① 扫码（持续优化）</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 页脚 -->
+  <div class="footer">
+    <div class="line1">2026 AI先锋未来人才大赛 · 东方雨虹命题 · 智虹先锋队</div>
+    <div class="line2">技术架构可视化图集 · Technical Architecture Atlas · 2026</div>
+  </div>
+
+</div>
+</body>
+</html>
