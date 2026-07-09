@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>飞书妙搭巡检应用部署验证 - 雨虹门店巡检</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#f5f7fa;color:#2c3e50;line-height:1.8;padding:20px}
+.container{max-width:1200px;margin:0 auto}
+.header{text-align:center;margin-bottom:40px;padding:40px 20px;background:linear-gradient(135deg,#E60012 0%,#b3000e 100%);border-radius:12px;color:#fff}
+.header h1{font-size:26px;margin-bottom:8px}
+.header p{font-size:14px;opacity:.85}
+.badge{display:inline-block;background:#52c41a;color:#fff;font-size:12px;padding:4px 12px;border-radius:12px;margin-top:8px;font-weight:600}
+.info{background:#fff5f5;border:1px solid #ffccc7;border-radius:8px;padding:20px;margin-bottom:32px}
+.info h3{font-size:16px;color:#E60012;margin-bottom:12px}
+.info table{width:100%;border-collapse:collapse;font-size:14px}
+.info td{padding:6px 0}
+.info td:first-child{color:#909399;width:140px}
+.info td:last-child{color:#1a1a1a;font-weight:600}
+.section{margin-bottom:40px}
+.section-title{font-size:20px;font-weight:700;color:#E60012;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #fff0f0}
+.screenshot{width:100%;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,.1);margin-bottom:12px;border:1px solid #e8e8e8}
+.caption{font-size:14px;color:#606266;margin-bottom:24px;padding:0 4px}
+.caption strong{color:#E60012}
+.dev-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
+.stat-card{background:#fff;border-radius:8px;padding:20px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.stat-card .num{font-size:28px;font-weight:700;color:#E60012}
+.stat-card .label{font-size:13px;color:#909399;margin-top:4px}
+.verify{background:#f6ffed;border:1px solid #b7eb8f;border-radius:8px;padding:20px;margin:32px 0}
+.verify h3{font-size:16px;color:#52c41a;margin-bottom:12px}
+.verify ul{list-style:none;padding:0}
+.verify li{padding:6px 0;font-size:14px;color:#5a6273}
+.verify li:before{content:"OK ";color:#52c41a;font-weight:700}
+.footer{text-align:center;padding:32px;font-size:12px;color:#909399}
+.app-link{display:inline-block;background:#E60012;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>飞书妙搭巡检应用部署验证</h1>
+<p>雨虹门店巡检 — AI自然语言生成 + 多维表格数据联动</p>
+<span class="badge">已部署验证</span>
+</div>
+
+<div class="info">
+<h3>妙搭应用配置信息</h3>
+<table>
+<tr><td>应用名称</td><td>雨虹门店巡检</td></tr>
+<tr><td>部署平台</td><td>飞书妙搭（Miaoda）</td></tr>
+<tr><td>开发模式</td><td>应用开发（AI自然语言生成）</td></tr>
+<tr><td>品牌色</td><td>#E60012（东方雨虹红）</td></tr>
+<tr><td>数据关联</td><td>飞书多维表格"雨虹门店运营管理表"-巡检记录表</td></tr>
+<tr><td>表单字段</td><td>门店编号、巡检人、巡检时间、6项评分、照片上传(6张)、备注</td></tr>
+<tr><td>自动计算</td><td>总分（6项之和）、评级（≥90优秀/≥80合格/<80不合格）</td></tr>
+<tr><td>访问地址</td><td>https://dcnlkmas0c30.aiforce.cloud/app/app_179t2htks3d</td></tr>
+</table>
+</div>
+
+<div class="dev-stats">
+<div class="stat-card"><div class="num">1,343</div><div class="label">新增代码行数</div></div>
+<div class="stat-card"><div class="num">33</div><div class="label">修改文件数</div></div>
+<div class="stat-card"><div class="num">100%</div><div class="label">ESLint/TS/Stylelint通过</div></div>
+</div>
+
+<div class="section">
+<div class="section-title">1. 应用预览页面</div>
+<img class="screenshot" src="妙搭巡检应用截图/1_应用预览页.png" alt="应用预览页">
+<div class="caption">
+<strong>验证结果：</strong>妙搭AI根据自然语言需求自动生成了完整的门店巡检表单应用。红色品牌色头部"东方雨虹门店巡检表"，包含门店编号、巡检人、巡检时间、6项评分（陈列20/卫生15/价签15/库存20/服务15/安全15）、照片上传（6张）、备注、提交按钮。左侧为妙搭AI开发对话界面，右侧为实时预览。
+</div>
+</div>
+
+<div class="section">
+<div class="section-title">2. 填写测试数据</div>
+<img class="screenshot" src="妙搭巡检应用截图/2_填写测试数据.png" alt="填写测试数据">
+<div class="caption">
+<strong>验证结果：</strong>在预览模式填入测试数据：门店编号BJ-001、巡检人张督导、6项评分（18+14+13+18+14+14）、上传1张现场照片、备注"测试提交"。总分自动计算为91分，实时显示在红色框中。数据写入多维表格"巡检记录"表。
+</div>
+</div>
+
+<div class="section">
+<div class="section-title">3. 提交结果：91分 优秀</div>
+<img class="screenshot" src="妙搭巡检应用截图/3_提交结果91分优秀.png" alt="提交结果">
+<div class="caption">
+<strong>验证结果：</strong>点击"提交巡检记录"后，弹出绿色弹窗显示"巡检得分 91 优秀"，并提供"继续巡检"按钮清空表单返回。评级逻辑正确：≥90分显示"优秀"（绿色），符合系统提示词配置规范。
+</div>
+</div>
+
+<div class="verify">
+<h3>妙搭巡检应用部署验证结论</h3>
+<ul>
+<li>应用已在飞书妙搭平台真实部署，AI自然语言生成+1343行代码，修改33个文件</li>
+<li>代码质量通过ESLint、TypeScript类型检查、Stylelint三重校验</li>
+<li>巡检表单包含全部9个字段（门店编号/巡检人/时间/6项评分/照片/备注）</li>
+<li>总分自动计算正确（18+14+13+18+14+14=91分）</li>
+<li>评级逻辑正确（91分≥90显示"优秀"）</li>
+<li>照片上传功能正常（1/6张已上传，支持拖拽和点击上传）</li>
+<li>表单数据关联飞书多维表格"巡检记录"表，提交后自动写入</li>
+<li>应用已发布上线，可通过aiforce.cloud链接访问</li>
+</ul>
+</div>
+
+<div style="text-align:center;margin:24px 0">
+<a class="app-link" href="https://dcnlkmas0c30.aiforce.cloud/app/app_179t2htks3d" target="_blank">访问妙搭巡检应用（需飞书登录）</a>
+</div>
+
+<div class="footer">
+智虹先锋队 · 2026 AI先锋未来人才大赛 · 东方雨虹企业命题 · 飞书妙搭巡检应用部署验证
+</div>
+</div>
+</body>
+</html>
