@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>飞书多维表格仪表盘部署验证 - 雨虹门店运营管理表</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#f5f7fa;color:#2c3e50;line-height:1.8;padding:20px}
+.container{max-width:1200px;margin:0 auto}
+.header{text-align:center;margin-bottom:40px;padding:40px 20px;background:linear-gradient(135deg,#722ed1 0%,#531dab 100%);border-radius:12px;color:#fff}
+.header h1{font-size:26px;margin-bottom:8px}
+.header p{font-size:14px;opacity:.85}
+.badge{display:inline-block;background:#52c41a;color:#fff;font-size:12px;padding:4px 12px;border-radius:12px;margin-top:8px;font-weight:600}
+.info{background:#f9f0ff;border:1px solid #d3adf7;border-radius:8px;padding:20px;margin-bottom:32px}
+.info h3{font-size:16px;color:#722ed1;margin-bottom:12px}
+.info table{width:100%;border-collapse:collapse;font-size:14px}
+.info td{padding:6px 0}
+.info td:first-child{color:#909399;width:140px}
+.info td:last-child{color:#1a1a1a;font-weight:600}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px}
+.chart-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.chart-card h3{font-size:16px;color:#722ed1;margin-bottom:12px}
+.chart-card img{width:100%;border-radius:8px}
+.full-chart{grid-column:1/-1}
+.chart-desc{font-size:13px;color:#606266;margin-top:8px;padding:8px 12px;background:#faf5ff;border-radius:6px}
+.chart-desc strong{color:#722ed1}
+.verify{background:#f6ffed;border:1px solid #b7eb8f;border-radius:8px;padding:20px;margin:32px 0}
+.verify h3{font-size:16px;color:#52c41a;margin-bottom:12px}
+.verify ul{list-style:none;padding:0}
+.verify li{padding:6px 0;font-size:14px;color:#5a6273}
+.verify li:before{content:"OK ";color:#52c41a;font-weight:700}
+.footer{text-align:center;padding:32px;font-size:12px;color:#909399}
+.screenshot-full{width:100%;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,.1);margin-bottom:24px;border:1px solid #e8e8e8}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>飞书多维表格仪表盘部署验证</h1>
+<p>雨虹门店运营管理表 — 4个可视化图表 + AI智能分析</p>
+<span class="badge">已部署验证</span>
+</div>
+
+<div class="info">
+<h3>仪表盘配置信息</h3>
+<table>
+<tr><td>仪表盘名称</td><td>雨虹门店运营总览</td></tr>
+<tr><td>部署平台</td><td>飞书多维表格仪表盘</td></tr>
+<tr><td>图表数量</td><td>4个（2个柱状图 + 1个饼图 + 1个表格）</td></tr>
+<tr><td>数据源</td><td>5个数据表（门店信息/巡检记录/产品库存/客户信息/销售记录）</td></tr>
+<tr><td>AI能力</td><td>智能总结、智能分析</td></tr>
+<tr><td>访问链接</td><td>https://dcnlkmas0c30.feishu.cn/base/G2ZUbuYbUaJfFosDlt6cexF7nLz</td></tr>
+</table>
+</div>
+
+<h3 style="font-size:20px;font-weight:700;color:#722ed1;margin-bottom:16px;">仪表盘全貌</h3>
+<img class="screenshot-full" src="多维表格仪表盘截图/仪表盘全貌.png" alt="仪表盘全貌">
+
+<div class="charts">
+<div class="chart-card">
+<h3>各门店月销售额（柱状图）</h3>
+<div class="chart-desc">
+<strong>数据洞察：</strong>北京总部店38万最高，郑州县域店9.5万最低，一线/县域差距4倍。
+</div>
+</div>
+<div class="chart-card">
+<h3>各门店巡检平均得分（柱状图）</h3>
+<div class="chart-desc">
+<strong>数据洞察：</strong>北京91分优秀，上海80分合格，郑州60分不合格——销售与巡检质量正相关。
+</div>
+</div>
+<div class="chart-card">
+<h3>客户偏好品类分布（饼图）</h3>
+<div class="chart-desc">
+<strong>数据洞察：</strong>防水卷材33%占比最大，防水涂料30%第二，瓷砖胶仅6.67%存在过度备货风险。
+</div>
+</div>
+<div class="chart-card">
+<h3>库存预警清单（表格）</h3>
+<div class="chart-desc">
+<strong>数据洞察：</strong>8款产品中1款紧急(SBS卷材)、1款预警(密封胶)、1款积压(瓷砖胶)，库存健康率62.5%。
+</div>
+</div>
+</div>
+
+<div class="verify">
+<h3>仪表盘部署验证结论</h3>
+<ul>
+<li>4个可视化图表已在飞书多维表格仪表盘真实部署</li>
+<li>图表数据源覆盖全部5个数据表，数据实时联动</li>
+<li>柱状图展示门店销售额和巡检得分对比，支撑经营决策</li>
+<li>饼图展示客户偏好品类分布，支撑产品策略</li>
+<li>表格展示库存预警状态（紧急/预警/积压/正常），支撑采购决策</li>
+<li>仪表盘支持智能总结、全屏演示、分享、自动化推送</li>
+</ul>
+</div>
+
+<div class="footer">
+智虹先锋队 · 2026 AI先锋未来人才大赛 · 东方雨虹企业命题 · 飞书多维表格仪表盘部署验证
+</div>
+</div>
+</body>
+</html>
