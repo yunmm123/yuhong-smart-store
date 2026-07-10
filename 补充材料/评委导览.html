@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>评委导览 — 3分钟看懂雨虹智慧门店运营助手</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap');
+
+:root {
+  --bg: #ffffff;
+  --bg2: #f7f8fc;
+  --ink: #1a1a2e;
+  --muted: #6b7280;
+  --rule: #e5e7eb;
+  --accent: #1677ff;
+  --accent2: #722ed1;
+  --good: #52c41a;
+  --warn: #faad14;
+  --bad: #ff4d4f;
+  --grad: linear-gradient(135deg, #1677ff, #722ed1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "Noto Sans SC", -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg2);
+  color: var(--ink);
+  line-height: 1.7;
+  padding: 24px;
+}
+
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.06);
+  padding: 48px 52px;
+}
+
+/* === Header === */
+.header { padding-bottom: 24px; border-bottom: 3px solid var(--ink); margin-bottom: 16px; }
+.header .badge {
+  display: inline-block; font-size: 11px; font-weight: 600; color: #fff;
+  background: var(--grad); padding: 4px 12px; border-radius: 4px;
+  letter-spacing: .08em; margin-bottom: 12px;
+}
+.header h1 { font-size: 30px; font-weight: 900; letter-spacing: -.02em; line-height: 1.25; }
+.header h1 .grad {
+  background: var(--grad); -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; background-clip: text;
+}
+.header .subtitle { font-size: 14px; color: var(--muted); margin-top: 8px; }
+
+.intro {
+  font-size: 13px; color: var(--muted); margin-bottom: 32px;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.intro .pill {
+  display: inline-block; font-size: 12px; font-weight: 600;
+  color: var(--accent); background: #f0f5ff; padding: 3px 10px; border-radius: 20px;
+}
+
+/* === Steps === */
+.steps { display: flex; flex-direction: column; gap: 18px; margin-bottom: 48px; }
+
+.step {
+  display: flex; gap: 22px;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-left: 5px solid var(--accent);
+  border-radius: 12px;
+  padding: 26px 28px;
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.step:hover { box-shadow: 0 10px 28px rgba(22,119,255,.10); transform: translateY(-2px); }
+.step.alt { border-left-color: var(--accent2); }
+.step.alt:hover { box-shadow: 0 10px 28px rgba(114,46,209,.12); }
+
+.step-num {
+  flex-shrink: 0;
+  width: 58px; height: 58px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 900; color: #fff;
+  background: var(--grad);
+  box-shadow: 0 4px 14px rgba(22,119,255,.28);
+}
+.step.alt .step-num {
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  box-shadow: 0 4px 14px rgba(114,46,209,.28);
+}
+
+.step-body { flex: 1; min-width: 0; }
+.step-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap; margin-bottom: 10px;
+}
+.step-head h3 { font-size: 19px; font-weight: 700; }
+.step-time {
+  font-size: 12px; font-weight: 600; color: var(--accent);
+  background: #f0f5ff; padding: 3px 11px; border-radius: 20px; white-space: nowrap;
+}
+.step.alt .step-time { color: var(--accent2); background: #f9f0ff; }
+
+.step-why { font-size: 13.5px; color: var(--ink); margin-bottom: 14px; line-height: 1.7; }
+.step-why .why-label {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  color: var(--accent); background: #f0f5ff; padding: 1px 8px; border-radius: 4px; margin-right: 6px;
+}
+.step.alt .step-why .why-label { color: var(--accent2); background: #f9f0ff; }
+
+.step-points { list-style: none; margin-bottom: 18px; display: flex; flex-direction: column; gap: 7px; }
+.step-points li {
+  font-size: 13px; color: var(--muted); padding-left: 18px; position: relative; line-height: 1.6;
+}
+.step-points li::before {
+  content: ''; position: absolute; left: 2px; top: 9px;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+}
+.step.alt .step-points li::before { background: var(--accent2); }
+
+.step-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--grad); color: #fff;
+  font-size: 14px; font-weight: 600;
+  padding: 12px 24px; border-radius: 8px;
+  text-decoration: none;
+  transition: box-shadow .2s ease, transform .15s ease;
+}
+.step-btn:hover { box-shadow: 0 8px 20px rgba(22,119,255,.35); transform: translateY(-1px); }
+.step-btn .arrow { transition: transform .2s ease; }
+.step-btn:hover .arrow { transform: translateX(3px); }
+
+/* === More materials === */
+.more { margin-bottom: 40px; }
+.more-title {
+  font-size: 15px; font-weight: 700; margin-bottom: 16px;
+  padding-left: 12px; border-left: 4px solid var(--accent);
+}
+.more-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.more-card {
+  display: block; text-decoration: none; color: var(--ink);
+  background: var(--bg2); border: 1px solid var(--rule);
+  border-radius: 10px; padding: 18px 18px;
+  transition: background .2s ease, border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+  position: relative;
+}
+.more-card:hover {
+  background: #fff; border-color: var(--accent);
+  box-shadow: 0 6px 18px rgba(0,0,0,.07); transform: translateY(-2px);
+}
+.more-card .mc-label { font-size: 14px; font-weight: 600; margin-bottom: 4px; padding-right: 18px; }
+.more-card .mc-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.more-card .mc-arrow {
+  position: absolute; top: 16px; right: 16px;
+  color: var(--muted); font-size: 14px; transition: color .2s ease, transform .2s ease;
+}
+.more-card:hover .mc-arrow { color: var(--accent); transform: translate(2px, -2px); }
+
+/* === Footer === */
+.footer {
+  text-align: center; padding-top: 26px;
+  border-top: 1px solid var(--rule);
+  font-size: 12px; color: var(--muted);
+}
+.footer .brand { font-weight: 600; color: var(--ink); }
+.footer .dot { margin: 0 8px; opacity: .5; }
+
+@media (max-width: 640px) {
+  body { padding: 12px; }
+  .page { padding: 28px 20px; }
+  .step { flex-direction: column; gap: 14px; padding: 20px; }
+  .step-num { width: 48px; height: 48px; font-size: 18px; }
+  .more-grid { grid-template-columns: 1fr; }
+  .header h1 { font-size: 24px; }
+}
+@media print { body { background: #fff; } .page { box-shadow: none; } .step:hover { transform: none; box-shadow: none; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <span class="badge">评委导览</span>
+    <h1>3分钟看懂<span class="grad">雨虹智慧门店运营助手</span></h1>
+    <p class="subtitle">按顺序看完这 5 个材料，即可全面了解项目</p>
+  </div>
+
+  <div class="intro">
+    <span>五个材料按由浅入深顺序排列，建议依次打开</span>
+    <span class="pill">全程约 3 分钟</span>
+  </div>
+
+  <!-- Steps -->
+  <div class="steps">
+
+    <!-- Step 01 -->
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-body">
+        <div class="step-head">
+          <h3>一页纸执行摘要</h3>
+          <span class="step-time">约 30 秒</span>
+        </div>
+        <p class="step-why"><span class="why-label">为什么看</span>这是项目的完整概览，一页看完问题—方案—验证—价值。</p>
+        <ul class="step-points">
+          <li>29 万网点的数字化困境</li>
+          <li>飞书 AI 四大模块</li>
+          <li>三大 AI 能力已部署验证</li>
+        </ul>
+        <a class="step-btn" href="https://yunmm123.github.io/yuhong-smart-store/补充材料/yuhong-onepager/yuhong-onepager.html" target="_blank">
+          查看一页纸摘要 <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Step 02 -->
+    <div class="step alt">
+      <div class="step-num">02</div>
+      <div class="step-body">
+        <div class="step-head">
+          <h3>路演 PPT</h3>
+          <span class="step-time">约 60 秒</span>
+        </div>
+        <p class="step-why"><span class="why-label">为什么看</span>14 页完整路演，从问题洞察到商业价值全流程展示。</p>
+        <ul class="step-points">
+          <li>85% 县域门店无数字化</li>
+          <li>五层技术架构</li>
+          <li>3515 战略对齐 ROI</li>
+        </ul>
+        <a class="step-btn" href="https://yunmm123.github.io/yuhong-smart-store/补充材料/yuhong-pitch/yuhong-pitch.html" target="_blank">
+          打开路演 PPT <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Step 03 -->
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-body">
+        <div class="step-head">
+          <h3>交互 Demo</h3>
+          <span class="step-time">约 60 秒</span>
+        </div>
+        <p class="step-why"><span class="why-label">为什么看</span>纯前端可操作 Demo，亲手体验 4 大功能模块。</p>
+        <ul class="step-points">
+          <li>首页仪表盘</li>
+          <li>AI 导购对话</li>
+          <li>门店巡检打分</li>
+          <li>3515 大屏</li>
+        </ul>
+        <a class="step-btn" href="https://yunmm123.github.io/yuhong-smart-store/补充材料/Demo交互演示.html" target="_blank">
+          体验交互 Demo <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Step 04 -->
+    <div class="step alt">
+      <div class="step-num">04</div>
+      <div class="step-body">
+        <div class="step-head">
+          <h3>飞书 AI 部署验证</h3>
+          <span class="step-time">约 30 秒</span>
+        </div>
+        <p class="step-why"><span class="why-label">为什么看</span>不是 PPT 方案，是真实部署并测试通过的飞书 AI 应用。</p>
+        <ul class="step-points">
+          <li>aily 智能体 3/3 测试通过</li>
+          <li>多维表格 5 表 39 条 + 2 AI 字段</li>
+          <li>妙搭 91 分优秀</li>
+        </ul>
+        <a class="step-btn" href="https://yunmm123.github.io/yuhong-smart-store/补充材料/飞书aily智能体部署验证.html" target="_blank">
+          查看部署验证 <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Step 05 -->
+    <div class="step">
+      <div class="step-num">05</div>
+      <div class="step-body">
+        <div class="step-head">
+          <h3>可落地性分析</h3>
+          <span class="step-time">约 30 秒</span>
+        </div>
+        <p class="step-why"><span class="why-label">为什么看</span>从 1 家店到 29 万家店的扩展路径，含成本拆解和风险评估。</p>
+        <ul class="step-points">
+          <li>单店年成本约 60 元 vs 传统 1.1 万+</li>
+          <li>三阶段推广路径</li>
+          <li>5 项风险评估</li>
+        </ul>
+        <a class="step-btn" href="https://yunmm123.github.io/yuhong-smart-store/补充材料/可落地性分析.html" target="_blank">
+          查看落地性分析 <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- More materials -->
+  <div class="more">
+    <div class="more-title">想深入了解？还有这些</div>
+    <div class="more-grid">
+      <a class="more-card" href="门店一日场景模拟.html" target="_blank">
+        <div class="mc-label">门店一日场景模拟</div>
+        <div class="mc-desc">跟随店长视角体验完整一天</div>
+        <span class="mc-arrow">↗</span>
+      </a>
+      <a class="more-card" href="ROI计算器.html" target="_blank">
+        <div class="mc-label">ROI 计算器</div>
+        <div class="mc-desc">在线测算投入产出比</div>
+        <span class="mc-arrow">↗</span>
+      </a>
+      <a class="more-card" href="竞品对比矩阵.html" target="_blank">
+        <div class="mc-label">竞品对比矩阵</div>
+        <div class="mc-desc">横向对标主流方案</div>
+        <span class="mc-arrow">↗</span>
+      </a>
+      <a class="more-card" href="API文档.html" target="_blank">
+        <div class="mc-label">API 文档</div>
+        <div class="mc-desc">接口规范与调用示例</div>
+        <span class="mc-arrow">↗</span>
+      </a>
+      <a class="more-card" href="技术架构图集.html" target="_blank">
+        <div class="mc-label">技术架构图集</div>
+        <div class="mc-desc">五层架构可视化图</div>
+        <span class="mc-arrow">↗</span>
+      </a>
+      <a class="more-card" href="综合补充材料报告.html" target="_blank">
+        <div class="mc-label">综合补充材料报告</div>
+        <div class="mc-desc">全部材料汇编索引</div>
+        <span class="mc-arrow">↗</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span class="brand">智虹先锋队</span>
+    <span class="dot">·</span>
+    2026 AI 先锋未来人才大赛
+    <span class="dot">·</span>
+    东方雨虹企业命题
+  </div>
+
+</div>
+</body>
+</html>

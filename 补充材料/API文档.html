@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RESTful API 接口文档 — 雨虹智慧门店运营助手</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap');
+
+:root {
+  --ink: #1a1a2e; --muted: #6b7280; --accent: #1677ff; --accent2: #722ed1;
+  --bg: #ffffff; --bg2: #f7f8fc; --rule: #e5e7eb;
+  --good: #52c41a; --warn: #faad14; --bad: #ff4d4f;
+  --grad: linear-gradient(135deg, #1677ff, #722ed1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "Noto Sans SC", -apple-system, sans-serif;
+  background: var(--bg2); color: var(--ink); line-height: 1.8; padding: 20px;
+}
+.page { max-width: 1000px; margin: 0 auto; background: var(--bg); padding: 48px 52px; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,.06); }
+
+/* Header */
+.header { padding-bottom: 24px; border-bottom: 3px solid var(--ink); margin-bottom: 32px; }
+.header .badge { display: inline-block; font-size: 11px; font-weight: 600; color: #fff; background: var(--grad); padding: 4px 12px; border-radius: 4px; margin-bottom: 12px; }
+.header h1 { font-size: 28px; font-weight: 900; }
+.header h1 .grad { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.header .subtitle { font-size: 14px; color: var(--muted); margin-top: 6px; }
+
+/* 基础信息 */
+.base-info { background: var(--bg2); border-radius: 10px; padding: 20px 24px; margin-bottom: 36px; }
+.base-info .info-title { font-size: 14px; font-weight: 700; margin-bottom: 14px; color: var(--ink); }
+.base-info .info-row { display: flex; align-items: flex-start; padding: 6px 0; font-size: 13px; }
+.base-info .info-label { flex: 0 0 110px; color: var(--muted); font-weight: 600; }
+.base-info .info-value { flex: 1; color: var(--ink); }
+.base-info .info-value code { font-family: "JetBrains Mono", "Fira Code", Consolas, monospace; background: #eef2ff; color: var(--accent); padding: 1px 6px; border-radius: 3px; font-size: 12.5px; }
+
+/* 模块 */
+.module { margin-bottom: 36px; }
+.module-title { font-size: 17px; font-weight: 700; margin-bottom: 16px; padding: 6px 0 6px 14px; border-left: 4px solid var(--accent); display: flex; align-items: center; gap: 10px; }
+.module-title .mod-count { font-size: 12px; font-weight: 600; color: #fff; background: var(--accent); padding: 2px 10px; border-radius: 10px; }
+.module.m2 .module-title { border-left-color: var(--accent2); }
+.module.m2 .module-title .mod-count { background: var(--accent2); }
+.module.m3 .module-title { border-left-color: var(--good); }
+.module.m3 .module-title .mod-count { background: var(--good); }
+.module.m4 .module-title { border-left-color: var(--warn); }
+.module.m4 .module-title .mod-count { background: var(--warn); }
+
+/* API卡片 */
+.api-card { background: var(--bg2); border-radius: 10px; padding: 20px 22px; margin-bottom: 14px; border: 1px solid var(--rule); }
+.api-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.method-tag { display: inline-block; font-size: 11px; font-weight: 700; color: #fff; padding: 3px 10px; border-radius: 4px; letter-spacing: .04em; }
+.method-tag.get { background: var(--accent); }
+.method-tag.post { background: var(--good); }
+.api-path { font-family: "JetBrains Mono", "Fira Code", Consolas, monospace; font-size: 14px; font-weight: 600; color: var(--ink); word-break: break-all; }
+.api-desc { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+
+/* 参数表 */
+.api-sub { font-size: 12px; font-weight: 700; color: var(--ink); margin: 14px 0 8px; text-transform: uppercase; letter-spacing: .05em; display: flex; align-items: center; gap: 6px; }
+.api-sub::before { content: ''; width: 3px; height: 12px; background: var(--accent); border-radius: 2px; display: inline-block; }
+.param-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.param-table th { background: #eef1f6; padding: 8px 12px; font-weight: 700; text-align: left; color: var(--ink); border-bottom: 1px solid var(--rule); font-size: 11.5px; }
+.param-table td { padding: 8px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.param-table tr:last-child td { border-bottom: none; }
+.param-table .pname { font-family: "JetBrains Mono", "Fira Code", Consolas, monospace; font-weight: 600; color: var(--accent); font-size: 12px; }
+.param-table .ptype { color: var(--accent2); font-weight: 600; font-size: 12px; }
+.param-table .required { color: var(--bad); font-weight: 700; font-size: 11.5px; }
+.param-table .optional { color: var(--muted); font-size: 11.5px; }
+.param-table .pdesc { color: var(--ink); font-size: 12px; }
+
+/* 响应示例代码块 */
+.code-block { background: #1a1a2e; border-radius: 8px; padding: 16px 18px; overflow-x: auto; margin-top: 4px; }
+.code-block pre { font-family: "JetBrains Mono", "Fira Code", Consolas, monospace; font-size: 12px; line-height: 1.7; color: #e2e8f0; white-space: pre; }
+.code-block .jk { color: #79c0ff; }
+.code-block .js { color: #a5d6ff; }
+.code-block .jn { color: #ffa657; }
+.code-block .jb { color: #d2a8ff; }
+.code-block .jc { color: #8b949e; }
+
+.no-params { font-size: 12.5px; color: var(--muted); font-style: italic; padding: 4px 0; }
+
+@media print { body { background: #fff; } .page { box-shadow: none; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <span class="badge">API文档</span>
+    <h1>RESTful API <span class="grad">接口文档</span></h1>
+    <p class="subtitle">16个API接口 · 4大业务模块 · 完整请求/响应规范</p>
+  </div>
+
+  <!-- 基础信息 -->
+  <div class="base-info">
+    <div class="info-title">基础信息</div>
+    <div class="info-row">
+      <div class="info-label">Base URL</div>
+      <div class="info-value"><code>http://localhost:5000</code></div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">响应格式</div>
+      <div class="info-value">所有接口统一返回 <code>{ "success": true/false, "data": {...} }</code> 结构</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">认证方式</div>
+      <div class="info-value">飞书 <code>tenant_access_token</code>（生产环境），Demo 模式无需认证</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">数据格式</div>
+      <div class="info-value">请求体 <code>application/json</code>，响应体 <code>application/json</code></div>
+    </div>
+  </div>
+
+  <!-- ==================== 模块1：门店巡检 ==================== -->
+  <div class="module m1">
+    <div class="module-title">模块一 · 门店巡检 <span class="mod-count">5个接口</span></div>
+
+    <!-- API 1 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag get">GET</span>
+        <span class="api-path">/api/inspection/template</span>
+      </div>
+      <p class="api-desc">获取巡检模板（6维度评分标准），供飞书妙搭巡检应用动态渲染表单</p>
+      <div class="api-sub">请求参数</div>
+      <p class="no-params">无参数</p>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: {
+    <span class="jk">"template_name"</span>: <span class="js">"东方雨虹门店巡检表"</span>,
+    <span class="jk">"version"</span>: <span class="js">"2.0"</span>,
+    <span class="jk">"total_max_score"</span>: <span class="jn">100</span>,
+    <span class="jk">"items"</span>: [
+      {
+        <span class="jk">"id"</span>: <span class="js">"display"</span>,
+        <span class="jk">"name"</span>: <span class="js">"产品陈列标准"</span>,
+        <span class="jk">"max_score"</span>: <span class="jn">20</span>,
+        <span class="jk">"check_points"</span>: [
+          <span class="js">"防水材料按品类分区陈列"</span>,
+          <span class="js">"畅销品放置在黄金视线区域"</span>,
+          <span class="js">"陈列面整洁无积灰"</span>,
+          <span class="js">"价签与产品对应准确"</span>
+        ]
+      },
+      {
+        <span class="jk">"id"</span>: <span class="js">"cleanliness"</span>,
+        <span class="jk">"name"</span>: <span class="js">"门店卫生状况"</span>,
+        <span class="jk">"max_score"</span>: <span class="jn">15</span>,
+        <span class="jk">"check_points"</span>: [<span class="js">"地面清洁无污渍"</span>, <span class="js">"展架无灰尘"</span>, <span class="js">"样品无破损"</span>, <span class="js">"照明设备正常运作"</span>]
+      },
+      {
+        <span class="jk">"id"</span>: <span class="js">"pricing"</span>,
+        <span class="jk">"name"</span>: <span class="js">"价签与促销物料"</span>,
+        <span class="jk">"max_score"</span>: <span class="jn">15</span>,
+        <span class="jk">"check_points"</span>: [<span class="js">"价签信息完整（品名、规格、价格）"</span>, <span class="js">"促销海报按公司规范张贴"</span>, <span class="js">"活动信息及时更新"</span>, <span class="js">"价签无缺失"</span>]
+      },
+      {
+        <span class="jk">"id"</span>: <span class="js">"inventory"</span>,
+        <span class="jk">"name"</span>: <span class="js">"库存与样品展示"</span>,
+        <span class="jk">"max_score"</span>: <span class="jn">20</span>,
+        <span class="jk">"check_points"</span>: [<span class="js">"样品库存充足"</span>, <span class="js">"滞销品及时下架"</span>, <span class="js">"新品上架及时"</span>, <span class="js">"库存与系统数据一致"</span>]
+      },
+      {
+        <span class="jk">"id"</span>: <span class="js">"service"</span>,
+        <span class="jk">"name"</span>: <span class="js">"服务规范"</span>,
+        <span class="jk">"max_score"</span>: <span class="jn">15</span>,
+        <span class="jk">"check_points"</span>: [<span class="js">"店员着统一工装"</span>, <span class="js">"接待话术规范"</span>, <span class="js">"客户咨询响应及时"</span>, <span class="js">"施工预约流程清晰"</span>]
+      },
+      {
+        <span class="jk">"id"</span>: <span class="js">"safety"</span>,
+        <span class="jk">"name"</span>: <span class="js">"安全合规"</span>,
+        <span class="jk">"max_score"</span>: <span class="jn">15</span>,
+        <span class="jk">"check_points"</span>: [<span class="js">"消防通道畅通"</span>, <span class="js">"危险品按规定存放"</span>, <span class="js">"电气设备安全"</span>, <span class="js">"应急标识完好"</span>]
+      }
+    ],
+    <span class="jk">"created_at"</span>: <span class="js">"2026-07-10T09:00:00"</span>
+  }
+}</pre></div>
+    </div>
+
+    <!-- API 2 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag post">POST</span>
+        <span class="api-path">/api/inspection/submit</span>
+      </div>
+      <p class="api-desc">提交巡检结果，自动计算总分、判定等级并写入飞书多维表格</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">store_id</td><td class="ptype">string</td><td class="required">是</td><td class="pdesc">门店编号，如 "BJ-001"</td></tr>
+          <tr><td class="pname">inspector</td><td class="ptype">string</td><td class="required">是</td><td class="pdesc">巡检人姓名</td></tr>
+          <tr><td class="pname">scores</td><td class="ptype">object</td><td class="required">是</td><td class="pdesc">6维度评分对象，键为维度id（display/cleanliness/pricing/inventory/service/safety），值为分值</td></tr>
+          <tr><td class="pname">photos</td><td class="ptype">array</td><td class="optional">否</td><td class="pdesc">巡检照片URL列表</td></tr>
+          <tr><td class="pname">notes</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">备注说明</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: {
+    <span class="jk">"门店编号"</span>: <span class="js">"BJ-001"</span>,
+    <span class="jk">"巡检人"</span>: <span class="js">"张督导"</span>,
+    <span class="jk">"巡检时间"</span>: <span class="js">"2026-07-10 10:30"</span>,
+    <span class="jk">"陈列标准得分"</span>: <span class="jn">18</span>,
+    <span class="jk">"卫生状况得分"</span>: <span class="jn">14</span>,
+    <span class="jk">"价签物料得分"</span>: <span class="jn">13</span>,
+    <span class="jk">"库存样品得分"</span>: <span class="jn">18</span>,
+    <span class="jk">"服务规范得分"</span>: <span class="jn">14</span>,
+    <span class="jk">"安全合规得分"</span>: <span class="jn">14</span>,
+    <span class="jk">"总分"</span>: <span class="jn">91</span>,
+    <span class="jk">"巡检结果"</span>: <span class="js">"优秀"</span>,
+    <span class="jk">"是否通过"</span>: <span class="js">"通过"</span>,
+    <span class="jk">"备注"</span>: <span class="js">"门店整体表现优秀，建议加强新品展示"</span>,
+    <span class="jk">"照片附件"</span>: [<span class="js">"https://files.feishu.cn/inspection/photo1.jpg"</span>]
+  }
+}</pre></div>
+    </div>
+
+    <!-- API 3 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag get">GET</span>
+        <span class="api-path">/api/inspection/history/{store_id}</span>
+      </div>
+      <p class="api-desc">获取指定门店的巡检历史记录，默认返回最近20条</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">store_id</td><td class="ptype">string</td><td class="required">是</td><td class="pdesc">路径参数，门店编号，如 "BJ-001"</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: [
+    {
+      <span class="jk">"门店编号"</span>: <span class="js">"BJ-001"</span>,
+      <span class="jk">"门店名称"</span>: <span class="js">"雨虹北京总部店"</span>,
+      <span class="jk">"巡检人"</span>: <span class="js">"张督导"</span>,
+      <span class="jk">"巡检时间"</span>: <span class="js">"2026-06-28 10:30"</span>,
+      <span class="jk">"陈列标准得分"</span>: <span class="jn">18</span>,
+      <span class="jk">"卫生状况得分"</span>: <span class="jn">14</span>,
+      <span class="jk">"价签物料得分"</span>: <span class="jn">13</span>,
+      <span class="jk">"库存样品得分"</span>: <span class="jn">18</span>,
+      <span class="jk">"服务规范得分"</span>: <span class="jn">14</span>,
+      <span class="jk">"安全合规得分"</span>: <span class="jn">14</span>,
+      <span class="jk">"总分"</span>: <span class="jn">91</span>,
+      <span class="jk">"巡检结果"</span>: <span class="js">"优秀"</span>,
+      <span class="jk">"是否通过"</span>: <span class="js">"通过"</span>
+    },
+    {
+      <span class="jk">"门店编号"</span>: <span class="js">"BJ-001"</span>,
+      <span class="jk">"巡检人"</span>: <span class="js">"李督导"</span>,
+      <span class="jk">"巡检时间"</span>: <span class="js">"2026-06-15 14:00"</span>,
+      <span class="jk">"总分"</span>: <span class="jn">87</span>,
+      <span class="jk">"巡检结果"</span>: <span class="js">"合格"</span>,
+      <span class="jk">"是否通过"</span>: <span class="js">"通过"</span>
+    }
+  ]
+}</pre></div>
+    </div>
+
+    <!-- API 4 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag post">POST</span>
+        <span class="api-path">/api/inspection/ai-detect</span>
+      </div>
+      <p class="api-desc">AI陈列检测，基于图像描述分析门店陈列合规性并给出整改建议</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">image_description</td><td class="ptype">string</td><td class="required">是</td><td class="pdesc">门店陈列图像描述文本或图像URL，供AI模型分析</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: {
+    <span class="jk">"product_categories"</span>: [<span class="js">"防水涂料"</span>, <span class="js">"瓷砖胶"</span>, <span class="js">"密封胶"</span>, <span class="js">"美缝剂"</span>],
+    <span class="jk">"shelf_utilization"</span>: <span class="jn">0.78</span>,
+    <span class="jk">"price_tag_coverage"</span>: <span class="jn">0.85</span>,
+    <span class="jk">"cleanliness_score"</span>: <span class="jn">0.92</span>,
+    <span class="jk">"issues_detected"</span>: [
+      <span class="js">"部分货架利用率偏低，建议补充样品"</span>,
+      <span class="js">"约15%的商品缺少价签"</span>
+    ],
+    <span class="jk">"overall_compliance"</span>: <span class="js">"需整改"</span>,
+    <span class="jk">"ai_suggestion"</span>: <span class="js">"部分货架利用率偏低，建议补充样品；约15%的商品缺少价签"</span>
+  }
+}</pre></div>
+    </div>
+
+    <!-- API 5 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag get">GET</span>
+        <span class="api-path">/api/inspection/report/{store_id}</span>
+      </div>
+      <p class="api-desc">生成门店巡检分析报告，含平均分、通过率、趋势分析和薄弱项识别</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">store_id</td><td class="ptype">string</td><td class="required">是</td><td class="pdesc">路径参数，门店编号</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: {
+    <span class="jk">"store_id"</span>: <span class="js">"BJ-001"</span>,
+    <span class="jk">"inspection_count"</span>: <span class="jn">8</span>,
+    <span class="jk">"average_score"</span>: <span class="jn">86.5</span>,
+    <span class="jk">"pass_rate"</span>: <span class="js">"88%"</span>,
+    <span class="jk">"trend"</span>: <span class="js">"上升"</span>,
+    <span class="jk">"weakest_area"</span>: <span class="js">"价签与促销物料"</span>,
+    <span class="jk">"ai_recommendation"</span>: <span class="js">"门店平均得分86.5分，趋势上升。薄弱项为「价签与促销物料」，建议重点改进。通过率88%，整体表现良好。"</span>,
+    <span class="jk">"score_history"</span>: [<span class="jn">91</span>, <span class="jn">87</span>, <span class="jn">85</span>, <span class="jn">82</span>, <span class="jn">88</span>]
+  }
+}</pre></div>
+    </div>
+  </div>
+
+  <!-- ==================== 模块2：AI导购 ==================== -->
+  <div class="module m2">
+    <div class="module-title">模块二 · AI导购 <span class="mod-count">4个接口</span></div>
+
+    <!-- API 6 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag get">GET</span>
+        <span class="api-path">/api/guide/products</span>
+      </div>
+      <p class="api-desc">搜索产品（支持关键词/分类/应用场景多条件筛选）</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">keyword</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">搜索关键词，匹配产品名称或描述</td></tr>
+          <tr><td class="pname">category</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">产品分类，如"防水涂料"、"防水卷材"、"密封胶"</td></tr>
+          <tr><td class="pname">application</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">应用场景，如"卫生间"、"屋顶"、"外墙"</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: [
+    {
+      <span class="jk">"id"</span>: <span class="js">"P001"</span>,
+      <span class="jk">"name"</span>: <span class="js">"雨虹JS复合防水涂料"</span>,
+      <span class="jk">"category"</span>: <span class="js">"防水涂料"</span>,
+      <span class="jk">"description"</span>: <span class="js">"双组份聚合物水泥防水涂料，柔韧性好，适用于卫生间、厨房等室内防水"</span>,
+      <span class="jk">"price"</span>: <span class="jn">320</span>,
+      <span class="jk">"unit"</span>: <span class="js">"桶(20kg)"</span>,
+      <span class="jk">"specs"</span>: <span class="js">"20kg/桶"</span>,
+      <span class="jk">"application"</span>: [<span class="js">"卫生间"</span>, <span class="js">"厨房"</span>, <span class="js">"阳台"</span>, <span class="js">"室内"</span>],
+      <span class="jk">"rating"</span>: <span class="jn">4.8</span>
+    },
+    {
+      <span class="jk">"id"</span>: <span class="js">"P002"</span>,
+      <span class="jk">"name"</span>: <span class="js">"雨虹聚氨酯防水涂料"</span>,
+      <span class="jk">"category"</span>: <span class="js">"防水涂料"</span>,
+      <span class="jk">"description"</span>: <span class="js">"单组份聚氨酯防水涂料，延伸率高，适用于屋面、地下室等防水工程"</span>,
+      <span class="jk">"price"</span>: <span class="jn">450</span>,
+      <span class="jk">"unit"</span>: <span class="js">"桶(20kg)"</span>,
+      <span class="jk">"specs"</span>: <span class="js">"20kg/桶"</span>,
+      <span class="jk">"application"</span>: [<span class="js">"屋顶"</span>, <span class="js">"地下室"</span>, <span class="js">"外墙"</span>, <span class="js">"卫生间"</span>],
+      <span class="jk">"rating"</span>: <span class="jn">4.7</span>
+    }
+  ]
+}</pre></div>
+    </div>
+
+    <!-- API 7 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag post">POST</span>
+        <span class="api-path">/api/guide/consult</span>
+      </div>
+      <p class="api-desc">AI导购咨询，基于飞书aily智能体的自然语言对话，支持多轮会话</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">question</td><td class="ptype">string</td><td class="required">是</td><td class="pdesc">用户咨询问题，如"卫生间漏水怎么处理？"</td></tr>
+          <tr><td class="pname">session_id</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">会话ID，用于多轮对话上下文关联</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: {
+    <span class="jk">"answer"</span>: <span class="js">"卫生间防水建议：\n1. 墙面防水：使用雨虹JS复合防水涂料，涂刷2-3遍\n2. 地面防水：使用雨虹聚氨酯防水涂料，确保无死角\n3. 管根处理：使用雨虹密封胶加强处理\n施工面积大约多少？我可以帮您计算用量。"</span>,
+    <span class="jk">"products"</span>: [<span class="js">"P001"</span>, <span class="js">"P002"</span>, <span class="js">"P005"</span>],
+    <span class="jk">"construction_steps"</span>: [
+      <span class="js">"基层处理：清理表面，确保平整干燥"</span>,
+      <span class="js">"底涂施工：涂刷底涂剂增强附着力"</span>,
+      <span class="js">"防水层施工：按产品说明涂刷2-3遍"</span>,
+      <span class="js">"闭水试验：施工后48小时进行闭水试验"</span>
+    ],
+    <span class="jk">"session_id"</span>: <span class="js">"sess_a3f8b2c1"</span>,
+    <span class="jk">"source"</span>: <span class="js">"feishu_aily"</span>
+  }
+}</pre></div>
+    </div>
+
+    <!-- API 8 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag post">POST</span>
+        <span class="api-path">/api/guide/recommend</span>
+      </div>
+      <p class="api-desc">智能产品推荐，基于场景+面积+预算进行综合匹配和用量预估</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">scene</td><td class="ptype">string</td><td class="required">是</td><td class="pdesc">应用场景，如"卫生间"、"屋顶"、"外墙"</td></tr>
+          <tr><td class="pname">area</td><td class="ptype">number</td><td class="optional">否</td><td class="pdesc">施工面积（平方米），用于计算用量和成本</td></tr>
+          <tr><td class="pname">budget</td><td class="ptype">number</td><td class="optional">否</td><td class="pdesc">预算上限（元），超出预算的产品降权推荐</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: [
+    {
+      <span class="jk">"id"</span>: <span class="js">"P001"</span>,
+      <span class="jk">"name"</span>: <span class="js">"雨虹JS复合防水涂料"</span>,
+      <span class="jk">"category"</span>: <span class="js">"防水涂料"</span>,
+      <span class="jk">"price"</span>: <span class="jn">320</span>,
+      <span class="jk">"unit"</span>: <span class="js">"桶(20kg)"</span>,
+      <span class="jk">"rating"</span>: <span class="jn">4.8</span>,
+      <span class="jk">"recommend_score"</span>: <span class="jn">4.8</span>,
+      <span class="jk">"usage_per_sqm"</span>: <span class="jn">2.5</span>,
+      <span class="jk">"estimated_amount"</span>: <span class="jn">25.0</span>,
+      <span class="jk">"estimated_cost"</span>: <span class="jn">8000.00</span>
+    },
+    {
+      <span class="jk">"id"</span>: <span class="js">"P002"</span>,
+      <span class="jk">"name"</span>: <span class="js">"雨虹聚氨酯防水涂料"</span>,
+      <span class="jk">"price"</span>: <span class="jn">450</span>,
+      <span class="jk">"rating"</span>: <span class="jn">4.7</span>,
+      <span class="jk">"recommend_score"</span>: <span class="jn">4.7</span>,
+      <span class="jk">"estimated_amount"</span>: <span class="jn">20.0</span>,
+      <span class="jk">"estimated_cost"</span>: <span class="jn">9000.00</span>
+    },
+    {
+      <span class="jk">"id"</span>: <span class="js">"P005"</span>,
+      <span class="jk">"name"</span>: <span class="js">"雨虹硅酮密封胶"</span>,
+      <span class="jk">"price"</span>: <span class="jn">38</span>,
+      <span class="jk">"rating"</span>: <span class="jn">4.7</span>,
+      <span class="jk">"recommend_score"</span>: <span class="jn">4.7</span>,
+      <span class="jk">"estimated_amount"</span>: <span class="jn">5.0</span>,
+      <span class="jk">"estimated_cost"</span>: <span class="jn">190.00</span>
+    }
+  ]
+}</pre></div>
+    </div>
+
+    <!-- API 9 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag get">GET</span>
+        <span class="api-path">/api/guide/construction/{product_id}</span>
+      </div>
+      <p class="api-desc">获取施工指南，返回产品的详细施工步骤、注意事项和难度评级</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">product_id</td><td class="ptype">string</td><td class="required">是</td><td class="pdesc">路径参数，产品ID，如 "P001"</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: {
+    <span class="jk">"product_name"</span>: <span class="js">"雨虹JS复合防水涂料"</span>,
+    <span class="jk">"construction_steps"</span>: [
+      <span class="js">"基层处理：清理表面，确保平整、无油污、无松动"</span>,
+      <span class="js">"配料：按液料:粉料=1:2.5比例混合搅拌均匀"</span>,
+      <span class="js">"第一遍涂刷：用滚筒均匀涂刷，厚度约0.5mm"</span>,
+      <span class="js">"等待表干（约4小时）后涂刷第二遍"</span>,
+      <span class="js">"涂刷第三遍，总厚度达到1.5mm以上"</span>,
+      <span class="js">"24小时后进行闭水试验"</span>
+    ],
+    <span class="jk">"precautions"</span>: [
+      <span class="js">"施工温度5℃-35℃"</span>,
+      <span class="js">"基层含水率不超过20%"</span>,
+      <span class="js">"每遍涂刷方向交叉"</span>,
+      <span class="js">"涂膜未干前禁止踩踏"</span>
+    ],
+    <span class="jk">"video_url"</span>: <span class="js">""</span>,
+    <span class="jk">"estimated_time"</span>: <span class="js">"约4-6小时"</span>,
+    <span class="jk">"difficulty"</span>: <span class="js">"中等"</span>
+  }
+}</pre></div>
+    </div>
+  </div>
+
+  <!-- ==================== 模块3：门店运营 ==================== -->
+  <div class="module m3">
+    <div class="module-title">模块三 · 门店运营 <span class="mod-count">4个接口</span></div>
+
+    <!-- API 10 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag get">GET</span>
+        <span class="api-path">/api/operation/dashboard/{store_id}</span>
+      </div>
+      <p class="api-desc">销售数据仪表盘，支持按周期（day/week/month）查看销售汇总和每日明细</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">store_id</td><td class="ptype">string</td><td class="required">是</td><td class="pdesc">路径参数，门店编号</td></tr>
+          <tr><td class="pname">period</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">查询周期，可选 day/week/month，默认 month</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: {
+    <span class="jk">"store_id"</span>: <span class="js">"BJ-001"</span>,
+    <span class="jk">"period"</span>: <span class="js">"month"</span>,
+    <span class="jk">"total_sales"</span>: <span class="jn">486500.00</span>,
+    <span class="jk">"order_count"</span>: <span class="jn">312</span>,
+    <span class="jk">"top_products"</span>: [
+      { <span class="jk">"name"</span>: <span class="js">"雨虹JS复合防水涂料"</span>, <span class="jk">"sales"</span>: <span class="jn">96000</span>, <span class="jk">"quantity"</span>: <span class="jn">300</span> },
+      { <span class="jk">"name"</span>: <span class="js">"雨虹聚氨酯防水涂料"</span>, <span class="jk">"sales"</span>: <span class="jn">76500</span>, <span class="jk">"quantity"</span>: <span class="jn">170</span> },
+      { <span class="jk">"name"</span>: <span class="js">"雨虹SBS改性沥青卷材"</span>, <span class="jk">"sales"</span>: <span class="jn">59500</span>, <span class="jk">"quantity"</span>: <span class="jn">700</span> }
+    ],
+    <span class="jk">"sales_trend"</span>: [
+      { <span class="jk">"date"</span>: <span class="js">"2026-06-10"</span>, <span class="jk">"sales_amount"</span>: <span class="jn">15200.00</span>, <span class="jk">"order_count"</span>: <span class="jn">12</span> },
+      { <span class="jk">"date"</span>: <span class="js">"2026-06-11"</span>, <span class="jk">"sales_amount"</span>: <span class="jn">18500.00</span>, <span class="jk">"order_count"</span>: <span class="jn">15</span> },
+      { <span class="jk">"date"</span>: <span class="js">"2026-06-12"</span>, <span class="jk">"sales_amount"</span>: <span class="jn">12300.00</span>, <span class="jk">"order_count"</span>: <span class="jn">9</span> }
+    ],
+    <span class="jk">"summary"</span>: {
+      <span class="jk">"total_sales"</span>: <span class="jn">486500.00</span>,
+      <span class="jk">"total_orders"</span>: <span class="jn">312</span>,
+      <span class="jk">"total_customers"</span>: <span class="jn">580</span>,
+      <span class="jk">"avg_order_value"</span>: <span class="jn">1560.00</span>,
+      <span class="jk">"avg_conversion_rate"</span>: <span class="jn">0.34</span>
+    }
+  }
+}</pre></div>
+    </div>
+
+    <!-- API 11 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag get">GET</span>
+        <span class="api-path">/api/operation/inventory/{store_id}</span>
+      </div>
+      <p class="api-desc">库存分析，返回各SKU库存状态、周转天数和预警信息</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">store_id</td><td class="ptype">string</td><td class="required">是</td><td class="pdesc">路径参数，门店编号</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: {
+    <span class="jk">"store_id"</span>: <span class="js">"BJ-001"</span>,
+    <span class="jk">"products"</span>: [
+      { <span class="jk">"name"</span>: <span class="js">"雨虹JS复合防水涂料"</span>, <span class="jk">"stock"</span>: <span class="jn">120</span>, <span class="jk">"unit"</span>: <span class="js">"桶"</span>, <span class="jk">"turnover_days"</span>: <span class="jn">25</span>, <span class="jk">"status"</span>: <span class="js">"正常"</span> },
+      { <span class="jk">"name"</span>: <span class="js">"雨虹SBS改性沥青卷材"</span>, <span class="jk">"stock"</span>: <span class="jn">8</span>, <span class="jk">"unit"</span>: <span class="js">"卷"</span>, <span class="jk">"turnover_days"</span>: <span class="jn">5</span>, <span class="jk">"status"</span>: <span class="js">"预警"</span> },
+      { <span class="jk">"name"</span>: <span class="js">"雨虹密封胶"</span>, <span class="jk">"stock"</span>: <span class="jn">15</span>, <span class="jk">"unit"</span>: <span class="js">"支"</span>, <span class="jk">"turnover_days"</span>: <span class="jn">3</span>, <span class="jk">"status"</span>: <span class="js">"紧急"</span> },
+      { <span class="jk">"name"</span>: <span class="js">"雨虹瓷砖胶"</span>, <span class="jk">"stock"</span>: <span class="jn">200</span>, <span class="jk">"unit"</span>: <span class="js">"袋"</span>, <span class="jk">"turnover_days"</span>: <span class="jn">45</span>, <span class="jk">"status"</span>: <span class="js">"积压"</span> }
+    ],
+    <span class="jk">"alerts"</span>: [
+      <span class="js">"密封胶库存仅剩15支，需立即补货"</span>,
+      <span class="js">"SBS卷材库存8卷，周转天数5天，建议补货"</span>,
+      <span class="js">"瓷砖胶库存200袋，周转天数45天，存在积压风险"</span>
+    ],
+    <span class="jk">"total_sku"</span>: <span class="jn">6</span>,
+    <span class="jk">"alert_count"</span>: <span class="jn">3</span>,
+    <span class="jk">"health_score"</span>: <span class="jn">72.5</span>
+  }
+}</pre></div>
+    </div>
+
+    <!-- API 12 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag get">GET</span>
+        <span class="api-path">/api/operation/flow/{store_id}</span>
+      </div>
+      <p class="api-desc">客流分析，返回时段分布、每日客流趋势和高峰时段建议（支持period参数）</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">store_id</td><td class="ptype">string</td><td class="required">是</td><td class="pdesc">路径参数，门店编号</td></tr>
+          <tr><td class="pname">period</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">查询周期，可选 week/month，默认 week</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: {
+    <span class="jk">"store_id"</span>: <span class="js">"BJ-001"</span>,
+    <span class="jk">"hourly_distribution"</span>: {
+      <span class="jk">"9:00"</span>: <span class="jn">5</span>, <span class="jk">"10:00"</span>: <span class="jn">12</span>, <span class="jk">"11:00"</span>: <span class="jn">15</span>,
+      <span class="jk">"14:00"</span>: <span class="jn">20</span>, <span class="jk">"15:00"</span>: <span class="jn">18</span>, <span class="jk">"16:00"</span>: <span class="jn">14</span>
+    },
+    <span class="jk">"daily_flow"</span>: [
+      { <span class="jk">"date"</span>: <span class="js">"2026-07-04"</span>, <span class="jk">"weekday"</span>: <span class="js">"Saturday"</span>, <span class="jk">"total_flow"</span>: <span class="jn">68</span>, <span class="jk">"peak_hour"</span>: <span class="js">"14:00"</span>, <span class="jk">"avg_stay_minutes"</span>: <span class="jn">28</span> },
+      { <span class="jk">"date"</span>: <span class="js">"2026-07-05"</span>, <span class="jk">"weekday"</span>: <span class="js">"Sunday"</span>, <span class="jk">"total_flow"</span>: <span class="jn">75</span>, <span class="jk">"peak_hour"</span>: <span class="js">"15:00"</span>, <span class="jk">"avg_stay_minutes"</span>: <span class="jn">32</span> }
+    ],
+    <span class="jk">"avg_daily_flow"</span>: <span class="jn">52</span>,
+    <span class="jk">"peak_hours"</span>: [<span class="js">"14:00"</span>, <span class="js">"15:00"</span>, <span class="js">"10:00"</span>],
+    <span class="jk">"ai_suggestion"</span>: <span class="js">"客流高峰集中在下午14-16点，建议在该时段增加导购人员。工作日客流偏少，可推出工作日专属优惠提升到店率。"</span>
+  }
+}</pre></div>
+    </div>
+
+    <!-- API 13 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag get">GET</span>
+        <span class="api-path">/api/operation/insight/{store_id}</span>
+      </div>
+      <p class="api-desc">AI经营洞察报告，整合销售、库存、客流数据生成综合分析报告</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">store_id</td><td class="ptype">string</td><td class="required">是</td><td class="pdesc">路径参数，门店编号</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: {
+    <span class="jk">"store_id"</span>: <span class="js">"BJ-001"</span>,
+    <span class="jk">"report_date"</span>: <span class="js">"2026-07-10"</span>,
+    <span class="jk">"sales_summary"</span>: {
+      <span class="jk">"total_sales"</span>: <span class="jn">486500.00</span>,
+      <span class="jk">"total_orders"</span>: <span class="jn">312</span>,
+      <span class="jk">"avg_order_value"</span>: <span class="jn">1560.00</span>,
+      <span class="jk">"avg_conversion_rate"</span>: <span class="jn">0.34</span>
+    },
+    <span class="jk">"inventory_health"</span>: <span class="jn">72.5</span>,
+    <span class="jk">"avg_flow"</span>: <span class="jn">52</span>,
+    <span class="jk">"key_recommendations"</span>: [
+      <span class="js">"紧急补货SBS卷材和密封胶"</span>,
+      <span class="js">"促销清仓积压瓷砖胶"</span>,
+      <span class="js">"下午高峰时段增加导购"</span>,
+      <span class="js">"推出工作日免费检测活动"</span>,
+      <span class="js">"加强私域会员引流"</span>
+    ],
+    <span class="jk">"report_content"</span>: <span class="js">"【雨虹智慧门店运营AI洞察报告】\n门店编号：BJ-001\n报告日期：2026-07-10\n\n一、销售概况\n- 月度总销售额：¥486,500.00\n- 总订单数：312单\n- 客单价：¥1,560.00\n- 转化率：34.0%\n\n二、库存健康度\n- SKU总数：6\n- 预警数量：3\n- 健康评分：72.5/100\n\n三、客流分析\n- 日均客流：52人\n- 高峰时段：14:00, 15:00, 10:00\n\n四、AI优化建议\n1. 库存管理：SBS卷材和密封胶需紧急补货\n2. 人员排班：下午14-16点为客流高峰，建议增加1名导购\n3. 营销策略：工作日转化率偏低，建议推出免费检测活动\n4. 产品组合：建议防水涂料与密封胶组合销售，提升客单价\n5. 私域运营：本月到店客户中仅35%加入会员，建议加强私域引流"</span>
+  }
+}</pre></div>
+    </div>
+  </div>
+
+  <!-- ==================== 模块4：私域客户 ==================== -->
+  <div class="module m4">
+    <div class="module-title">模块四 · 私域客户 <span class="mod-count">3个接口</span></div>
+
+    <!-- API 14 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag post">POST</span>
+        <span class="api-path">/api/customer/profile</span>
+      </div>
+      <p class="api-desc">构建客户画像，基于消费数据自动生成会员等级、流失风险、标签和复购预测</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">id</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">客户ID</td></tr>
+          <tr><td class="pname">name</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">客户姓名</td></tr>
+          <tr><td class="pname">phone</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">联系电话</td></tr>
+          <tr><td class="pname">total_purchase</td><td class="ptype">number</td><td class="optional">否</td><td class="pdesc">累计消费金额（元），用于计算会员等级</td></tr>
+          <tr><td class="pname">purchase_count</td><td class="ptype">number</td><td class="optional">否</td><td class="pdesc">购买次数</td></tr>
+          <tr><td class="pname">last_purchase_date</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">最近购买日期，格式 YYYY-MM-DD，用于计算流失风险</td></tr>
+          <tr><td class="pname">preferred_category</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">偏好品类，如"防水涂料"</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: {
+    <span class="jk">"customer_id"</span>: <span class="js">"C10086"</span>,
+    <span class="jk">"name"</span>: <span class="js">"王先生"</span>,
+    <span class="jk">"phone"</span>: <span class="js">"138****8888"</span>,
+    <span class="jk">"member_level"</span>: <span class="js">"金卡会员"</span>,
+    <span class="jk">"churn_risk"</span>: <span class="js">"中"</span>,
+    <span class="jk">"tags"</span>: [<span class="js">"高价值客户"</span>, <span class="js">"高频复购"</span>, <span class="js">"卫生间防水需求"</span>],
+    <span class="jk">"lifetime_value"</span>: <span class="jn">15800</span>,
+    <span class="jk">"purchase_frequency"</span>: <span class="jn">6</span>,
+    <span class="jk">"last_purchase_date"</span>: <span class="js">"2026-03-15"</span>,
+    <span class="jk">"preferred_category"</span>: <span class="js">"防水涂料"</span>,
+    <span class="jk">"preferred_channel"</span>: <span class="js">"门店"</span>,
+    <span class="jk">"next_purchase_prediction"</span>: <span class="js">"2026-09-22"</span>
+  }
+}</pre></div>
+    </div>
+
+    <!-- API 15 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag post">POST</span>
+        <span class="api-path">/api/customer/script</span>
+      </div>
+      <p class="api-desc">生成跟进话术，基于客户画像和场景自动生成个性化沟通话术（复购/节日/挽回）</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">profile</td><td class="ptype">object</td><td class="required">是</td><td class="pdesc">客户画像对象，由 /api/customer/profile 接口返回</td></tr>
+          <tr><td class="pname">scenario</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">话术场景，可选 repurchase（复购跟进）/festival（节日关怀）/winback（流失挽回），默认 repurchase</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: <span class="js">"【复购跟进话术】\n客户：王先生（金卡会员）\n标签：高价值客户、高频复购、卫生间防水需求\n\n开场白：\n\"王先生您好！我是雨虹门店的专属顾问小虹。上次您购买的防水涂料使用效果怎么样？\n现在我们新到了一批升级款产品，针对您之前的需求做了优化。\n作为金卡会员，您本次购买可享专属9折优惠，还赠送一次免费上门检测服务。\n您看这周末方便来店里看看吗？\"\n\n跟进要点：\n1. 询问上次购买产品的使用体验\n2. 推荐升级款或配套产品\n3. 强调会员专属优惠\n4. 邀请到店体验\n5. 记录客户反馈，更新画像"</span>
+}</pre></div>
+    </div>
+
+    <!-- API 16 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag post">POST</span>
+        <span class="api-path">/api/customer/tasks</span>
+      </div>
+      <p class="api-desc">自动生成跟进任务，根据客户流失风险和会员等级智能创建优先级任务清单</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">profile</td><td class="ptype">object</td><td class="required">是</td><td class="pdesc">客户画像对象，由 /api/customer/profile 接口返回</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: [
+    {
+      <span class="jk">"task_type"</span>: <span class="js">"流失挽回"</span>,
+      <span class="jk">"priority"</span>: <span class="js">"高"</span>,
+      <span class="jk">"deadline"</span>: <span class="js">"2026-07-12"</span>,
+      <span class="jk">"action"</span>: <span class="js">"电话回访，了解客户现状"</span>,
+      <span class="jk">"script_scenario"</span>: <span class="js">"winback"</span>
+    },
+    {
+      <span class="jk">"task_type"</span>: <span class="js">"VIP关怀"</span>,
+      <span class="jk">"priority"</span>: <span class="js">"中"</span>,
+      <span class="jk">"deadline"</span>: <span class="js">"2026-07-17"</span>,
+      <span class="jk">"action"</span>: <span class="js">"发送新品推荐+专属优惠"</span>,
+      <span class="jk">"script_scenario"</span>: <span class="js">"repurchase"</span>
+    },
+    {
+      <span class="jk">"task_type"</span>: <span class="js">"定期关怀"</span>,
+      <span class="jk">"priority"</span>: <span class="js">"低"</span>,
+      <span class="jk">"deadline"</span>: <span class="js">"2026-07-24"</span>,
+      <span class="jk">"action"</span>: <span class="js">"微信/飞书消息关怀，分享防水知识"</span>,
+      <span class="jk">"script_scenario"</span>: <span class="js">"festival"</span>
+    }
+  ]
+}</pre></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

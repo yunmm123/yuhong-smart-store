@@ -5,10 +5,19 @@
 > 零硬件 · 零代码 · 零培训 · 极低软件成本
 
 <p align="center">
+  <img src="https://img.shields.io/badge/飞书AI-已部署验证-success" alt="Feishu AI">
+  <img src="https://img.shields.io/badge/GitHub%20Pages-在线可访问-blue" alt="GitHub Pages">
+  <img src="https://img.shields.io/badge/tests-23%20passed-brightgreen" alt="Tests">
+  <img src="https://img.shields.io/badge/API-16%20endpoints-blue" alt="API">
+  <img src="https://img.shields.io/badge/license-MIT-lightgrey" alt="License">
+</p>
+
+<p align="center">
   <a href="https://yunmm123.github.io/yuhong-smart-store/"><strong>🏠 项目首页</strong></a> ·
   <a href="https://yunmm123.github.io/yuhong-smart-store/%E8%A1%A5%E5%85%85%E6%9D%90%E6%96%99/yuhong-onepager/yuhong-onepager.html"><strong>📄 一页纸摘要</strong></a> ·
   <a href="https://yunmm123.github.io/yuhong-smart-store/%E8%A1%A5%E5%85%85%E6%9D%90%E6%96%99/yuhong-pitch/yuhong-pitch.html"><strong>📊 路演PPT</strong></a> ·
-  <a href="https://yunmm123.github.io/yuhong-smart-store/%E8%A1%A5%E5%85%85%E6%9D%90%E6%96%99/Demo%E4%BA%A4%E4%BA%92%E6%BC%94%E7%A4%BA.html"><strong>🖥️ 交互Demo</strong></a>
+  <a href="https://yunmm123.github.io/yuhong-smart-store/%E8%A1%A5%E5%85%85%E6%9D%90%E6%96%99/Demo%E4%BA%A4%E4%BA%92%E6%BC%94%E7%A4%BA.html"><strong>🖥️ 交互Demo</strong></a> ·
+  <a href="https://yunmm123.github.io/yuhong-smart-store/%E8%A1%A5%E5%85%85%E6%9D%90%E6%96%99/%E8%AF%84%E5%A7%94%E5%AF%BC%E8%A7%88.html"><strong>🗺️ 评委导览</strong></a>
 </p>
 
 ---
@@ -168,10 +177,14 @@ python -m pytest tests/test_core.py -v
 
 | 材料 | 链接 |
 |------|------|
+| 🗺️ 评委导览（3分钟看懂） | [打开](补充材料/评委导览.html) |
 | 📄 一页纸执行摘要（评委必看） | [打开](补充材料/yuhong-onepager/yuhong-onepager.html) |
 | 📊 路演PPT（14页） | [打开](补充材料/yuhong-pitch/yuhong-pitch.html) |
 | 🏪 门店一日场景模拟 | [打开](补充材料/门店一日场景模拟.html) |
 | 📈 可落地性分析 | [打开](补充材料/可落地性分析.html) |
+| 🧮 交互式ROI计算器 | [打开](补充材料/ROI计算器.html) |
+| 📊 竞品实名深度对比 | [打开](补充材料/竞品实名深度对比.html) |
+| 📡 API接口文档（16接口） | [打开](补充材料/API文档.html) |
 | 🖥️ 交互Demo（4页面可操作） | [打开](补充材料/Demo交互演示.html) |
 | ✅ aily智能体部署验证 | [打开](补充材料/飞书aily智能体部署验证.html) |
 | ✅ 多维表格部署验证 | [打开](补充材料/飞书多维表格部署验证.html) |

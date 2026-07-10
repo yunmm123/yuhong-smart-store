@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>竞品实名深度对比 — 雨虹智慧门店运营助手</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap');
+
+:root {
+  --ink: #1a1a2e; --muted: #6b7280; --accent: #1677ff; --accent2: #722ed1;
+  --bg: #ffffff; --bg2: #f7f8fc; --rule: #e5e7eb;
+  --good: #52c41a; --warn: #faad14; --bad: #ff4d4f;
+  --grad: linear-gradient(135deg, #1677ff, #722ed1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "Noto Sans SC", -apple-system, sans-serif;
+  background: var(--bg2); color: var(--ink); line-height: 1.8; padding: 20px;
+}
+.page { max-width: 1100px; margin: 0 auto; background: var(--bg); padding: 48px 52px; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,.06); }
+
+.header { padding-bottom: 24px; border-bottom: 3px solid var(--ink); margin-bottom: 32px; }
+.header .badge { display: inline-block; font-size: 11px; font-weight: 600; color: #fff; background: var(--grad); padding: 4px 12px; border-radius: 4px; margin-bottom: 12px; }
+.header h1 { font-size: 28px; font-weight: 900; }
+.header h1 .grad { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.header .subtitle { font-size: 14px; color: var(--muted); margin-top: 6px; }
+
+.section { margin-bottom: 36px; }
+.section-title { font-size: 15px; font-weight: 700; margin-bottom: 14px; padding-left: 12px; border-left: 4px solid var(--accent); }
+
+/* 总览对比表 */
+.compare-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12px; }
+.compare-table th { background: var(--bg2); padding: 10px 12px; font-weight: 700; text-align: left; border-bottom: 2px solid var(--rule); white-space: nowrap; }
+.compare-table td { padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.compare-table tr:hover { background: #fafbff; }
+.compare-table .ours { background: #f0f5ff; font-weight: 600; }
+.compare-table .yes { color: var(--good); font-weight: 700; }
+.compare-table .no { color: var(--bad); font-weight: 700; }
+.compare-table .partial { color: var(--warn); font-weight: 700; }
+
+/* 竞品卡片 */
+.competitor-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 16px 0; }
+.comp-card { background: var(--bg2); border-radius: 10px; padding: 20px; border-top: 3px solid var(--rule); }
+.comp-card.highlight { border-top-color: var(--accent); background: linear-gradient(135deg, #f0f5ff, #f9f0ff); }
+.comp-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.comp-card .price { font-size: 13px; color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+.comp-card .desc { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+.comp-card ul { list-style: none; padding: 0; }
+.comp-card li { font-size: 12px; color: var(--muted); padding: 3px 0; padding-left: 16px; position: relative; }
+.comp-card li::before { content: '•'; position: absolute; left: 0; color: var(--accent); }
+.comp-card li.bad::before { content: '✗'; color: var(--bad); }
+.comp-card li.good::before { content: '✓'; color: var(--good); }
+
+/* 功能矩阵 */
+.feature-matrix { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12px; }
+.feature-matrix th { background: var(--ink); color: #fff; padding: 8px 10px; font-weight: 600; text-align: center; border: 1px solid var(--ink); white-space: nowrap; }
+.feature-matrix td { padding: 8px 10px; border: 1px solid var(--rule); text-align: center; }
+.feature-matrix td:first-child { text-align: left; font-weight: 600; background: var(--bg2); }
+.feature-matrix .ours-col { background: #f0f5ff; }
+.feature-matrix .check { color: var(--good); font-weight: 700; }
+.feature-matrix .cross { color: var(--bad); font-weight: 700; }
+.feature-matrix .warn { color: var(--warn); font-weight: 700; }
+
+/* 优势总结 */
+.advantage-box { background: linear-gradient(135deg, #f0f5ff, #f9f0ff); border-radius: 12px; padding: 24px 28px; margin: 20px 0; border: 1px solid #d6e4ff; }
+.advantage-box h3 { font-size: 16px; font-weight: 700; color: var(--accent); margin-bottom: 12px; }
+.advantage-box ol { padding-left: 20px; }
+.advantage-box li { font-size: 13px; color: var(--ink); margin-bottom: 8px; line-height: 1.8; }
+.advantage-box li strong { color: var(--accent); }
+
+@media print { body { background: #fff; } .page { box-shadow: none; } }
+@media (max-width: 768px) {
+  .competitor-grid { grid-template-columns: 1fr; }
+  .compare-table, .feature-matrix { font-size: 11px; }
+  .page { padding: 24px 20px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <span class="badge">竞品分析 · 实名对比</span>
+    <h1>竞品实名<span class="grad">深度对比</span></h1>
+    <p class="subtitle">5款产品 · 20个功能维度 · 基于公开定价与功能信息（2026年7月）</p>
+  </div>
+
+  <!-- 总览对比 -->
+  <div class="section">
+    <div class="section-title">市场主流方案总览</div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>对比维度</th>
+          <th>管家婆</th>
+          <th>金蝶精斗云</th>
+          <th>用友好生意</th>
+          <th>材路管家</th>
+          <th class="ours">本方案（飞书AI）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>定位</td>
+          <td>通用进销存</td>
+          <td>云ERP/财税</td>
+          <td>通用进销存</td>
+          <td>建材行业专属</td>
+          <td class="ours">飞书AI智慧运营</td>
+        </tr>
+        <tr>
+          <td>最低年费</td>
+          <td>698元/年/用户</td>
+          <td>698元/年/用户</td>
+          <td>580元/年</td>
+          <td>365元/年/用户</td>
+          <td class="ours">试点免费 / 规模化≈420元/年/店</td>
+        </tr>
+        <tr>
+          <td>AI能力</td>
+          <td class="no">无</td>
+          <td class="partial">有（ChatBI/AI凭证）</td>
+          <td class="no">无</td>
+          <td class="no">无</td>
+          <td class="ours yes">强（aily智能体+AI字段+妙搭）</td>
+        </tr>
+        <tr>
+          <td>建材行业适配</td>
+          <td class="no">低（通用）</td>
+          <td class="no">低（通用）</td>
+          <td class="no">低（通用）</td>
+          <td class="yes">极高（色号/加工/测量）</td>
+          <td class="ours">中（产品知识库可定制）</td>
+        </tr>
+        <tr>
+          <td>移动端</td>
+          <td class="yes">支持</td>
+          <td class="yes">支持</td>
+          <td class="yes">支持</td>
+          <td class="yes">支持</td>
+          <td class="ours yes">支持（飞书全端）</td>
+        </tr>
+        <tr>
+          <td>部署方式</td>
+          <td>云端+本地买断</td>
+          <td>纯云端</td>
+          <td>云端+本地</td>
+          <td>纯云端</td>
+          <td class="ours">纯云端（无需自建服务器）</td>
+        </tr>
+        <tr>
+          <td>硬件投入</td>
+          <td class="no">需POS终端</td>
+          <td class="no">需电脑+POS</td>
+          <td class="no">需电脑+POS</td>
+          <td class="no">需电脑+POS</td>
+          <td class="ours yes">零硬件（手机即可）</td>
+        </tr>
+        <tr>
+          <td>AI导购/咨询</td>
+          <td class="no">无</td>
+          <td class="no">无</td>
+          <td class="no">无</td>
+          <td class="no">无</td>
+          <td class="ours yes">aily 7×24自然语言对话</td>
+        </tr>
+        <tr>
+          <td>AI巡检/图像识别</td>
+          <td class="no">无</td>
+          <td class="no">无</td>
+          <td class="no">无</td>
+          <td class="no">无</td>
+          <td class="ours yes">妙搭低代码+AI评分</td>
+        </tr>
+        <tr>
+          <td>客户流失预测</td>
+          <td class="no">无</td>
+          <td class="partial">有（风险预警）</td>
+          <td class="no">无</td>
+          <td class="partial">有（老客提醒）</td>
+          <td class="ours yes">AI标签+流失风险+自动话术</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 竞品逐个分析 -->
+  <div class="section">
+    <div class="section-title">竞品逐个分析</div>
+    <div class="competitor-grid">
+
+      <div class="comp-card">
+        <h3>管家婆（任我行软件）</h3>
+        <div class="price">698-1,298元/年/用户 · 买断3,490元起</div>
+        <div class="desc">老牌通用进销存，50万家中小企业在用，支持五端同步</div>
+        <ul>
+          <li class="good">功能成熟稳定，进销存+财务一体</li>
+          <li class="good">支持本地买断，一次性付费</li>
+          <li class="good">POS零售功能完善</li>
+          <li class="bad">无任何AI能力</li>
+          <li class="bad">无建材行业专属功能</li>
+          <li class="bad">需POS终端硬件投入</li>
+          <li class="bad">界面较老旧，学习成本高</li>
+          <li class="bad">按用户收费，多门店成本高</li>
+        </ul>
+      </div>
+
+      <div class="comp-card">
+        <h3>金蝶精斗云</h3>
+        <div class="price">698-1,298元/年/用户 · 云财贸1,098元起</div>
+        <div class="desc">金蝶旗下小微企业云ERP，5大产品线，AI能力较强</div>
+        <ul>
+          <li class="good">有AI能力（ChatBI智能问答、AI凭证）</li>
+          <li class="good">业财一体化，自动生成财务凭证</li>
+          <li class="good">品牌背书强，生态完善</li>
+          <li class="bad">AI聚焦财务而非门店运营</li>
+          <li class="bad">无建材行业适配</li>
+          <li class="bad">需电脑+POS硬件</li>
+          <li class="bad">多用户阶梯定价，规模化成本高</li>
+          <li class="bad">无AI导购、AI巡检能力</li>
+        </ul>
+      </div>
+
+      <div class="comp-card">
+        <h3>用友畅捷通·好生意</h3>
+        <div class="price">580-1,998元/年 · 3用户3,998元/年</div>
+        <div class="desc">用友旗下小微企业进销存，云端+本地双模式</div>
+        <ul>
+          <li class="good">入门价格低（580元/年）</li>
+          <li class="good">支持云端+本地部署</li>
+          <li class="good">手机管店、多端开单</li>
+          <li class="bad">无明显AI能力</li>
+          <li class="bad">无建材行业适配</li>
+          <li class="bad">标准版多用户价格陡增</li>
+          <li class="bad">无客户流失预测</li>
+          <li class="bad">需电脑+POS硬件</li>
+        </ul>
+      </div>
+
+      <div class="comp-card">
+        <h3>材路管家（建材行业专属）</h3>
+        <div class="price">365-1,095元/年/用户（1-3元/天）</div>
+        <div class="desc">专为建材行业打造，色号/加工/测量/坑距等行业功能</div>
+        <ul>
+          <li class="good">建材行业适配度极高</li>
+          <li class="good">色号/等级/加工/测量专属功能</li>
+          <li class="good">联盟管理、分销管理</li>
+          <li class="good">按天计费灵活</li>
+          <li class="bad">无任何AI能力</li>
+          <li class="bad">无AI导购/智能推荐</li>
+          <li class="bad">需电脑+POS硬件</li>
+          <li class="bad">品牌影响力有限</li>
+          <li class="bad">无飞书生态协同能力</li>
+        </ul>
+      </div>
+
+      <div class="comp-card highlight" style="grid-column: span 2">
+        <h3>本方案 — 雨虹智慧门店运营助手（飞书AI）</h3>
+        <div class="price">试点约60元/年/店 · 规模化约420-600元/年/店</div>
+        <div class="desc">基于飞书aily+多维表格AI+妙搭低代码，为建材县域零售量身定制</div>
+        <ul>
+          <li class="good">三大AI能力真实部署验证（aily 3/3通过、多维表格5表+2AI、妙搭91分）</li>
+          <li class="good">AI导购7×24在线，产品推荐+施工指导+用量计算</li>
+          <li class="good">AI巡检6维度自动评分，妙搭低代码生成</li>
+          <li class="good">AI客户标签+流失风险预测+自动跟进话术</li>
+          <li class="good">零硬件投入（手机即可），零代码部署（扫码即用）</li>
+          <li class="good">飞书生态全链路打通（aily+多维表格+妙搭协同）</li>
+          <li class="good">试点阶段利用免费额度，成本极低</li>
+          <li class="good">产品知识库可按东方雨虹产品线定制</li>
+          <li class="bad">建材行业专属功能（色号/加工）需补充</li>
+          <li class="bad">财务核算能力弱于专业ERP（多维表格非财务系统）</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 功能矩阵 -->
+  <div class="section">
+    <div class="section-title">20项功能点覆盖矩阵</div>
+    <table class="feature-matrix">
+      <thead>
+        <tr>
+          <th style="text-align:left">功能点</th>
+          <th>管家婆</th>
+          <th>金蝶精斗云</th>
+          <th>用友好生意</th>
+          <th>材路管家</th>
+          <th class="ours-col">本方案</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>进销存管理</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check ours-col">✓</td></tr>
+        <tr><td>库存预警</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check ours-col">✓</td></tr>
+        <tr><td>客户管理</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check ours-col">✓</td></tr>
+        <tr><td>销售报表</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check ours-col">✓</td></tr>
+        <tr><td>移动端开单</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check ours-col">✓</td></tr>
+        <tr><td>财务核算</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="warn">~</td><td class="cross ours-col">✗</td></tr>
+        <tr><td>POS零售</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="cross">✗</td><td class="cross ours-col">✗</td></tr>
+        <tr><td>建材色号/加工管理</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td><td class="cross ours-col">✗</td></tr>
+        <tr><td>AI导购/智能咨询</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="check ours-col">✓</td></tr>
+        <tr><td>AI施工指导</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="check ours-col">✓</td></tr>
+        <tr><td>AI用量计算</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="check ours-col">✓</td></tr>
+        <tr><td>AI巡检评分</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="check ours-col">✓</td></tr>
+        <tr><td>AI客户标签</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="check ours-col">✓</td></tr>
+        <tr><td>AI流失风险预测</td><td class="cross">✗</td><td class="warn">~</td><td class="cross">✗</td><td class="warn">~</td><td class="check ours-col">✓</td></tr>
+        <tr><td>AI自动跟进话术</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="check ours-col">✓</td></tr>
+        <tr><td>零硬件部署</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="check ours-col">✓</td></tr>
+        <tr><td>扫码即用（零代码）</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="check ours-col">✓</td></tr>
+        <tr><td>自然语言交互</td><td class="cross">✗</td><td class="warn">~</td><td class="cross">✗</td><td class="cross">✗</td><td class="check ours-col">✓</td></tr>
+        <tr><td>生态协同（IM+文档+日历）</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="check ours-col">✓</td></tr>
+        <tr><td>低代码自定义扩展</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td><td class="check ours-col">✓</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:11px;color:var(--muted);margin-top:6px">✓ 完整支持 &nbsp; ~ 部分支持 &nbsp; ✗ 不支持</p>
+  </div>
+
+  <!-- 差异化优势总结 -->
+  <div class="advantage-box">
+    <h3>我们的差异化优势</h3>
+    <ol>
+      <li><strong>唯一具备AI导购能力的方案：</strong>5款产品中，仅本方案支持自然语言对话式产品推荐+施工指导+用量计算。管家婆、用友、材路管家均无AI能力，金蝶AI聚焦财务而非门店运营。</li>
+      <li><strong>唯一零硬件零代码部署：</strong>其他4款产品均需电脑/POS终端硬件投入和专业IT部署，本方案手机扫码即用，10分钟完成部署。这对85%无数字化基础的县域夫妻店是决定性优势。</li>
+      <li><strong>唯一AI巡检+AI客户预测组合：</strong>AI巡检6维度自动评分+AI客户流失风险预测+自动跟进话术，是其他任何竞品都不具备的组合能力。</li>
+      <li><strong>飞书生态协同效应：</strong>aily+多维表格+妙搭三大AI能力一体化，天然打通IM、文档、日历、审批等飞书生态，形成完整工作流，而非孤立工具。</li>
+      <li><strong>成本结构最优：</strong>试点阶段利用飞书免费额度单店年成本约60元，远低于管家婆698元、材路管家365元的起步价；规模化后约420-600元/年/店，仍有竞争力。</li>
+    </ol>
+    <p style="font-size:12px;color:var(--muted);margin-top:14px;padding-top:10px;border-top:1px dashed var(--rule)">
+      <strong>坦诚短板：</strong>本方案在财务核算（多维表格非专业财务系统）、POS零售收银、建材色号/加工管理等方面弱于专业竞品。方案定位不是替代ERP，而是为<strong>无数字化基础的县域夫妻店</strong>提供AI增量能力——先解决"从0到1"，再考虑"从1到100"。
+    </p>
+  </div>
+
+  <!-- 数据来源 -->
+  <div class="section">
+    <div class="section-title">数据来源</div>
+    <p style="font-size:11px;color:var(--muted);line-height:1.8">
+      管家婆：任我行软件官网及App Store定价（2026年7月）<br>
+      金蝶精斗云：金蝶官网及授权代理商定价页（2026年7月）<br>
+      用友畅捷通好生意：畅捷通官网收费标准问答（2026年7月）<br>
+      材路管家：材路软件官网aicailu.com及定价页（2026年7月）<br>
+      飞书多维表格：飞书官网版本权益页（2026年7月）<br>
+      通义千问API：阿里云百炼平台定价页（2026年7月）
+    </p>
+  </div>
+
+</div>
+</body>
+</html>
