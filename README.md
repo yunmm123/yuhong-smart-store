@@ -42,12 +42,12 @@
 
 ## 商业价值 · 3515战略对齐
 
-| 指标 | 效果 |
-|------|------|
-| 巡检效率 | ↑50% |
-| 新员工上手周期 | 30天 → 7天 |
-| 决策响应速度 | 2周 → 实时 |
-| 客户复购率 | ↑15% |
+| 指标 | 效果 | 测算依据 |
+|------|------|----------|
+| 巡检效率 | ↑50% | 移动表单替代纸质巡检单，6维度自动评分替代人工计算（参考建材行业数字化报告） |
+| 新员工上手周期 | 30天 → 7天 | aily智能体7×24在线解答产品/施工问题，替代传统师傅带教模式 |
+| 决策响应速度 | 2周 → 实时 | 多维表格AI字段自动分析经营数据，仪表盘实时可视化替代月度报表 |
+| 客户复购率 | ↑15% | AI客户标签+流失风险预测+自动跟进话术，基于零售行业AI赋能基准测算 |
 
 > **507城 × 29万网点 × 10分钟AI赋能 = 县域零售数字化从0到1的突破**
 
@@ -77,17 +77,23 @@
 ```
 yuhong-smart-store/
 ├── src/                          # Flask主应用 (5页面 + 16API)
-│   ├── app.py                    # 主入口
-│   ├── feishu_api.py             # 飞书API封装
-│   ├── inspection.py             # 门店巡检模块
-│   ├── ai_assistant.py           # AI导购模块
-│   ├── store_ops.py              # 门店运营模块
-│   └── customer.py               # 客户维护模块
+│   ├── app.py                    # 主入口，16个API路由
+│   ├── config.py                 # 配置管理（飞书凭证 + mock模式检测）
+│   ├── api/                      # 飞书API封装层
+│   │   ├── feishu_aily.py        # aily智能体API封装
+│   │   └── feishu_bitable.py     # 多维表格API封装
+│   └── modules/                  # 四大业务模块
+│       ├── store_inspection.py   # 门店巡检模块
+│       ├── ai_shopping_guide.py  # AI导购模块
+│       ├── store_operation.py    # 门店运营模块
+│       └── customer_relation.py  # 客户维护模块
 ├── templates/                    # 前端页面
 │   ├── index.html                # 首页仪表盘
 │   ├── inspection.html           # 门店巡检
-│   ├── ai_chat.html              # AI导购
-│   └── dashboard_3515.html       # 3515县域大屏
+│   ├── guide.html                # AI导购
+│   └── bigscreen.html            # 3515县域大屏
+├── tests/                        # 单元测试
+│   └── test_core.py              # 核心业务逻辑测试
 ├── docs/                         # 技术文档 (6份)
 │   ├── 01_行业研究与竞品分析报告.md
 │   ├── 02_技术方案架构设计文档.md
@@ -111,9 +117,13 @@ yuhong-smart-store/
 │   ├── 项目甘特图与时间线.html
 │   ├── 研究笔记与调研记录.html
 │   └── 相关项目经验与技术能力说明.html
-├── data/                         # 产品知识库
-│   └── products.json             # 8个核心产品数据
+├── data/                         # 本地演示数据（mock模式使用）
+│   ├── products.json             # 8个核心产品数据
+│   ├── stores.json               # 门店信息
+│   └── inspection_records.json   # 巡检记录
 ├── requirements.txt
+├── run.sh                        # 一键启动脚本
+├── .env.example                  # 环境变量模板
 └── index.html                    # GitHub Pages 首页导航
 ```
 
@@ -124,10 +134,12 @@ yuhong-smart-store/
 | 后端 | Python Flask | Web应用框架，16个API接口 |
 | 前端 | Bootstrap 5 + Chart.js | 响应式UI + 数据可视化 |
 | AI对话 | 飞书aily智能体 | 自然语言交互，产品推荐+施工指导 |
-| 数据存储 | 飞书多维表格 | 轻量ERP，5表39条记录+AI字段 |
+| 数据存储 | 飞书多维表格 | 轻量ERP，云端5表39条记录+AI字段 |
 | 低代码 | 飞书妙搭 | AI生成巡检应用，1343行代码 |
 | API | 飞书开放平台 | tenant_access_token + Bitable + Aily |
 | 部署 | GitHub Pages + 飞书云 | 零服务器成本 |
+
+> **数据口径说明：** 飞书多维表格云端存储5表39条真实记录（含2个AI字段、7个公式字段）；本地 `data/` 目录仅存放mock演示数据（产品/门店/巡检记录），供无飞书凭证时Demo运行使用。
 
 ## 快速开始
 
@@ -138,6 +150,15 @@ pip install -r requirements.txt
 python src/app.py
 # 打开 http://localhost:5000
 ```
+
+## 运行测试
+
+```bash
+cd yuhong-smart-store
+python -m pytest tests/test_core.py -v
+```
+
+覆盖23个测试用例，包括：巡检评分逻辑（优秀/合格/不合格边界）、产品搜索（关键词/分类/空结果）、客户画像（会员等级/流失风险/标签生成）。
 
 ## 在线预览
 
