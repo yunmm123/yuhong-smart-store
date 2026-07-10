@@ -3,115 +3,385 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>雨虹智慧门店运营助手 - 补充材料</title>
+<title>雨虹智慧门店运营助手 — 2026 AI先锋未来人才大赛</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f7fa; color: #2c3e50; line-height: 1.9; padding: 20px; }
-.container { max-width: 860px; margin: 0 auto; }
-.header { text-align: center; margin-bottom: 40px; padding: 40px 20px; background: linear-gradient(135deg, #1677FF 0%, #0958d9 100%); border-radius: 12px; color: #fff; }
-.header h1 { font-size: 28px; margin-bottom: 8px; }
-.header p { font-size: 14px; opacity: 0.85; }
-.section-title { font-size: 18px; font-weight: 700; color: #1677FF; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #e8f0ff; }
-.card { display: block; background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 16px; text-decoration: none; color: inherit; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: all 0.2s; border: 2px solid transparent; }
-.card:hover { border-color: #1677FF; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(22,119,255,0.12); }
-.card h3 { font-size: 16px; color: #1a1a1a; margin-bottom: 6px; }
-.card p { font-size: 13px; color: #909399; }
-.card .tag { display: inline-block; background: #e8f0ff; color: #1677FF; font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-right: 6px; }
-.footer { text-align: center; padding: 32px; font-size: 12px; color: #909399; }
+body {
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  background: #f0f2f5;
+  color: #1a1a2e;
+  line-height: 1.8;
+  padding: 0;
+}
+.container { max-width: 920px; margin: 0 auto; padding: 24px 20px 48px; }
+
+/* Header */
+.header {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  padding: 48px 32px;
+  margin-bottom: 32px;
+  background: linear-gradient(135deg, #0b1024 0%, #1a2238 40%, #1e3a5f 100%);
+  color: #fff;
+  text-align: center;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -20%;
+  width: 60%; height: 200%;
+  background: radial-gradient(circle, rgba(0,112,243,.25), transparent 60%);
+  pointer-events: none;
+}
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -50%; right: -20%;
+  width: 60%; height: 200%;
+  background: radial-gradient(circle, rgba(121,40,202,.2), transparent 60%);
+  pointer-events: none;
+}
+.header .badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .05em;
+  background: linear-gradient(135deg, #0070f3, #7928ca);
+  padding: 5px 16px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+.header h1 { font-size: 32px; font-weight: 900; letter-spacing: -.02em; margin-bottom: 10px; position: relative; z-index: 1; }
+.header h1 .grad {
+  background: linear-gradient(135deg, #60a5fa, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.header .subtitle { font-size: 15px; opacity: .82; position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+.header .quick-links {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+  position: relative;
+  z-index: 1;
+  flex-wrap: wrap;
+}
+.header .quick-links a {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  transition: all .2s;
+}
+.header .quick-links a:hover {
+  background: rgba(255,255,255,.22);
+  transform: translateY(-1px);
+}
+
+/* Section Title */
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 36px 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-title .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0070f3, #7928ca);
+}
+
+/* Stats Row */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px 16px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.stat-card:nth-child(1)::before { background: #0070f3; }
+.stat-card:nth-child(2)::before { background: #7928ca; }
+.stat-card:nth-child(3)::before { background: #52c41a; }
+.stat-card:nth-child(4)::before { background: #fa8c16; }
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+.stat-card:nth-child(1) .num { color: #0070f3; }
+.stat-card:nth-child(2) .num { color: #7928ca; }
+.stat-card:nth-child(3) .num { color: #52c41a; }
+.stat-card:nth-child(4) .num { color: #fa8c16; }
+.stat-card .label { font-size: 12px; color: #8c8c8c; margin-top: 4px; }
+
+/* Cards */
+.card {
+  display: block;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 12px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04);
+  transition: all .2s;
+  border: 2px solid transparent;
+  position: relative;
+}
+.card:hover {
+  border-color: #0070f3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,112,243,.12);
+}
+.card h3 { font-size: 15px; color: #1a1a1a; margin-bottom: 4px; font-weight: 600; }
+.card p { font-size: 13px; color: #8c8c8c; line-height: 1.6; }
+.card .arrow {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #d0d0d0;
+  transition: all .2s;
+}
+.card:hover .arrow { color: #0070f3; transform: translateY(-50%) translateX(4px); }
+
+/* Highlight Cards */
+.card.highlight {
+  border-width: 2px;
+}
+.card.highlight .tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* Card Grid for deploy verification */
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.card-grid .card { margin-bottom: 0; }
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 40px 20px 20px;
+  font-size: 13px;
+  color: #8c8c8c;
+}
+.footer .links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.footer .links a {
+  color: #0070f3;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13px;
+}
+.footer .links a:hover { text-decoration: underline; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .card-grid { grid-template-columns: 1fr; }
+  .header { padding: 32px 20px; }
+  .header h1 { font-size: 24px; }
+  .header .quick-links { gap: 8px; }
+  .header .quick-links a { font-size: 12px; padding: 6px 12px; }
+}
+@media (max-width: 480px) {
+  .stats-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-card { padding: 14px 10px; }
+  .stat-card .num { font-size: 22px; }
+  .container { padding: 16px 12px 32px; }
+  .card { padding: 16px; }
+}
 </style>
 </head>
 <body>
 <div class="container">
+
+    <!-- Header -->
     <div class="header">
-        <h1>雨虹智慧门店运营助手</h1>
-        <p>2026 AI先锋未来人才大赛 | 东方雨虹企业命题 | 补充材料</p>
+      <span class="badge">2026 AI先锋未来人才大赛 · 东方雨虹企业命题</span>
+      <h1>雨虹智慧门店<span class="grad">运营助手</span></h1>
+      <p class="subtitle">基于飞书AI的建材县域零售智慧运营一体化方案 — 让29万夫妻老婆店10分钟拥有AI能力</p>
+      <div class="quick-links">
+        <a href="补充材料/yuhong-onepager/yuhong-onepager.html">📄 一页纸摘要</a>
+        <a href="补充材料/yuhong-pitch/yuhong-pitch.html">📊 路演PPT</a>
+        <a href="补充材料/Demo交互演示.html">🖥️ 交互Demo</a>
+        <a href="https://github.com/yunmm123/yuhong-smart-store">📦 GitHub</a>
+      </div>
     </div>
 
-    <div class="section-title">核心提交材料</div>
+    <!-- Core Stats -->
+    <div class="stats-row">
+      <div class="stat-card"><div class="num">29万+</div><div class="label">覆盖分销网点</div></div>
+      <div class="stat-card"><div class="num">85%</div><div class="label">县域门店无数字化</div></div>
+      <div class="stat-card"><div class="num">3大</div><div class="label">飞书AI能力已部署</div></div>
+      <div class="stat-card"><div class="num">10min</div><div class="label">经销商上手时间</div></div>
+    </div>
 
-    <a class="card" href="补充材料/yuhong-onepager/yuhong-onepager.html" style="border-color: #1677ff; background: linear-gradient(135deg, #f0f5ff 0%, #e6f7ff 100%);">
-        <h3>★ 一页纸执行摘要（评委必看）</h3>
-        <p>问题洞察→解决方案→技术架构→部署验证→商业价值→竞争优势，一页全景概览</p>
+    <!-- 核心提交材料 -->
+    <div class="section-title"><span class="dot"></span>核心提交材料</div>
+
+    <a class="card highlight" href="补充材料/yuhong-onepager/yuhong-onepager.html" style="border-color: #0070f3; background: linear-gradient(135deg, #f0f5ff 0%, #e6f7ff 100%);">
+      <h3>一页纸执行摘要<span class="tag" style="background:#0070f3;color:#fff">评委必看</span></h3>
+      <p>问题洞察 → 解决方案 → 技术架构 → 部署验证 → 商业价值 → 竞争优势，一页全景概览</p>
+      <span class="arrow">→</span>
+    </a>
+    <a class="card highlight" href="补充材料/yuhong-pitch/yuhong-pitch.html" style="border-color: #fa8c16; background: linear-gradient(135deg, #fff7e6 0%, #ffeccc 100%);">
+      <h3>路演PPT（13页完整版）</h3>
+      <p>问题洞察 → 解决方案 → 技术架构 → 部署验证 → 商业价值 → 竞争优势，全流程路演展示</p>
+      <span class="arrow">→</span>
+    </a>
+    <a class="card highlight" href="补充材料/Demo交互演示.html" style="border-color: #f5222d; background: linear-gradient(135deg, #fff3f0 0%, #ffece8 100%);">
+      <h3>交互Demo（4页面可操作）</h3>
+      <p>纯前端交互Demo，可直接在浏览器中操作首页仪表盘/门店巡检/AI导购/3515大屏所有功能</p>
+      <span class="arrow">→</span>
     </a>
 
-    <div class="section-title">补充材料（点击查看）</div>
+    <!-- 飞书AI部署验证 -->
+    <div class="section-title"><span class="dot"></span>飞书AI真实部署验证</div>
 
-    <a class="card" href="补充材料/yuhong-submission/yuhong-submission.html">
-        <h3>1. 综合补充材料报告</h3>
-        <p>含ECharts图表、行业研究、竞品分析、技术架构、数据分析样本、参考资料</p>
-    </a>
-    <a class="card" href="补充材料/技术架构图集.html">
-        <h3>2. 技术架构图集</h3>
-        <p>5张架构图：五层架构、四模块流转、飞书AI矩阵、3515推广路线、一店一码闭环</p>
-    </a>
-    <a class="card" href="补充材料/竞品对比矩阵.html">
-        <h3>3. 竞品对比矩阵</h3>
-        <p>雷达图对比6家方案、20功能点覆盖矩阵、差异化优势分析</p>
-    </a>
-    <a class="card" href="补充材料/产品需求文档PRD.html">
-        <h3>4. 产品需求文档PRD</h3>
-        <p>5类用户角色、20条功能需求、非功能需求、飞书AI映射、10个KPI</p>
-    </a>
-    <a class="card" href="补充材料/用户故事地图.html">
-        <h3>5. 用户故事地图</h3>
-        <p>3类用户18个触点旅程、30条用户故事、3个场景故事板</p>
-    </a>
-    <a class="card" href="补充材料/项目甘特图与时间线.html">
-        <h3>6. 项目甘特图与时间线</h3>
-        <p>10周甘特图、6个里程碑、10个KPI追踪表、9项风险评估</p>
-    </a>
-    <a class="card" href="补充材料/研究笔记与调研记录.html">
-        <h3>7. 研究笔记与调研记录</h3>
-        <p>7个阶段调研过程：行业研究、竞品分析、用户反馈、技术选型、关键洞察</p>
-    </a>
-    <a class="card" href="补充材料/相关项目经验与技术能力说明.html">
-        <h3>8. 相关项目经验与技术能力说明</h3>
-        <p>代码统计、技术栈、核心功能、项目文件结构</p>
-    </a>
-    <a class="card" href="补充材料/Demo交互演示.html" style="border-color: #f5222d; background: linear-gradient(135deg, #fff3f0 0%, #ffece8 100%);">
-        <h3>★ Demo交互演示（点击体验）</h3>
-        <p>纯前端交互Demo，可直接在浏览器中操作4个页面所有功能</p>
-    </a>
-    <a class="card" href="补充材料/飞书aily智能体部署验证.html" style="border-color: #52c41a; background: linear-gradient(135deg, #f6ffed 0%, #f0ffe0 100%);">
-        <h3>★ 飞书aily智能体部署验证（已真实部署）</h3>
-        <p>在飞书aily平台部署的AI导购助手，3个测试对话截图，证明真实使用飞书AI</p>
-    </a>
-    <a class="card" href="补充材料/飞书多维表格部署验证.html" style="border-color: #722ed1; background: linear-gradient(135deg, #f9f0ff 0%, #efdbff 100%);">
-        <h3>★ 飞书多维表格部署验证（5表+2AI字段）</h3>
-        <p>5个数据表39条记录+2个AI自动填充字段+7个公式字段，完整数据可查看</p>
-    </a>
-    <a class="card" href="补充材料/飞书多维表格仪表盘验证.html" style="border-color: #13c2c2; background: linear-gradient(135deg, #e6fffb 0%, #d3f5f0 100%);">
-        <h3>★ 飞书多维表格仪表盘验证（4图表）</h3>
+    <div class="card-grid">
+      <a class="card highlight" href="补充材料/飞书aily智能体部署验证.html" style="border-color: #52c41a; background: linear-gradient(135deg, #f6ffed 0%, #f0ffe0 100%);">
+        <h3>aily智能体 <span class="tag" style="background:#52c41a;color:#fff">3/3通过</span></h3>
+        <p>3个测试对话全部通过：卫生间漏水/SBS用量/JS施工，产品推荐+施工步骤+用量计算</p>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card highlight" href="补充材料/飞书多维表格部署验证.html" style="border-color: #722ed1; background: linear-gradient(135deg, #f9f0ff 0%, #efdbff 100%);">
+        <h3>多维表格AI <span class="tag" style="background:#722ed1;color:#fff">5表+2AI</span></h3>
+        <p>5表39条记录 + 2个AI自动填充字段 + 7个公式字段 + 4个仪表盘图表</p>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card highlight" href="补充材料/飞书多维表格仪表盘验证.html" style="border-color: #13c2c2; background: linear-gradient(135deg, #e6fffb 0%, #d3f5f0 100%);">
+        <h3>仪表盘 <span class="tag" style="background:#13c2c2;color:#fff">4图表</span></h3>
         <p>柱状图+饼图+表格，门店销售/巡检得分/客户分布/库存预警全貌可视化</p>
-    </a>
-    <a class="card" href="补充材料/飞书妙搭巡检应用验证.html" style="border-color: #E60012; background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);">
-        <h3>★ 飞书妙搭巡检应用验证（AI生成+已上线）</h3>
-        <p>AI自然语言生成巡检表单应用，1343行代码，测试提交91分优秀，已发布上线</p>
-    </a>
-    <a class="card" href="补充材料/yuhong-pitch/yuhong-pitch.html" style="border-color: #fa8c16; background: linear-gradient(135deg, #fff7e6 0%, #ffeccc 100%);">
-        <h3>★ 路演PPT（13页完整版）</h3>
-        <p>问题洞察→解决方案→技术架构→部署验证→商业价值→竞争优势，全流程路演展示</p>
-    </a>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card highlight" href="补充材料/飞书妙搭巡检应用验证.html" style="border-color: #E60012; background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);">
+        <h3>妙搭低代码 <span class="tag" style="background:#E60012;color:#fff">91分</span></h3>
+        <p>AI生成1343行代码/33文件，巡检表单测试91分优秀，已发布上线</p>
+        <span class="arrow">→</span>
+      </a>
+    </div>
 
-    <div class="section-title">技术文档</div>
+    <!-- 补充材料 -->
+    <div class="section-title"><span class="dot"></span>补充材料</div>
+
+    <div class="card-grid">
+      <a class="card" href="补充材料/yuhong-submission/yuhong-submission.html">
+        <h3>综合补充材料报告</h3>
+        <p>ECharts图表、行业研究、竞品分析、技术架构、数据分析样本</p>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="补充材料/技术架构图集.html">
+        <h3>技术架构图集</h3>
+        <p>5张架构图：五层架构/四模块流转/飞书AI矩阵/3515路线/一店一码</p>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="补充材料/竞品对比矩阵.html">
+        <h3>竞品对比矩阵</h3>
+        <p>雷达图对比6家方案、20功能点覆盖矩阵、差异化优势分析</p>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="补充材料/产品需求文档PRD.html">
+        <h3>产品需求文档PRD</h3>
+        <p>5类用户角色、20条功能需求、非功能需求、飞书AI映射、10个KPI</p>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="补充材料/用户故事地图.html">
+        <h3>用户故事地图</h3>
+        <p>3类用户18个触点旅程、30条用户故事、3个场景故事板</p>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="补充材料/项目甘特图与时间线.html">
+        <h3>项目甘特图与时间线</h3>
+        <p>10周甘特图、6个里程碑、10个KPI追踪表、9项风险评估</p>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="补充材料/研究笔记与调研记录.html">
+        <h3>研究笔记与调研记录</h3>
+        <p>7个阶段调研过程：行业研究、竞品分析、用户反馈、技术选型</p>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="补充材料/相关项目经验与技术能力说明.html">
+        <h3>项目经验与技术能力</h3>
+        <p>代码统计、技术栈、核心功能、项目文件结构</p>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+
+    <!-- 技术文档与源代码 -->
+    <div class="section-title"><span class="dot"></span>技术文档与源代码</div>
+
     <a class="card" href="https://github.com/yunmm123/yuhong-smart-store/tree/main/docs">
-        <h3>docs/ 技术文档目录（6份）</h3>
-        <p>行业研究报告 | 技术架构设计(16个架构图) | 用户需求调研 | 实施路线图 | 差异化策略 | 飞书AI配置手册</p>
+      <h3>docs/ 技术文档目录（6份）</h3>
+      <p>行业研究报告 | 技术架构设计(16个架构图) | 用户需求调研 | 实施路线图 | 差异化策略 | 飞书AI配置手册</p>
+      <span class="arrow">→</span>
     </a>
-
-    <div class="section-title">源代码</div>
     <a class="card" href="https://github.com/yunmm123/yuhong-smart-store/tree/main/src">
-        <h3>src/ 源代码</h3>
-        <p>Flask主应用(5页面+16API) | 飞书API封装 | 四大业务模块</p>
+      <h3>src/ 源代码 — Flask主应用（5页面+16API）</h3>
+      <p>飞书API封装 | 门店巡检模块 | AI导购模块 | 门店运营模块 | 客户维护模块</p>
+      <span class="arrow">→</span>
     </a>
     <a class="card" href="https://github.com/yunmm123/yuhong-smart-store/tree/main/templates">
-        <h3>templates/ 前端页面</h3>
-        <p>首页仪表盘 | 门店巡检 | AI导购 | 3515县域大屏</p>
+      <h3>templates/ 前端页面</h3>
+      <p>首页仪表盘 | 门店巡检 | AI导购 | 3515县域大屏</p>
+      <span class="arrow">→</span>
     </a>
 
+    <!-- Footer -->
     <div class="footer">
-        智虹先锋队 · 2026 AI先锋未来人才大赛 · 东方雨虹企业命题
+      <div class="links">
+        <a href="https://yunmm123.github.io/yuhong-smart-store/">🏠 项目首页</a>
+        <a href="https://github.com/yunmm123/yuhong-smart-store">📦 GitHub源码</a>
+        <a href="https://dcnlkmas0c30.feishu.cn/base/G2ZUbuYbUaJfFosDlt6cexF7nLz">📋 多维表格</a>
+        <a href="https://dcnlkmas0c30.aiforce.cloud/app/app_179t2htks3d">📱 妙搭应用</a>
+      </div>
+      <p>智虹先锋队 · 2026 AI先锋未来人才大赛 · 东方雨虹企业命题</p>
     </div>
+
 </div>
 </body>
 </html>
