@@ -169,7 +169,9 @@ python -m pytest tests/test_core.py -v
 | 材料 | 链接 |
 |------|------|
 | 📄 一页纸执行摘要（评委必看） | [打开](补充材料/yuhong-onepager/yuhong-onepager.html) |
-| 📊 路演PPT（13页） | [打开](补充材料/yuhong-pitch/yuhong-pitch.html) |
+| 📊 路演PPT（14页） | [打开](补充材料/yuhong-pitch/yuhong-pitch.html) |
+| 🏪 门店一日场景模拟 | [打开](补充材料/门店一日场景模拟.html) |
+| 📈 可落地性分析 | [打开](补充材料/可落地性分析.html) |
 | 🖥️ 交互Demo（4页面可操作） | [打开](补充材料/Demo交互演示.html) |
 | ✅ aily智能体部署验证 | [打开](补充材料/飞书aily智能体部署验证.html) |
 | ✅ 多维表格部署验证 | [打开](补充材料/飞书多维表格部署验证.html) |

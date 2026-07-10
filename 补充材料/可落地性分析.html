@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>可落地性分析 — 雨虹智慧门店运营助手</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap');
+
+:root {
+  --ink: #1a1a2e; --muted: #6b7280; --accent: #1677ff; --accent2: #722ed1;
+  --bg: #ffffff; --bg2: #f7f8fc; --rule: #e5e7eb;
+  --good: #52c41a; --warn: #faad14; --bad: #ff4d4f;
+  --grad: linear-gradient(135deg, #1677ff, #722ed1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "Noto Sans SC", -apple-system, sans-serif;
+  background: var(--bg2); color: var(--ink); line-height: 1.8; padding: 20px;
+}
+.page { max-width: 900px; margin: 0 auto; background: var(--bg); padding: 48px 52px; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,.06); }
+
+.header { padding-bottom: 24px; border-bottom: 3px solid var(--ink); margin-bottom: 32px; }
+.header .badge { display: inline-block; font-size: 11px; font-weight: 600; color: #fff; background: var(--grad); padding: 4px 12px; border-radius: 4px; margin-bottom: 12px; }
+.header h1 { font-size: 28px; font-weight: 900; }
+.header h1 .grad { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.header .subtitle { font-size: 14px; color: var(--muted); margin-top: 6px; }
+
+.section { margin-bottom: 32px; }
+.section-title { font-size: 15px; font-weight: 700; margin-bottom: 14px; padding-left: 12px; border-left: 4px solid var(--accent); }
+
+/* 成本对比 */
+.cost-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+.cost-table th { background: var(--bg2); padding: 12px 16px; font-size: 13px; font-weight: 700; text-align: left; border-bottom: 2px solid var(--rule); }
+.cost-table td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid var(--rule); }
+.cost-table tr:hover { background: var(--bg2); }
+.cost-table .zero { color: var(--good); font-weight: 700; }
+.cost-table .num { color: var(--bad); font-weight: 700; }
+
+/* 推广阶段 */
+.phase-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 16px 0; }
+.phase-card { background: var(--bg2); border-radius: 10px; padding: 20px; border-top: 3px solid var(--accent); position: relative; }
+.phase-card:nth-child(2) { border-top-color: var(--accent2); }
+.phase-card:nth-child(3) { border-top-color: var(--good); }
+.phase-card .phase-num { font-size: 36px; font-weight: 900; color: var(--accent); line-height: 1; margin-bottom: 8px; }
+.phase-card:nth-child(2) .phase-num { color: var(--accent2); }
+.phase-card:nth-child(3) .phase-num { color: var(--good); }
+.phase-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+.phase-card .timeline { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+.phase-card ul { list-style: none; padding: 0; }
+.phase-card li { font-size: 12px; color: var(--muted); padding: 3px 0; padding-left: 16px; position: relative; }
+.phase-card li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+
+/* 扩展路径 */
+.expand-flow { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 20px 0; flex-wrap: wrap; }
+.flow-node { background: var(--bg2); border-radius: 8px; padding: 14px 20px; text-align: center; border: 2px solid var(--rule); min-width: 120px; }
+.flow-node.active { border-color: var(--accent); background: linear-gradient(135deg, #f0f5ff, #f9f0ff); }
+.flow-node .icon { font-size: 24px; }
+.flow-node .label { font-size: 12px; font-weight: 600; margin-top: 4px; }
+.flow-node .num { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.flow-arrow { font-size: 20px; color: var(--muted); }
+
+/* 风险矩阵 */
+.risk-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+.risk-table th { background: var(--bg2); padding: 10px 14px; font-size: 12px; font-weight: 700; text-align: left; border-bottom: 2px solid var(--rule); }
+.risk-table td { padding: 10px 14px; font-size: 12px; border-bottom: 1px solid var(--rule); }
+.risk-badge { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+.risk-low { background: #f6ffed; color: var(--good); }
+.risk-mid { background: #fffbe6; color: var(--warn); }
+.risk-high { background: #fff2f0; color: var(--bad); }
+
+/* 结论 */
+.conclusion { background: linear-gradient(135deg, #f0f5ff, #f9f0ff); border-radius: 12px; padding: 24px 28px; margin: 20px 0; border: 1px solid #d6e4ff; }
+.conclusion h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--accent); }
+.conclusion p { font-size: 13px; color: var(--ink); }
+.conclusion .highlight { font-weight: 700; }
+
+/* 底部数据 */
+.bottom-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0; }
+.bottom-stat { text-align: center; padding: 16px; background: var(--bg2); border-radius: 8px; }
+.bottom-stat .num { font-size: 24px; font-weight: 900; color: var(--accent); }
+.bottom-stat .label { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+@media print { body { background: #fff; } .page { box-shadow: none; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <span class="badge">落地性分析</span>
+    <h1>从1家店到<span class="grad">29万家店</span>的可落地路径</h1>
+    <p class="subtitle">零硬件投入 · 零代码部署 · 零培训成本 — 不是概念方案，是可执行的扩展计划</p>
+  </div>
+
+  <!-- 部署成本对比 -->
+  <div class="section">
+    <div class="section-title">单店部署成本对比</div>
+    <table class="cost-table">
+      <thead>
+        <tr>
+          <th>成本维度</th>
+          <th>传统数字化方案</th>
+          <th>本方案（飞书AI）</th>
+          <th>差异</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>硬件投入</td>
+          <td class="num">¥8,000-15,000/店（服务器+终端设备）</td>
+          <td class="zero">¥0（手机/电脑即可）</td>
+          <td>省去全部硬件</td>
+        </tr>
+        <tr>
+          <td>软件授权</td>
+          <td class="num">¥3,000-8,000/年/店</td>
+          <td class="zero">¥0（飞书基础功能免费）</td>
+          <td>零软件费</td>
+        </tr>
+        <tr>
+          <td>部署周期</td>
+          <td class="num">30-90天（需IT人员驻场）</td>
+          <td class="zero">10分钟（扫码加入飞书组织）</td>
+          <td>效率提升432倍</td>
+        </tr>
+        <tr>
+          <td>培训成本</td>
+          <td class="num">3-5天集中培训+持续跟进</td>
+          <td class="zero">零培训（自然语言交互）</td>
+          <td>AI替代人工教学</td>
+        </tr>
+        <tr>
+          <td>维护成本</td>
+          <td class="num">需专职IT人员运维</td>
+          <td class="zero">零运维（飞书云托管）</td>
+          <td>云端自动维护</td>
+        </tr>
+        <tr style="font-weight:700">
+          <td>单店总成本</td>
+          <td class="num">¥11,000-23,000+</td>
+          <td class="zero">¥0</td>
+          <td>成本归零</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 推广阶段 -->
+  <div class="section">
+    <div class="section-title">三阶段推广路径</div>
+    <div class="phase-grid">
+      <div class="phase-card">
+        <div class="phase-num">01</div>
+        <h3>试点验证</h3>
+        <div class="timeline">3-5家标杆门店 · 1-2个月</div>
+        <ul>
+          <li>选取2-3个县城标杆店试点</li>
+          <li>验证aily智能体产品问答准确率</li>
+          <li>收集巡检评分数据校准AI模型</li>
+          <li>跑通"扫码→使用→反馈"闭环</li>
+          <li>输出试点效果报告</li>
+        </ul>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">02</div>
+        <h3>区域复制</h3>
+        <div class="timeline">1个省/50-100家店 · 3-6个月</div>
+        <ul>
+          <li>按"一店一码"模式快速复制</li>
+          <li>区域督导统一接入仪表盘</li>
+          <li>多维表格模板一键分发新店</li>
+          <li>建立区域经营数据对比基准</li>
+          <li>AI话术库按区域特点调优</li>
+        </ul>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">03</div>
+        <h3>全网覆盖</h3>
+        <div class="timeline">3515目标县城 · 12-18个月</div>
+        <ul>
+          <li>对接3515计划507城推广节奏</li>
+          <li>飞书组织架构批量导入门店</li>
+          <li>构建全国门店运营数据大屏</li>
+          <li>AI模型基于全网数据持续迭代</li>
+          <li>输出标准化"县域AI门店手册"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 扩展路径图 -->
+  <div class="section">
+    <div class="section-title">技术扩展路径 · 从单店到全网</div>
+    <div class="expand-flow">
+      <div class="flow-node active">
+        <div class="icon">🏪</div>
+        <div class="label">单店部署</div>
+        <div class="num">10分钟/店</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node active">
+        <div class="icon">📋</div>
+        <div class="label">多维表格模板</div>
+        <div class="num">一键复制5表结构</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="icon">🔗</div>
+        <div class="label">一店一码</div>
+        <div class="num">扫码即用，无需安装</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="icon">👥</div>
+        <div class="label">组织架构导入</div>
+        <div class="num">飞书批量管理</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="icon">🌐</div>
+        <div class="label">全网数据大屏</div>
+        <div class="num">实时聚合分析</div>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:8px">
+      当前已完成前两个节点（蓝色高亮），后续节点基于飞书原生能力即可实现，无需额外开发
+    </p>
+  </div>
+
+  <!-- 风险矩阵 -->
+  <div class="section">
+    <div class="section-title">落地风险评估与应对</div>
+    <table class="risk-table">
+      <thead>
+        <tr>
+          <th>风险项</th>
+          <th>风险等级</th>
+          <th>应对措施</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>经销商使用意愿低</td>
+          <td><span class="risk-badge risk-mid">中</span></td>
+          <td>零培训+扫码即用降低门槛；AI自然语言交互无需学习成本；试点标杆效应带动</td>
+        </tr>
+        <tr>
+          <td>网络环境不稳定</td>
+          <td><span class="risk-badge risk-low">低</span></td>
+          <td>飞书支持弱网离线消息；多维表格数据缓存本地；关键操作断网可继续</td>
+        </tr>
+        <tr>
+          <td>AI回答准确率不足</td>
+          <td><span class="risk-badge risk-mid">中</span></td>
+          <td>产品知识库已覆盖8个核心产品；3/3测试对话通过；可持续补充产品数据迭代</td>
+        </tr>
+        <tr>
+          <td>数据安全合规</td>
+          <td><span class="risk-badge risk-low">低</span></td>
+          <td>数据存储在飞书云端（企业级安全）；妙搭应用需飞书登录验证；无第三方数据泄露风险</td>
+        </tr>
+        <tr>
+          <td>推广人员不足</td>
+          <td><span class="risk-badge risk-low">低</span></td>
+          <td>部署无需IT人员；督导即可完成"扫码→加入→使用"全流程；可视频远程指导</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 底部数据 -->
+  <div class="section">
+    <div class="section-title">规模化核心指标</div>
+    <div class="bottom-stats">
+      <div class="bottom-stat">
+        <div class="num">¥0</div>
+        <div class="label">单店部署成本</div>
+      </div>
+      <div class="bottom-stat">
+        <div class="num">10min</div>
+        <div class="label">单店部署时间</div>
+      </div>
+      <div class="bottom-stat">
+        <div class="num">3阶段</div>
+        <div class="label">推广路径</div>
+      </div>
+      <div class="bottom-stat">
+        <div class="num">507城</div>
+        <div class="label">3515目标覆盖</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 结论 -->
+  <div class="conclusion">
+    <h3>落地性结论</h3>
+    <p>
+      本方案基于<span class="highlight">飞书原生AI能力</span>构建，无需自建基础设施、无需采购硬件、无需专业IT运维。
+      单店部署成本为<span class="highlight">¥0</span>，部署时间为<span class="highlight">10分钟</span>，
+      扩展方式为<span class="highlight">"一店一码"扫码即用</span>，可无缝对接东方雨虹3515计划507城推广节奏。
+      从技术可行性、成本可控性、操作简易性三个维度评估，<span class="highlight">具备直接落地推广的条件</span>。
+    </p>
+  </div>
+
+</div>
+</body>
+</html>

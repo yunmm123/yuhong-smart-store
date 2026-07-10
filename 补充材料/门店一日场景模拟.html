@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>门店一日场景模拟 — 雨虹智慧门店运营助手</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap');
+
+:root {
+  --ink: #1a1a2e; --muted: #6b7280; --accent: #1677ff; --accent2: #722ed1;
+  --bg: #ffffff; --bg2: #f7f8fc; --rule: #e5e7eb;
+  --good: #52c41a; --warn: #faad14; --bad: #ff4d4f;
+  --grad: linear-gradient(135deg, #1677ff, #722ed1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "Noto Sans SC", -apple-system, sans-serif;
+  background: var(--bg2); color: var(--ink); line-height: 1.8; padding: 20px;
+}
+.page { max-width: 900px; margin: 0 auto; background: var(--bg); padding: 48px 52px; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,.06); }
+
+.header { padding-bottom: 24px; border-bottom: 3px solid var(--ink); margin-bottom: 32px; }
+.header .badge { display: inline-block; font-size: 11px; font-weight: 600; color: #fff; background: var(--grad); padding: 4px 12px; border-radius: 4px; margin-bottom: 12px; }
+.header h1 { font-size: 28px; font-weight: 900; }
+.header h1 .grad { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.header .subtitle { font-size: 14px; color: var(--muted); margin-top: 6px; }
+
+/* 角色卡 */
+.character {
+  display: flex; gap: 20px; align-items: center;
+  background: linear-gradient(135deg, #f0f5ff, #f9f0ff);
+  border-radius: 12px; padding: 20px 24px; margin-bottom: 32px; border: 1px solid #d6e4ff;
+}
+.character .avatar {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--grad); display: flex; align-items: center; justify-content: center;
+  font-size: 28px; flex-shrink: 0;
+}
+.character .info h3 { font-size: 15px; font-weight: 700; }
+.character .info p { font-size: 13px; color: var(--muted); }
+
+/* 时间线 */
+.timeline { position: relative; padding-left: 40px; }
+.timeline::before {
+  content: ''; position: absolute; left: 15px; top: 0; bottom: 0;
+  width: 2px; background: linear-gradient(180deg, var(--accent), var(--accent2), var(--good));
+}
+.scene { position: relative; margin-bottom: 32px; }
+.scene::before {
+  content: ''; position: absolute; left: -33px; top: 8px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--bg); border: 3px solid var(--accent);
+  z-index: 1;
+}
+.scene:nth-child(2)::before { border-color: var(--accent2); }
+.scene:nth-child(3)::before { border-color: var(--warn); }
+.scene:nth-child(4)::before { border-color: var(--good); }
+.scene:nth-child(5)::before { border-color: var(--bad); }
+
+.scene-time {
+  display: inline-block; font-size: 12px; font-weight: 700;
+  color: #fff; background: var(--accent);
+  padding: 3px 12px; border-radius: 4px; margin-bottom: 8px;
+}
+.scene:nth-child(2) .scene-time { background: var(--accent2); }
+.scene:nth-child(3) .scene-time { background: var(--warn); }
+.scene:nth-child(4) .scene-time { background: var(--good); }
+.scene:nth-child(5) .scene-time { background: var(--bad); }
+
+.scene h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+
+/* 对话框 */
+.dialog { margin: 12px 0; }
+.dialog .msg {
+  max-width: 80%; padding: 12px 16px; border-radius: 12px;
+  font-size: 13px; margin-bottom: 8px; line-height: 1.7;
+}
+.dialog .msg.user {
+  background: var(--bg2); border: 1px solid var(--rule);
+  margin-right: auto;
+}
+.dialog .msg.ai {
+  background: linear-gradient(135deg, #f0f5ff, #f9f0ff);
+  border: 1px solid #d6e4ff;
+  margin-left: auto;
+}
+.dialog .msg .role {
+  font-size: 11px; color: var(--muted); margin-bottom: 4px; font-weight: 600;
+}
+.dialog .msg.ai .role { color: var(--accent); }
+
+/* 动作卡 */
+.action-card {
+  background: var(--bg2); border-radius: 8px; padding: 14px 18px;
+  margin: 10px 0; font-size: 13px; border-left: 3px solid var(--accent);
+}
+.action-card .label { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.action-card .result { font-size: 12px; color: var(--muted); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--rule); }
+.action-card .result strong { color: var(--good); }
+
+/* 对比卡 */
+.before-after { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+.before-after .ba-card { padding: 12px 16px; border-radius: 8px; font-size: 12px; }
+.before-after .ba-card.before { background: #fff3f0; border-top: 2px solid var(--bad); }
+.before-after .ba-card.after { background: #f6ffed; border-top: 2px solid var(--good); }
+.before-after .ba-card .title { font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+.before-after .ba-card.before .title { color: var(--bad); }
+.before-after .ba-card.after .title { color: var(--good); }
+
+/* 结尾 */
+.ending {
+  background: linear-gradient(135deg, #f0f5ff, #f9f0ff);
+  border-radius: 12px; padding: 24px 28px; margin-top: 32px;
+  border: 1px solid #d6e4ff; text-align: center;
+}
+.ending h3 { font-size: 16px; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+.ending p { font-size: 13px; color: var(--ink); }
+.ending .stats { display: flex; justify-content: center; gap: 32px; margin-top: 16px; }
+.ending .stat .num { font-size: 22px; font-weight: 900; color: var(--accent); }
+.ending .stat .label { font-size: 11px; color: var(--muted); }
+
+@media print { body { background: #fff; } .page { box-shadow: none; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <span class="badge">场景模拟 · 一日叙事</span>
+    <h1>老张的一天 — <span class="grad">AI赋能县域门店</span></h1>
+    <p class="subtitle">一个宜宾县城建材店老板，在飞书AI赋能下的一天</p>
+  </div>
+
+  <!-- 角色介绍 -->
+  <div class="character">
+    <div class="avatar">👨</div>
+    <div class="info">
+      <h3>老张 · 宜宾市长宁县·雨虹授权经销商</h3>
+      <p>55岁，经营建材店8年，不会用电脑，只会用微信。店里3个员工，年销售额约200万。一个月前，督导帮他扫码加入了雨虹飞书AI系统。</p>
+    </div>
+  </div>
+
+  <!-- 时间线 -->
+  <div class="timeline">
+
+    <!-- 场景1: 早上 -->
+    <div class="scene">
+      <span class="scene-time">07:30 · 早上开店</span>
+      <h3>📊 打开手机看仪表盘，不用等月度报表</h3>
+
+      <div class="before-after">
+        <div class="ba-card before">
+          <div class="title">以前</div>
+          每月初等督导汇总Excel报表，看到数据已经滞后两周。库存够不够、哪个产品卖得好，全凭感觉。
+        </div>
+        <div class="ba-card after">
+          <div class="title">现在</div>
+          打开飞书多维表格仪表盘，昨晚的销售、库存、巡检得分一目了然。手机上看就行，不用电脑。
+        </div>
+      </div>
+
+      <div class="action-card">
+        <div class="label">飞书多维表格 · AI仪表盘</div>
+        老张看到：SBS防水卷材库存仅剩12卷（低于预警线），上周销售15卷，AI建议"7天内补货50卷"。
+        <div class="result">AI字段自动分析：<strong>库存预警 + 补货建议</strong>，老张直接点了补货电话</div>
+      </div>
+    </div>
+
+    <!-- 场景2: 上午 -->
+    <div class="scene">
+      <span class="scene-time">10:15 · 客户咨询</span>
+      <h3>💬 客户问卫生间漏水怎么处理，老张问AI</h3>
+
+      <div class="dialog">
+        <div class="msg user">
+          <div class="role">客户</div>
+          老板，我家卫生间漏水了，想自己修，该买什么材料？大概要多少？
+        </div>
+        <div class="msg user">
+          <div class="role">老张 → aily智能体</div>
+          卫生间漏水，客户想自己修，推荐什么产品和施工步骤？面积大约8平米。
+        </div>
+        <div class="msg ai">
+          <div class="role">🤖 雨虹AI助手（3秒回复）</div>
+          建议使用<strong>雨虹JS防水涂料</strong>，适合卫生间DIY施工：<br>
+          ① 基层处理：清理地面，确保无油污灰尘<br>
+          ② 涂刷底涂：稀释JS涂料打底一遍<br>
+          ③ 涂刷两遍：纵向+横向十字交叉涂刷，每遍间隔4小时<br>
+          ④ 闭水试验：48小时后做闭水试验<br>
+          <strong>用量计算：</strong>8平米×2kg/㎡×2遍 = 32kg，建议购买2桶（20kg装）<br>
+          <strong>参考价格：</strong>¥280/桶，总费用约¥560
+        </div>
+      </div>
+
+      <div class="action-card">
+        <div class="label">飞书aily智能体 · 7×24在线</div>
+        老张不用翻产品手册，不用打电话问厂家。3秒得到完整的产品推荐+施工步骤+用量计算+价格。
+        <div class="result">成交时间从15分钟缩短至3分钟，<strong>客户满意度提升</strong></div>
+      </div>
+    </div>
+
+    <!-- 场景3: 下午 -->
+    <div class="scene">
+      <span class="scene-time">14:00 · 督导巡检</span>
+      <h3>🔍 督导扫码巡检，6维度自动打分</h3>
+
+      <div class="before-after">
+        <div class="ba-card before">
+          <div class="title">以前</div>
+          督导带着纸质表格到店，逐项打勾签字。回办公室再录入Excel，一周后老张才知道巡检结果。
+        </div>
+        <div class="ba-card after">
+          <div class="title">现在</div>
+          督导打开妙搭巡检应用，拍照+打分6个维度（陈列/卫生/价格/库存/服务/安全），提交后系统自动计算总分。
+        </div>
+      </div>
+
+      <div class="action-card">
+        <div class="label">飞书妙搭低代码 · 巡检表单应用</div>
+        督导打分：陈列16+卫生14+价格13+库存17+服务14+安全14 = <strong>88分·合格</strong><br>
+        系统自动生成巡检记录，多维表格实时更新，老张手机上立刻看到结果和改进建议。
+        <div class="result">巡检效率<strong>提升50%</strong>，结果反馈从1周缩短至<strong>实时</strong></div>
+      </div>
+    </div>
+
+    <!-- 场景4: 傍晚 -->
+    <div class="scene">
+      <span class="scene-time">17:30 · 客户维护</span>
+      <h3>👥 AI提醒：3个老客户可能流失</h3>
+
+      <div class="action-card">
+        <div class="label">飞书多维表格 · AI客户标签 + 流失预测</div>
+        AI自动分析客户购买记录，发现3个客户超过90天未复购，标记为<strong>"高流失风险"</strong>：<br>
+        ① 李老板（上次购买128天前）— 建议推送SBS卷材促销信息<br>
+        ② 王工头（上次购买105天前）— 建议电话回访+赠品<br>
+        ③ 赵师傅（上次购买95天前）— 建议发送施工案例分享
+        <div class="result">老张按照AI话术建议逐个跟进，<strong>当月挽回2个客户</strong>，复购率<strong>提升15%</strong></div>
+      </div>
+    </div>
+
+    <!-- 场景5: 晚上 -->
+    <div class="scene">
+      <span class="scene-time">21:00 · 晚上关店</span>
+      <h3>📈 一天数据自动归档，明天自动出报表</h3>
+
+      <div class="action-card">
+        <div class="label">飞书多维表格 · 数据自动流转</div>
+        今天的新增客户、销售记录、巡检结果，全部自动写入多维表格。仪表盘数据实时更新。
+        AI字段自动分析：今日销售额¥4,280、新增客户2人、巡检得分88分。
+        <div class="result">老张不需要做任何数据录入，<strong>零操作，数据全自动</strong></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 结尾 -->
+  <div class="ending">
+    <h3>老张的一天，就是29万县域门店的一天</h3>
+    <p>零硬件投入 · 零代码部署 · 零培训成本 — 扫码加入飞书，10分钟拥有AI能力</p>
+    <div class="stats">
+      <div class="stat"><div class="num">¥0</div><div class="label">老张的投入成本</div></div>
+      <div class="stat"><div class="num">10min</div><div class="label">部署时间</div></div>
+      <div class="stat"><div class="num">4个</div><div class="label">AI场景覆盖</div></div>
+      <div class="stat"><div class="num">0次</div><div class="label">需要操作电脑</div></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
