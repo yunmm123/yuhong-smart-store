@@ -218,8 +218,12 @@ input[type=range].slider::-moz-range-thumb {
           <div class="ci-val free" id="fSoftware">免费（基础版）</div>
         </div>
         <div class="cost-item">
-          <div><div class="ci-label">AI调用费</div><div class="ci-unit">约15元/店/年（通义千问API）</div></div>
-          <div class="ci-val zero" id="fAI">¥120</div>
+          <div><div class="ci-label">AI调用费</div><div class="ci-unit">约50元/店/年（通义千问API）</div></div>
+          <div class="ci-val zero" id="fAI">¥500</div>
+        </div>
+        <div class="cost-item">
+          <div><div class="ci-label">AI平台费</div><div class="ci-unit" id="fPlatformUnit">免费版（≤5店）</div></div>
+          <div class="ci-val free" id="fPlatform">免费</div>
         </div>
         <div class="cost-item">
           <div><div class="ci-label">部署成本</div><div class="ci-unit">扫码即用</div></div>
@@ -285,7 +289,8 @@ input[type=range].slider::-moz-range-thumb {
     <div class="section-title">成本测算依据</div>
     <div class="notes">
       <p><strong>传统方案定价参考：</strong>硬件按服务器+POS终端中位数，软件按中端ERP年费。本计算器取区间中位数（硬件¥11,500/店、软件¥5,500/店/年）进行测算。</p>
-      <p><strong>飞书AI方案定价参考（2026年7月）：</strong>多维表格基础版免费（20人），专业版35元/人/月；通义千问API输入0.40元/百万Tokens。门店数≤20时软件成本显示"免费（基础版）"，规模化阶段按35元/人/月×12个月×门店数计算；AI调用费按约15元/店/年估算（单店日均20次对话、每次约2,000 Tokens）。</p>
+      <p><strong>飞书AI方案定价参考（2026年7月）：</strong>①AI平台费：≤5店用aily免费版（400额度/月），>5店需飞书AI基础版9,900元/年（含aily+多维表格AI+妙搭捆绑包）；②多维表格：基础版免费（≤20人），专业版35元/人/月；③API调用费：约50元/店/年（单店日均10-20次对话、每次含上下文约3000-5000 Tokens，通义千问API输入0.40元/百万Tokens、输出1.60元/百万Tokens）。</p>
+      <p><strong>试点阶段注意：</strong>≤5店时利用aily免费版（400额度/月），功能受限但可验证核心流程；6-20店需飞书AI基础版9,900元/年，单店均摊495-1,650元；规模化100+店后均摊降至99元/店/年。本计算器>5店时按9,900元/年固定计入（不随门店数翻倍）。</p>
       <p><strong>增收估算参考：</strong>AI赋能后巡检效率+50%、复购率+15%，按单店年销售额200万估算增收约5,000元。回本周期 = 飞书方案年成本 ÷（门店数 × 5,000）× 12个月，小于1个月显示"&lt;1个月"。</p>
     </div>
   </div>
@@ -313,8 +318,10 @@ input[type=range].slider::-moz-range-thumb {
   var T_SW = 5500;    // 软件 3000-8000 中位
   var T_DEPLOY = 2000;
   var T_TRAIN = 1000;
-  var F_AI_PER = 15;      // AI调用 15元/店/年
+  var F_AI_PER = 50;      // AI调用 50元/店/年（含输入输出Tokens，日均10-20次对话）
   var F_SW_PER_PERSON = 35; // 35元/人/月
+  var F_PLATFORM_ANNUAL = 9900; // 飞书AI基础版 9,900元/年（含aily+多维表格AI+妙搭）
+  var F_PLATFORM_THRESHOLD = 5; // ≤5店可用免费版，>5店需AI基础版
   var GAIN_PER_STORE = 5000; // 每店年增收
 
   function fmt(n) {
@@ -348,9 +355,11 @@ input[type=range].slider::-moz-range-thumb {
     document.getElementById('tTotal').textContent = fmt(tTotal);
 
     // 飞书AI方案
-    var fHw = 0, fSw = 0, fAI = F_AI_PER * stores, fDp = 0, fTr = 0;
+    var fHw = 0, fSw = 0, fAI = F_AI_PER * stores, fPlatform = 0, fDp = 0, fTr = 0;
     var fSwEl = document.getElementById('fSoftware');
     var fSwUnitEl = document.getElementById('fSoftwareUnit');
+    var fPlatEl = document.getElementById('fPlatform');
+    var fPlatUnitEl = document.getElementById('fPlatformUnit');
 
     if (stores <= 20) {
       fSw = 0;
@@ -364,7 +373,20 @@ input[type=range].slider::-moz-range-thumb {
       fSwUnitEl.textContent = '35元/人/月 × 12个月';
     }
 
-    var fTotal = fHw + fSw + fAI + fDp + fTr;
+    // AI平台费：≤5店用aily免费版(400额度/月)，>5店需飞书AI基础版9,900元/年
+    if (stores <= F_PLATFORM_THRESHOLD) {
+      fPlatform = 0;
+      fPlatEl.textContent = '免费';
+      fPlatEl.className = 'ci-val free';
+      fPlatUnitEl.textContent = 'aily免费版（≤' + F_PLATFORM_THRESHOLD + '店）';
+    } else {
+      fPlatform = F_PLATFORM_ANNUAL; // 9,900元/年（固定，不按店数翻倍）
+      fPlatEl.textContent = fmt(fPlatform);
+      fPlatEl.className = 'ci-val zero';
+      fPlatUnitEl.textContent = '飞书AI基础版9,900元/年（均摊' + Math.round(fPlatform/stores) + '元/店）';
+    }
+
+    var fTotal = fHw + fSw + fAI + fPlatform + fDp + fTr;
 
     document.getElementById('fHardware').textContent = fmt(fHw);
     document.getElementById('fAI').textContent = fmt(fAI);
