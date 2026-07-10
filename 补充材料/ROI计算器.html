@@ -218,7 +218,7 @@ input[type=range].slider::-moz-range-thumb {
           <div class="ci-val free" id="fSoftware">免费（基础版）</div>
         </div>
         <div class="cost-item">
-          <div><div class="ci-label">AI调用费</div><div class="ci-unit">约12元/店/年（通义千问API）</div></div>
+          <div><div class="ci-label">AI调用费</div><div class="ci-unit">约15元/店/年（通义千问API）</div></div>
           <div class="ci-val zero" id="fAI">¥120</div>
         </div>
         <div class="cost-item">
@@ -285,7 +285,7 @@ input[type=range].slider::-moz-range-thumb {
     <div class="section-title">成本测算依据</div>
     <div class="notes">
       <p><strong>传统方案定价参考：</strong>硬件按服务器+POS终端中位数，软件按中端ERP年费。本计算器取区间中位数（硬件¥11,500/店、软件¥5,500/店/年）进行测算。</p>
-      <p><strong>飞书AI方案定价参考（2026年7月）：</strong>多维表格基础版免费（20人），专业版35元/人/月；通义千问API输入0.40元/百万Tokens。门店数≤20时软件成本显示"免费（基础版）"，规模化阶段按35元/人/月×12个月×门店数计算；AI调用费按约12元/店/年估算（单店日均20次对话、每次约2,000 Tokens）。</p>
+      <p><strong>飞书AI方案定价参考（2026年7月）：</strong>多维表格基础版免费（20人），专业版35元/人/月；通义千问API输入0.40元/百万Tokens。门店数≤20时软件成本显示"免费（基础版）"，规模化阶段按35元/人/月×12个月×门店数计算；AI调用费按约15元/店/年估算（单店日均20次对话、每次约2,000 Tokens）。</p>
       <p><strong>增收估算参考：</strong>AI赋能后巡检效率+50%、复购率+15%，按单店年销售额200万估算增收约5,000元。回本周期 = 飞书方案年成本 ÷（门店数 × 5,000）× 12个月，小于1个月显示"&lt;1个月"。</p>
     </div>
   </div>
@@ -313,7 +313,7 @@ input[type=range].slider::-moz-range-thumb {
   var T_SW = 5500;    // 软件 3000-8000 中位
   var T_DEPLOY = 2000;
   var T_TRAIN = 1000;
-  var F_AI_PER = 12;      // AI调用 12元/店/年
+  var F_AI_PER = 15;      // AI调用 15元/店/年
   var F_SW_PER_PERSON = 35; // 35元/人/月
   var GAIN_PER_STORE = 5000; // 每店年增收
 
