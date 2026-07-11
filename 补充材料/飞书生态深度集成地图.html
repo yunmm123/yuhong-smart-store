@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>飞书生态深度集成地图 — 雨虹渠道智慧运营助手</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap');
+
+:root {
+  --ink: #1a1a2e; --muted: #6b7280; --accent: #1677ff; --accent2: #722ed1;
+  --yuhong-red: #E8392B;
+  --bg: #ffffff; --bg2: #f7f8fc; --rule: #e5e7eb;
+  --good: #52c41a; --warn: #faad14; --bad: #ff4d4f; --teal: #13c2c2;
+  --grad: linear-gradient(135deg, #1677ff, #722ed1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "Noto Sans SC", -apple-system, sans-serif;
+  background: var(--bg2); color: var(--ink); line-height: 1.8;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+  background: var(--grad);
+  padding: 14px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 16px rgba(22,119,255,.28);
+  position: relative; z-index: 10;
+}
+.navbar-brand { display: flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; }
+.navbar-logo {
+  width: 40px; height: 40px; border-radius: 9px;
+  background: var(--yuhong-red);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 800; font-size: 22px;
+  box-shadow: 0 2px 8px rgba(232,57,43,.45);
+}
+.navbar-title { font-size: 18px; font-weight: 700; letter-spacing: .5px; }
+.navbar-sub { font-size: 12px; opacity: .85; }
+.navbar-badge {
+  background: rgba(255,255,255,.16);
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 20px; padding: 6px 16px;
+  font-size: 13px; color: #fff; font-weight: 600;
+}
+
+/* ===== Page ===== */
+.page { max-width: 1100px; margin: 28px auto; background: var(--bg); padding: 44px 52px; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,.06); }
+
+/* ===== Header ===== */
+.header { padding-bottom: 24px; border-bottom: 3px solid var(--ink); margin-bottom: 36px; }
+.header .badge { display: inline-block; font-size: 11px; font-weight: 600; color: #fff; background: var(--grad); padding: 4px 12px; border-radius: 4px; margin-bottom: 12px; letter-spacing: .5px; }
+.header h1 { font-size: 30px; font-weight: 900; line-height: 1.3; }
+.header h1 .grad { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.header .subtitle { font-size: 14px; color: var(--muted); margin-top: 8px; }
+
+/* ===== Section ===== */
+.section { margin-bottom: 40px; }
+.section-title { font-size: 16px; font-weight: 700; margin-bottom: 22px; padding-left: 12px; border-left: 4px solid var(--accent); display: flex; align-items: center; gap: 10px; }
+.section-title .st-note { font-size: 12px; font-weight: 400; color: var(--muted); }
+
+/* ===== Eco Layout ===== */
+.eco-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 36px; align-items: start; }
+
+/* ===== Graph ===== */
+.graph-wrap { display: flex; flex-direction: column; align-items: center; }
+.graph {
+  --node-size: 104px;
+  position: relative;
+  width: 100%; max-width: 440px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  background: radial-gradient(circle at 50% 50%, rgba(22,119,255,.05) 0%, transparent 62%);
+}
+.line {
+  position: absolute; left: 50%; top: 50%;
+  height: 0; border-top: 2px dashed #c5cad6;
+  transform-origin: left center;
+  z-index: 1; opacity: .6;
+  transition: opacity .3s, border-top-width .3s;
+  pointer-events: none;
+}
+.line.active { opacity: 1; border-top-width: 2.5px; }
+
+/* Center node */
+.center-node {
+  position: absolute; left: 50%; top: 50%;
+  width: 134px; height: 134px;
+  margin-left: -67px; margin-top: -67px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ff6b5b, var(--yuhong-red));
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: #fff; z-index: 5;
+  box-shadow: 0 8px 28px rgba(232,57,43,.4);
+  animation: pulse 2.4s infinite;
+  text-align: center;
+}
+.center-node .cicon { font-size: 26px; line-height: 1; margin-bottom: 4px; }
+.center-node .ctitle { font-size: 12.5px; font-weight: 700; line-height: 1.3; padding: 0 10px; }
+.center-node .csub { font-size: 9.5px; opacity: .92; margin-top: 3px; letter-spacing: .5px; }
+@keyframes pulse {
+  0% { box-shadow: 0 8px 28px rgba(232,57,43,.4), 0 0 0 0 rgba(232,57,43,.45); }
+  70% { box-shadow: 0 8px 28px rgba(232,57,43,.4), 0 0 0 24px rgba(232,57,43,0); }
+  100% { box-shadow: 0 8px 28px rgba(232,57,43,.4), 0 0 0 0 rgba(232,57,43,0); }
+}
+
+/* Eco nodes */
+.node {
+  position: absolute;
+  width: var(--node-size); height: var(--node-size);
+  margin-left: calc(var(--node-size) / -2);
+  margin-top: calc(var(--node-size) / -2);
+  border-radius: 50%;
+  background: #fff;
+  border: 2.5px solid var(--node-color, var(--accent));
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 3;
+  text-align: center;
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+  box-shadow: 0 4px 14px rgba(0,0,0,.08);
+}
+.node .nicon { font-size: 24px; line-height: 1; margin-bottom: 4px; }
+.node .nname { font-size: 12.5px; font-weight: 700; color: var(--ink); line-height: 1.2; padding: 0 4px; }
+.node .nsub { font-size: 9.5px; color: var(--muted); margin-top: 3px; line-height: 1.25; padding: 0 4px; }
+.node:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 6px rgba(22,119,255,.12), 0 8px 24px rgba(0,0,0,.16);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--node-color) 14%, transparent), 0 8px 24px rgba(0,0,0,.16);
+}
+.node.active {
+  transform: scale(1.12);
+  background: var(--node-color);
+  box-shadow: 0 0 0 6px rgba(22,119,255,.14), 0 10px 26px rgba(0,0,0,.2);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--node-color) 16%, transparent), 0 10px 26px rgba(0,0,0,.2);
+}
+.node.active .nname { color: #fff; }
+.node.active .nsub { color: rgba(255,255,255,.9); }
+.node.active .nicon { filter: drop-shadow(0 1px 2px rgba(0,0,0,.2)); }
+
+.graph-tip { margin-top: 18px; font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 6px; background: var(--bg2); padding: 8px 16px; border-radius: 20px; border: 1px solid var(--rule); }
+.graph-tip .tip-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--yuhong-red); animation: blink 1.5s infinite; }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+
+/* ===== Detail Panel ===== */
+.detail-panel {
+  background: var(--bg2); border-radius: 12px; padding: 24px 26px;
+  border: 1px solid var(--rule); min-height: 440px;
+  position: relative; overflow: hidden;
+}
+.detail-panel::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: var(--dp-color, var(--accent));
+  transition: background .3s;
+}
+.dp-head { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--rule); }
+.dp-icon { width: 46px; height: 46px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 23px; color: #fff; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,.12); }
+.dp-head h3 { font-size: 17px; font-weight: 700; }
+.dp-head .dp-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.dp-count { font-size: 12px; color: var(--muted); margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+.dp-count strong { color: var(--dp-color, var(--accent)); font-size: 15px; }
+
+.scenario { background: #fff; border-radius: 10px; padding: 16px 18px; margin-bottom: 12px; border-left: 3px solid var(--sc-color, var(--accent)); box-shadow: 0 2px 8px rgba(0,0,0,.04); transition: transform .2s, box-shadow .2s; }
+.scenario:hover { transform: translateX(4px); box-shadow: 0 4px 14px rgba(0,0,0,.09); }
+.scenario:last-child { margin-bottom: 0; }
+.sc-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+.sc-name { font-size: 14px; font-weight: 700; color: var(--ink); }
+.sc-role { font-size: 11px; font-weight: 600; color: #fff; padding: 2px 10px; border-radius: 10px; white-space: nowrap; }
+.sc-row { display: flex; gap: 10px; font-size: 12.5px; margin-top: 6px; line-height: 1.7; }
+.sc-row .sc-label { flex: 0 0 60px; color: var(--muted); font-weight: 600; flex-shrink: 0; }
+.sc-row .sc-text { flex: 1; color: var(--ink); }
+.sc-row.value .sc-text { color: var(--sc-color, var(--accent)); font-weight: 600; }
+
+/* ===== Stats Bar ===== */
+.stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.stat-card { background: linear-gradient(135deg, #f0f5ff, #f9f0ff); border-radius: 12px; padding: 26px 16px; text-align: center; border: 1px solid #d6e4ff; transition: transform .25s, box-shadow .25s; }
+.stat-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(22,119,255,.15); }
+.stat-card .stat-icon { font-size: 24px; margin-bottom: 8px; }
+.stat-card .stat-num { font-size: 34px; font-weight: 900; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+.stat-card .stat-num .unit { font-size: 16px; font-weight: 700; }
+.stat-card .stat-label { font-size: 13px; color: var(--muted); margin-top: 10px; }
+
+/* ===== Footer ===== */
+.footer { text-align: center; font-size: 12px; color: var(--muted); padding-top: 26px; border-top: 1px solid var(--rule); margin-top: 8px; }
+.footer .ft-grad { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 700; }
+
+/* ===== Mobile ===== */
+@media (max-width: 768px) {
+  .navbar { padding: 10px 14px; flex-wrap: wrap; gap: 8px; }
+  .navbar-logo { width: 34px; height: 34px; font-size: 18px; border-radius: 8px; }
+  .navbar-title { font-size: 14px; }
+  .navbar-sub { font-size: 11px; }
+  .navbar-badge { font-size: 11px; padding: 4px 10px; }
+  .page { padding: 24px 16px; margin: 14px auto; border-radius: 10px; }
+  .header h1 { font-size: 22px; }
+  .header .subtitle { font-size: 13px; }
+  .section { margin-bottom: 28px; }
+  .section-title { font-size: 14px; margin-bottom: 16px; }
+  .eco-layout { grid-template-columns: 1fr; gap: 22px; }
+  .graph { --node-size: 80px; max-width: 330px; }
+  .center-node { width: 104px; height: 104px; margin-left: -52px; margin-top: -52px; }
+  .center-node .cicon { font-size: 22px; }
+  .center-node .ctitle { font-size: 11px; }
+  .center-node .csub { font-size: 8.5px; }
+  .node .nicon { font-size: 18px; }
+  .node .nname { font-size: 11px; }
+  .node .nsub { font-size: 8.5px; }
+  .graph-tip { font-size: 11.5px; padding: 6px 12px; }
+  .detail-panel { padding: 18px 16px; min-height: auto; }
+  .dp-head h3 { font-size: 15px; }
+  .scenario { padding: 14px 14px; }
+  .sc-name { font-size: 13px; }
+  .sc-row { font-size: 12px; }
+  .sc-row .sc-label { flex: 0 0 52px; }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .stat-card { padding: 18px 12px; }
+  .stat-card .stat-num { font-size: 26px; }
+  .stat-card .stat-label { font-size: 12px; }
+}
+@media (max-width: 380px) {
+  .graph { --node-size: 68px; max-width: 290px; }
+  .center-node { width: 92px; height: 92px; margin-left: -46px; margin-top: -46px; }
+  .node .nname { font-size: 10px; }
+  .node .nsub { font-size: 8px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <a class="navbar-brand" href="../index.html">
+    <div class="navbar-logo">虹</div>
+    <div>
+      <div class="navbar-title">雨虹渠道智慧运营助手</div>
+      <div class="navbar-sub">飞书生态深度集成地图</div>
+    </div>
+  </a>
+  <div class="navbar-badge">6大产品 · 22个接口 · 全员协同</div>
+</nav>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <span class="badge">FEISHU ECOSYSTEM INTEGRATION MAP</span>
+    <h1>飞书全家桶<span class="grad">生态深度集成</span>地图</h1>
+    <div class="subtitle">以"雨虹渠道智慧运营助手"为核心，深度打通飞书6大产品能力，覆盖巡检、导购、运营、私域、渠道管理五大业务场景，实现4类角色全员协同。</div>
+  </div>
+
+  <!-- Section: 节点图 -->
+  <div class="section">
+    <div class="section-title">飞书全家桶生态节点图 <span class="st-note">点击任意节点查看业务场景详情</span></div>
+    <div class="eco-layout">
+      <div class="graph-wrap">
+        <div class="graph" id="graph">
+          <div class="center-node">
+            <div class="cicon">🌧️</div>
+            <div class="ctitle">雨虹渠道<br>智慧运营助手</div>
+            <div class="csub">生态中枢</div>
+          </div>
+        </div>
+        <div class="graph-tip"><span class="tip-dot"></span>点击周围节点切换详情</div>
+      </div>
+      <div class="detail-panel" id="detailPanel"></div>
+    </div>
+  </div>
+
+  <!-- Section: 统计栏 -->
+  <div class="section">
+    <div class="section-title">飞书生态集成关键指标</div>
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-icon">🧩</div>
+        <div class="stat-num">6<span class="unit">大</span></div>
+        <div class="stat-label">飞书产品深度集成</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🔌</div>
+        <div class="stat-num">22<span class="unit">个</span></div>
+        <div class="stat-label">API接口打通</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-num">15<span class="unit">+</span></div>
+        <div class="stat-label">业务场景覆盖</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-num">4<span class="unit">类</span></div>
+        <div class="stat-label">角色全员协同</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="ft-grad">雨虹渠道智慧运营助手</span> · 基于飞书AI生态构建 · 2026 AI先锋未来人才大赛 · 东方雨虹命题
+  </div>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // 角色色值
+  var R_STORE = '#1677ff';   // 门店店长/店员
+  var R_GUIDE = '#fa8c16';   // 门店导购
+  var R_REGION = '#722ed1';  // 区域督导/区域经理
+  var R_BOSS = '#13c2c2';    // 企业管理者
+  var R_USER = '#52c41a';    // 消费者
+
+  // 节点数据（六边形排布，顺时针）
+  var NODES = [
+    {
+      id: 'msg', name: '飞书消息', icon: '💬', sub: '消息推送·群通知·加急',
+      color: '#1677ff', x: 50, y: 9,
+      desc: '依托飞书IM能力，实现业务事件的消息推送、群通知与加急提醒，确保关键信息秒级触达。',
+      scenarios: [
+        { name: '巡检不合格整改通知', role: '门店店长', roleColor: R_STORE, trigger: '巡检得分低于80分自动触发', value: '整改通知5分钟触达，整改周期缩短60%' },
+        { name: '库存预警群通知', role: '区域督导', roleColor: R_REGION, trigger: '库存低于安全水位线', value: '防断货预警前置，缺货损失降低40%' },
+        { name: '费用审批加急提醒', role: '区域经理', roleColor: R_REGION, trigger: '大额费用单据待审批超时', value: '审批时效从3天压缩至4小时' },
+        { name: '客户线索分配推送', role: '门店导购', roleColor: R_GUIDE, trigger: '新客户线索录入系统', value: '线索响应缩短至15分钟，转化率提升25%' }
+      ]
+    },
+    {
+      id: 'approval', name: '飞书审批', icon: '✅', sub: '整改·费用·上架审批',
+      color: '#722ed1', x: 85, y: 29,
+      desc: '通过飞书审批流引擎，将整改、费用、上架、拓展等关键动作标准化为可追溯的审批流程。',
+      scenarios: [
+        { name: '巡检整改审批', role: '区域督导', roleColor: R_REGION, trigger: '门店提交整改方案', value: '整改流程闭环可追溯，合规率提升至95%' },
+        { name: '营销费用审批', role: '区域经理', roleColor: R_REGION, trigger: '门店申请促销费用', value: '费用透明可控，预算执行偏差<5%' },
+        { name: '新品上架审批', role: '门店店长', roleColor: R_STORE, trigger: '新品入店陈列申请', value: '上架标准统一执行，铺货周期缩短50%' },
+        { name: '网点拓展审批', role: '企业管理者', roleColor: R_BOSS, trigger: '新增网点申请建店', value: '渠道拓展规范审批，建店合规率100%' }
+      ]
+    },
+    {
+      id: 'bitable', name: '多维表格', icon: '📊', sub: '巡检·库存·销售·客户',
+      color: '#13c2c2', x: 85, y: 71,
+      desc: '以多维表格为数据底座，汇聚巡检、库存、销售、客户四大维度数据，仪表盘秒级生成经营洞察。',
+      scenarios: [
+        { name: '巡检记录数据看板', role: '区域督导', roleColor: R_REGION, trigger: '巡检数据实时回传', value: '全渠道合规率一屏掌握，督导效率提升3倍' },
+        { name: '库存数据实时同步', role: '门店店长', roleColor: R_STORE, trigger: '出入库数据变动', value: '智能补货提醒，库存周转提升30%' },
+        { name: '销售数据聚合分析', role: '企业管理者', roleColor: R_BOSS, trigger: '门店销售日报汇总', value: '经营洞察秒级生成，决策响应提速' },
+        { name: '客户信息台账管理', role: '门店导购', roleColor: R_GUIDE, trigger: '客户建档与跟进', value: '客户画像精准，复购率提升20%' }
+      ]
+    },
+    {
+      id: 'miaoda', name: '妙搭应用', icon: '📱', sub: '巡检表单·分单看板',
+      color: '#fa8c16', x: 50, y: 91,
+      desc: '基于飞书妙搭低代码平台搭建移动端巡检表单与智能分单看板，无需独立App即可完成业务执行。',
+      scenarios: [
+        { name: '移动端巡检表单', role: '门店店员', roleColor: R_STORE, trigger: '每周定期巡检触发', value: '巡检全程数字化，单店巡检耗时减半' },
+        { name: 'AI陈列合规检测', role: '门店店员', roleColor: R_STORE, trigger: '巡检照片上传', value: 'AI自动评分客观公正，漏检率降低70%' },
+        { name: '智能分单看板', role: '区域督导', roleColor: R_REGION, trigger: '订单自动归集', value: '公平高效分单，分单争议归零' }
+      ]
+    },
+    {
+      id: 'aily', name: 'aily智能体', icon: '🤖', sub: 'AI导购·施工·用量',
+      color: '#52c41a', x: 15, y: 71,
+      desc: '部署"AI导购小虹"aily智能体，提供产品选型、施工指导、用量计算等专业知识服务，赋能一线导购。',
+      scenarios: [
+        { name: 'AI导购咨询', role: '门店导购', roleColor: R_GUIDE, trigger: '客户进店咨询', value: '专业选型秒级响应，成交率提升35%' },
+        { name: '施工方案指导', role: '门店导购', roleColor: R_GUIDE, trigger: '客户提出施工需求', value: '标准施工方案输出，返工率降低50%' },
+        { name: '材料用量计算', role: '门店导购', roleColor: R_GUIDE, trigger: '客户提供施工面积', value: '精准用量计算，材料浪费减少25%' },
+        { name: '跟进话术智能生成', role: '门店导购', roleColor: R_GUIDE, trigger: '客户跟进任务触发', value: '个性化话术推荐，回访转化提升30%' }
+      ]
+    },
+    {
+      id: 'doc', name: '飞书文档', icon: '📄', sub: 'SOP·培训·周报模板',
+      color: '#eb2f96', x: 15, y: 29,
+      desc: '沉淀SOP手册、产品培训资料与周报模板于飞书文档，实现知识统一管理与全员实时同步。',
+      scenarios: [
+        { name: '巡检SOP手册', role: '门店店员', roleColor: R_STORE, trigger: '新人入职/巡检前查阅', value: '标准化执行，新人上手周期缩短70%' },
+        { name: '产品培训资料库', role: '门店导购', roleColor: R_GUIDE, trigger: '新品上市/主动学习', value: '知识统一沉淀，培训成本降低60%' },
+        { name: '周报模板自动化', role: '区域督导', roleColor: R_REGION, trigger: '每周汇总节点', value: '一键生成周报，耗时从2小时降至10分钟' }
+      ]
+    }
+  ];
+
+  var graph = document.getElementById('graph');
+  var panel = document.getElementById('detailPanel');
+
+  // ---- 渲染连接线 ----
+  function renderLines() {
+    NODES.forEach(function (n) {
+      var dx = n.x - 50, dy = n.y - 50;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      var angle = Math.atan2(dy, dx) * 180 / Math.PI;
+      var line = document.createElement('div');
+      line.className = 'line';
+      line.setAttribute('data-id', n.id);
+      line.style.width = dist + '%';
+      line.style.transform = 'rotate(' + angle + 'deg)';
+      graph.appendChild(line);
+    });
+  }
+
+  // ---- 渲染节点 ----
+  function renderNodes() {
+    NODES.forEach(function (n) {
+      var el = document.createElement('div');
+      el.className = 'node';
+      el.setAttribute('data-id', n.id);
+      el.style.left = n.x + '%';
+      el.style.top = n.y + '%';
+      el.style.setProperty('--node-color', n.color);
+      el.innerHTML =
+        '<div class="nicon">' + n.icon + '</div>' +
+        '<div class="nname">' + n.name + '</div>' +
+        '<div class="nsub">' + n.sub + '</div>';
+      el.addEventListener('click', function () { selectNode(n.id); });
+      graph.appendChild(el);
+    });
+  }
+
+  // ---- 选中节点 ----
+  function selectNode(id) {
+    // 节点高亮
+    var nodes = graph.querySelectorAll('.node');
+    for (var i = 0; i < nodes.length; i++) {
+      if (nodes[i].getAttribute('data-id') === id) {
+        nodes[i].classList.add('active');
+      } else {
+        nodes[i].classList.remove('active');
+      }
+    }
+    // 连接线高亮
+    var lines = graph.querySelectorAll('.line');
+    var target = null;
+    for (var j = 0; j < lines.length; j++) {
+      if (lines[j].getAttribute('data-id') === id) {
+        lines[j].classList.add('active');
+        lines[j].style.borderColor = '';
+        target = lines[j];
+      } else {
+        lines[j].classList.remove('active');
+        lines[j].style.borderColor = '';
+      }
+    }
+    var node = null;
+    for (var k = 0; k < NODES.length; k++) {
+      if (NODES[k].id === id) { node = NODES[k]; break; }
+    }
+    if (target && node) {
+      target.style.borderColor = node.color;
+    }
+    if (node) { renderDetail(node); }
+  }
+
+  // ---- 渲染详情面板 ----
+  function renderDetail(n) {
+    panel.style.setProperty('--dp-color', n.color);
+    var html =
+      '<div class="dp-head">' +
+        '<div class="dp-icon" style="background:' + n.color + '">' + n.icon + '</div>' +
+        '<div><h3>' + n.name + '</h3>' +
+        '<div class="dp-sub">' + n.desc + '</div></div>' +
+      '</div>' +
+      '<div class="dp-count">共 <strong>' + n.scenarios.length + '</strong> 个业务场景落地</div>';
+
+    n.scenarios.forEach(function (s) {
+      html +=
+        '<div class="scenario" style="--sc-color:' + n.color + '">' +
+          '<div class="sc-head">' +
+            '<div class="sc-name">' + s.name + '</div>' +
+            '<span class="sc-role" style="background:' + s.roleColor + '">' + s.role + '</span>' +
+          '</div>' +
+          '<div class="sc-row"><div class="sc-label">触发条件</div><div class="sc-text">' + s.trigger + '</div></div>' +
+          '<div class="sc-row value"><div class="sc-label">业务价值</div><div class="sc-text">' + s.value + '</div></div>' +
+        '</div>';
+    });
+
+    panel.innerHTML = html;
+  }
+
+  // ---- 初始化 ----
+  renderLines();
+  renderNodes();
+  selectNode('msg'); // 默认选中第一个节点（飞书消息）
+
+  // ---- 键盘左右切换（增强体验）----
+  document.addEventListener('keydown', function (e) {
+    var curIdx = -1;
+    for (var i = 0; i < NODES.length; i++) {
+      if (graph.querySelector('.node[data-id="' + NODES[i].id + '"]').classList.contains('active')) {
+        curIdx = i; break;
+      }
+    }
+    if (curIdx === -1) return;
+    if (e.key === 'ArrowRight') {
+      selectNode(NODES[(curIdx + 1) % NODES.length].id);
+    } else if (e.key === 'ArrowLeft') {
+      selectNode(NODES[(curIdx - 1 + NODES.length) % NODES.length].id);
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

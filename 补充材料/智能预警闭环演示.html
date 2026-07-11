@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智能预警与主动决策闭环演示 — 雨虹渠道智慧运营助手</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap');
+
+:root {
+  --accent: #1677ff;
+  --accent2: #722ed1;
+  --yuhong-red: #E8392B;
+  --grad: linear-gradient(135deg, #1677ff, #722ed1);
+  --ink: #1a1a2e;
+  --muted: #6b7280;
+  --bg: #ffffff;
+  --bg2: #f7f8fc;
+  --rule: #e5e7eb;
+  --good: #52c41a;
+  --warn: #faad14;
+  --bad: #ff4d4f;
+  --fs-card: #fafbfc;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Noto Sans SC", -apple-system, sans-serif;
+  background: var(--bg2);
+  color: var(--ink);
+  line-height: 1.7;
+  padding-bottom: 40px;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+  background: var(--grad);
+  box-shadow: 0 2px 12px rgba(22, 119, 255, 0.3);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.navbar .logo {
+  width: 42px; height: 42px; border-radius: 10px;
+  background: var(--yuhong-red);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 900; font-size: 24px;
+  box-shadow: 0 2px 10px rgba(232, 57, 43, 0.5);
+  flex-shrink: 0;
+}
+.navbar .nav-title { color: #fff; font-size: 19px; font-weight: 700; letter-spacing: 1px; }
+.navbar .nav-sub { color: rgba(255,255,255,.8); font-size: 12px; margin-top: 2px; }
+.navbar .nav-right { margin-left: auto; color: rgba(255,255,255,.85); font-size: 13px; }
+
+/* ===== Page ===== */
+.page {
+  max-width: 1100px;
+  margin: 28px auto;
+  background: var(--bg);
+  padding: 44px 48px;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.06);
+}
+
+/* ===== Header ===== */
+.header { padding-bottom: 22px; border-bottom: 3px solid var(--ink); margin-bottom: 28px; }
+.header .badge {
+  display: inline-block; font-size: 11px; font-weight: 600; color: #fff;
+  background: var(--grad); padding: 4px 12px; border-radius: 4px; margin-bottom: 12px;
+  letter-spacing: .05em;
+}
+.header h1 { font-size: 28px; font-weight: 900; line-height: 1.3; }
+.header h1 .grad { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.header .subtitle { font-size: 14px; color: var(--muted); margin-top: 8px; }
+
+/* ===== Control bar ===== */
+.control-bar {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  background: linear-gradient(135deg, #f0f5ff, #f9f0ff);
+  border-radius: 12px; padding: 16px 20px; margin-bottom: 24px;
+  border: 1px solid #d6e4ff;
+}
+.btn-play {
+  background: var(--grad); color: #fff; border: none;
+  padding: 11px 24px; border-radius: 8px; font-size: 14px; font-weight: 700;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+  transition: transform .2s, box-shadow .2s; box-shadow: 0 4px 12px rgba(22,119,255,.3);
+  font-family: inherit;
+}
+.btn-play:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(22,119,255,.4); }
+.btn-play:active { transform: translateY(0); }
+.btn-play.playing { background: linear-gradient(135deg, #8a8a8a, #6b7280); box-shadow: none; cursor: default; }
+.btn-play .play-icon { font-size: 14px; }
+.control-hint { font-size: 13px; color: var(--muted); }
+.control-hint b { color: var(--accent); }
+
+/* ===== Step nav ===== */
+.steps-nav {
+  display: flex; gap: 6px; margin-bottom: 28px; position: relative;
+  flex-wrap: nowrap;
+}
+.step-dot {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  cursor: pointer; user-select: none; padding: 6px 2px;
+  transition: transform .2s;
+}
+.step-dot:hover { transform: translateY(-2px); }
+.step-dot .circle {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: #fff; border: 2px solid var(--rule);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 700; color: var(--muted);
+  transition: all .3s; position: relative; z-index: 2;
+}
+.step-dot .label { font-size: 12px; color: var(--muted); font-weight: 600; text-align: center; line-height: 1.3; transition: color .3s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.step-dot.active .circle { background: var(--grad); border-color: transparent; color: #fff; box-shadow: 0 0 0 4px rgba(22,119,255,.15); }
+.step-dot.active .label { color: var(--accent); font-weight: 700; }
+.step-dot.done .circle { background: var(--good); border-color: transparent; color: #fff; }
+.step-dot.done .circle::after { content: "\2713"; font-size: 18px; }
+.step-dot.done .circle .num { display: none; }
+.step-dot.done .label { color: var(--good); }
+
+.steps-line {
+  position: absolute; top: 26px; left: 7%; right: 7%; height: 3px;
+  background: var(--rule); border-radius: 2px; z-index: 1;
+}
+.steps-line .fill {
+  height: 100%; width: 0; background: var(--grad); border-radius: 2px;
+  transition: width .5s ease;
+}
+
+/* ===== Stage area ===== */
+.stage {
+  background: var(--bg2); border-radius: 14px; padding: 30px;
+  min-height: 420px; position: relative; overflow: hidden;
+  border: 1px solid var(--rule);
+}
+.stage-empty { text-align: center; padding: 80px 20px; color: var(--muted); }
+.stage-empty .big-icon { font-size: 56px; margin-bottom: 16px; opacity: .4; }
+.stage-empty p { font-size: 15px; }
+
+.step-panel { display: none; animation: fadeUp .5s ease both; }
+.step-panel.show { display: block; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+.step-head { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+.step-head .step-tag {
+  font-size: 11px; font-weight: 700; color: #fff; background: var(--grad);
+  padding: 3px 10px; border-radius: 4px; letter-spacing: .05em;
+}
+.step-head h2 { font-size: 20px; font-weight: 800; }
+.step-head h2 .grad { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.step-head .scene-tip { font-size: 13px; color: var(--muted); margin-left: auto; }
+
+/* ===== Step 1: bar chart ===== */
+.chart-wrap { background: #fff; border-radius: 12px; padding: 24px; border: 1px solid var(--rule); }
+.chart-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.chart-sub { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+.bar-chart { display: flex; align-items: flex-end; gap: 18px; height: 220px; position: relative; padding: 0 10px; border-bottom: 2px solid var(--rule); }
+.bar-chart .threshold {
+  position: absolute; left: 0; right: 0; bottom: 160px;
+  border-top: 2px dashed var(--bad); z-index: 1;
+}
+.bar-chart .threshold .th-label {
+  position: absolute; right: 0; top: -20px;
+  font-size: 11px; color: var(--bad); font-weight: 700; background: #fff; padding: 0 6px;
+}
+.bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; z-index: 2; }
+.bar-item .bar {
+  width: 100%; max-width: 56px; border-radius: 6px 6px 0 0;
+  background: linear-gradient(180deg, #4d9cff, #1677ff);
+  transition: height 1s cubic-bezier(.22,1,.36,1);
+  height: 0;
+  position: relative;
+}
+.bar-item.alert .bar { background: linear-gradient(180deg, #ff7875, #ff4d4f); }
+.bar-item .bar-val { font-size: 13px; font-weight: 700; color: var(--ink); }
+.bar-item.alert .bar-val { color: var(--bad); }
+.bar-item .bar-label { font-size: 11px; color: var(--muted); }
+.bar-item.alert .bar { animation: pulseRed 1.2s ease-in-out infinite; }
+@keyframes pulseRed {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,77,79,.5); }
+  50% { box-shadow: 0 0 0 10px rgba(255,77,79,0); }
+}
+.alert-banner {
+  margin-top: 18px; background: #fff1f0; border: 1px solid #ffccc7;
+  border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: var(--bad); font-weight: 600;
+}
+.alert-banner .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--bad); animation: blink 1s infinite; }
+@keyframes blink { 50% { opacity: .3; } }
+
+/* ===== Step 2: Feishu card ===== */
+.feishu-msg {
+  max-width: 440px; margin: 10px 0;
+  background: #fff; border-radius: 10px; overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0,0,0,.1); border: 1px solid #e8e8e8;
+  opacity: 0; transform: translateX(60px);
+}
+.feishu-msg.show { animation: slideInRight .6s cubic-bezier(.22,1,.36,1) both; }
+@keyframes slideInRight { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: translateX(0); } }
+.feishu-msg .fc-header {
+  background: linear-gradient(135deg, #ff7875, #ff4d4f);
+  color: #fff; padding: 14px 18px; display: flex; align-items: center; gap: 10px;
+  font-size: 15px; font-weight: 700;
+}
+.feishu-msg .fc-body { padding: 16px 18px; }
+.feishu-msg .fc-row { display: flex; padding: 7px 0; font-size: 13px; border-bottom: 1px solid #f3f3f3; }
+.feishu-msg .fc-row:last-child { border-bottom: none; }
+.feishu-msg .fc-row .k { color: var(--muted); width: 90px; flex-shrink: 0; }
+.feishu-msg .fc-row .v { color: var(--ink); font-weight: 600; }
+.feishu-msg .fc-row .v .red { color: var(--bad); }
+.feishu-msg .fc-actions { display: flex; gap: 10px; padding: 12px 18px; border-top: 1px solid #f0f0f0; background: var(--fs-card); }
+.feishu-msg .fc-btn {
+  flex: 1; padding: 9px 0; border-radius: 6px; font-size: 13px; font-weight: 600;
+  border: 1px solid var(--accent); background: #fff; color: var(--accent);
+  cursor: pointer; transition: all .2s; text-align: center; font-family: inherit;
+}
+.feishu-msg .fc-btn:hover { background: var(--accent); color: #fff; }
+.feishu-msg .fc-btn.primary { background: var(--accent); color: #fff; }
+.feishu-msg .fc-btn.primary:hover { background: #0d5fe0; }
+.feishu-msg .fc-btn.purple { border-color: var(--accent2); color: var(--accent2); }
+.feishu-msg .fc-btn.purple:hover { background: var(--accent2); color: #fff; }
+.msg-meta { font-size: 12px; color: var(--muted); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.msg-meta .bot-avatar { width: 28px; height: 28px; border-radius: 6px; background: var(--grad); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; font-weight: 700; }
+.msg-meta .bot-name { font-weight: 700; color: var(--ink); }
+.msg-meta .bot-time { color: var(--muted); }
+
+/* ===== Step 3: approval form ===== */
+.form-wrap {
+  max-width: 480px; background: #fff; border-radius: 10px; overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0,0,0,.1); border: 1px solid #e8e8e8;
+  max-height: 0; opacity: 0; transition: max-height .6s ease, opacity .5s ease;
+}
+.form-wrap.show { max-height: 700px; opacity: 1; }
+.form-wrap .form-head {
+  background: var(--grad); color: #fff; padding: 14px 18px;
+  font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px;
+}
+.form-wrap .form-body { padding: 18px; }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 5px; }
+.form-group .field {
+  background: var(--bg2); border: 1px solid var(--rule); border-radius: 6px;
+  padding: 9px 12px; font-size: 13px; color: var(--ink); font-weight: 500;
+}
+.form-group .field.high { color: var(--bad); font-weight: 700; }
+.form-group .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.form-group .tags span {
+  background: #eef4ff; color: var(--accent); font-size: 12px; font-weight: 600;
+  padding: 4px 10px; border-radius: 12px;
+}
+.form-actions { display: flex; gap: 10px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--rule); }
+.form-actions .btn { flex: 1; padding: 10px 0; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; border: none; font-family: inherit; transition: all .2s; }
+.form-actions .btn.approve { background: var(--good); color: #fff; }
+.form-actions .btn.reject { background: #fff; color: var(--muted); border: 1px solid var(--rule); }
+.form-actions .btn.approve:hover { background: #389e0d; }
+
+/* ===== Step 4: progress + photos ===== */
+.progress-section { background: #fff; border-radius: 12px; padding: 22px; border: 1px solid var(--rule); margin-bottom: 18px; }
+.progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.progress-top .pt-label { font-size: 14px; font-weight: 700; }
+.progress-top .pt-val { font-size: 22px; font-weight: 800; color: var(--accent); }
+.progress-track { height: 12px; background: #f0f0f0; border-radius: 6px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0; background: var(--grad); border-radius: 6px; transition: width 1.5s cubic-bezier(.22,1,.36,1); }
+.photo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.photo-box {
+  aspect-ratio: 1; border-radius: 10px; border: 2px dashed var(--rule);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 6px; color: var(--muted); font-size: 11px; background: var(--bg2);
+  opacity: 0; transform: scale(.8); transition: all .4s;
+}
+.photo-box.uploaded { border-style: solid; border-color: var(--good); background: linear-gradient(135deg,#f6ffed,#eafaf1); color: var(--good); }
+.photo-box.show { opacity: 1; transform: scale(1); }
+.photo-box .pic-icon { font-size: 26px; }
+.acceptance-row {
+  margin-top: 16px; display: flex; align-items: center; gap: 12px;
+  background: #f6ffed; border: 1px solid #b7eb8f; border-radius: 8px; padding: 12px 16px;
+  font-size: 13px; color: #389e0d; font-weight: 600; opacity: 0; transition: opacity .5s;
+}
+.acceptance-row.show { opacity: 1; }
+.acceptance-row .check { width: 24px; height: 24px; border-radius: 50%; background: var(--good); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+
+/* ===== Step 5: table ===== */
+.table-wrap { background: #fff; border-radius: 12px; overflow: hidden; border: 1px solid var(--rule); }
+.table-wrap .tw-head { background: var(--grad); color: #fff; padding: 12px 18px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table th { background: #fafafa; padding: 11px 14px; text-align: left; font-weight: 700; color: var(--muted); border-bottom: 1px solid var(--rule); font-size: 12px; }
+.data-table td { padding: 11px 14px; border-bottom: 1px solid #f3f3f3; color: var(--ink); }
+.data-table tr.new-row { background: #fffbe6; animation: rowHighlight 1.5s ease; }
+@keyframes rowHighlight {
+  0% { background: #fff1f0; }
+  50% { background: #fff7e6; }
+  100% { background: #fffbe6; }
+}
+.data-table tr.new-row td:first-child { position: relative; }
+.data-table tr.new-row td:first-child::before { content: "NEW"; position: absolute; left: -2px; top: 50%; transform: translateY(-50%); font-size: 9px; font-weight: 800; color: #fff; background: var(--yuhong-red); padding: 2px 5px; border-radius: 3px; }
+.score-update { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; }
+.score-update .old { color: var(--bad); text-decoration: line-through; font-size: 12px; }
+.score-update .arrow { color: var(--muted); }
+.score-update .new { color: var(--good); font-size: 15px; }
+.score-chip { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+.score-chip.green { background: #f6ffed; color: var(--good); }
+.score-chip.red { background: #fff1f0; color: var(--bad); }
+
+/* ===== Step 6: big screen ===== */
+.bigscreens { display: grid; grid-template-columns: 1.1fr 1fr; gap: 18px; }
+.bs-card {
+  background: linear-gradient(160deg, #0a1628, #11244a);
+  border-radius: 14px; padding: 24px; color: #fff; position: relative; overflow: hidden;
+  border: 1px solid #1e3a6f;
+}
+.bs-card .bs-title { font-size: 12px; color: #7da4d6; margin-bottom: 6px; letter-spacing: .08em; text-transform: uppercase; }
+.bs-card .bs-store { font-size: 18px; font-weight: 700; margin-bottom: 18px; }
+.bs-score-box { text-align: center; padding: 14px 0; }
+.bs-score-box .bs-score { font-size: 56px; font-weight: 900; line-height: 1; transition: color .6s; }
+.bs-score-box .bs-score.red { color: #ff7875; }
+.bs-score-box .bs-score.green { color: #5cdbd3; }
+.bs-score-box .bs-score-label { font-size: 12px; color: #7da4d6; margin-top: 8px; }
+.bs-status {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700;
+  padding: 5px 12px; border-radius: 16px; margin-top: 12px;
+}
+.bs-status.alert { background: rgba(255,77,79,.18); color: #ff9c9c; }
+.bs-status.ok { background: rgba(82,196,26,.18); color: #95de64; }
+.bs-status .sdot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: blink 1.2s infinite; }
+.bs-notify {
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 10px;
+}
+.bs-notify .notif {
+  background: rgba(255,255,255,.05); border-radius: 8px; padding: 11px 14px;
+  font-size: 13px; display: flex; align-items: flex-start; gap: 10px;
+  opacity: 0; transform: translateY(10px); transition: all .5s;
+}
+.bs-notify .notif.show { opacity: 1; transform: translateY(0); }
+.bs-notify .notif .nicon { width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.bs-notify .notif.green .nicon { background: rgba(82,196,26,.2); color: #95de64; }
+.bs-notify .notif.blue .nicon { background: rgba(22,119,255,.2); color: #69b1ff; }
+.bs-notify .notif .ntext { color: #d6e4ff; line-height: 1.5; }
+.bs-notify .notif .ntext b { color: #fff; }
+.bs-refresh { position: absolute; top: 14px; right: 14px; font-size: 11px; color: #7da4d6; display: flex; align-items: center; gap: 5px; }
+.bs-refresh .spin { display: inline-block; animation: spin 1.5s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== Flow summary ===== */
+.flow-summary { margin-top: 32px; }
+.flow-summary h3 { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+.flow-summary .fs-sub { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+.value-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.value-card {
+  background: #fff; border-radius: 12px; padding: 22px 20px;
+  border: 1px solid var(--rule); position: relative; overflow: hidden;
+  transition: transform .2s, box-shadow .2s;
+}
+.value-card:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(22,119,255,.1); }
+.value-card .vc-icon { font-size: 26px; margin-bottom: 8px; }
+.value-card .vc-label { font-size: 13px; color: var(--muted); margin-bottom: 12px; font-weight: 600; }
+.value-card .vc-change { display: flex; align-items: baseline; gap: 10px; }
+.value-card .vc-old { font-size: 15px; color: var(--bad); text-decoration: line-through; opacity: .7; }
+.value-card .vc-arrow { color: var(--muted); font-size: 14px; }
+.value-card .vc-new { font-size: 26px; font-weight: 900; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.value-card .vc-tag { position: absolute; top: 16px; right: 16px; font-size: 11px; font-weight: 700; color: var(--good); background: #f6ffed; padding: 3px 9px; border-radius: 10px; }
+
+/* ===== Mobile ===== */
+@media (max-width: 768px) {
+  body { padding: 0; }
+  .page { margin: 0; border-radius: 0; padding: 24px 18px; }
+  .navbar { padding: 12px 16px; }
+  .navbar .nav-title { font-size: 16px; }
+  .navbar .nav-right { display: none; }
+  .header h1 { font-size: 22px; }
+  .stage { padding: 18px 14px; min-height: 360px; }
+  .step-head { flex-wrap: wrap; }
+  .step-head .scene-tip { margin-left: 0; width: 100%; }
+  .steps-nav { flex-wrap: wrap; gap: 10px; }
+  .steps-line { display: none; }
+  .step-dot { flex: 0 0 30%; }
+  .step-dot .label { font-size: 11px; }
+  .bar-chart { gap: 8px; height: 180px; }
+  .bar-item .bar-val { font-size: 11px; }
+  .photo-grid { grid-template-columns: repeat(2, 1fr); }
+  .bigscreens { grid-template-columns: 1fr; }
+  .value-grid { grid-template-columns: 1fr; }
+  .bs-score-box .bs-score { font-size: 44px; }
+  .control-bar { flex-direction: column; align-items: stretch; }
+  .btn-play { justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="logo">虹</div>
+  <div>
+    <div class="nav-title">雨虹渠道智慧运营助手</div>
+    <div class="nav-sub">智能预警与主动决策闭环</div>
+  </div>
+  <div class="nav-right">3515 渠道运营中枢 · 演示版</div>
+</nav>
+
+<!-- Page -->
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <span class="badge">CLOSED-LOOP DEMO · 闭环演示</span>
+    <h1>智能预警与主动决策<span class="grad">闭环工作流</span></h1>
+    <p class="subtitle">从异常检测到数据回写的全自动闭环：AI 巡检引擎发现异常 → 飞书消息秒级预警 → 督导在线整改 → 结果回写多维表格 → 3515 大屏实时刷新</p>
+  </div>
+
+  <!-- Control bar -->
+  <div class="control-bar">
+    <button class="btn-play" id="btnPlay" onclick="playFullFlow()">
+      <span class="play-icon">▶</span> 播放完整流程
+    </button>
+    <span class="control-hint">点击按钮自动演示 <b>Step 1 → Step 6</b>（每步间隔 2 秒），也可手动点击下方步骤查看</span>
+  </div>
+
+  <!-- Steps nav -->
+  <div class="steps-nav" id="stepsNav">
+    <div class="steps-line"><div class="fill" id="lineFill"></div></div>
+    <div class="step-dot" data-step="1" onclick="goToStep(1)">
+      <div class="circle"><span class="num">1</span></div>
+      <div class="label">异常检测</div>
+    </div>
+    <div class="step-dot" data-step="2" onclick="goToStep(2)">
+      <div class="circle"><span class="num">2</span></div>
+      <div class="label">预警推送</div>
+    </div>
+    <div class="step-dot" data-step="3" onclick="goToStep(3)">
+      <div class="circle"><span class="num">3</span></div>
+      <div class="label">督导响应</div>
+    </div>
+    <div class="step-dot" data-step="4" onclick="goToStep(4)">
+      <div class="circle"><span class="num">4</span></div>
+      <div class="label">整改执行</div>
+    </div>
+    <div class="step-dot" data-step="5" onclick="goToStep(5)">
+      <div class="circle"><span class="num">5</span></div>
+      <div class="label">数据回写</div>
+    </div>
+    <div class="step-dot" data-step="6" onclick="goToStep(6)">
+      <div class="circle"><span class="num">6</span></div>
+      <div class="label">大屏更新</div>
+    </div>
+  </div>
+
+  <!-- Stage -->
+  <div class="stage" id="stage">
+    <div class="stage-empty" id="stageEmpty">
+      <div class="big-icon">∿</div>
+      <p>点击「播放完整流程」或选择任意步骤开始演示智能预警闭环</p>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="step-panel" id="panel1">
+      <div class="step-head">
+        <span class="step-tag">STEP 1</span>
+        <h2>异常检测 · <span class="grad">AI巡检分析引擎</span></h2>
+        <span class="scene-tip">北京朝阳区某门店 · 巡检数据自动比对</span>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">近6周巡检分数趋势</div>
+        <div class="chart-sub">预警阈值 80 分 · 本周分数骤降至 68 分，触发预警</div>
+        <div class="bar-chart" id="barChart">
+          <div class="threshold"><span class="th-label">阈值 80</span></div>
+          <div class="bar-item"><div class="bar-val">90</div><div class="bar" data-h="180"></div><div class="bar-label">第1周</div></div>
+          <div class="bar-item"><div class="bar-val">92</div><div class="bar" data-h="184"></div><div class="bar-label">第2周</div></div>
+          <div class="bar-item"><div class="bar-val">88</div><div class="bar" data-h="176"></div><div class="bar-label">第3周</div></div>
+          <div class="bar-item"><div class="bar-val">91</div><div class="bar" data-h="182"></div><div class="bar-label">第4周</div></div>
+          <div class="bar-item"><div class="bar-val">92</div><div class="bar" data-h="184"></div><div class="bar-label">第5周</div></div>
+          <div class="bar-item alert"><div class="bar-val">68</div><div class="bar" data-h="136"></div><div class="bar-label">本周</div></div>
+        </div>
+        <div class="alert-banner">
+          <span class="dot"></span>
+          <span>检测到异常：巡检分数 68 分，低于阈值 80 分，较上周下降 24 分，已自动生成预警工单</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step-panel" id="panel2">
+      <div class="step-head">
+        <span class="step-tag">STEP 2</span>
+        <h2>智能预警推送 · <span class="grad">飞书消息卡片</span></h2>
+        <span class="scene-tip">预警引擎自动推送至督导飞书</span>
+      </div>
+      <div class="msg-meta">
+        <div class="bot-avatar">智</div>
+        <span class="bot-name">雨虹智能预警助手</span>
+        <span class="bot-time">今天 09:12</span>
+      </div>
+      <div class="feishu-msg" id="feishuCard">
+        <div class="fc-header">⚠️ 巡检预警 - 北京朝阳店</div>
+        <div class="fc-body">
+          <div class="fc-row"><span class="k">门店</span><span class="v">北京朝阳区旗舰店</span></div>
+          <div class="fc-row"><span class="k">巡检分数</span><span class="v"><span class="red">68 分</span>（较上周下降 24 分）</span></div>
+          <div class="fc-row"><span class="k">主要扣分项</span><span class="v">陈列（8/20）、卫生（6/15）</span></div>
+          <div class="fc-row"><span class="k">预警等级</span><span class="v"><span class="red">高</span> · 建议立即整改</span></div>
+        </div>
+        <div class="fc-actions">
+          <button class="fc-btn" onclick="flashAction(this)">查看详情</button>
+          <button class="fc-btn primary" onclick="flashAction(this)">发起整改</button>
+          <button class="fc-btn purple" onclick="flashAction(this)">指派督导</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step-panel" id="panel3">
+      <div class="step-head">
+        <span class="step-tag">STEP 3</span>
+        <h2>督导响应 · <span class="grad">发起整改审批</span></h2>
+        <span class="scene-tip">督导点击「发起整改」→ 飞书审批表单自动展开</span>
+      </div>
+      <div class="form-wrap" id="approvalForm">
+        <div class="form-head">📋 巡检整改工单 - 北京朝阳店</div>
+        <div class="form-body">
+          <div class="form-group">
+            <label>申请人</label>
+            <div class="field">张督导（华北区督导经理）</div>
+          </div>
+          <div class="form-group">
+            <label>整改门店</label>
+            <div class="field">北京朝阳区旗舰店 · 店长 王磊</div>
+          </div>
+          <div class="form-group">
+            <label>整改内容</label>
+            <div class="tags">
+              <span>陈列整改</span><span>卫生清洁</span><span>店长培训</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>整改限期</label>
+            <div class="field">48 小时内完成（截止 07-13 09:00）</div>
+          </div>
+          <div class="form-group">
+            <label>优先级</label>
+            <div class="field high">高 · 需督导远程验收</div>
+          </div>
+          <div class="form-actions">
+            <button class="btn approve" onclick="flashAction(this)">提交审批</button>
+            <button class="btn reject" onclick="flashAction(this)">暂存草稿</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step-panel" id="panel4">
+      <div class="step-head">
+        <span class="step-tag">STEP 4</span>
+        <h2>整改执行 · <span class="grad">进度跟踪与远程验收</span></h2>
+        <span class="scene-tip">店长上传整改照片 · 督导远程在线验收</span>
+      </div>
+      <div class="progress-section">
+        <div class="progress-top">
+          <span class="pt-label">整改进度</span>
+          <span class="pt-val" id="progressVal">0%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+      <div class="photo-grid" id="photoGrid">
+        <div class="photo-box" data-delay="0"><span class="pic-icon">🖼</span>陈列整改</div>
+        <div class="photo-box" data-delay="200"><span class="pic-icon">🧹</span>卫生清洁</div>
+        <div class="photo-box" data-delay="400"><span class="pic-icon">📚</span>店长培训</div>
+        <div class="photo-box" data-delay="600"><span class="pic-icon">✅</span>整改复核</div>
+      </div>
+      <div class="acceptance-row" id="acceptanceRow">
+        <span class="check">✓</span>
+        <span>督导远程验收通过 · 整改照片清晰完整 · 已提交数据回写</span>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step-panel" id="panel5">
+      <div class="step-head">
+        <span class="step-tag">STEP 5</span>
+        <h2>数据回写 · <span class="grad">多维表格更新</span></h2>
+        <span class="scene-tip">整改结果自动写入飞书多维表格 · 巡检分数刷新</span>
+      </div>
+      <div class="table-wrap">
+        <div class="tw-head">📊 巡检整改记录表 · 雨虹渠道运营多维表格</div>
+        <table class="data-table">
+          <thead>
+            <tr><th>门店</th><th>整改项</th><th>限期</th><th>状态</th><th>巡检分数</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>上海浦东店</td><td>陈列优化</td><td>已完成</td><td><span class="score-chip green">已闭环</span></td><td><span class="score-chip green">94</span></td></tr>
+            <tr><td>广州天河店</td><td>卫生整改</td><td>已完成</td><td><span class="score-chip green">已闭环</span></td><td><span class="score-chip green">90</span></td></tr>
+            <tr class="new-row" id="newRow">
+              <td>北京朝阳店</td>
+              <td>陈列/卫生/培训</td>
+              <td>48h</td>
+              <td><span class="score-chip green">已闭环</span></td>
+              <td>
+                <span class="score-update">
+                  <span class="old">68</span><span class="arrow">→</span><span class="new" id="newScore">89</span>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Step 6 -->
+    <div class="step-panel" id="panel6">
+      <div class="step-head">
+        <span class="step-tag">STEP 6</span>
+        <h2>大屏更新 · <span class="grad">3515数据实时刷新</span></h2>
+        <span class="scene-tip">3515 渠道运营大屏数据同步 · 预警解除通知推送</span>
+      </div>
+      <div class="bigscreens">
+        <div class="bs-card">
+          <div class="bs-refresh"><span class="spin">⟳</span> 实时刷新</div>
+          <div class="bs-title">3515 渠道运营大屏</div>
+          <div class="bs-store">北京朝阳区旗舰店</div>
+          <div class="bs-score-box">
+            <div class="bs-score red" id="bsScore">68</div>
+            <div class="bs-score-label">巡检综合分数</div>
+          </div>
+          <div class="bs-status alert" id="bsStatus"><span class="sdot"></span>预警中</div>
+        </div>
+        <div class="bs-notify">
+          <div class="notif green" data-d="0">
+            <div class="nicon">✓</div>
+            <div class="ntext"><b>预警已解除</b><br>北京朝阳店整改完成，分数回升至 89 分</div>
+          </div>
+          <div class="notif blue" data-d="600">
+            <div class="nicon">📊</div>
+            <div class="ntext"><b>大屏数据已同步</b><br>3515 运营大屏实时刷新完成</div>
+          </div>
+          <div class="notif green" data-d="1200">
+            <div class="nicon">🔄</div>
+            <div class="ntext"><b>闭环归档</b><br>本次预警闭环用时 10 分钟，已自动归档</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /stage -->
+
+  <!-- Flow summary -->
+  <div class="flow-summary">
+    <h3>闭环价值总结</h3>
+    <p class="fs-sub">智能预警闭环让运营问题从「被动发现」转向「主动决策」，核心指标全面跃升</p>
+    <div class="value-grid">
+      <div class="value-card">
+        <div class="vc-icon">⚡</div>
+        <div class="vc-label">预警响应时间</div>
+        <div class="vc-change">
+          <span class="vc-old">24小时</span><span class="vc-arrow">→</span><span class="vc-new">10分钟</span>
+        </div>
+        <span class="vc-tag">提升 144×</span>
+      </div>
+      <div class="value-card">
+        <div class="vc-icon">✅</div>
+        <div class="vc-label">整改完成率</div>
+        <div class="vc-change">
+          <span class="vc-old">65%</span><span class="vc-arrow">→</span><span class="vc-new">92%</span>
+        </div>
+        <span class="vc-tag">+27%</span>
+      </div>
+      <div class="value-card">
+        <div class="vc-icon">🔄</div>
+        <div class="vc-label">问题复发率</div>
+        <div class="vc-change">
+          <span class="vc-old">35%</span><span class="vc-arrow">→</span><span class="vc-new">8%</span>
+        </div>
+        <span class="vc-tag">下降 27%</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+(function(){
+  "use strict";
+  var currentStep = 0;
+  var playing = false;
+  var playTimer = null;
+  var stepTimers = [];
+  var stepIntervals = [];
+  var stepRafs = [];
+
+  var dots = document.querySelectorAll('.step-dot');
+  var stageEmpty = document.getElementById('stageEmpty');
+
+  function clearStepAnimations(){
+    stepTimers.forEach(function(t){ clearTimeout(t); });
+    stepIntervals.forEach(function(t){ clearInterval(t); });
+    stepRafs.forEach(function(t){ cancelAnimationFrame(t); });
+    stepTimers = [];
+    stepIntervals = [];
+    stepRafs = [];
+  }
+
+  function stopPlay(){
+    if(playTimer){ clearTimeout(playTimer); playTimer = null; }
+    if(playing){
+      playing = false;
+      var btn = document.getElementById('btnPlay');
+      btn.classList.remove('playing');
+      btn.innerHTML = '<span class="play-icon">\u25B6</span> 播放完整流程';
+    }
+  }
+
+  function updateNav(step){
+    dots.forEach(function(d){
+      var s = parseInt(d.getAttribute('data-step'),10);
+      d.classList.remove('active','done');
+      if(s < step){ d.classList.add('done'); }
+      else if(s === step){ d.classList.add('active'); }
+    });
+    var fill = document.getElementById('lineFill');
+    var pct = step <= 1 ? 0 : ((step-1)/5)*100;
+    fill.style.width = pct + '%';
+  }
+
+  function showPanel(step){
+    for(var i=1;i<=6;i++){
+      var p = document.getElementById('panel'+i);
+      if(p){ p.classList.remove('show'); }
+    }
+    var panel = document.getElementById('panel'+step);
+    if(panel){ panel.classList.add('show'); }
+    if(stageEmpty){ stageEmpty.style.display = step ? 'none' : 'block'; }
+  }
+
+  function animateStep(step){
+    clearStepAnimations();
+    if(step === 1){ animateBars(); }
+    else if(step === 2){ animateFeishuCard(); }
+    else if(step === 3){ animateForm(); }
+    else if(step === 4){ animateProgress(); }
+    else if(step === 5){ animateTable(); }
+    else if(step === 6){ animateBigScreen(); }
+  }
+
+  /* Step 1 - bar chart grows + red pulse on alert bar */
+  function animateBars(){
+    var bars = document.querySelectorAll('#barChart .bar');
+    bars.forEach(function(b){ b.style.height = '0px'; });
+    bars.forEach(function(b){
+      var h = b.getAttribute('data-h');
+      stepTimers.push(setTimeout(function(){ b.style.height = h + 'px'; }, 150));
+    });
+  }
+
+  /* Step 2 - Feishu card slides in from right */
+  function animateFeishuCard(){
+    var card = document.getElementById('feishuCard');
+    card.classList.remove('show');
+    void card.offsetWidth; // force reflow to restart animation
+    stepTimers.push(setTimeout(function(){ card.classList.add('show'); }, 100));
+  }
+
+  /* Step 3 - approval form expands */
+  function animateForm(){
+    var form = document.getElementById('approvalForm');
+    form.classList.remove('show');
+    void form.offsetWidth;
+    stepTimers.push(setTimeout(function(){ form.classList.add('show'); }, 150));
+  }
+
+  /* Step 4 - progress bar + photo uploads + acceptance */
+  function animateProgress(){
+    var fill = document.getElementById('progressFill');
+    var val = document.getElementById('progressVal');
+    var boxes = document.querySelectorAll('#photoGrid .photo-box');
+    var acc = document.getElementById('acceptanceRow');
+    fill.style.width = '0%';
+    val.textContent = '0%';
+    boxes.forEach(function(b){ b.classList.remove('show','uploaded'); });
+    acc.classList.remove('show');
+
+    var pct = 0;
+    stepTimers.push(setTimeout(function(){
+      fill.style.width = '100%';
+      var iv = setInterval(function(){
+        pct += 5;
+        if(pct >= 100){ pct = 100; clearInterval(iv); }
+        val.textContent = pct + '%';
+      }, 75);
+      stepIntervals.push(iv);
+    }, 200));
+
+    boxes.forEach(function(b){
+      var d = parseInt(b.getAttribute('data-delay'),10) || 0;
+      stepTimers.push(setTimeout(function(){
+        b.classList.add('show','uploaded');
+      }, 800 + d));
+    });
+    stepTimers.push(setTimeout(function(){ acc.classList.add('show'); }, 1700));
+  }
+
+  /* Step 5 - table row highlight + score count up 68 -> 89 */
+  function animateTable(){
+    var row = document.getElementById('newRow');
+    var scoreEl = document.getElementById('newScore');
+    if(row){ row.style.animation = 'none'; void row.offsetWidth; row.style.animation = ''; }
+    countUp(scoreEl, 68, 89, 1200);
+  }
+
+  /* Step 6 - big screen score jumps + color change red->green + notifications */
+  function animateBigScreen(){
+    var scoreEl = document.getElementById('bsScore');
+    var statusEl = document.getElementById('bsStatus');
+    var notifs = document.querySelectorAll('.bs-notify .notif');
+    scoreEl.classList.remove('green'); scoreEl.classList.add('red');
+    scoreEl.textContent = '68';
+    statusEl.className = 'bs-status alert';
+    statusEl.innerHTML = '<span class="sdot"></span>\u9884\u8B66\u4E2D';
+    notifs.forEach(function(n){ n.classList.remove('show'); });
+
+    countUp(scoreEl, 68, 89, 1500, function(){
+      scoreEl.classList.remove('red');
+      scoreEl.classList.add('green');
+      statusEl.className = 'bs-status ok';
+      statusEl.innerHTML = '<span class="sdot"></span>\u9884\u8B66\u5DF2\u89E3\u9664';
+    });
+
+    notifs.forEach(function(n){
+      var d = parseInt(n.getAttribute('data-d'),10) || 0;
+      stepTimers.push(setTimeout(function(){ n.classList.add('show'); }, 1800 + d));
+    });
+  }
+
+  function countUp(el, from, to, duration, cb){
+    if(!el) return;
+    var start = null;
+    var running = true;
+    function frame(ts){
+      if(!running) return;
+      if(!start) start = ts;
+      var p = Math.min((ts - start)/duration, 1);
+      var v = Math.round(from + (to - from) * p);
+      el.textContent = v;
+      if(p < 1){ stepRafs.push(requestAnimationFrame(frame)); }
+      else if(typeof cb === 'function'){ cb(); }
+    }
+    stepRafs.push(requestAnimationFrame(frame));
+  }
+
+  // Manual step navigation (interrupts auto-play)
+  window.goToStep = function(step){
+    stopPlay();
+    clearStepAnimations();
+    currentStep = step;
+    showPanel(step);
+    updateNav(step);
+    animateStep(step);
+  };
+
+  // Auto-play full flow: Step 1 -> Step 6, 2s each
+  window.playFullFlow = function(){
+    if(playing) return;
+    clearStepAnimations();
+    playing = true;
+    var btn = document.getElementById('btnPlay');
+    btn.classList.add('playing');
+    btn.innerHTML = '<span class="play-icon">\u25CF</span> \u6F14\u793A\u4E2D...';
+
+    currentStep = 0;
+    dots.forEach(function(d){ d.classList.remove('active','done'); });
+    document.getElementById('lineFill').style.width = '0%';
+
+    var i = 1;
+    function next(){
+      if(!playing){ return; }
+      if(i > 6){
+        finishPlay();
+        return;
+      }
+      currentStep = i;
+      showPanel(i);
+      updateNav(i);
+      animateStep(i);
+      i++;
+      playTimer = setTimeout(next, 2000);
+    }
+    next();
+  };
+
+  function finishPlay(){
+    playing = false;
+    playTimer = null;
+    var btn = document.getElementById('btnPlay');
+    btn.classList.remove('playing');
+    btn.innerHTML = '<span class="play-icon">\u25B6</span> \u91CD\u65B0\u64AD\u653E';
+  }
+
+  // Button feedback for Feishu card / form actions
+  window.flashAction = function(btn){
+    var orig = btn.innerHTML;
+    btn.innerHTML = '\u2713 \u5DF2\u5904\u7406';
+    btn.style.opacity = '.7';
+    setTimeout(function(){ btn.innerHTML = orig; btn.style.opacity = '1'; }, 1200);
+  };
+
+  // reset visuals on load
+  showPanel(0);
+})();
+</script>
+</body>
+</html>

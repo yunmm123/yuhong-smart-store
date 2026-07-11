@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多角色协同工作流演示 — 雨虹渠道智慧运营助手</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap');
+
+:root {
+  --accent: #1677ff;
+  --accent2: #722ed1;
+  --yuhong-red: #E8392B;
+  --grad: linear-gradient(135deg, #1677ff, #722ed1);
+  --ink: #1a1a2e;
+  --muted: #6b7280;
+  --bg: #ffffff;
+  --bg2: #f7f8fc;
+  --rule: #e5e7eb;
+  --good: #52c41a;
+  --warn: #faad14;
+  --bad: #ff4d4f;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Noto Sans SC", -apple-system, sans-serif;
+  background: var(--bg2);
+  color: var(--ink);
+  line-height: 1.7;
+  padding-bottom: 40px;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+  background: var(--grad);
+  box-shadow: 0 2px 12px rgba(22, 119, 255, 0.3);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.navbar .logo {
+  width: 42px; height: 42px; border-radius: 10px;
+  background: var(--yuhong-red);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 900; font-size: 24px;
+  box-shadow: 0 2px 10px rgba(232, 57, 43, 0.5);
+  flex-shrink: 0;
+}
+.navbar .nav-title { color: #fff; font-size: 19px; font-weight: 700; letter-spacing: 1px; }
+.navbar .nav-sub { color: rgba(255,255,255,.8); font-size: 12px; margin-top: 2px; }
+.navbar .nav-right { margin-left: auto; color: rgba(255,255,255,.85); font-size: 13px; }
+
+/* ===== Page ===== */
+.page {
+  max-width: 1200px;
+  margin: 28px auto;
+  background: var(--bg);
+  padding: 40px 44px;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.06);
+}
+
+/* ===== Header ===== */
+.header { padding-bottom: 22px; border-bottom: 3px solid var(--ink); margin-bottom: 24px; }
+.header .badge {
+  display: inline-block; font-size: 11px; font-weight: 600; color: #fff;
+  background: var(--grad); padding: 4px 12px; border-radius: 4px; margin-bottom: 12px;
+  letter-spacing: .05em;
+}
+.header h1 { font-size: 26px; font-weight: 900; line-height: 1.3; }
+.header h1 .grad { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.header .subtitle { font-size: 14px; color: var(--muted); margin-top: 8px; }
+
+/* ===== Control bar ===== */
+.control-bar {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  background: linear-gradient(135deg, #f0f5ff, #f9f0ff);
+  border-radius: 12px; padding: 16px 22px; margin-bottom: 24px;
+  border: 1px solid #d6e4ff;
+}
+.btn-play {
+  background: var(--grad); color: #fff; border: none;
+  padding: 12px 28px; border-radius: 8px; font-size: 15px; font-weight: 700;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+  transition: transform .2s, box-shadow .2s; box-shadow: 0 4px 12px rgba(22,119,255,.3);
+  font-family: inherit;
+}
+.btn-play:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(22,119,255,.4); }
+.btn-play:active { transform: translateY(0); }
+.btn-play.playing { background: linear-gradient(135deg, #8a8a8a, #6b7280); box-shadow: none; cursor: not-allowed; transform: none; }
+.btn-play .play-icon { font-size: 14px; }
+.control-hint { font-size: 13px; color: var(--muted); }
+.control-hint b { color: var(--accent); }
+
+/* ===== Timeline indicator ===== */
+.timeline-bar {
+  display: flex; gap: 4px; margin-bottom: 24px; flex-wrap: wrap;
+}
+.tl-step {
+  flex: 1; min-width: 120px;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; border-radius: 8px;
+  background: var(--bg2); border: 1px solid var(--rule);
+  font-size: 12px; color: var(--muted); font-weight: 600;
+  transition: all .35s;
+}
+.tl-step .tl-time {
+  font-size: 10px; font-weight: 800; color: #fff; background: var(--muted);
+  padding: 2px 6px; border-radius: 4px; flex-shrink: 0;
+  transition: background .35s;
+}
+.tl-step.active { background: #eef4ff; border-color: var(--accent); color: var(--accent); }
+.tl-step.active .tl-time { background: var(--accent); }
+.tl-step.done { background: #f6ffed; border-color: var(--good); color: var(--good); }
+.tl-step.done .tl-time { background: var(--good); }
+.tl-step.done::after { content: "\2713"; font-weight: 800; margin-left: auto; }
+
+/* ===== Collab grid ===== */
+.collab-grid-wrap {
+  position: relative;
+  margin-bottom: 28px;
+}
+.collab-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 28px;
+}
+.panel {
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  box-shadow: 0 4px 18px rgba(0,0,0,.08);
+  border: 1px solid var(--rule);
+  min-height: 460px;
+  max-height: 520px;
+  transition: box-shadow .4s, transform .4s;
+}
+.panel.pulse-green { box-shadow: 0 0 0 3px rgba(82,196,26,.4), 0 4px 24px rgba(82,196,26,.3); }
+.panel-body {
+  flex: 1; overflow-y: auto; padding: 16px;
+  scrollbar-width: thin;
+}
+.panel-body::-webkit-scrollbar { width: 5px; }
+.panel-body::-webkit-scrollbar-thumb { background: #d0d0d0; border-radius: 3px; }
+
+.panel-head {
+  padding: 12px 16px; color: #fff; font-size: 14px; font-weight: 700;
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+}
+.panel-head .ph-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.7); }
+.panel-head .ph-sub { font-size: 11px; font-weight: 400; opacity: .85; margin-left: auto; }
+
+/* ---- Panel: HQ (dark big-screen) ---- */
+.panel-hq .panel-head { background: linear-gradient(135deg, #0d47d1, #1677ff); }
+.panel-hq .panel-body {
+  background: linear-gradient(160deg, #0a1628, #11244a);
+  color: #fff;
+}
+.panel-hq .panel-body::-webkit-scrollbar-thumb { background: #2a4a7a; }
+.hq-heat-title { font-size: 11px; color: #7da4d6; margin-bottom: 8px; letter-spacing: .05em; text-transform: uppercase; }
+.heatmap {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 14px;
+}
+.heat-region {
+  border-radius: 8px; padding: 10px 12px; font-size: 12px; font-weight: 600;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: all .4s;
+}
+.heat-region .hr-score { font-size: 16px; font-weight: 800; }
+.heat-east { background: linear-gradient(135deg, rgba(255,77,79,.85), rgba(232,57,43,.7)); }
+.heat-south { background: linear-gradient(135deg, rgba(250,173,20,.85), rgba(212,136,6,.7)); }
+.heat-north { background: linear-gradient(135deg, rgba(250,204,21,.85), rgba(202,138,4,.7)); color: #1a1a2e; }
+.heat-west { background: linear-gradient(135deg, rgba(82,196,26,.85), rgba(38,174,26,.7)); }
+.hq-kpis { display: flex; gap: 8px; margin-bottom: 14px; }
+.hq-kpi {
+  flex: 1; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+  border-radius: 8px; padding: 10px; text-align: center;
+}
+.hq-kpi .k-val { font-size: 20px; font-weight: 800; color: #fff; }
+.hq-kpi .k-val.warn { color: var(--warn); }
+.hq-kpi .k-val.bad { color: var(--bad); }
+.hq-kpi .k-label { font-size: 10px; color: #7da4d6; margin-top: 2px; }
+.hq-alert-title { font-size: 11px; color: #7da4d6; margin-bottom: 8px; letter-spacing: .05em; text-transform: uppercase; }
+.hq-alert-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.hq-alert-item {
+  background: rgba(255,77,79,.12); border: 1px solid rgba(255,77,79,.3);
+  border-radius: 8px; padding: 8px 12px; font-size: 12px;
+  display: flex; align-items: center; gap: 8px;
+  transition: all .3s;
+}
+.hq-alert-item .ai-store { font-weight: 600; flex: 1; }
+.hq-alert-item .ai-score { font-weight: 800; color: var(--bad); font-size: 14px; }
+.hq-alert-item .ai-score.updated { color: var(--good); }
+.hq-alert-item.flash { background: rgba(255,77,79,.4); border-color: var(--bad); animation: alertFlash .8s ease-in-out 3; }
+@keyframes alertFlash { 0%,100% { background: rgba(255,77,79,.12); } 50% { background: rgba(255,77,79,.5); } }
+.hq-alert-item.resolved { background: rgba(82,196,26,.15); border-color: rgba(82,196,26,.4); }
+.hq-push-btn {
+  width: 100%; padding: 11px; border-radius: 8px; border: none;
+  background: linear-gradient(135deg, #ff7875, #ff4d4f); color: #fff;
+  font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit;
+  transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.hq-push-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255,77,79,.4); }
+.hq-push-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+.hq-push-btn.sent { background: linear-gradient(135deg, #52c41a, #389e0d); }
+
+/* ---- Panel: Supervisor (Feishu msg) ---- */
+.panel-supervisor .panel-head { background: linear-gradient(135deg, #722ed1, #9254de); }
+.panel-supervisor .panel-body { background: #f5f6f8; }
+.sv-empty { text-align: center; padding: 40px 16px; color: var(--muted); font-size: 13px; }
+.sv-empty .se-icon { font-size: 40px; margin-bottom: 10px; opacity: .3; }
+.sv-msg-meta { font-size: 12px; color: var(--muted); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.sv-msg-meta .bot-avatar { width: 28px; height: 28px; border-radius: 6px; background: var(--grad); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; font-weight: 700; }
+.sv-msg-meta .bot-name { font-weight: 700; color: var(--ink); }
+.feishu-card {
+  background: #fff; border-radius: 10px; overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,.08); border: 1px solid #e8e8e8;
+  opacity: 0; transform: translateX(50px);
+}
+.feishu-card.show { animation: slideInRight .6s cubic-bezier(.22,1,.36,1) both; }
+@keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+.fc-header {
+  background: linear-gradient(135deg, #ff7875, #ff4d4f);
+  color: #fff; padding: 12px 16px; font-size: 14px; font-weight: 700;
+  display: flex; align-items: center; gap: 8px;
+}
+.fc-body { padding: 14px 16px; }
+.fc-row { display: flex; padding: 6px 0; font-size: 13px; border-bottom: 1px solid #f3f3f3; }
+.fc-row:last-child { border-bottom: none; }
+.fc-row .k { color: var(--muted); width: 80px; flex-shrink: 0; }
+.fc-row .v { color: var(--ink); font-weight: 600; }
+.fc-row .v .red { color: var(--bad); }
+.fc-actions { display: flex; gap: 10px; padding: 12px 16px; border-top: 1px solid #f0f0f0; background: #fafbfc; }
+.fc-btn {
+  flex: 1; padding: 9px 0; border-radius: 6px; font-size: 13px; font-weight: 600;
+  border: 1px solid var(--accent); background: #fff; color: var(--accent);
+  cursor: pointer; transition: all .2s; text-align: center; font-family: inherit;
+}
+.fc-btn:hover { background: var(--accent); color: #fff; }
+.fc-btn.primary { background: var(--accent); color: #fff; }
+.fc-btn.primary:hover { background: #0d5fe0; }
+.fc-btn.purple { border-color: var(--accent2); color: var(--accent2); }
+.fc-btn.purple:hover { background: var(--accent2); color: #fff; }
+.sv-approval {
+  background: #fff; border-radius: 10px; overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,.08); border: 1px solid #e8e8e8;
+  margin-top: 14px;
+  max-height: 0; opacity: 0; overflow: hidden;
+  transition: max-height .6s ease, opacity .5s ease, margin-top .4s;
+}
+.sv-approval.show { max-height: 500px; opacity: 1; }
+.sv-approval .ap-head { background: var(--grad); color: #fff; padding: 12px 16px; font-size: 14px; font-weight: 700; }
+.sv-approval .ap-body { padding: 14px 16px; }
+.ap-group { margin-bottom: 12px; }
+.ap-group label { display: block; font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.ap-group .ap-field { background: var(--bg2); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 12px; font-size: 13px; font-weight: 500; }
+.ap-group .ap-field.high { color: var(--bad); font-weight: 700; }
+.ap-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.ap-tags span { background: #eef4ff; color: var(--accent); font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 10px; }
+.ap-actions { display: flex; gap: 10px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--rule); }
+.ap-actions .btn { flex: 1; padding: 9px 0; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; border: none; font-family: inherit; transition: all .2s; }
+.ap-actions .btn.approve { background: var(--good); color: #fff; }
+.ap-actions .btn.approve:hover { background: #389e0d; }
+.ap-actions .btn.reject { background: #fff; color: var(--muted); border: 1px solid var(--rule); }
+.ap-approved-stamp { text-align: center; padding: 10px; background: #f6ffed; border: 1px solid #b7eb8f; border-radius: 8px; font-size: 13px; color: var(--good); font-weight: 700; margin-top: 12px; display: none; }
+.ap-approved-stamp.show { display: block; animation: fadeUp .4s ease; }
+
+/* ---- Panel: Store Manager (Miaoda style) ---- */
+.panel-manager .panel-head { background: linear-gradient(135deg, #389e0d, #52c41a); }
+.panel-manager .panel-body { background: #f0fbf3; }
+.mg-notify {
+  background: #fff; border-radius: 10px; padding: 14px 16px;
+  border: 1px solid #d9f7be; margin-bottom: 14px;
+  display: flex; align-items: flex-start; gap: 10px; font-size: 13px;
+  opacity: 0; transform: translateY(10px); transition: all .5s;
+}
+.mg-notify.show { opacity: 1; transform: translateY(0); }
+.mg-notify.flash { animation: mgFlash 1s ease-in-out 3; }
+@keyframes mgFlash { 0%,100% { box-shadow: 0 0 0 0 rgba(82,196,26,0); border-color: #d9f7be; } 50% { box-shadow: 0 0 0 4px rgba(82,196,26,.35); border-color: var(--good); } }
+.mg-notify .mn-icon { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, #ff7875, #ff4d4f); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.mg-notify .mn-text { flex: 1; }
+.mg-notify .mn-text b { color: var(--bad); }
+.mg-section-title { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.mg-section-title::before { content: ""; width: 3px; height: 14px; background: var(--good); border-radius: 2px; }
+.mg-checklist { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+.mg-check-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; font-size: 13px;
+  transition: all .3s;
+}
+.mg-check-item .ci-box {
+  width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--rule);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  transition: all .3s; font-size: 12px; color: #fff;
+}
+.mg-check-item.done .ci-box { background: var(--good); border-color: var(--good); }
+.mg-check-item.done .ci-box::after { content: "\2713"; font-weight: 800; }
+.mg-check-item.done .ci-label { color: var(--muted); text-decoration: line-through; }
+.mg-check-item .ci-label { flex: 1; font-weight: 500; }
+.mg-check-item .ci-tag { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 8px; }
+.mg-check-item .ci-tag.pending { background: #fff7e6; color: var(--warn); }
+.mg-check-item .ci-tag.done { background: #f6ffed; color: var(--good); }
+.mg-progress { background: #fff; border-radius: 10px; padding: 14px 16px; border: 1px solid #e8e8e8; margin-bottom: 14px; }
+.mg-progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.mg-progress-top .pt-label { font-size: 13px; font-weight: 700; }
+.mg-progress-top .pt-val { font-size: 20px; font-weight: 800; color: var(--good); }
+.mg-progress-track { height: 10px; background: #f0f0f0; border-radius: 5px; overflow: hidden; }
+.mg-progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, #52c41a, #389e0d); border-radius: 5px; transition: width 1.5s cubic-bezier(.22,1,.36,1); }
+.mg-photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+.mg-photo-box {
+  aspect-ratio: 1; border-radius: 8px; border: 2px dashed var(--rule);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; color: var(--muted); font-size: 10px; background: #fafafa;
+  opacity: 0; transform: scale(.8); transition: all .4s;
+}
+.mg-photo-box.show { opacity: 1; transform: scale(1); }
+.mg-photo-box.uploaded { border-style: solid; border-color: var(--good); background: linear-gradient(135deg,#f6ffed,#eafaf1); color: var(--good); }
+.mg-photo-box .pic-icon { font-size: 22px; }
+.mg-actions { display: flex; gap: 10px; }
+.mg-btn {
+  flex: 1; padding: 10px 0; border-radius: 8px; font-size: 13px; font-weight: 700;
+  cursor: pointer; font-family: inherit; transition: all .2s; border: none;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.mg-btn.upload { background: #fff; color: var(--good); border: 1px solid var(--good); }
+.mg-btn.upload:hover { background: #f6ffed; }
+.mg-btn.submit { background: linear-gradient(135deg, #52c41a, #389e0d); color: #fff; }
+.mg-btn.submit:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(82,196,26,.4); }
+.mg-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+.mg-accept-result { text-align: center; padding: 12px; background: #f6ffed; border: 1px solid #b7eb8f; border-radius: 8px; font-size: 13px; color: var(--good); font-weight: 700; display: none; }
+.mg-accept-result.show { display: block; animation: fadeUp .4s ease; }
+
+/* ---- Panel: Guide (aily chat) ---- */
+.panel-guide .panel-head { background: linear-gradient(135deg, #fa8c16, #faad14); }
+.panel-guide .panel-body { background: #fffaf0; padding: 16px; }
+.gd-chat { display: flex; flex-direction: column; gap: 12px; }
+.gd-bubble {
+  max-width: 88%; padding: 10px 14px; border-radius: 12px;
+  font-size: 13px; line-height: 1.6; position: relative;
+  opacity: 0; transform: translateY(8px); transition: all .4s;
+}
+.gd-bubble.show { opacity: 1; transform: translateY(0); }
+.gd-bubble.left { align-self: flex-start; background: #f0f0f0; color: var(--ink); border-bottom-left-radius: 4px; }
+.gd-bubble.right { align-self: flex-end; background: linear-gradient(135deg, #1677ff, #4096ff); color: #fff; border-bottom-right-radius: 4px; }
+.gd-bubble .gb-name { font-size: 11px; font-weight: 700; margin-bottom: 4px; opacity: .7; }
+.gd-bot-reply { background: #fff; border: 1px solid #ffe7ba; border-radius: 12px; padding: 12px 14px; align-self: flex-start; max-width: 92%; opacity: 0; transform: translateY(8px); transition: all .4s; border-bottom-left-radius: 4px; }
+.gd-bot-reply.show { opacity: 1; transform: translateY(0); }
+.gd-bot-reply .gbr-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.gd-bot-reply .gbr-avatar { width: 26px; height: 26px; border-radius: 6px; background: linear-gradient(135deg, #fa8c16, #faad14); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+.gd-bot-reply .gbr-name { font-size: 12px; font-weight: 700; color: var(--ink); }
+.gd-bot-reply .gbr-tag { font-size: 10px; color: var(--accent2); background: #f9f0ff; padding: 2px 6px; border-radius: 4px; margin-left: auto; }
+.gd-bot-reply .gbr-section { margin-bottom: 10px; }
+.gd-bot-reply .gbr-section:last-child { margin-bottom: 0; }
+.gd-bot-reply .gbr-label { font-size: 11px; font-weight: 700; color: var(--accent2); margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
+.gd-bot-reply .gbr-prod { background: #fff7e6; border: 1px solid #ffe7ba; border-radius: 8px; padding: 8px 10px; font-size: 12px; }
+.gd-bot-reply .gbr-prod b { color: var(--yuhong-red); }
+.gd-bot-reply .gbr-steps { font-size: 12px; color: var(--ink); }
+.gd-bot-reply .gbr-steps .step-li { display: flex; gap: 6px; margin-bottom: 3px; }
+.gd-bot-reply .gbr-steps .step-num { width: 16px; height: 16px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700; margin-top: 2px; }
+.gd-bot-reply .gbr-calc { background: #f0f5ff; border: 1px solid #d6e4ff; border-radius: 8px; padding: 8px 10px; font-size: 12px; }
+.gd-bot-reply .gbr-calc b { color: var(--accent); font-size: 14px; }
+.gd-typing { display: flex; gap: 4px; padding: 4px 0; align-self: flex-start; }
+.gd-typing span { width: 7px; height: 7px; border-radius: 50%; background: #faad14; animation: typingDot 1.2s infinite; }
+.gd-typing span:nth-child(2) { animation-delay: .2s; }
+.gd-typing span:nth-child(3) { animation-delay: .4s; }
+@keyframes typingDot { 0%,60%,100% { opacity: .3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-4px); } }
+
+/* ===== Cross connector ===== */
+.cross-connector {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 56px; height: 56px;
+  z-index: 10;
+  pointer-events: none;
+}
+.cross-connector .cc-circle {
+  width: 100%; height: 100%; border-radius: 50%;
+  background: #fff; border: 3px solid var(--accent);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(22,119,255,.25);
+  font-size: 10px; font-weight: 800; color: var(--accent);
+  text-align: center; line-height: 1.2;
+  position: relative; z-index: 2;
+}
+.cross-connector .cc-circle .cc-sub { font-size: 8px; font-weight: 600; color: var(--accent2); }
+.cross-connector.active .cc-circle { animation: ccPulse 1s ease-in-out infinite; border-color: var(--good); }
+.cross-connector.active .cc-circle { color: var(--good); }
+@keyframes ccPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(82,196,26,.4); } 50% { box-shadow: 0 0 0 12px rgba(82,196,26,0); } }
+/* cross lines */
+.cross-line-h, .cross-line-v {
+  position: absolute; background: linear-gradient(90deg, transparent, var(--accent) 20%, var(--accent2) 80%, transparent);
+  opacity: .25; z-index: 1;
+}
+.cross-line-h { top: 50%; left: -40px; right: -40px; height: 2px; transform: translateY(-50%); }
+.cross-line-v { left: 50%; top: -40px; bottom: -40px; width: 2px; transform: translateX(-50%); background: linear-gradient(180deg, transparent, var(--accent) 20%, var(--accent2) 80%, transparent); }
+.cross-connector.active .cross-line-h, .cross-connector.active .cross-line-v { opacity: .6; background: linear-gradient(90deg, transparent, var(--good) 20%, var(--good) 80%, transparent); animation: lineFlow 1.5s linear infinite; }
+.cross-connector.active .cross-line-v { background: linear-gradient(180deg, transparent, var(--good) 20%, var(--good) 80%, transparent); }
+@keyframes lineFlow { 0% { background-position: 0% 0; } 100% { background-position: 200% 0; } }
+/* signal dots traveling along lines */
+.signal-dot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--good); box-shadow: 0 0 8px var(--good); opacity: 0; z-index: 3; }
+.signal-dot.go-right { top: 50%; left: 0; transform: translateY(-50%); }
+.signal-dot.go-left { top: 50%; right: 0; transform: translateY(-50%); }
+.signal-dot.go-down { left: 50%; top: 0; transform: translateX(-50%); }
+.signal-dot.go-up { left: 50%; bottom: 0; transform: translateX(-50%); }
+.signal-dot.animate-right { animation: travelRight 1s ease-in-out; }
+.signal-dot.animate-left { animation: travelLeft 1s ease-in-out; }
+.signal-dot.animate-down { animation: travelDown 1s ease-in-out; }
+.signal-dot.animate-up { animation: travelUp 1s ease-in-out; }
+@keyframes travelRight { 0% { left: 0; opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { left: calc(100% + 200px); opacity: 0; } }
+@keyframes travelLeft { 0% { right: 0; opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { right: calc(100% + 200px); opacity: 0; } }
+@keyframes travelDown { 0% { top: 0; opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { top: calc(100% + 200px); opacity: 0; } }
+@keyframes travelUp { 0% { bottom: 0; opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { bottom: calc(100% + 200px); opacity: 0; } }
+
+/* ===== Footer ===== */
+.collab-footer {
+  background: linear-gradient(135deg, #f0f5ff, #f9f0ff);
+  border-radius: 12px; padding: 28px 32px; text-align: center;
+  border: 1px solid #d6e4ff;
+}
+.collab-footer .cf-quote { font-size: 20px; font-weight: 800; line-height: 1.5; margin-bottom: 10px; }
+.collab-footer .cf-quote .grad { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.collab-footer .cf-desc { font-size: 14px; color: var(--muted); max-width: 760px; margin: 0 auto; }
+.collab-footer .cf-roles { display: flex; justify-content: center; gap: 16px; margin-top: 18px; flex-wrap: wrap; }
+.collab-footer .cf-role { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--ink); }
+.collab-footer .cf-role .cr-dot { width: 10px; height: 10px; border-radius: 50%; }
+.collab-footer .cf-role .cr-dot.hq { background: #1677ff; }
+.collab-footer .cf-role .cr-dot.sv { background: #722ed1; }
+.collab-footer .cf-role .cr-dot.mg { background: #52c41a; }
+.collab-footer .cf-role .cr-dot.gd { background: #fa8c16; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+/* full-screen green pulse overlay */
+.green-pulse-overlay {
+  position: fixed; inset: 0; pointer-events: none; z-index: 999;
+  background: radial-gradient(circle at center, rgba(82,196,26,.15), transparent 60%);
+  opacity: 0;
+}
+.green-pulse-overlay.show { animation: greenPulseFx 2s ease-out; }
+@keyframes greenPulseFx { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; } }
+
+/* ===== Mobile ===== */
+@media (max-width: 768px) {
+  .page { padding: 24px 18px; margin: 16px auto; }
+  .header h1 { font-size: 20px; }
+  .collab-grid { grid-template-columns: 1fr; gap: 18px; }
+  .panel { min-height: 380px; max-height: 440px; }
+  .cross-connector { display: none; }
+  .timeline-bar { flex-direction: column; }
+  .tl-step { min-width: 0; }
+  .navbar { padding: 12px 16px; }
+  .navbar .nav-title { font-size: 16px; }
+  .navbar .nav-right { display: none; }
+  .collab-footer .cf-quote { font-size: 16px; }
+  .control-bar { padding: 14px 16px; }
+  .btn-play { width: 100%; justify-content: center; }
+  .mg-photos { grid-template-columns: repeat(2, 1fr); }
+  .hq-kpis { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="logo">虹</div>
+  <div>
+    <div class="nav-title">雨虹渠道智慧运营助手</div>
+    <div class="nav-sub">多角色协同工作流演示</div>
+  </div>
+  <div class="nav-right">飞书生态 · 实时联动</div>
+</nav>
+
+<!-- Page -->
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <span class="badge">MULTI-ROLE COLLABORATION</span>
+    <h1>四角色<span class="grad">分屏协同</span>工作流演示</h1>
+    <p class="subtitle">总部运营中心 / 区域督导 / 门店店长 / 门店导购 — 通过飞书生态实现实时信息同步、任务流转与数据闭环</p>
+  </div>
+
+  <!-- Control bar -->
+  <div class="control-bar">
+    <button class="btn-play" id="btnPlay">
+      <span class="play-icon">&#9658;</span>
+      <span id="btnPlayText">播放协同场景</span>
+    </button>
+    <div class="control-hint">点击播放，观看四个角色如何在 <b>7.5秒</b> 内完成一次完整的预警→整改→验收闭环。也可点击各面板按钮手动操作。</div>
+  </div>
+
+  <!-- Timeline indicator -->
+  <div class="timeline-bar" id="timelineBar">
+    <div class="tl-step" data-step="0"><span class="tl-time">T+0s</span>总部预警检测</div>
+    <div class="tl-step" data-step="1"><span class="tl-time">T+1.5s</span>推送整改指令</div>
+    <div class="tl-step" data-step="2"><span class="tl-time">T+3s</span>督导发起审批</div>
+    <div class="tl-step" data-step="3"><span class="tl-time">T+4.5s</span>店长提交验收</div>
+    <div class="tl-step" data-step="4"><span class="tl-time">T+6s</span>导购智能接待</div>
+    <div class="tl-step" data-step="5"><span class="tl-time">T+7.5s</span>总部分数更新</div>
+  </div>
+
+  <!-- Collab grid -->
+  <div class="collab-grid-wrap">
+    <div class="collab-grid">
+
+      <!-- ===== Panel 1: HQ Operations Center ===== -->
+      <div class="panel panel-hq" id="panelHq">
+        <div class="panel-head">
+          <span class="ph-dot"></span>
+          总部运营中心 · 实时大屏
+          <span class="ph-sub">HQ Dashboard</span>
+        </div>
+        <div class="panel-body">
+          <div class="hq-heat-title">全国门店热力图</div>
+          <div class="heatmap">
+            <div class="heat-region heat-east">华东 <span class="hr-score">91</span></div>
+            <div class="heat-region heat-south">华南 <span class="hr-score">88</span></div>
+            <div class="heat-region heat-north">华北 <span class="hr-score" id="hqNorthScore">79</span></div>
+            <div class="heat-region heat-west">西部 <span class="hr-score">86</span></div>
+          </div>
+          <div class="hq-kpis">
+            <div class="hq-kpi"><div class="k-val" id="hqKpiCoverage">87%</div><div class="k-label">巡检覆盖率</div></div>
+            <div class="hq-kpi"><div class="k-val warn" id="hqKpiAlert">12</div><div class="k-label">预警门店</div></div>
+            <div class="hq-kpi"><div class="k-val" id="hqKpiAvg">85.3</div><div class="k-label">平均分</div></div>
+          </div>
+          <div class="hq-alert-title">预警列表</div>
+          <div class="hq-alert-list">
+            <div class="hq-alert-item" id="hqAlert1">
+              <span class="ai-store">北京朝阳店</span>
+              <span class="ai-score" id="hqAlert1Score">68分&#8595;</span>
+            </div>
+            <div class="hq-alert-item" id="hqAlert2">
+              <span class="ai-store">上海浦东店</span>
+              <span class="ai-score">72分&#8595;</span>
+            </div>
+          </div>
+          <button class="hq-push-btn" id="hqPushBtn" onclick="hqPush()">
+            <span>&#128229;</span> 推送整改指令
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== Panel 2: Regional Supervisor ===== -->
+      <div class="panel panel-supervisor" id="panelSv">
+        <div class="panel-head">
+          <span class="ph-dot"></span>
+          张督导 · 华北区
+          <span class="ph-sub">Feishu Message</span>
+        </div>
+        <div class="panel-body" id="svBody">
+          <div class="sv-empty" id="svEmpty">
+            <div class="se-icon">&#128172;</div>
+            <p>等待接收总部预警通知...</p>
+          </div>
+          <div class="sv-msg-meta" id="svMsgMeta" style="display:none;">
+            <div class="bot-avatar">虹</div>
+            <span class="bot-name">雨虹智慧运营助手</span>
+            <span class="bot-time" id="svMsgTime"></span>
+          </div>
+          <div class="feishu-card" id="svCard">
+            <div class="fc-header"><span>&#9888;</span> 门店巡检预警通知</div>
+            <div class="fc-body">
+              <div class="fc-row"><span class="k">预警门店</span><span class="v">北京朝阳店</span></div>
+              <div class="fc-row"><span class="k">巡检分数</span><span class="v"><span class="red">68分</span>（低于阈值80）</span></div>
+              <div class="fc-row"><span class="k">主要问题</span><span class="v">陈列不规范、卫生不达标、价签过期</span></div>
+              <div class="fc-row"><span class="k">整改时限</span><span class="v">48小时内完成</span></div>
+            </div>
+            <div class="fc-actions">
+              <button class="fc-btn primary" id="svApproveBtn" onclick="svApprove()">发起整改审批</button>
+              <button class="fc-btn purple" onclick="svContact()">联系店长</button>
+            </div>
+          </div>
+          <div class="sv-approval" id="svApproval">
+            <div class="ap-head">&#128221; 整改审批单</div>
+            <div class="ap-body">
+              <div class="ap-group">
+                <label>整改门店</label>
+                <div class="ap-field">北京朝阳店（王店长）</div>
+              </div>
+              <div class="ap-group">
+                <label>紧急程度</label>
+                <div class="ap-field high">高 — 48小时内整改</div>
+              </div>
+              <div class="ap-group">
+                <label>整改事项</label>
+                <div class="ap-tags">
+                  <span>陈列整改</span><span>卫生清洁</span><span>价签更新</span>
+                </div>
+              </div>
+              <div class="ap-actions">
+                <button class="btn approve" id="svApproveConfirm" onclick="svApproveConfirm()">审批通过并下发</button>
+                <button class="btn reject" onclick="svReject()">退回</button>
+              </div>
+              <div class="ap-approved-stamp" id="svApprovedStamp">&#9989; 审批已通过，整改任务已下发至店长</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Panel 3: Store Manager ===== -->
+      <div class="panel panel-manager" id="panelMg">
+        <div class="panel-head">
+          <span class="ph-dot"></span>
+          王店长 · 北京朝阳店
+          <span class="ph-sub">Feishu Miaoda</span>
+        </div>
+        <div class="panel-body" id="mgBody">
+          <div class="mg-notify" id="mgNotify">
+            <div class="mn-icon">&#9888;</div>
+            <div class="mn-text">
+              收到整改通知：北京朝阳店巡检 <b>68分</b>，需在48小时内完成陈列整改、卫生清洁、价签更新。请尽快执行整改并上传照片验收。
+            </div>
+          </div>
+          <div class="mg-section-title">整改清单</div>
+          <div class="mg-checklist">
+            <div class="mg-check-item" id="mgCheck1">
+              <div class="ci-box"></div>
+              <span class="ci-label">陈列整改 — 货架商品按规范重新陈列</span>
+              <span class="ci-tag pending" id="mgCheck1Tag">待整改</span>
+            </div>
+            <div class="mg-check-item" id="mgCheck2">
+              <div class="ci-box"></div>
+              <span class="ci-label">卫生清洁 — 门店地面及展示区深度清洁</span>
+              <span class="ci-tag pending" id="mgCheck2Tag">待整改</span>
+            </div>
+            <div class="mg-check-item" id="mgCheck3">
+              <div class="ci-box"></div>
+              <span class="ci-label">价签更新 — 过期促销价签全部更换</span>
+              <span class="ci-tag pending" id="mgCheck3Tag">待整改</span>
+            </div>
+          </div>
+          <div class="mg-progress">
+            <div class="mg-progress-top">
+              <span class="pt-label">整改进度</span>
+              <span class="pt-val" id="mgProgressVal">0%</span>
+            </div>
+            <div class="mg-progress-track">
+              <div class="mg-progress-fill" id="mgProgressFill"></div>
+            </div>
+          </div>
+          <div class="mg-photos" id="mgPhotos" style="display:none;">
+            <div class="mg-photo-box" id="mgPhoto1"><span class="pic-icon">&#128247;</span>陈列照片</div>
+            <div class="mg-photo-box" id="mgPhoto2"><span class="pic-icon">&#128247;</span>卫生照片</div>
+            <div class="mg-photo-box" id="mgPhoto3"><span class="pic-icon">&#128247;</span>价签照片</div>
+          </div>
+          <div class="mg-actions">
+            <button class="mg-btn upload" id="mgUploadBtn" onclick="mgUpload()">上传整改照片</button>
+            <button class="mg-btn submit" id="mgSubmitBtn" onclick="mgSubmit()">提交验收</button>
+          </div>
+          <div class="mg-accept-result" id="mgAcceptResult">&#9989; 整改验收通过！巡检分数已更新</div>
+        </div>
+      </div>
+
+      <!-- ===== Panel 4: Store Guide (aily) ===== -->
+      <div class="panel panel-guide" id="panelGd">
+        <div class="panel-head">
+          <span class="ph-dot"></span>
+          小李 · 导购
+          <span class="ph-sub">aily 智能体</span>
+        </div>
+        <div class="panel-body">
+          <div class="gd-chat" id="gdChat">
+            <div class="gd-bubble right show" id="gdMsg1">
+              <div class="gb-name">客户</div>
+              这个防水涂料怎么施工？
+            </div>
+            <div class="gd-typing" id="gdTyping" style="display:none;">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="gd-bot-reply" id="gdReply" style="display:none;">
+              <div class="gbr-head">
+                <div class="gbr-avatar">虹</div>
+                <span class="gbr-name">小虹 · aily智能体</span>
+                <span class="gbr-tag">AI助手</span>
+              </div>
+              <div class="gbr-section">
+                <div class="gbr-label">&#127919; 产品推荐</div>
+                <div class="gbr-prod">推荐 <b>雨虹JS聚合物水泥防水涂料</b>，适合卫生间、厨房等室内防水，环保无毒、柔韧性好。</div>
+              </div>
+              <div class="gbr-section">
+                <div class="gbr-label">&#128221; 施工步骤</div>
+                <div class="gbr-steps">
+                  <div class="step-li"><span class="step-num">1</span>基层清理：确保表面平整、无裂缝、无灰尘</div>
+                  <div class="step-li"><span class="step-num">2</span>涂刷底涂：按液料:粉料=1:2调配，薄涂一遍</div>
+                  <div class="step-li"><span class="step-num">3</span>交叉涂刷：纵横各刷两遍，每遍间隔4小时</div>
+                  <div class="step-li"><span class="step-num">4</span>闭水试验：涂刷完48小时后蓄水24小时验收</div>
+                </div>
+              </div>
+              <div class="gbr-section">
+                <div class="gbr-label">&#128202; 用量计算</div>
+                <div class="gbr-calc">卫生间 5m² × 涂刷厚度 1.5mm × 1.5kg/m² = <b>约11kg</b>（建议购买1桶20kg装）</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /collab-grid -->
+
+    <!-- Cross connector -->
+    <div class="cross-connector" id="crossConnector">
+      <div class="cross-line-h"></div>
+      <div class="cross-line-v"></div>
+      <div class="cc-circle">
+        飞书<br>协同
+        <div class="cc-sub">实时联动</div>
+      </div>
+      <div class="signal-dot" id="signalR"></div>
+      <div class="signal-dot" id="signalD"></div>
+      <div class="signal-dot" id="signalU"></div>
+    </div>
+  </div><!-- /collab-grid-wrap -->
+
+  <!-- Footer -->
+  <div class="collab-footer">
+    <div class="cf-quote">"<span class="grad">一个组织在协同，而非一个人在用工具</span>"</div>
+    <p class="cf-desc">四个角色通过飞书生态实现实时信息同步、任务流转、数据闭环 — 总部发现预警、督导审批下发、店长执行整改、导购智能接待，每一次协同都在飞书中留下完整的数据轨迹。</p>
+    <div class="cf-roles">
+      <div class="cf-role"><span class="cr-dot hq"></span>总部运营中心</div>
+      <div class="cf-role"><span class="cr-dot sv"></span>区域督导</div>
+      <div class="cf-role"><span class="cr-dot mg"></span>门店店长</div>
+      <div class="cf-role"><span class="cr-dot gd"></span>门店导购</div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<div class="green-pulse-overlay" id="greenPulse"></div>
+
+<script>
+// ===== State =====
+var playing = false;
+var timers = [];
+var step = -1;
+
+// ===== Helper: clear all timers =====
+function clearTimers() {
+  timers.forEach(function(t) { clearTimeout(t); });
+  timers = [];
+}
+
+// ===== Timeline step management =====
+function setStep(n, status) {
+  var steps = document.querySelectorAll('.tl-step');
+  steps.forEach(function(s) {
+    var sn = parseInt(s.dataset.step);
+    s.classList.remove('active', 'done');
+    if (sn < n) s.classList.add('done');
+    else if (sn === n && status === 'active') s.classList.add('active');
+    else if (sn < n || (sn === n && status === 'done')) s.classList.add('done');
+  });
+}
+
+function markStepDone(n) {
+  var el = document.querySelector('.tl-step[data-step="' + n + '"]');
+  if (el) { el.classList.remove('active'); el.classList.add('done'); }
+}
+
+function markStepActive(n) {
+  var el = document.querySelector('.tl-step[data-step="' + n + '"]');
+  if (el) { el.classList.remove('done'); el.classList.add('active'); }
+}
+
+// ===== Signal animation =====
+function fireSignal(direction) {
+  var dot;
+  if (direction === 'right') dot = document.getElementById('signalR');
+  else if (direction === 'down') dot = document.getElementById('signalD');
+  else if (direction === 'up') dot = document.getElementById('signalU');
+  if (!dot) return;
+  dot.className = 'signal-dot';
+  void dot.offsetWidth;
+  dot.classList.add('animate-' + direction);
+}
+
+// ===== HQ: push button =====
+function hqPush() {
+  var btn = document.getElementById('hqPushBtn');
+  btn.disabled = true;
+  btn.classList.add('sent');
+  btn.innerHTML = '<span>&#9989;</span> 整改指令已推送';
+  // trigger supervisor card
+  timers.push(setTimeout(function() { showSvCard(); }, 600));
+}
+
+// ===== Supervisor: show card =====
+function showSvCard() {
+  document.getElementById('svEmpty').style.display = 'none';
+  document.getElementById('svMsgMeta').style.display = 'flex';
+  document.getElementById('svMsgTime').textContent = formatTime();
+  var card = document.getElementById('svCard');
+  card.classList.add('show');
+  fireSignal('right');
+  // scroll into view
+  document.getElementById('svBody').scrollTop = document.getElementById('svBody').scrollHeight;
+}
+
+function formatTime() {
+  var d = new Date();
+  return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+}
+
+// ===== Supervisor: approve =====
+function svApprove() {
+  document.getElementById('svApproval').classList.add('show');
+  document.getElementById('svBody').scrollTop = document.getElementById('svBody').scrollHeight;
+}
+
+function svApproveConfirm() {
+  document.getElementById('svApproveConfirm').disabled = true;
+  document.getElementById('svApproveConfirm').textContent = '已审批通过';
+  document.getElementById('svApprovedStamp').classList.add('show');
+  // trigger manager notification
+  timers.push(setTimeout(function() {
+    showMgNotify();
+    fireSignal('down');
+  }, 600));
+}
+
+function svReject() {
+  // no-op for demo
+}
+
+function svContact() {
+  // no-op for demo
+}
+
+// ===== Manager: show notification =====
+function showMgNotify() {
+  var notify = document.getElementById('mgNotify');
+  notify.classList.add('show');
+  notify.classList.add('flash');
+  setTimeout(function() { notify.classList.remove('flash'); }, 3000);
+  document.getElementById('mgBody').scrollTop = 0;
+}
+
+// ===== Manager: upload photos =====
+function mgUpload() {
+  document.getElementById('mgPhotos').style.display = 'grid';
+  var photos = ['mgPhoto1', 'mgPhoto2', 'mgPhoto3'];
+  photos.forEach(function(id, i) {
+    timers.push(setTimeout(function() {
+      var el = document.getElementById(id);
+      el.classList.add('show');
+      el.classList.add('uploaded');
+      el.innerHTML = '<span class="pic-icon">&#9989;</span>已上传';
+    }, i * 400));
+  });
+  // mark checklist items done progressively
+  var checks = ['mgCheck1', 'mgCheck2', 'mgCheck3'];
+  var tags = ['mgCheck1Tag', 'mgCheck2Tag', 'mgCheck3Tag'];
+  checks.forEach(function(id, i) {
+    timers.push(setTimeout(function() {
+      document.getElementById(id).classList.add('done');
+      var tag = document.getElementById(tags[i]);
+      tag.classList.remove('pending');
+      tag.classList.add('done');
+      tag.textContent = '已完成';
+      updateMgProgress((i + 1) * 33);
+    }, i * 400 + 200));
+  });
+}
+
+function updateMgProgress(pct) {
+  if (pct > 100) pct = 100;
+  document.getElementById('mgProgressVal').textContent = pct + '%';
+  document.getElementById('mgProgressFill').style.width = pct + '%';
+}
+
+// ===== Manager: submit =====
+function mgSubmit() {
+  updateMgProgress(100);
+  document.getElementById('mgUploadBtn').disabled = true;
+  document.getElementById('mgSubmitBtn').disabled = true;
+  document.getElementById('mgSubmitBtn').textContent = '已提交验收';
+  document.getElementById('mgAcceptResult').classList.add('show');
+  document.getElementById('mgBody').scrollTop = document.getElementById('mgBody').scrollHeight;
+  // trigger HQ score update
+  timers.push(setTimeout(function() {
+    updateHqScore();
+    fireSignal('up');
+  }, 800));
+}
+
+// ===== HQ: update score =====
+function updateHqScore() {
+  var alert1 = document.getElementById('hqAlert1');
+  var score1 = document.getElementById('hqAlert1Score');
+  alert1.classList.add('resolved');
+  score1.classList.add('updated');
+  score1.innerHTML = '89分&#8593;';
+  // update KPIs
+  document.getElementById('hqKpiAlert').textContent = '11';
+  document.getElementById('hqKpiAlert').classList.remove('warn');
+  document.getElementById('hqKpiAlert').classList.add('k-val');
+  document.getElementById('hqKpiAvg').textContent = '85.8';
+  document.getElementById('hqNorthScore').textContent = '82';
+  // green pulse
+  document.getElementById('panelHq').classList.add('pulse-green');
+  document.getElementById('greenPulse').classList.add('show');
+  document.getElementById('crossConnector').classList.add('active');
+  setTimeout(function() {
+    document.getElementById('greenPulse').classList.remove('show');
+  }, 2000);
+}
+
+// ===== Guide: show typing + reply =====
+function showGuideReply() {
+  document.getElementById('gdTyping').style.display = 'flex';
+  timers.push(setTimeout(function() {
+    document.getElementById('gdTyping').style.display = 'none';
+    var reply = document.getElementById('gdReply');
+    reply.style.display = 'block';
+    void reply.offsetWidth;
+    reply.classList.add('show');
+  }, 1200));
+}
+
+// ===== Full scenario playback =====
+function playScenario() {
+  if (playing) return;
+  resetAll();
+  playing = true;
+  var btn = document.getElementById('btnPlay');
+  btn.classList.add('playing');
+  document.getElementById('btnPlayText').textContent = '协同场景播放中...';
+  document.getElementById('crossConnector').classList.add('active');
+
+  // T+0s: HQ detects alert
+  markStepActive(0);
+  var alert1 = document.getElementById('hqAlert1');
+  alert1.classList.add('flash');
+  timers.push(setTimeout(function() {
+    alert1.classList.remove('flash');
+    markStepDone(0);
+  }, 1500));
+
+  // T+1.5s: HQ push
+  timers.push(setTimeout(function() {
+    markStepActive(1);
+    hqPush();
+  }, 1500));
+
+  // T+3s: Supervisor approve
+  timers.push(setTimeout(function() {
+    markStepDone(1);
+    markStepActive(2);
+    svApprove();
+    timers.push(setTimeout(function() {
+      svApproveConfirm();
+    }, 800));
+  }, 3000));
+
+  // T+4.5s: Manager submit
+  timers.push(setTimeout(function() {
+    markStepDone(2);
+    markStepActive(3);
+    mgUpload();
+    timers.push(setTimeout(function() {
+      mgSubmit();
+    }, 1500));
+  }, 4500));
+
+  // T+6s: Guide reply
+  timers.push(setTimeout(function() {
+    markStepDone(3);
+    markStepActive(4);
+    showGuideReply();
+  }, 6000));
+
+  // T+7.5s: HQ score update
+  timers.push(setTimeout(function() {
+    markStepDone(4);
+    markStepActive(5);
+    // updateHqScore is triggered by mgSubmit callback, but ensure it runs
+    if (!document.getElementById('hqAlert1').classList.contains('resolved')) {
+      updateHqScore();
+    }
+    timers.push(setTimeout(function() {
+      markStepDone(5);
+      finishPlay();
+    }, 1500));
+  }, 7500));
+}
+
+function finishPlay() {
+  playing = false;
+  var btn = document.getElementById('btnPlay');
+  btn.classList.remove('playing');
+  document.getElementById('btnPlayText').textContent = '重新播放';
+}
+
+// ===== Reset =====
+function resetAll() {
+  clearTimers();
+  playing = false;
+  step = -1;
+  document.getElementById('btnPlay').classList.remove('playing');
+  document.getElementById('btnPlayText').textContent = '播放协同场景';
+  document.getElementById('crossConnector').classList.remove('active');
+
+  // reset timeline
+  document.querySelectorAll('.tl-step').forEach(function(s) {
+    s.classList.remove('active', 'done');
+  });
+
+  // reset HQ
+  document.getElementById('hqPushBtn').disabled = false;
+  document.getElementById('hqPushBtn').classList.remove('sent');
+  document.getElementById('hqPushBtn').innerHTML = '<span>&#128229;</span> 推送整改指令';
+  document.getElementById('hqAlert1').classList.remove('flash', 'resolved');
+  document.getElementById('hqAlert1Score').classList.remove('updated');
+  document.getElementById('hqAlert1Score').innerHTML = '68分&#8595;';
+  document.getElementById('hqKpiAlert').textContent = '12';
+  document.getElementById('hqKpiAlert').classList.add('warn');
+  document.getElementById('hqKpiAvg').textContent = '85.3';
+  document.getElementById('hqNorthScore').textContent = '79';
+  document.getElementById('panelHq').classList.remove('pulse-green');
+  document.getElementById('greenPulse').classList.remove('show');
+
+  // reset Supervisor
+  document.getElementById('svEmpty').style.display = 'block';
+  document.getElementById('svMsgMeta').style.display = 'none';
+  document.getElementById('svCard').classList.remove('show');
+  document.getElementById('svApproval').classList.remove('show');
+  document.getElementById('svApproveBtn').disabled = false;
+  document.getElementById('svApproveConfirm').disabled = false;
+  document.getElementById('svApproveConfirm').textContent = '审批通过并下发';
+  document.getElementById('svApprovedStamp').classList.remove('show');
+
+  // reset Manager
+  document.getElementById('mgNotify').classList.remove('show', 'flash');
+  ['mgCheck1','mgCheck2','mgCheck3'].forEach(function(id) {
+    document.getElementById(id).classList.remove('done');
+  });
+  ['mgCheck1Tag','mgCheck2Tag','mgCheck3Tag'].forEach(function(id, i) {
+    var el = document.getElementById(id);
+    el.classList.remove('done');
+    el.classList.add('pending');
+    el.textContent = '待整改';
+  });
+  updateMgProgress(0);
+  document.getElementById('mgPhotos').style.display = 'none';
+  ['mgPhoto1','mgPhoto2','mgPhoto3'].forEach(function(id) {
+    var el = document.getElementById(id);
+    el.classList.remove('show', 'uploaded');
+    el.innerHTML = '<span class="pic-icon">&#128247;</span>' + (id === 'mgPhoto1' ? '陈列照片' : id === 'mgPhoto2' ? '卫生照片' : '价签照片');
+  });
+  document.getElementById('mgUploadBtn').disabled = false;
+  document.getElementById('mgSubmitBtn').disabled = false;
+  document.getElementById('mgSubmitBtn').textContent = '提交验收';
+  document.getElementById('mgAcceptResult').classList.remove('show');
+
+  // reset Guide
+  document.getElementById('gdTyping').style.display = 'none';
+  var reply = document.getElementById('gdReply');
+  reply.style.display = 'none';
+  reply.classList.remove('show');
+}
+
+// ===== Init =====
+document.getElementById('btnPlay').addEventListener('click', function() {
+  if (playing) return;
+  playScenario();
+});
+</script>
+
+</body>
+</html>

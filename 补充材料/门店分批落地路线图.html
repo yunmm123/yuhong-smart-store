@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>门店分批落地路线图 — 雨虹渠道智慧运营助手</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap');
+
+:root {
+  --ink: #1a1a2e; --muted: #6b7280; --accent: #1677ff; --accent2: #722ed1;
+  --bg: #ffffff; --bg2: #f7f8fc; --rule: #e5e7eb;
+  --good: #52c41a; --warn: #faad14; --bad: #ff4d4f; --yuhong-red: #E8392B;
+  --grad: linear-gradient(135deg, #1677ff, #722ed1);
+  /* 阶段色 */
+  --p1: #1677ff; --p2: #722ed1; --p3: #52c41a; --p4: #faad14;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "Noto Sans SC", -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg2); color: var(--ink); line-height: 1.8;
+}
+
+/* ============ 导航栏 ============ */
+.navbar {
+  background: var(--grad);
+  padding: 14px 28px;
+  display: flex; align-items: center; gap: 14px;
+  box-shadow: 0 2px 12px rgba(22,119,255,.25);
+  position: sticky; top: 0; z-index: 100;
+}
+.navbar .logo {
+  width: 40px; height: 40px; border-radius: 9px;
+  background: var(--yuhong-red);
+  color: #fff; font-size: 24px; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; box-shadow: 0 3px 10px rgba(232,57,43,.4);
+}
+.navbar .nav-title { color: #fff; font-size: 18px; font-weight: 700; letter-spacing: .02em; }
+.navbar .nav-spacer { flex: 1; }
+.navbar .nav-meta { color: rgba(255,255,255,.82); font-size: 13px; }
+
+/* ============ 页面容器 ============ */
+.page {
+  max-width: 1100px; margin: 28px auto; background: var(--bg);
+  padding: 44px 48px; border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.06);
+}
+
+/* ============ Header ============ */
+.header { padding-bottom: 24px; border-bottom: 3px solid var(--ink); margin-bottom: 32px; }
+.header .badge {
+  display: inline-block; font-size: 11px; font-weight: 600; color: #fff;
+  background: var(--grad); padding: 4px 14px; border-radius: 4px;
+  letter-spacing: .08em; margin-bottom: 14px;
+}
+.header h1 { font-size: 30px; font-weight: 900; letter-spacing: -.01em; line-height: 1.3; }
+.header h1 .grad {
+  background: var(--grad); -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; background-clip: text;
+}
+.header .subtitle { font-size: 14px; color: var(--muted); margin-top: 8px; }
+
+/* ============ 章节标题 ============ */
+.section { margin-bottom: 36px; }
+.section-title {
+  font-size: 16px; font-weight: 700; margin-bottom: 18px;
+  padding-left: 12px; border-left: 4px solid var(--accent);
+  display: flex; align-items: center; gap: 8px;
+}
+.section-title .hint { font-size: 12px; font-weight: 400; color: var(--muted); }
+
+/* ============ 总体进度概览 ============ */
+.progress-wrap { background: var(--bg2); border-radius: 14px; padding: 28px 32px 36px; border: 1px solid var(--rule); }
+.progress-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 22px; flex-wrap: wrap; gap: 8px; }
+.progress-head .total { font-size: 13px; color: var(--muted); }
+.progress-head .total b { font-size: 22px; font-weight: 900; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.progress-track {
+  position: relative; height: 14px; background: #e9edf5; border-radius: 10px; margin: 30px 12px 8px;
+}
+.progress-fill {
+  position: absolute; left: 0; top: 0; height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--p1), var(--p2), var(--p3), var(--p4));
+  border-radius: 10px; transition: width 1.8s cubic-bezier(.22,.61,.36,1);
+}
+.progress-nodes { display: flex; justify-content: space-between; margin-top: 4px; position: relative; }
+.progress-node {
+  position: relative; flex: 1; text-align: center; cursor: pointer;
+  margin-top: -28px;
+}
+.progress-node .dot {
+  width: 22px; height: 22px; border-radius: 50%; background: #fff;
+  border: 4px solid var(--p1); margin: 0 auto; position: relative; z-index: 2;
+  transition: transform .2s ease, box-shadow .2s ease;
+  opacity: 0; transform: scale(.4);
+}
+.progress-node.active .dot { opacity: 1; transform: scale(1); box-shadow: 0 3px 10px rgba(0,0,0,.18); }
+.progress-node:nth-child(2) .dot { border-color: var(--p2); }
+.progress-node:nth-child(3) .dot { border-color: var(--p3); }
+.progress-node:nth-child(4) .dot { border-color: var(--p4); }
+.progress-node .label { font-size: 12px; font-weight: 700; color: var(--ink); margin-top: 8px; }
+.progress-node .pct { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.progress-node .tip {
+  position: absolute; bottom: 52px; left: 50%; transform: translateX(-50%) translateY(6px);
+  background: var(--ink); color: #fff; font-size: 12px; line-height: 1.6;
+  padding: 10px 14px; border-radius: 8px; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+  box-shadow: 0 6px 18px rgba(0,0,0,.18); z-index: 20;
+}
+.progress-node .tip::after {
+  content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  border: 6px solid transparent; border-top-color: var(--ink);
+}
+.progress-node:hover .tip { opacity: 1; transform: translateX(-50%) translateY(0); }
+.progress-node:hover .dot { transform: scale(1.18); }
+
+/* ============ 四阶段时间线卡片 ============ */
+.timeline-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+}
+.phase-card {
+  background: var(--bg); border: 1px solid var(--rule); border-radius: 12px;
+  padding: 0; overflow: hidden; cursor: pointer;
+  transition: transform .25s ease, box-shadow .25s ease;
+  display: flex; flex-direction: column;
+}
+.phase-card:hover { transform: translateY(-6px); box-shadow: 0 14px 34px rgba(0,0,0,.12); }
+.phase-card .topbar { height: 6px; width: 100%; }
+.phase-card.p1 .topbar { background: linear-gradient(90deg, var(--p1), #4096ff); }
+.phase-card.p2 .topbar { background: linear-gradient(90deg, var(--p2), #9254de); }
+.phase-card.p3 .topbar { background: linear-gradient(90deg, var(--p3), #73d13d); }
+.phase-card.p4 .topbar { background: linear-gradient(90deg, var(--p4), #ffc53d); }
+.phase-card .body { padding: 22px 20px 20px; flex: 1; display: flex; flex-direction: column; }
+.phase-card .big-num {
+  font-size: 42px; font-weight: 900; line-height: 1; letter-spacing: -.02em;
+  background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.phase-card.p1 .big-num { background: linear-gradient(135deg, var(--p1), #4096ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.phase-card.p2 .big-num { background: linear-gradient(135deg, var(--p2), #9254de); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.phase-card.p3 .big-num { background: linear-gradient(135deg, var(--p3), #95de64); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.phase-card.p4 .big-num { background: linear-gradient(135deg, var(--p4), #ffd666); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.phase-card .big-num .unit { font-size: 16px; font-weight: 600; -webkit-text-fill-color: var(--muted); margin-left: 2px; }
+.phase-card .ph-tag {
+  display: inline-block; font-size: 11px; font-weight: 700; color: #fff;
+  padding: 2px 9px; border-radius: 4px; margin-top: 6px;
+}
+.phase-card.p1 .ph-tag { background: var(--p1); }
+.phase-card.p2 .ph-tag { background: var(--p2); }
+.phase-card.p3 .ph-tag { background: var(--p3); }
+.phase-card.p4 .ph-tag { background: var(--p4); }
+.phase-card h3 { font-size: 16px; font-weight: 800; margin-top: 8px; line-height: 1.35; }
+.phase-card .duration { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.phase-card .goal-box {
+  font-size: 12px; color: var(--ink); background: var(--bg2);
+  border-radius: 8px; padding: 10px 12px; margin-top: 14px;
+  border-left: 3px solid var(--accent);
+}
+.phase-card.p1 .goal-box { border-left-color: var(--p1); }
+.phase-card.p2 .goal-box { border-left-color: var(--p2); }
+.phase-card.p3 .goal-box { border-left-color: var(--p3); }
+.phase-card.p4 .goal-box { border-left-color: var(--p4); }
+.phase-card .goal-box b { display: block; font-size: 11px; color: var(--muted); margin-bottom: 2px; font-weight: 600; }
+
+.info-list { list-style: none; padding: 0; margin-top: 14px; }
+.info-list li { font-size: 12.5px; padding: 6px 0; padding-left: 24px; position: relative; color: var(--ink); border-bottom: 1px dashed var(--rule); }
+.info-list li:last-child { border-bottom: none; }
+.info-list li .ico { position: absolute; left: 0; top: 6px; font-size: 14px; line-height: 1; }
+.info-list li .k { font-weight: 700; color: var(--muted); font-size: 11px; display: block; margin-bottom: 1px; }
+
+.expand-toggle {
+  margin-top: 14px; text-align: center; font-size: 12px; font-weight: 700;
+  color: var(--accent); padding: 8px; border-top: 1px solid var(--rule);
+  transition: background .2s ease; user-select: none;
+}
+.phase-card.p1 .expand-toggle { color: var(--p1); }
+.phase-card.p2 .expand-toggle { color: var(--p2); }
+.phase-card.p3 .expand-toggle { color: var(--p3); }
+.phase-card.p4 .expand-toggle { color: var(--p4); }
+.expand-toggle:hover { background: var(--bg2); }
+.expand-toggle .arr { display: inline-block; transition: transform .25s ease; margin-left: 4px; }
+.phase-card.open .expand-toggle .arr { transform: rotate(180deg); }
+
+/* 展开子任务 */
+.subtasks {
+  display: none; background: linear-gradient(180deg, #fafbff, var(--bg2));
+  padding: 16px 18px; border-top: 1px solid var(--rule);
+}
+.phase-card.open .subtasks { display: block; animation: expandIn .3s ease; }
+@keyframes expandIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+.subtasks h4 { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.subtasks ol { padding-left: 20px; margin: 0; }
+.subtasks ol li { font-size: 12px; color: var(--ink); padding: 3px 0; line-height: 1.6; }
+
+/* ============ 资源投入估算表 ============ */
+.resource-table { width: 100%; border-collapse: collapse; margin: 8px 0; border-radius: 10px; overflow: hidden; }
+.resource-table th {
+  background: var(--grad); color: #fff; padding: 13px 16px; font-size: 13px;
+  font-weight: 700; text-align: left;
+}
+.resource-table td { padding: 13px 16px; font-size: 13px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+.resource-table tr:last-child td { border-bottom: none; }
+.resource-table tr:hover td { background: var(--bg2); }
+.resource-table .ph-cell { font-weight: 700; }
+.resource-table .ph-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 7px; vertical-align: middle; }
+.resource-table .roi { font-weight: 800; }
+.resource-table .roi.good { color: var(--good); }
+
+/* ============ 底部说明 ============ */
+.foot-note {
+  font-size: 12px; color: var(--muted); margin-top: 18px; padding: 14px 16px;
+  background: linear-gradient(135deg, #f0f5ff, #f9f0ff); border-radius: 10px; border: 1px solid #d6e4ff;
+}
+.foot-note b { color: var(--accent); }
+
+@media (max-width: 768px) {
+  body { font-size: 14px; }
+  .navbar { padding: 12px 16px; }
+  .navbar .nav-title { font-size: 15px; }
+  .navbar .nav-meta { display: none; }
+  .page { margin: 16px 10px; padding: 24px 18px; border-radius: 10px; }
+  .header h1 { font-size: 22px; }
+  .header .subtitle { font-size: 13px; }
+  .section { margin-bottom: 26px; }
+  .section-title { font-size: 14px; }
+  .progress-wrap { padding: 20px 16px 28px; }
+  .progress-head .total b { font-size: 18px; }
+  .progress-node .label { font-size: 11px; }
+  .progress-node .pct { font-size: 10px; }
+  .progress-node .tip { font-size: 11px; padding: 8px 10px; white-space: normal; width: 140px; }
+  /* 卡片改单列 */
+  .timeline-grid { grid-template-columns: 1fr; gap: 14px; }
+  .phase-card:hover { transform: none; }
+  /* 表格横向滚动 */
+  .resource-table { display: block; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; max-width: 100%; }
+  .resource-table th, .resource-table td { font-size: 12px; padding: 10px 12px; }
+  .foot-note { font-size: 12px; padding: 12px 14px; }
+}
+@media print { body { background: #fff; } .navbar { position: static; } .page { box-shadow: none; } }
+</style>
+</head>
+<body>
+
+<!-- 导航栏 -->
+<nav class="navbar">
+  <div class="logo">虹</div>
+  <div class="nav-title">雨虹渠道智慧运营助手</div>
+  <div class="nav-spacer"></div>
+  <div class="nav-meta">门店分批落地路线图 · 13000家全量覆盖</div>
+</nav>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <span class="badge">落地路线图</span>
+    <h1>13000家门店<span class="grad">四阶段分批落地路线图</span></h1>
+    <p class="subtitle">从50家旗舰店标杆到13000家全量覆盖 · 12个月分批推进 · 每阶段准入标准、部署内容、验收指标清晰可控</p>
+  </div>
+
+  <!-- 总体进度概览 -->
+  <div class="section">
+    <div class="section-title">总体进度概览 <span class="hint">— 累计覆盖 13000 家门店的推进节奏</span></div>
+    <div class="progress-wrap">
+      <div class="progress-head">
+        <span class="total">目标总规模：<b>13,000 家</b> 门店全量数字化</span>
+        <span class="total">推进周期：<b>12 个月</b> · 四批递进</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-nodes" id="progressNodes">
+        <div class="progress-node" data-pct="0.4">
+          <div class="tip"><b>第1批 · 旗舰店标杆</b><br>50家 · 0.4% · 第1-4周</div>
+          <div class="dot"></div>
+          <div class="label">第1批</div>
+          <div class="pct">50家 · 0.4%</div>
+        </div>
+        <div class="progress-node" data-pct="3.8">
+          <div class="tip"><b>第2批 · 核心店扩展</b><br>500家 · 3.8% · 第2-4月</div>
+          <div class="dot"></div>
+          <div class="label">第2批</div>
+          <div class="pct">500家 · 3.8%</div>
+        </div>
+        <div class="progress-node" data-pct="23">
+          <div class="tip"><b>第3批 · 标准店规模化</b><br>3000家 · 23% · 第5-10月</div>
+          <div class="dot"></div>
+          <div class="label">第3批</div>
+          <div class="pct">3000家 · 23%</div>
+        </div>
+        <div class="progress-node" data-pct="100">
+          <div class="tip"><b>第4批 · 全量覆盖</b><br>13000家 · 100% · 第11-12月</div>
+          <div class="dot"></div>
+          <div class="label">第4批</div>
+          <div class="pct">13000家 · 100%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 四阶段详细卡片 -->
+  <div class="section">
+    <div class="section-title">四阶段分批推广 <span class="hint">— 点击任意卡片展开子任务清单</span></div>
+    <div class="timeline-grid">
+
+      <!-- 第1批 -->
+      <div class="phase-card p1" data-idx="1">
+        <div class="topbar"></div>
+        <div class="body">
+          <div class="big-num">50<span class="unit">家</span></div>
+          <span class="ph-tag">第1批 · 旗舰店标杆</span>
+          <h3>旗舰店标杆打造</h3>
+          <div class="duration">第1-4周 · 1个月</div>
+          <div class="goal-box"><b>阶段目标</b>打造标杆案例，形成可复制SOP</div>
+          <ul class="info-list">
+            <li><span class="ico">📍</span><span class="k">规模</span>北京/上海/广州/深圳/杭州各10家</li>
+            <li><span class="ico">✅</span><span class="k">准入标准</span>年销售额&gt;500万、店长3年以上经验、已部署飞书</li>
+            <li><span class="ico">🚀</span><span class="k">部署内容</span>妙搭巡检应用 + aily导购 + 多维表格仪表盘</li>
+            <li><span class="ico">🎓</span><span class="k">培训计划</span>线下2天集中培训 + 1周驻店辅导</li>
+            <li><span class="ico">🎯</span><span class="k">验收指标</span>巡检覆盖率100%、AI咨询使用率&gt;80%、数据准确率&gt;95%</li>
+          </ul>
+          <div class="expand-toggle">展开子任务清单 <span class="arr">▾</span></div>
+        </div>
+        <div class="subtasks">
+          <h4>📋 第1批子任务清单</h4>
+          <ol>
+            <li>门店筛选与定向邀约（5城各10家）</li>
+            <li>飞书组织架构搭建与权限配置</li>
+            <li>妙搭巡检应用定制开发与测试</li>
+            <li>aily导购知识库构建（产品/施工/售后）</li>
+            <li>多维表格仪表盘模板设计</li>
+            <li>线下集中培训（2天）</li>
+            <li>驻店辅导（1周）</li>
+            <li>试运行数据采集与复盘</li>
+            <li>标杆案例素材沉淀</li>
+            <li>可复制SOP文档输出</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 第2批 -->
+      <div class="phase-card p2" data-idx="2">
+        <div class="topbar"></div>
+        <div class="body">
+          <div class="big-num">500<span class="unit">家</span></div>
+          <span class="ph-tag">第2批 · 核心店扩展</span>
+          <h3>核心店扩展验证</h3>
+          <div class="duration">第2-4月 · 3个月</div>
+          <div class="goal-box"><b>阶段目标</b>验证可扩展性，优化部署流程</div>
+          <ul class="info-list">
+            <li><span class="ico">📍</span><span class="k">规模</span>500家核心店（覆盖一二线城市）</li>
+            <li><span class="ico">✅</span><span class="k">准入标准</span>年销售额&gt;200万、已安装飞书、有专职运营人员</li>
+            <li><span class="ico">🚀</span><span class="k">部署内容</span>全量功能 + 智能预警 + 渠道管理中枢</li>
+            <li><span class="ico">🎓</span><span class="k">培训计划</span>线上3天培训 + 区域督导1对1辅导</li>
+            <li><span class="ico">🎯</span><span class="k">验收指标</span>巡检覆盖率&gt;90%、预警响应&lt;30分钟、整改完成率&gt;85%</li>
+          </ul>
+          <div class="expand-toggle">展开子任务清单 <span class="arr">▾</span></div>
+        </div>
+        <div class="subtasks">
+          <h4>📋 第2批子任务清单</h4>
+          <ol>
+            <li>区域督导团队组建</li>
+            <li>准入门店名单筛选（一二线城市）</li>
+            <li>批量飞书部署脚本与自动化配置</li>
+            <li>智能预警规则配置</li>
+            <li>渠道管理中枢上线</li>
+            <li>线上培训体系搭建（3天课程）</li>
+            <li>1对1辅导排期与执行</li>
+            <li>阶段性验收巡检</li>
+            <li>部署流程优化迭代</li>
+            <li>区域经验横向复用</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 第3批 -->
+      <div class="phase-card p3" data-idx="3">
+        <div class="topbar"></div>
+        <div class="body">
+          <div class="big-num">3000<span class="unit">家</span></div>
+          <span class="ph-tag">第3批 · 标准店规模化</span>
+          <h3>标准店规模化复制</h3>
+          <div class="duration">第5-10月 · 6个月</div>
+          <div class="goal-box"><b>阶段目标</b>规模化复制，成本效率最优</div>
+          <ul class="info-list">
+            <li><span class="ico">📍</span><span class="k">规模</span>3000家标准店（覆盖三四线城市及县域）</li>
+            <li><span class="ico">✅</span><span class="k">准入标准</span>已安装飞书、有基本运营能力</li>
+            <li><span class="ico">🚀</span><span class="k">部署内容</span>标准化配置包 + 自动化巡检 + aily基础功能</li>
+            <li><span class="ico">🎓</span><span class="k">培训计划</span>视频教程 + 在线考试 + 远程答疑</li>
+            <li><span class="ico">🎯</span><span class="k">验收指标</span>巡检覆盖率&gt;80%、AI使用率&gt;60%、系统活跃度&gt;70%</li>
+          </ul>
+          <div class="expand-toggle">展开子任务清单 <span class="arr">▾</span></div>
+        </div>
+        <div class="subtasks">
+          <h4>📋 第3批子任务清单</h4>
+          <ol>
+            <li>标准化配置包封装</li>
+            <li>自动化巡检模板批量下发</li>
+            <li>aily基础功能轻量化适配</li>
+            <li>视频教程录制（覆盖全场景）</li>
+            <li>在线考试系统搭建</li>
+            <li>远程答疑知识库完善</li>
+            <li>三四线城市专项推广</li>
+            <li>县域门店运营赋能</li>
+            <li>成本效率监控与优化</li>
+            <li>规模化数据看板建设</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 第4批 -->
+      <div class="phase-card p4" data-idx="4">
+        <div class="topbar"></div>
+        <div class="body">
+          <div class="big-num">13000<span class="unit">家</span></div>
+          <span class="ph-tag">第4批 · 全量覆盖</span>
+          <h3>全量覆盖闭环</h3>
+          <div class="duration">第11-12月 · 12个月累计</div>
+          <div class="goal-box"><b>阶段目标</b>全面数字化，数据飞轮自运转</div>
+          <ul class="info-list">
+            <li><span class="ico">📍</span><span class="k">规模</span>13000家全量门店（含县域3515工程重点店）</li>
+            <li><span class="ico">✅</span><span class="k">准入标准</span>无（全量覆盖）</li>
+            <li><span class="ico">🚀</span><span class="k">部署内容</span>按门店等级分级配置（旗舰/核心/标准/基础）</li>
+            <li><span class="ico">🎓</span><span class="k">培训计划</span>社区运营 + AI智能辅导 + 最佳实践分享</li>
+            <li><span class="ico">🎯</span><span class="k">验收指标</span>系统覆盖率100%、月活&gt;85%、ROI&gt;3.0</li>
+          </ul>
+          <div class="expand-toggle">展开子任务清单 <span class="arr">▾</span></div>
+        </div>
+        <div class="subtasks">
+          <h4>📋 第4批子任务清单</h4>
+          <ol>
+            <li>全量门店清单梳理（含3515工程重点店）</li>
+            <li>分级配置策略制定（旗舰/核心/标准/基础）</li>
+            <li>社区运营体系搭建</li>
+            <li>AI智能辅导机器人部署</li>
+            <li>最佳实践库沉淀与分发</li>
+            <li>老旧门店改造迁移</li>
+            <li>数据飞轮闭环验证</li>
+            <li>全面数字化验收</li>
+            <li>长期运营机制建立</li>
+            <li>持续迭代规划</li>
+          </ol>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 资源投入估算 -->
+  <div class="section">
+    <div class="section-title">资源投入估算 <span class="hint">— 四阶段人力、培训、系统与ROI预估</span></div>
+    <table class="resource-table">
+      <thead>
+        <tr>
+          <th>阶段</th>
+          <th>人力投入</th>
+          <th>培训成本</th>
+          <th>系统资源</th>
+          <th>预计ROI</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="ph-cell"><span class="ph-dot" style="background:var(--p1)"></span>第1批 · 旗舰标杆</td>
+          <td>5人专项组（产品+实施+运营）</td>
+          <td>约 ¥10万（线下集中培训+驻店）</td>
+          <td>aily专业版 + 多维表格 + 妙搭应用</td>
+          <td class="roi">1.5（投入期）</td>
+        </tr>
+        <tr>
+          <td class="ph-cell"><span class="ph-dot" style="background:var(--p2)"></span>第2批 · 核心扩展</td>
+          <td>15人区域团队（含5名督导）</td>
+          <td>约 ¥50万（线上课程+1对1辅导）</td>
+          <td>aily企业版 + 渠道管理中枢</td>
+          <td class="roi">2.2</td>
+        </tr>
+        <tr>
+          <td class="ph-cell"><span class="ph-dot" style="background:var(--p3)"></span>第3批 · 规模化</td>
+          <td>30人全国团队（远程为主）</td>
+          <td>约 ¥150万（视频教程+在线考试）</td>
+          <td>标准化配置包 + 批量自动化部署</td>
+          <td class="roi">2.8</td>
+        </tr>
+        <tr>
+          <td class="ph-cell"><span class="ph-dot" style="background:var(--p4)"></span>第4批 · 全量覆盖</td>
+          <td>50人 + AI智能辅导降本</td>
+          <td>约 ¥300万（社区运营+AI辅导）</td>
+          <td>全量分级配置 + 智能运维</td>
+          <td class="roi good">3.5（数据飞轮自运转）</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="foot-note">
+      <b>说明：</b>四阶段递进式推广确保风险可控、成本最优。前期重投入打造标杆与SOP，中期验证可扩展性并优化流程，后期依靠标准化配置与AI智能辅导实现低成本规模化，最终全量覆盖进入数据飞轮自运转阶段，ROI持续提升。
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // 进度条加载动画自动播放
+  window.addEventListener('load', function () {
+    var fill = document.getElementById('progressFill');
+    var nodes = document.querySelectorAll('#progressNodes .progress-node');
+    // 先重置，下一帧再设置目标宽度，触发过渡动画
+    setTimeout(function () {
+      fill.style.width = '100%';
+      // 逐个点亮节点
+      nodes.forEach(function (node, i) {
+        setTimeout(function () {
+          node.classList.add('active');
+        }, 300 + i * 420);
+      });
+    }, 200);
+  });
+
+  // 卡片点击展开/收起子任务
+  document.querySelectorAll('.phase-card').forEach(function (card) {
+    card.addEventListener('click', function (e) {
+      // 避免链接等内部元素误触发（当前无链接，预留）
+      card.classList.toggle('open');
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
