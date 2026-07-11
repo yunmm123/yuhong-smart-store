@@ -1132,7 +1132,9 @@
   renderProgress();
 
   function renderMatrix() {
-    document.getElementById('aiMatrix').innerHTML = AI_MATRIX.map(m => `
+    const el = document.getElementById('aiMatrix');
+    if (!el) return;
+    el.innerHTML = AI_MATRIX.map(m => `
       <div class="matrix-item">
         <div>
           <div style="color:#fff;font-weight:600;">${m.name}</div>
