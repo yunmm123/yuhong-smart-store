@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>门店巡检 - 雨虹智慧门店</title>
+    <title>门店巡检 - 雨虹渠道智慧运营</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root { --primary: #1677FF; }
         body { background: #f0f2f5; font-family: -apple-system, "PingFang SC", sans-serif; }
         .navbar { background: linear-gradient(135deg, var(--primary) 0%, #0958d9 100%); }
         .navbar-brand { color: #fff !important; font-weight: 700; }
+        .navbar .nav-link { color: rgba(255,255,255,0.6) !important; }
+        .navbar .nav-link.active, .navbar .nav-link:hover { color: #fff !important; font-weight: 600; }
         .card { border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
         .score-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
         .score-item:last-child { border-bottom: none; }
@@ -22,7 +24,19 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="/"><span style="color:#E8392B;">雨虹</span> 门店巡检</a>
-            {% if mock_mode %}<span class="badge bg-warning text-dark">Demo</span>{% endif %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link text-white-50" href="/">首页</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/inspection">门店巡检</a></li>
+                    <li class="nav-item"><a class="nav-link text-white-50" href="/guide">AI导购</a></li>
+                    <li class="nav-item"><a class="nav-link text-white-50" href="/channel">渠道管理</a></li>
+                    <li class="nav-item"><a class="nav-link text-white-50" href="/bigscreen">3515大屏</a></li>
+                </ul>
+                {% if mock_mode %}<span class="badge bg-warning text-dark ms-2">Demo</span>{% endif %}
+            </div>
         </div>
     </nav>
 

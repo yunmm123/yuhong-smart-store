@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>渠道管理中枢 - 雨虹渠道智慧运营</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        :root { --primary: #1677FF; --yuhong: #E8392B; }
+        body { background: #f0f2f5; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+        .navbar { background: linear-gradient(135deg, var(--primary) 0%, #0958d9 100%); }
+        .navbar-brand { color: #fff !important; font-weight: 700; }
+        .navbar .nav-link { color: rgba(255,255,255,0.85) !important; font-size: 14px; }
+        .navbar .nav-link:hover, .navbar .nav-link.active { color: #fff !important; font-weight: 600; }
+        .badge-mock { background: #fff7e6; color: #fa8c16; font-size: 11px; padding: 3px 8px; border-radius: 4px; }
+        .card { border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: none; }
+        .section-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; color: #1a1a1a; }
+        .stat-mini { background: #fff; border-radius: 10px; padding: 16px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+        .stat-mini .value { font-size: 24px; font-weight: 700; }
+        .stat-mini .label { font-size: 12px; color: #909399; }
+        .progress-bar-custom { width: 100%; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+        .timeline { position: relative; padding-left: 24px; }
+        .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: #e8e8e8; }
+        .timeline-item { position: relative; padding-bottom: 16px; }
+        .timeline-item::before { content: ''; position: absolute; left: -20px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: #d9d9d9; border: 2px solid #fff; }
+        .timeline-item.done::before { background: #52c41a; }
+        .timeline-item.active::before { background: var(--primary); }
+        .timeline-item.pending::before { background: #d9d9d9; }
+        .store-card { border: 1px solid #e8e8e8; border-radius: 10px; padding: 16px; margin-bottom: 12px; transition: all 0.2s; }
+        .store-card:hover { border-color: var(--primary); box-shadow: 0 2px 12px rgba(22,119,255,0.1); }
+        .alert-overdue { background: #fff2f0; border: 1px solid #ffccc7; border-radius: 8px; padding: 12px; margin-bottom: 8px; }
+        .alert-normal { background: #f6ffed; border: 1px solid #b7eb8f; border-radius: 8px; padding: 12px; margin-bottom: 8px; }
+        .nav-tabs .nav-link { color: #606266; font-weight: 500; }
+        .nav-tabs .nav-link.active { color: var(--primary); font-weight: 700; }
+        .dispatch-result { background: #f0f5ff; border: 1px solid #adc6ff; border-radius: 10px; padding: 16px; }
+        .ranking-badge { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; font-size: 13px; font-weight: 700; }
+        .ranking-1 { background: #ffd700; color: #fff; }
+        .ranking-2 { background: #c0c0c0; color: #fff; }
+        .ranking-3 { background: #cd7f32; color: #fff; }
+        .ranking-other { background: #f0f0f0; color: #666; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/"><span style="color:#E8392B;">雨虹</span> 渠道智慧运营助手</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">首页</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/inspection">门店巡检</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/guide">AI导购</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/channel">渠道管理</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/bigscreen">3515大屏</a></li>
+                </ul>
+                {% if mock_mode %}
+                <span class="badge-mock ms-2">Demo模拟模式</span>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <!-- 页面标题 -->
+        <div class="mb-4">
+            <h4 class="mb-1">渠道管理中枢</h4>
+            <p class="text-muted mb-0" style="font-size:14px;">站在总部/区域经理视角，管理全渠道标准化、拓展、分单和经营洞察</p>
+        </div>
+
+        <!-- Tab导航 -->
+        <ul class="nav nav-tabs mb-3" id="channelTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-compliance" type="button">标准化看板</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-expansion" type="button">渠道拓展</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-dispatch" type="button">智能分单</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-insight" type="button">经营洞察</button>
+            </li>
+        </ul>
+
+        <!-- Tab内容 -->
+        <div class="tab-content">
+            <!-- 标准化看板 -->
+            <div class="tab-pane fade show active" id="tab-compliance" role="tabpanel">
+                <div class="row g-3 mb-3">
+                    <div class="col-6 col-md-3">
+                        <div class="stat-mini"><div class="value text-primary" id="nationalRate">--</div><div class="label">全国合规率</div></div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-mini"><div class="value text-success" id="totalStores">--</div><div class="label">覆盖网点</div></div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-mini"><div class="value text-warning" id="rectRate">--</div><div class="label">整改完成率</div></div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-mini"><div class="value text-danger" id="overdueCount">--</div><div class="label">逾期整改</div></div>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-lg-7">
+                        <div class="card p-4">
+                            <div class="section-title">区域合规率排名</div>
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>排名</th><th>区域</th><th>合规率</th><th>门店数</th><th>整改完成率</th><th>趋势</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="complianceTable"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="card p-4 mb-3">
+                            <div class="section-title">门店类型合规率</div>
+                            <canvas id="typeChart" height="160"></canvas>
+                        </div>
+                        <div class="card p-4">
+                            <div class="section-title">整改追踪</div>
+                            <div id="rectTracking"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-4 mt-3">
+                    <div class="section-title">AI洞察</div>
+                    <div id="complianceInsight" class="text-muted" style="font-size:14px; line-height:1.8;">加载中...</div>
+                </div>
+            </div>
+
+            <!-- 渠道拓展 -->
+            <div class="tab-pane fade" id="tab-expansion" role="tabpanel">
+                <div class="row g-3 mb-3">
+                    <div class="col-6 col-md-3">
+                        <div class="stat-mini"><div class="value text-primary" id="newStoreCount">--</div><div class="label">在拓网点</div></div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-mini"><div class="value text-success" id="avgSiteScore">--</div><div class="label">平均选址评分</div></div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-mini"><div class="value text-warning" id="avgInvestment">--</div><div class="label">平均投资(万)</div></div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-mini"><div class="value text-info">15天</div><div class="label">轻资产开业周期</div></div>
+                    </div>
+                </div>
+
+                <div class="card p-4">
+                    <div class="section-title">新网点开发档案</div>
+                    <div id="expansionList"></div>
+                </div>
+
+                <div class="card p-4 mt-3">
+                    <div class="section-title">参考数据</div>
+                    <div class="row text-muted" style="font-size:13px;">
+                        <div class="col-md-6">建材市场租金：60-120元/㎡（一线），40+元/㎡（三线）</div>
+                        <div class="col-md-6">轻资产模式：100㎡开店、10余万元投资、15天开业</div>
+                        <div class="col-md-6">经销商盈利面：不低于88%</div>
+                        <div class="col-md-6">经销商年均营收：不低于120万元</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 智能分单 -->
+            <div class="tab-pane fade" id="tab-dispatch" role="tabpanel">
+                <div class="row g-3">
+                    <div class="col-lg-5">
+                        <div class="card p-4">
+                            <div class="section-title">分单表单</div>
+                            <div class="mb-3">
+                                <label class="form-label">产品</label>
+                                <select class="form-select" id="dispatchProduct">
+                                    <option value="雨虹JS复合防水涂料">雨虹JS复合防水涂料</option>
+                                    <option value="雨虹SBS改性沥青卷材">雨虹SBS改性沥青卷材</option>
+                                    <option value="雨虹聚氨酯防水涂料">雨虹聚氨酯防水涂料</option>
+                                    <option value="雨虹瓷砖胶">雨虹瓷砖胶</option>
+                                    <option value="雨虹密封胶">雨虹密封胶</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">数量</label>
+                                <input type="number" class="form-control" id="dispatchQuantity" value="10" min="1">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">收货地址</label>
+                                <input type="text" class="form-control" id="dispatchAddress" value="河南省郑州市新郑市">
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="dispatchUrgent">
+                                <label class="form-check-label" for="dispatchUrgent">紧急订单</label>
+                            </div>
+                            <button class="btn btn-primary w-100" onclick="smartDispatch()">智能分单</button>
+                        </div>
+
+                        <div class="card p-4 mt-3">
+                            <div class="section-title">履约风险监控</div>
+                            <div class="row g-2 mb-3">
+                                <div class="col-6"><div class="stat-mini"><div class="value text-primary" id="totalOrders">--</div><div class="label">在途订单</div></div></div>
+                                <div class="col-6"><div class="stat-mini"><div class="value text-danger" id="overdueOrders">--</div><div class="label">超时预警</div></div></div>
+                            </div>
+                            <div id="fulfillmentList" style="max-height:300px; overflow-y:auto;"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="card p-4">
+                            <div class="section-title">分单结果</div>
+                            <div id="dispatchResult">
+                                <p class="text-muted text-center py-5">请填写左侧表单后点击"智能分单"</p>
+                            </div>
+                        </div>
+                        <div class="card p-4 mt-3">
+                            <div class="section-title">参考数据</div>
+                            <div class="text-muted" style="font-size:13px; line-height:2;">
+                                传统模式平均交付周期：<strong>7-10天</strong><br>
+                                紧急订单履约率：<strong class="text-danger">不足60%</strong>（传统模式）<br>
+                                经销商备货失误率：<strong class="text-danger">35%</strong><br>
+                                库存周转率：<strong>3.8次/年</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 经营洞察 -->
+            <div class="tab-pane fade" id="tab-insight" role="tabpanel">
+                <div class="row g-3 mb-3">
+                    <div class="col-6 col-md-3">
+                        <div class="stat-mini"><div class="value text-primary" id="totalSales">--</div><div class="label">全国销售额(万)</div></div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-mini"><div class="value text-success" id="avgGrowth">--</div><div class="label">平均增速</div></div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-mini"><div class="value text-warning" id="topProduct">--</div><div class="label">动销TOP1</div></div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-mini"><div class="value text-info" id="totalRankedStores">--</div><div class="label">排名门店数</div></div>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-lg-6">
+                        <div class="card p-4">
+                            <div class="section-title">区域销售排名</div>
+                            <canvas id="regionChart" height="200"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card p-4">
+                            <div class="section-title">销售趋势（AI赋能vs传统）</div>
+                            <canvas id="trendChart" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-4 mt-3">
+                    <div class="section-title">产品动销TOP5</div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr><th>排名</th><th>产品</th><th>销售额(万)</th><th>占比</th><th>增速</th><th>热销区域</th></tr>
+                            </thead>
+                            <tbody id="productTop5"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card p-4 mt-3">
+                    <div class="section-title">门店排名
+                        <select class="form-select form-select-sm d-inline-block ms-2" style="width:auto;" id="rankingDimension" onchange="loadRanking()">
+                            <option value="sales">按销售额</option>
+                            <option value="compliance">按合规率</option>
+                            <option value="satisfaction">按满意度</option>
+                            <option value="conversion">按转化率</option>
+                            <option value="repurchase">按复购率</option>
+                        </select>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr><th>排名</th><th>门店</th><th>区域</th><th id="rankingLabel">月销售额(万)</th><th>合规率</th><th>满意度</th></tr>
+                            </thead>
+                            <tbody id="storeRanking"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card p-4 mt-3">
+                    <div class="section-title">AI经营洞察</div>
+                    <div id="channelInsight" class="text-muted" style="font-size:14px; line-height:1.8;">加载中...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部数据更新时间 -->
+        <div class="text-center text-muted mt-4 mb-2" style="font-size:12px;">
+            数据更新时间：<span id="updateTime">--</span> | 雨虹渠道智慧运营助手 - 渠道管理中枢
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ============ 标准化看板 ============
+        async function loadCompliance() {
+            const resp = await fetch('/api/channel/compliance-dashboard');
+            const result = await resp.json();
+            const d = result.data;
+
+            document.getElementById('nationalRate').textContent = d.national_compliance_rate + '%';
+            document.getElementById('totalStores').textContent = d.total_stores;
+            document.getElementById('rectRate').textContent = d.rectification_tracking.completion_rate + '%';
+            document.getElementById('overdueCount').textContent = d.rectification_tracking.overdue;
+            document.getElementById('updateTime').textContent = d.update_time;
+
+            // 区域合规率表格
+            let html = '';
+            d.region_ranking.forEach(r => {
+                const trendColor = r.trend === '上升' ? 'text-success' : r.trend === '下降' ? 'text-danger' : 'text-muted';
+                const rateColor = r.compliance_rate >= 90 ? 'text-success' : r.compliance_rate >= 85 ? 'text-warning' : 'text-danger';
+                html += `<tr>
+                    <td><span class="ranking-badge ${r.rank <= 3 ? 'ranking-' + r.rank : 'ranking-other'}">${r.rank}</span></td>
+                    <td><strong>${r.region}</strong></td>
+                    <td class="${rateColor}"><strong>${r.compliance_rate}%</strong></td>
+                    <td>${r.total_stores}</td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="progress-bar-custom" style="flex:1;"><div class="progress-fill" style="width:${r.rectification_rate}%; background:${r.rectification_rate >= 85 ? '#52c41a' : r.rectification_rate >= 75 ? '#fa8c16' : '#ff4d4f'};"></div></div>
+                            <span style="font-size:12px;">${r.rectification_rate}%</span>
+                        </div>
+                    </td>
+                    <td class="${trendColor}">${r.trend}</td>
+                </tr>`;
+            });
+            document.getElementById('complianceTable').innerHTML = html;
+
+            // 门店类型合规率图
+            new Chart(document.getElementById('typeChart'), {
+                type: 'bar',
+                data: {
+                    labels: d.store_type_compliance.map(t => t.type),
+                    datasets: [{
+                        label: '合规率(%)',
+                        data: d.store_type_compliance.map(t => t.compliance_rate),
+                        backgroundColor: ['#1677FF', '#52c41a', '#fa8c16'],
+                        borderRadius: 6
+                    }]
+                },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100 } } }
+            });
+
+            // 整改追踪
+            const rt = d.rectification_tracking;
+            document.getElementById('rectTracking').innerHTML = `
+                <div class="d-flex justify-content-between py-2 border-bottom"><span>总问题数</span><strong>${rt.total_issues}</strong></div>
+                <div class="d-flex justify-content-between py-2 border-bottom"><span class="text-success">已解决</span><strong class="text-success">${rt.resolved}</strong></div>
+                <div class="d-flex justify-content-between py-2 border-bottom"><span class="text-warning">进行中</span><strong class="text-warning">${rt.in_progress}</strong></div>
+                <div class="d-flex justify-content-between py-2"><span class="text-danger">逾期</span><strong class="text-danger">${rt.overdue}</strong></div>
+                <div class="mt-2">
+                    <div class="d-flex justify-content-between" style="font-size:12px;"><span>完成率</span><span>${rt.completion_rate}%</span></div>
+                    <div class="progress-bar-custom mt-1"><div class="progress-fill" style="width:${rt.completion_rate}%; background:#52c41a;"></div></div>
+                </div>`;
+
+            document.getElementById('complianceInsight').textContent = d.ai_insight;
+        }
+
+        // ============ 渠道拓展 ============
+        async function loadExpansion() {
+            const resp = await fetch('/api/channel/expansion-tracking');
+            const result = await resp.json();
+            const d = result.data;
+
+            document.getElementById('newStoreCount').textContent = d.summary.total_new_stores;
+            document.getElementById('avgSiteScore').textContent = d.summary.avg_site_score;
+            document.getElementById('avgInvestment').textContent = d.summary.avg_investment_万元;
+
+            let html = '';
+            d.new_stores.forEach(s => {
+                let timelineHTML = '';
+                s.开业进度.forEach(stage => {
+                    const cls = stage.状态 === '已完成' ? 'done' : stage.状态 === '进行中' ? 'active' : 'pending';
+                    const color = stage.状态 === '已完成' ? 'text-success' : stage.状态 === '进行中' ? 'text-primary' : 'text-muted';
+                    timelineHTML += `<div class="timeline-item ${cls}">
+                        <div class="d-flex justify-content-between">
+                            <span class="${color}" style="font-size:13px;"><strong>${stage.阶段}</strong></span>
+                            <span class="text-muted" style="font-size:12px;">${stage.日期}</span>
+                        </div>
+                        <span class="text-muted" style="font-size:11px;">${stage.状态}</span>
+                    </div>`;
+                });
+
+                const scoreColor = s.选址评分 >= 85 ? 'text-success' : s.选址评分 >= 80 ? 'text-warning' : 'text-danger';
+
+                html += `<div class="store-card">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <strong>${s.store_name}</strong>
+                            <span class="badge bg-secondary ms-1">${s.store_type}</span>
+                        </div>
+                        <span class="${scoreColor}" style="font-size:20px; font-weight:700;">${s.选址评分}</span>
+                    </div>
+                    <div class="row text-muted mb-2" style="font-size:12px;">
+                        <div class="col-4">区域：${s.region}</div>
+                        <div class="col-4">城市：${s.city}</div>
+                        <div class="col-4">面积：${s.area_sqm}㎡</div>
+                        <div class="col-4">投资：${s.投资额_万元}万</div>
+                        <div class="col-4">租金：${s.租金评估.月租金_元每平米}元/㎡</div>
+                        <div class="col-4">预计开业：${s.预计开业日期}</div>
+                    </div>
+                    <div class="text-muted mb-2" style="font-size:12px;">市场分析：${s.市场分析}</div>
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span style="font-size:13px;">当前阶段：<strong class="text-primary">${s.当前阶段}</strong></span>
+                        <span style="font-size:12px;">进度：${s.进度百分比}%</span>
+                    </div>
+                    <div class="progress-bar-custom mb-3"><div class="progress-fill" style="width:${s.进度百分比}%; background:linear-gradient(90deg,#1677FF,#00d4ff);"></div></div>
+                    <div class="timeline">${timelineHTML}</div>
+                </div>`;
+            });
+            document.getElementById('expansionList').innerHTML = html;
+        }
+
+        // ============ 智能分单 ============
+        async function smartDispatch() {
+            const data = {
+                product: document.getElementById('dispatchProduct').value,
+                quantity: parseInt(document.getElementById('dispatchQuantity').value),
+                address: document.getElementById('dispatchAddress').value,
+                urgent: document.getElementById('dispatchUrgent').checked
+            };
+            const resp = await fetch('/api/channel/smart-dispatch', {
+                method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)
+            });
+            const result = await resp.json();
+            const d = result.data;
+            const r = d.recommended_store;
+
+            let altHTML = '';
+            d.alternative_stores.forEach((s, i) => {
+                altHTML += `<div class="d-flex justify-content-between py-2 border-bottom" style="font-size:13px;">
+                    <span>${i+2}. ${s.store_name}</span>
+                    <span class="text-muted">距离${s.distance_km}km | 库存${s.stock} | 得分${s.match_score}</span>
+                </div>`;
+            });
+
+            document.getElementById('dispatchResult').innerHTML = `
+                <div class="dispatch-result mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="mb-0 text-primary">推荐网点：${r.store_name}</h6>
+                        <span class="badge bg-primary">匹配得分 ${r.match_score}</span>
+                    </div>
+                    <div class="row text-muted" style="font-size:13px;">
+                        <div class="col-6">距收货地：<strong>${r.distance_km}km</strong></div>
+                        <div class="col-6">库存：<strong class="text-success">${r.stock}</strong>（需求${d.order_info.quantity}）</div>
+                        <div class="col-6">配送能力：${r.delivery_capacity}</div>
+                        <div class="col-6">网点评分：${r.store_rating}分</div>
+                    </div>
+                </div>
+                <div class="alert alert-info">
+                    <strong>配送方案</strong><br>
+                    ${d.delivery_plan}<br>
+                    <span class="text-muted">预计送达：${d.estimated_delivery_date}（${d.estimated_delivery_hours}小时内）</span>
+                </div>
+                ${d.order_info.urgent ? '<div class="alert alert-warning"><strong>紧急订单</strong>：传统紧急订单履约率不足60%，本方案通过智能匹配提升至95%+</div>' : ''}
+                <div class="section-title mt-3">备选网点</div>
+                ${altHTML || '<p class="text-muted">暂无备选</p>'}
+                <div class="mt-3 p-3 bg-light rounded" style="font-size:13px;">${d.ai_insight}</div>
+            `;
+        }
+
+        // ============ 履约监控 ============
+        async function loadFulfillment() {
+            const resp = await fetch('/api/channel/fulfillment-monitor');
+            const result = await resp.json();
+            const d = result.data;
+
+            document.getElementById('totalOrders').textContent = d.summary.total_in_transit;
+            document.getElementById('overdueOrders').textContent = d.summary.overdue_count;
+
+            let html = '';
+            d.orders.forEach(o => {
+                const cls = o.is_overdue ? 'alert-overdue' : 'alert-normal';
+                const badge = o.is_overdue ? '<span class="badge bg-danger">超时' + (o.overdue_hours || 0) + 'h</span>' : '<span class="badge bg-success">' + o.status + '</span>';
+                let stagesHTML = '';
+                o.stages.forEach(s => {
+                    const color = s.done ? 'text-success' : 'text-muted';
+                    stagesHTML += `<span class="${color}" style="font-size:11px;">${s.done ? '✓' : '○'} ${s.stage} </span>`;
+                });
+                html += `<div class="${cls}">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <strong style="font-size:13px;">${o.product} x${o.quantity}</strong>
+                            <span class="text-muted ms-1" style="font-size:12px;">${o.order_id}</span>
+                        </div>
+                        ${badge}
+                    </div>
+                    <div class="text-muted" style="font-size:12px;">客户：${o.customer} | 网点：${o.assigned_store}</div>
+                    <div class="mt-1">${stagesHTML}</div>
+                    <div class="progress-bar-custom mt-1"><div class="progress-fill" style="width:${o.progress}%; background:${o.is_overdue ? '#ff4d4f' : '#52c41a'};"></div></div>
+                    ${o.alert ? '<div class="text-danger mt-1" style="font-size:12px;">⚠ ' + o.alert + '</div>' : ''}
+                </div>`;
+            });
+            document.getElementById('fulfillmentList').innerHTML = html;
+        }
+
+        // ============ 经营洞察 ============
+        let regionChart = null, trendChart = null;
+
+        async function loadInsight() {
+            const resp = await fetch('/api/channel/insight');
+            const result = await resp.json();
+            const d = result.data;
+
+            document.getElementById('totalSales').textContent = d.total_sales_万元.toFixed(0);
+            document.getElementById('avgGrowth').textContent = d.avg_growth + '%';
+            document.getElementById('topProduct').textContent = d.product_sales_top5[0].product.replace('雨虹', '');
+            document.getElementById('totalRankedStores').textContent = d.region_ranking.length;
+            document.getElementById('channelInsight').textContent = d.ai_insight;
+
+            // 区域排名图
+            if (regionChart) regionChart.destroy();
+            regionChart = new Chart(document.getElementById('regionChart'), {
+                type: 'bar',
+                data: {
+                    labels: d.region_ranking.map(r => r.region),
+                    datasets: [{
+                        label: '销售额(万元)',
+                        data: d.region_ranking.map(r => r.sales_万元),
+                        backgroundColor: d.region_ranking.map(r => r.growth > 15 ? '#52c41a' : r.growth > 10 ? '#1677FF' : '#fa8c16'),
+                        borderRadius: 6
+                    }]
+                },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            });
+
+            // 趋势图
+            if (trendChart) trendChart.destroy();
+            trendChart = new Chart(document.getElementById('trendChart'), {
+                type: 'line',
+                data: {
+                    labels: d.trend_analysis.labels,
+                    datasets: [
+                        { label: 'AI赋能门店', data: d.trend_analysis.ai_store_sales, borderColor: '#1677FF', backgroundColor: 'rgba(22,119,255,0.1)', fill: true, tension: 0.3 },
+                        { label: '传统门店', data: d.trend_analysis.traditional_store_sales, borderColor: '#fa8c16', borderDash: [5,5], fill: false, tension: 0.3 }
+                    ]
+                },
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } }
+            });
+
+            // 产品动销TOP5
+            let pHTML = '';
+            d.product_sales_top5.forEach(p => {
+                const growthColor = p.growth > 0 ? 'text-success' : 'text-danger';
+                pHTML += `<tr>
+                    <td><span class="ranking-badge ${p.rank <= 3 ? 'ranking-' + p.rank : 'ranking-other'}">${p.rank}</span></td>
+                    <td><strong>${p.product}</strong></td>
+                    <td>${p.sales_万元}</td>
+                    <td>${p.share}%</td>
+                    <td class="${growthColor}">${p.growth > 0 ? '+' : ''}${p.growth}%</td>
+                    <td style="font-size:12px;">${p.hot_regions.join('、')}</td>
+                </tr>`;
+            });
+            document.getElementById('productTop5').innerHTML = pHTML;
+        }
+
+        // ============ 门店排名 ============
+        async function loadRanking() {
+            const dim = document.getElementById('rankingDimension').value;
+            const resp = await fetch(`/api/channel/store-ranking?dimension=${dim}`);
+            const result = await resp.json();
+            const d = result.data;
+
+            document.getElementById('rankingLabel').textContent = d.dimension_label;
+
+            let html = '';
+            d.ranking.forEach(s => {
+                const badgeCls = s.rank <= 3 ? 'ranking-' + s.rank : 'ranking-other';
+                let mainValue = '';
+                if (dim === 'sales') mainValue = s.sales_万元;
+                else if (dim === 'compliance') mainValue = s.compliance_rate + '%';
+                else if (dim === 'satisfaction') mainValue = s.satisfaction;
+                else if (dim === 'conversion') mainValue = s.conversion_rate + '%';
+                else if (dim === 'repurchase') mainValue = s.repurchase_rate + '%';
+
+                html += `<tr>
+                    <td><span class="ranking-badge ${badgeCls}">${s.rank}</span></td>
+                    <td><strong>${s.store_name}</strong></td>
+                    <td>${s.region}</td>
+                    <td><strong class="text-primary">${mainValue}</strong></td>
+                    <td>${s.compliance_rate}%</td>
+                    <td>${s.satisfaction}</td>
+                </tr>`;
+            });
+            document.getElementById('storeRanking').innerHTML = html;
+        }
+
+        // 初始化加载
+        loadCompliance();
+        loadExpansion();
+        loadFulfillment();
+        loadInsight();
+        loadRanking();
+    </script>
+</body>
+</html>

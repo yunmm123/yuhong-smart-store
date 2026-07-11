@@ -168,17 +168,17 @@
     <div class="subtitle">东方雨虹 · 智虹先锋队 · 飞书AI全链路解决方案</div>
   </div>
 
-  <!-- ============ 图1：系统总体五层架构图 ============ -->
+  <!-- ============ 图1：系统总体六层架构图 ============ -->
   <div class="diagram">
     <div class="diagram-head">
       <div class="diagram-title">
         <div class="num">01</div>
-        <h2>系统总体五层架构图</h2>
+        <h2>系统总体六层架构图</h2>
       </div>
-      <div class="diagram-desc">系统采用自上而下的五层架构设计，以飞书生态为底座，向上贯通数据层、AI能力层、应用层与用户层，实现从终端用户到平台能力的全链路打通，构建覆盖"人-货-场-服务"的完整闭环。</div>
+      <div class="diagram-desc">系统采用自上而下的六层架构设计（新增渠道层），以飞书生态为底座，向上贯通数据层、AI能力层、渠道层、应用层与用户层，实现从终端用户到平台能力的全链路打通，构建覆盖"人-货-场-渠道-服务"的完整闭环。</div>
     </div>
     <div class="svg-wrap">
-      <svg viewBox="0 0 1080 640" width="1080" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 1080 690" width="1080" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="L1" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stop-color="#e74c3c"/><stop offset="100%" stop-color="#c0392b"/>
@@ -187,163 +187,196 @@
             <stop offset="0%" stop-color="#f39c12"/><stop offset="100%" stop-color="#e67e22"/>
           </linearGradient>
           <linearGradient id="L3" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stop-color="#00c7ac"/><stop offset="100%" stop-color="#00a890"/>
+            <stop offset="0%" stop-color="#13c2c2"/><stop offset="100%" stop-color="#08979c"/>
           </linearGradient>
           <linearGradient id="L4" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stop-color="#0078d4"/><stop offset="100%" stop-color="#005a9e"/>
+            <stop offset="0%" stop-color="#00c7ac"/><stop offset="100%" stop-color="#00a890"/>
           </linearGradient>
           <linearGradient id="L5" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#0078d4"/><stop offset="100%" stop-color="#005a9e"/>
+          </linearGradient>
+          <linearGradient id="L6" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stop-color="#8e44ad"/><stop offset="100%" stop-color="#6c3483"/>
           </linearGradient>
           <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        </defs>
-
-        <!-- 左侧层级标签 -->
-        <text x="20" y="80" fill="#5d7a9c" font-size="12" letter-spacing="2">LAYER 01</text>
-        <text x="20" y="195" fill="#5d7a9c" font-size="12" letter-spacing="2">LAYER 02</text>
-        <text x="20" y="310" fill="#5d7a9c" font-size="12" letter-spacing="2">LAYER 03</text>
-        <text x="20" y="425" fill="#5d7a9c" font-size="12" letter-spacing="2">LAYER 04</text>
-        <text x="20" y="540" fill="#5d7a9c" font-size="12" letter-spacing="2">LAYER 05</text>
-
-        <!-- 第1层 用户层 -->
-        <rect x="100" y="30" width="940" height="100" rx="12" fill="url(#L1)" opacity="0.92"/>
-        <rect x="100" y="30" width="940" height="100" rx="12" fill="none" stroke="#ff7b6b" stroke-width="1.5" opacity="0.7"/>
-        <text x="125" y="68" fill="#fff" font-size="20" font-weight="700">用户层</text>
-        <text x="125" y="92" fill="#ffe5e0" font-size="12" opacity="0.85">User Layer · 触达终端</text>
-        <g font-size="13.5" fill="#fff">
-          <rect x="300" y="55" width="150" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="375" y="85" text-anchor="middle">C端消费者</text>
-          <rect x="465" y="55" width="150" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="540" y="85" text-anchor="middle">门店店长</text>
-          <rect x="630" y="55" width="150" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="705" y="85" text-anchor="middle">区域督导</text>
-          <rect x="795" y="55" width="150" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="870" y="85" text-anchor="middle">总部运营</text>
-        </g>
-
-        <!-- 连接箭头 1->2 -->
-        <g stroke="#3a5878" stroke-width="1.5" fill="none" opacity="0.6">
-          <path d="M540 130 L540 145" marker-end="url(#arr2)"/>
-        </g>
-        <defs>
           <marker id="arr2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
             <path d="M0,0 L8,4 L0,8 z" fill="#3a5878"/>
           </marker>
         </defs>
 
+        <!-- 左侧层级标签 -->
+        <text x="20" y="72" fill="#5d7a9c" font-size="12" letter-spacing="2">LAYER 01</text>
+        <text x="20" y="172" fill="#5d7a9c" font-size="12" letter-spacing="2">LAYER 02</text>
+        <text x="20" y="272" fill="#13c2c2" font-size="12" letter-spacing="2">LAYER 03</text>
+        <text x="20" y="372" fill="#5d7a9c" font-size="12" letter-spacing="2">LAYER 04</text>
+        <text x="20" y="472" fill="#5d7a9c" font-size="12" letter-spacing="2">LAYER 05</text>
+        <text x="20" y="572" fill="#5d7a9c" font-size="12" letter-spacing="2">LAYER 06</text>
+
+        <!-- 第1层 用户层 -->
+        <rect x="100" y="30" width="940" height="85" rx="12" fill="url(#L1)" opacity="0.92"/>
+        <rect x="100" y="30" width="940" height="85" rx="12" fill="none" stroke="#ff7b6b" stroke-width="1.5" opacity="0.7"/>
+        <text x="125" y="63" fill="#fff" font-size="18" font-weight="700">用户层</text>
+        <text x="125" y="85" fill="#ffe5e0" font-size="11" opacity="0.85">User Layer · 触达终端</text>
+        <g font-size="13" fill="#fff">
+          <rect x="280" y="50" width="135" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="347" y="78" text-anchor="middle">C端消费者</text>
+          <rect x="430" y="50" width="135" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="497" y="78" text-anchor="middle">门店店长</text>
+          <rect x="580" y="50" width="135" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="647" y="78" text-anchor="middle">区域督导</text>
+          <rect x="730" y="50" width="135" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="797" y="78" text-anchor="middle">渠道经理</text>
+          <rect x="880" y="50" width="135" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="947" y="78" text-anchor="middle">总部运营</text>
+        </g>
+
+        <!-- 连接箭头 1->2 -->
+        <g stroke="#3a5878" stroke-width="1.5" fill="none" opacity="0.6">
+          <path d="M540 115 L540 130" marker-end="url(#arr2)"/>
+        </g>
+
         <!-- 第2层 应用层 -->
-        <rect x="100" y="145" width="940" height="100" rx="12" fill="url(#L2)" opacity="0.92"/>
-        <rect x="100" y="145" width="940" height="100" rx="12" fill="none" stroke="#ffb84d" stroke-width="1.5" opacity="0.7"/>
-        <text x="125" y="183" fill="#fff" font-size="20" font-weight="700">应用层</text>
-        <text x="125" y="207" fill="#fff3df" font-size="12" opacity="0.9">Application Layer · 业务四大模块</text>
-        <g font-size="13.5" fill="#fff">
-          <rect x="300" y="170" width="150" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="375" y="200" text-anchor="middle">门店巡检</text>
-          <rect x="465" y="170" width="150" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="540" y="200" text-anchor="middle">AI 导购</text>
-          <rect x="630" y="170" width="150" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="705" y="200" text-anchor="middle">门店运营</text>
-          <rect x="795" y="170" width="150" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="870" y="200" text-anchor="middle">私域维护</text>
+        <rect x="100" y="130" width="940" height="85" rx="12" fill="url(#L2)" opacity="0.92"/>
+        <rect x="100" y="130" width="940" height="85" rx="12" fill="none" stroke="#ffb84d" stroke-width="1.5" opacity="0.7"/>
+        <text x="125" y="163" fill="#fff" font-size="18" font-weight="700">应用层</text>
+        <text x="125" y="185" fill="#fff3df" font-size="11" opacity="0.9">Application Layer · 业务五大模块</text>
+        <g font-size="13" fill="#fff">
+          <rect x="250" y="150" width="120" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="310" y="178" text-anchor="middle">门店巡检</text>
+          <rect x="385" y="150" width="120" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="445" y="178" text-anchor="middle">AI 导购</text>
+          <rect x="520" y="150" width="120" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="580" y="178" text-anchor="middle">门店运营</text>
+          <rect x="655" y="150" width="120" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="715" y="178" text-anchor="middle">私域维护</text>
+          <rect x="790" y="150" width="220" height="45" rx="8" fill="rgba(19,194,194,0.35)" stroke="#3fffd8" stroke-width="1.5"/>
+          <text x="900" y="178" text-anchor="middle" font-weight="700">📡 渠道管理中枢（新增）</text>
         </g>
 
         <!-- 连接箭头 2->3 -->
         <g stroke="#3a5878" stroke-width="1.5" fill="none" opacity="0.6">
-          <path d="M540 245 L540 260" marker-end="url(#arr2)"/>
+          <path d="M540 215 L540 230" marker-end="url(#arr2)"/>
         </g>
 
-        <!-- 第3层 AI能力层 -->
-        <rect x="100" y="260" width="940" height="100" rx="12" fill="url(#L3)" opacity="0.92"/>
-        <rect x="100" y="260" width="940" height="100" rx="12" fill="none" stroke="#3fffd8" stroke-width="1.5" opacity="0.7"/>
-        <text x="125" y="298" fill="#fff" font-size="20" font-weight="700">AI 能力层</text>
-        <text x="125" y="322" fill="#d8fff5" font-size="12" opacity="0.9">AI Capability Layer · 智能引擎中枢</text>
-        <g font-size="13.5" fill="#fff">
-          <rect x="300" y="285" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="367" y="315" text-anchor="middle">aily 智能体</text>
-          <rect x="445" y="285" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="512" y="315" text-anchor="middle">知识库</text>
-          <rect x="590" y="285" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="657" y="315" text-anchor="middle">多维分析</text>
-          <rect x="735" y="285" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="802" y="315" text-anchor="middle">智能问答</text>
-          <rect x="880" y="285" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="947" y="315" text-anchor="middle">流程自动化</text>
+        <!-- 第3层 渠道层（新增） -->
+        <rect x="100" y="230" width="940" height="85" rx="12" fill="url(#L3)" opacity="0.92"/>
+        <rect x="100" y="230" width="940" height="85" rx="12" fill="none" stroke="#3fffd8" stroke-width="1.5" opacity="0.7"/>
+        <text x="125" y="263" fill="#fff" font-size="18" font-weight="700">渠道层</text>
+        <text x="125" y="285" fill="#d8ffff" font-size="11" opacity="0.9">Channel Layer · 渠道管控中枢（新增）</text>
+        <g font-size="13" fill="#fff">
+          <rect x="250" y="250" width="155" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="327" y="278" text-anchor="middle">标准化看板</text>
+          <rect x="420" y="250" width="155" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="497" y="278" text-anchor="middle">智能分单</text>
+          <rect x="590" y="250" width="155" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="667" y="278" text-anchor="middle">履约监控</text>
+          <rect x="760" y="250" width="120" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="820" y="278" text-anchor="middle">拓展管理</text>
+          <rect x="895" y="250" width="120" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="955" y="278" text-anchor="middle">经营洞察</text>
         </g>
 
         <!-- 连接箭头 3->4 -->
         <g stroke="#3a5878" stroke-width="1.5" fill="none" opacity="0.6">
-          <path d="M540 360 L540 375" marker-end="url(#arr2)"/>
+          <path d="M540 315 L540 330" marker-end="url(#arr2)"/>
         </g>
 
-        <!-- 第4层 数据层 -->
-        <rect x="100" y="375" width="940" height="100" rx="12" fill="url(#L4)" opacity="0.92"/>
-        <rect x="100" y="375" width="940" height="100" rx="12" fill="none" stroke="#4da3ff" stroke-width="1.5" opacity="0.7"/>
-        <text x="125" y="413" fill="#fff" font-size="20" font-weight="700">数据层</text>
-        <text x="125" y="437" fill="#dceeff" font-size="12" opacity="0.9">Data Layer · 统一数据底座</text>
-        <g font-size="13.5" fill="#fff">
-          <rect x="300" y="400" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="367" y="430" text-anchor="middle">门店数据</text>
-          <rect x="445" y="400" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="512" y="430" text-anchor="middle">商品数据</text>
-          <rect x="590" y="400" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="657" y="430" text-anchor="middle">用户数据</text>
-          <rect x="735" y="400" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="802" y="430" text-anchor="middle">施工数据</text>
-          <rect x="880" y="400" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="947" y="430" text-anchor="middle">知识文档</text>
+        <!-- 第4层 AI能力层 -->
+        <rect x="100" y="330" width="940" height="85" rx="12" fill="url(#L4)" opacity="0.92"/>
+        <rect x="100" y="330" width="940" height="85" rx="12" fill="none" stroke="#3fffd8" stroke-width="1.5" opacity="0.7"/>
+        <text x="125" y="363" fill="#fff" font-size="18" font-weight="700">AI 能力层</text>
+        <text x="125" y="385" fill="#d8fff5" font-size="11" opacity="0.9">AI Capability Layer · 智能引擎中枢</text>
+        <g font-size="13" fill="#fff">
+          <rect x="280" y="350" width="130" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="345" y="378" text-anchor="middle">aily 智能体</text>
+          <rect x="425" y="350" width="130" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="490" y="378" text-anchor="middle">知识库</text>
+          <rect x="570" y="350" width="130" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="635" y="378" text-anchor="middle">多维分析</text>
+          <rect x="715" y="350" width="130" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="780" y="378" text-anchor="middle">智能问答</text>
+          <rect x="860" y="350" width="155" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="937" y="378" text-anchor="middle">流程自动化</text>
         </g>
 
         <!-- 连接箭头 4->5 -->
         <g stroke="#3a5878" stroke-width="1.5" fill="none" opacity="0.6">
-          <path d="M540 475 L540 490" marker-end="url(#arr2)"/>
+          <path d="M540 415 L540 430" marker-end="url(#arr2)"/>
         </g>
 
-        <!-- 第5层 飞书生态层 -->
-        <rect x="100" y="490" width="940" height="100" rx="12" fill="url(#L5)" opacity="0.92"/>
-        <rect x="100" y="490" width="940" height="100" rx="12" fill="none" stroke="#b98cdb" stroke-width="1.5" opacity="0.7"/>
-        <text x="125" y="528" fill="#fff" font-size="20" font-weight="700">飞书生态层</text>
-        <text x="125" y="552" fill="#f0e0ff" font-size="12" opacity="0.9">Feishu Ecosystem · 平台基础设施</text>
-        <g font-size="13.5" fill="#fff">
-          <rect x="300" y="515" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="367" y="545" text-anchor="middle">开放平台</text>
-          <rect x="445" y="515" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="512" y="545" text-anchor="middle">多维表格</text>
-          <rect x="590" y="515" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="657" y="545" text-anchor="middle">消息推送</text>
-          <rect x="735" y="515" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="802" y="545" text-anchor="middle">审批流程</text>
-          <rect x="880" y="515" width="135" height="50" rx="8" fill="rgba(0,0,0,0.25)"/>
-          <text x="947" y="545" text-anchor="middle">日历日程</text>
+        <!-- 第5层 数据层 -->
+        <rect x="100" y="430" width="940" height="85" rx="12" fill="url(#L5)" opacity="0.92"/>
+        <rect x="100" y="430" width="940" height="85" rx="12" fill="none" stroke="#4da3ff" stroke-width="1.5" opacity="0.7"/>
+        <text x="125" y="463" fill="#fff" font-size="18" font-weight="700">数据层</text>
+        <text x="125" y="485" fill="#dceeff" font-size="11" opacity="0.9">Data Layer · 统一数据底座</text>
+        <g font-size="13" fill="#fff">
+          <rect x="250" y="450" width="125" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="312" y="478" text-anchor="middle">门店数据</text>
+          <rect x="390" y="450" width="125" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="452" y="478" text-anchor="middle">商品数据</text>
+          <rect x="530" y="450" width="125" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="592" y="478" text-anchor="middle">用户数据</text>
+          <rect x="670" y="450" width="125" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="732" y="478" text-anchor="middle">渠道数据</text>
+          <rect x="810" y="450" width="205" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="912" y="478" text-anchor="middle">施工数据 / 知识文档</text>
+        </g>
+
+        <!-- 连接箭头 5->6 -->
+        <g stroke="#3a5878" stroke-width="1.5" fill="none" opacity="0.6">
+          <path d="M540 515 L540 530" marker-end="url(#arr2)"/>
+        </g>
+
+        <!-- 第6层 飞书生态层 -->
+        <rect x="100" y="530" width="940" height="85" rx="12" fill="url(#L6)" opacity="0.92"/>
+        <rect x="100" y="530" width="940" height="85" rx="12" fill="none" stroke="#b98cdb" stroke-width="1.5" opacity="0.7"/>
+        <text x="125" y="563" fill="#fff" font-size="18" font-weight="700">飞书生态层</text>
+        <text x="125" y="585" fill="#f0e0ff" font-size="11" opacity="0.9">Feishu Ecosystem · 平台基础设施</text>
+        <g font-size="13" fill="#fff">
+          <rect x="280" y="550" width="130" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="345" y="578" text-anchor="middle">开放平台</text>
+          <rect x="425" y="550" width="130" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="490" y="578" text-anchor="middle">多维表格</text>
+          <rect x="570" y="550" width="130" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="635" y="578" text-anchor="middle">消息推送</text>
+          <rect x="715" y="550" width="130" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="780" y="578" text-anchor="middle">审批流程</text>
+          <rect x="860" y="550" width="155" height="45" rx="8" fill="rgba(0,0,0,0.25)"/>
+          <text x="937" y="578" text-anchor="middle">日历日程</text>
         </g>
 
         <!-- 右侧纵向贯穿指示 -->
         <g opacity="0.5">
-          <line x1="1050" y1="60" x2="1050" y2="565" stroke="#2a4a6a" stroke-width="1" stroke-dasharray="4 4"/>
-          <circle cx="1050" cy="60" r="3" fill="#e74c3c"/>
-          <circle cx="1050" cy="195" r="3" fill="#f39c12"/>
-          <circle cx="1050" cy="310" r="3" fill="#00c7ac"/>
-          <circle cx="1050" cy="425" r="3" fill="#0078d4"/>
-          <circle cx="1050" cy="540" r="3" fill="#8e44ad"/>
+          <line x1="1050" y1="55" x2="1050" y2="600" stroke="#2a4a6a" stroke-width="1" stroke-dasharray="4 4"/>
+          <circle cx="1050" cy="72" r="3" fill="#e74c3c"/>
+          <circle cx="1050" cy="172" r="3" fill="#f39c12"/>
+          <circle cx="1050" cy="272" r="3" fill="#13c2c2"/>
+          <circle cx="1050" cy="372" r="3" fill="#00c7ac"/>
+          <circle cx="1050" cy="472" r="3" fill="#0078d4"/>
+          <circle cx="1050" cy="572" r="3" fill="#8e44ad"/>
         </g>
-        <text x="1066" y="315" fill="#5d7a9c" font-size="11" transform="rotate(90 1066 315)" text-anchor="middle">全链路贯通 · 数据双向流转</text>
+        <text x="1066" y="330" fill="#5d7a9c" font-size="11" transform="rotate(90 1066 330)" text-anchor="middle">全链路贯通 · 数据双向流转</text>
       </svg>
     </div>
   </div>
 
-  <!-- ============ 图2：四大模块数据流转图 ============ -->
+  <!-- ============ 图2：五大模块数据流转图 ============ -->
   <div class="diagram">
     <div class="diagram-head">
       <div class="diagram-title">
         <div class="num">02</div>
-        <h2>四大模块数据流转图</h2>
+        <h2>五大模块数据流转图</h2>
       </div>
-      <div class="diagram-desc">四大业务模块以循环驱动方式协同运转：门店巡检采集一线数据，AI导购沉淀消费需求，门店运营优化经营效率，私域维护实现用户复购，最终数据回流形成业务飞轮，持续自我强化。</div>
+      <div class="diagram-desc">五大业务模块以循环驱动方式协同运转：门店巡检采集一线数据，AI导购沉淀消费需求，门店运营优化经营效率，私域维护实现用户复购，渠道管理中枢统管标准化/分单/履约/洞察，最终数据回流形成业务飞轮，持续自我强化。</div>
     </div>
     <div class="svg-wrap">
-      <svg viewBox="0 0 1080 620" width="1080" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 1080 740" width="1080" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <marker id="arrowG" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
             <path d="M0,0 L10,5 L0,10 z" fill="#00c7ac"/>
+          </marker>
+          <marker id="arrowCh" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="#13c2c2"/>
           </marker>
           <radialGradient id="centerG" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stop-color="#00c7ac" stop-opacity="0.25"/>
@@ -430,8 +463,26 @@
           <text x="196" y="488" fill="#7fd8ff" font-size="11.5">输出：复购转化 + 留存</text>
         </g>
 
+        <!-- 模块5：渠道管理中枢（底部中央·新增） -->
+        <g>
+          <rect x="400" y="525" width="280" height="100" rx="14" fill="#1a2c44" stroke="#13c2c2" stroke-width="2"/>
+          <circle cx="430" cy="555" r="16" fill="#13c2c2"/>
+          <text x="430" y="561" text-anchor="middle" fill="#061427" font-size="14" font-weight="700">5</text>
+          <text x="456" y="561" fill="#fff" font-size="16" font-weight="700">📡 渠道管理中枢</text>
+          <line x1="416" y1="577" x2="664" y2="577" stroke="#2a4a6a" stroke-width="1"/>
+          <text x="416" y="597" fill="#9fb4cc" font-size="11.5">输入：渠道网点/履约/标准化数据</text>
+          <text x="416" y="615" fill="#3fffd8" font-size="11.5">输出：标准化看板 + 智能分单 + 履约监控</text>
+        </g>
+
+        <!-- 数据飞轮 <-> 渠道管理中枢 双向箭头 -->
+        <g fill="none" stroke="#13c2c2" stroke-width="2.5" opacity="0.85">
+          <path d="M 540 400 L 540 525" marker-end="url(#arrowCh)" stroke-dasharray="5 3"/>
+        </g>
+        <rect x="490" y="445" width="100" height="22" rx="11" fill="#0a1628" stroke="#13c2c2" stroke-width="1"/>
+        <text x="540" y="460" text-anchor="middle" fill="#3fffd8" font-size="12">渠道数据</text>
+
         <!-- 底部图例 -->
-        <g transform="translate(180,560)">
+        <g transform="translate(180,670)">
           <rect x="0" y="0" width="720" height="42" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
           <text x="20" y="26" fill="#9fb4cc" font-size="12">流转方向：</text>
           <line x1="92" y1="21" x2="132" y2="21" stroke="#00c7ac" stroke-width="2.5" marker-end="url(#arrowG)"/>
@@ -454,10 +505,10 @@
         <div class="num">03</div>
         <h2>飞书AI能力对接矩阵</h2>
       </div>
-      <div class="diagram-desc">矩阵展示四大业务模块与五种飞书AI核心能力的对接关系。绿色圆点表示方案设计已规划对接的能力（Demo中以模拟数据演示），灰色圆点表示规划中或暂未对接的能力，清晰呈现能力覆盖度与待拓展空间。</div>
+      <div class="diagram-desc">矩阵展示五大业务模块与五种飞书AI核心能力的对接关系。绿色圆点表示方案设计已规划对接的能力（Demo中以模拟数据演示），灰色圆点表示规划中或暂未对接的能力，清晰呈现能力覆盖度与待拓展空间。</div>
     </div>
     <div class="svg-wrap">
-      <svg viewBox="0 0 1080 560" width="1080" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 1080 650" width="1080" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="greenDot" cx="35%" cy="35%" r="65%">
             <stop offset="0%" stop-color="#5dffce"/>
@@ -486,10 +537,10 @@
 
         <!-- 列分隔虚线 -->
         <g stroke="#2a4a6a" stroke-width="1" stroke-dasharray="3 4" opacity="0.6">
-          <line x1="350" y1="120" x2="350" y2="480"/>
-          <line x1="510" y1="120" x2="510" y2="480"/>
-          <line x1="670" y1="120" x2="670" y2="480"/>
-          <line x1="830" y1="120" x2="830" y2="480"/>
+          <line x1="350" y1="120" x2="350" y2="570"/>
+          <line x1="510" y1="120" x2="510" y2="570"/>
+          <line x1="670" y1="120" x2="670" y2="570"/>
+          <line x1="830" y1="120" x2="830" y2="570"/>
         </g>
 
         <!-- 行1：门店巡检 -->
@@ -549,22 +600,40 @@
           <circle cx="910" cy="440" r="14" fill="rgba(255,255,255,0.08)" stroke="#3a5878" stroke-width="1.5"/>
         </g>
 
+        <!-- 行5：渠道管理中枢（新增） -->
+        <g>
+          <rect x="20" y="490" width="1040" height="80" rx="6" fill="rgba(19,194,194,0.05)"/>
+          <rect x="20" y="490" width="135" height="80" rx="6" fill="rgba(19,194,194,0.18)" stroke="#13c2c2" stroke-width="1.5"/>
+          <text x="87" y="525" text-anchor="middle" fill="#3fffd8" font-size="15" font-weight="700">渠道管理中枢</text>
+          <text x="87" y="546" text-anchor="middle" fill="#9fb4cc" font-size="11">Channel Hub</text>
+          <!-- aily: 已对接（经营洞察） -->
+          <circle cx="270" cy="530" r="14" fill="url(#greenDot)"/><circle cx="266" cy="526" r="4" fill="#fff" opacity="0.6"/>
+          <!-- 多维表格: 已对接（标准化看板） -->
+          <circle cx="430" cy="530" r="14" fill="url(#greenDot)"/><circle cx="426" cy="526" r="4" fill="#fff" opacity="0.6"/>
+          <!-- 知识库: 未对接 -->
+          <circle cx="590" cy="530" r="14" fill="rgba(255,255,255,0.08)" stroke="#3a5878" stroke-width="1.5"/>
+          <!-- 消息推送: 已对接（履约预警） -->
+          <circle cx="750" cy="530" r="14" fill="url(#greenDot)"/><circle cx="746" cy="526" r="4" fill="#fff" opacity="0.6"/>
+          <!-- 审批流程: 已对接（智能分单） -->
+          <circle cx="910" cy="530" r="14" fill="url(#greenDot)"/><circle cx="906" cy="526" r="4" fill="#fff" opacity="0.6"/>
+        </g>
+
         <!-- 统计行 -->
-        <g transform="translate(20,500)">
+        <g transform="translate(20,590)">
           <rect x="0" y="0" width="1040" height="44" rx="8" fill="rgba(0,199,172,0.08)" stroke="#00c7ac" stroke-width="1" opacity="0.6"/>
           <text x="20" y="28" fill="#7fd8ff" font-size="13" font-weight="600">方案规划对接覆盖率：</text>
-          <text x="200" y="28" fill="#5dffce" font-size="13" font-weight="700">14 / 20</text>
-          <text x="252" y="28" fill="#9fb4cc" font-size="12">（70%）</text>
+          <text x="200" y="28" fill="#5dffce" font-size="13" font-weight="700">18 / 25</text>
+          <text x="252" y="28" fill="#9fb4cc" font-size="12">（72%）</text>
           <text x="330" y="28" fill="#9fb4cc" font-size="12">·</text>
-          <text x="350" y="28" fill="#9fb4cc" font-size="12">aily 4/4</text>
+          <text x="350" y="28" fill="#9fb4cc" font-size="12">aily 5/5</text>
           <text x="450" y="28" fill="#9fb4cc" font-size="12">·</text>
-          <text x="470" y="28" fill="#9fb4cc" font-size="12">多维表格 3/4</text>
+          <text x="470" y="28" fill="#9fb4cc" font-size="12">多维表格 4/5</text>
           <text x="580" y="28" fill="#9fb4cc" font-size="12">·</text>
-          <text x="600" y="28" fill="#9fb4cc" font-size="12">知识库 2/4</text>
+          <text x="600" y="28" fill="#9fb4cc" font-size="12">知识库 2/5</text>
           <text x="690" y="28" fill="#9fb4cc" font-size="12">·</text>
-          <text x="710" y="28" fill="#9fb4cc" font-size="12">消息推送 4/4</text>
+          <text x="710" y="28" fill="#9fb4cc" font-size="12">消息推送 5/5</text>
           <text x="820" y="28" fill="#9fb4cc" font-size="12">·</text>
-          <text x="840" y="28" fill="#9fb4cc" font-size="12">审批流程 1/4</text>
+          <text x="840" y="28" fill="#9fb4cc" font-size="12">审批流程 2/5</text>
         </g>
 
         <!-- 图例（移到表头右侧空隙，这里放右上） -->
@@ -585,7 +654,7 @@
         <div class="num">04</div>
         <h2>3515计划推广路线图</h2>
       </div>
-      <div class="diagram-desc">"3515计划"以阶梯式递进策略分四阶段铺开：从试点5店验证模式，到区域50店复制流程，再到507城规模扩张，最终覆盖全国29万网点，实现飞书AI能力在东方雨虹渠道网络的全面落地。</div>
+      <div class="diagram-desc">"3515计划"以阶梯式递进策略分四阶段铺开：从试点5店验证模式，到区域50店复制流程，再到507城规模扩张，最终覆盖全国29万网点（3000余家专卖店和10000余家终端网点），实现飞书AI能力在东方雨虹渠道网络的全面落地。</div>
     </div>
     <div class="svg-wrap">
       <svg viewBox="0 0 1080 560" width="1080" xmlns="http://www.w3.org/2000/svg">
@@ -624,7 +693,7 @@
           <!-- 顶部标签 -->
           <rect x="100" y="350" width="150" height="38" rx="6" fill="#1a2c44" stroke="#e67e22" stroke-width="1"/>
           <text x="175" y="367" text-anchor="middle" fill="#ffb84d" font-size="11">目标</text>
-          <text x="175" y="382" text-anchor="middle" fill="#9fb4cc" font-size="11">验证四大模块闭环</text>
+          <text x="175" y="382" text-anchor="middle" fill="#9fb4cc" font-size="11">验证五大模块闭环</text>
           <!-- 连接 -->
           <line x1="175" y1="388" x2="175" y2="400" stroke="#e67e22" stroke-width="1.5"/>
         </g>

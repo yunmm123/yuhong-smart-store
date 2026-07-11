@@ -1,7 +1,7 @@
 """
-雨虹智慧门店运营助手 - 核心业务逻辑测试
+雨虹渠道智慧运营助手 - 核心业务逻辑测试
 ======================================
-覆盖巡检评分、产品搜索、客户画像、流失风险预测等核心逻辑。
+覆盖巡检评分、产品搜索、客户画像、流失风险预测、渠道管理等核心逻辑。
 
 运行方式：
     cd yuhong-smart-store
@@ -18,6 +18,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 from modules.store_inspection import StoreInspectionModule, INSPECTION_ITEMS
 from modules.ai_shopping_guide import AIShoppingGuideModule
 from modules.customer_relation import CustomerRelationModule
+from modules.channel_management import ChannelManagementModule
 
 
 class TestStoreInspection:
@@ -197,3 +198,133 @@ class TestCustomerRelation:
         """购买次数<2应返回数据不足"""
         result = self.module._predict_next_purchase({"purchase_count": 1})
         assert result == "数据不足"
+
+
+class TestChannelManagement:
+    """渠道管理中枢模块测试"""
+
+    def setup_method(self):
+        self.module = ChannelManagementModule()
+
+    def test_compliance_dashboard_structure(self):
+        """合规率看板应返回正确数据结构"""
+        result = self.module.get_compliance_dashboard()
+        assert "national_compliance_rate" in result
+        assert "total_stores" in result
+        assert "region_ranking" in result
+        assert "store_type_compliance" in result
+        assert "rectification_tracking" in result
+        assert "ai_insight" in result
+        assert isinstance(result["region_ranking"], list)
+        assert len(result["region_ranking"]) == 6
+
+    def test_compliance_dashboard_region_data(self):
+        """各区域合规率数据应完整"""
+        result = self.module.get_compliance_dashboard()
+        for region in result["region_ranking"]:
+            assert "region" in region
+            assert "compliance_rate" in region
+            assert "total_stores" in region
+            assert "passed_stores" in region
+            assert "rectification_rate" in region
+            assert "rank" in region
+
+    def test_compliance_dashboard_national_rate(self):
+        """全国合规率应为合理数值"""
+        result = self.module.get_compliance_dashboard()
+        assert 0 < result["national_compliance_rate"] <= 100
+
+    def test_smart_dispatch_returns_recommended_store(self):
+        """智能分单应返回推荐网点"""
+        order_info = {
+            "product": "雨虹JS复合防水涂料",
+            "quantity": 10,
+            "address": "河南省郑州市新郑市",
+            "urgent": False
+        }
+        result = self.module.smart_dispatch(order_info)
+        assert "recommended_store" in result
+        assert "store_name" in result["recommended_store"]
+        assert "match_score" in result["recommended_store"]
+        assert "delivery_plan" in result
+        assert "estimated_delivery_hours" in result
+
+    def test_smart_dispatch_urgent_order(self):
+        """紧急订单分单应包含加急信息"""
+        order_info = {
+            "product": "雨虹SBS改性沥青卷材",
+            "quantity": 50,
+            "address": "河南省郑州市新郑市",
+            "urgent": True
+        }
+        result = self.module.smart_dispatch(order_info)
+        assert result["order_info"]["urgent"] is True
+        assert "紧急" in result["delivery_plan"]
+
+    def test_smart_dispatch_alternative_stores(self):
+        """智能分单应返回备选网点"""
+        order_info = {"product": "雨虹密封胶", "quantity": 5}
+        result = self.module.smart_dispatch(order_info)
+        assert "alternative_stores" in result
+        assert isinstance(result["alternative_stores"], list)
+
+    def test_fulfillment_monitor_overdue_alerts(self):
+        """履约监控应返回预警列表"""
+        result = self.module.get_fulfillment_monitor()
+        assert "overdue_alerts" in result
+        assert isinstance(result["overdue_alerts"], list)
+        assert len(result["overdue_alerts"]) >= 1
+
+    def test_fulfillment_monitor_orders_count(self):
+        """履约监控应返回8个在途订单"""
+        result = self.module.get_fulfillment_monitor()
+        assert len(result["orders"]) == 8
+        assert result["summary"]["total_in_transit"] == 8
+
+    def test_fulfillment_monitor_overdue_marked(self):
+        """超时订单应标记is_overdue为True"""
+        result = self.module.get_fulfillment_monitor()
+        for alert in result["overdue_alerts"]:
+            assert alert["is_overdue"] is True
+            assert alert["risk_level"] == "超时预警"
+
+    def test_store_ranking_default_dimension(self):
+        """门店排名默认按销售额排序"""
+        result = self.module.get_store_ranking()
+        assert result["dimension"] == "sales"
+        assert len(result["ranking"]) == 10
+        sales_values = [s["sales_万元"] for s in result["ranking"]]
+        assert sales_values == sorted(sales_values, reverse=True)
+
+    def test_store_ranking_by_compliance(self):
+        """门店排名按合规率应正确排序"""
+        result = self.module.get_store_ranking(dimension='compliance')
+        assert result["dimension"] == "compliance"
+        compliance_values = [s["compliance_rate"] for s in result["ranking"]]
+        assert compliance_values == sorted(compliance_values, reverse=True)
+
+    def test_store_ranking_rank_assignment(self):
+        """门店排名应正确分配排名序号"""
+        result = self.module.get_store_ranking()
+        for i, store in enumerate(result["ranking"]):
+            assert store["rank"] == i + 1
+
+    def test_expansion_tracking_structure(self):
+        """渠道拓展应返回5个新网点"""
+        result = self.module.get_expansion_tracking()
+        assert len(result["new_stores"]) == 5
+        assert "summary" in result
+        for store in result["new_stores"]:
+            assert "选址评分" in store
+            assert "开业进度" in store
+            assert "租金评估" in store
+            assert "当前阶段" in store
+
+    def test_channel_insight_structure(self):
+        """渠道经营洞察应返回正确数据结构"""
+        result = self.module.get_channel_insight()
+        assert "region_ranking" in result
+        assert "product_sales_top5" in result
+        assert "trend_analysis" in result
+        assert len(result["product_sales_top5"]) == 5
+        assert "ai_insight" in result

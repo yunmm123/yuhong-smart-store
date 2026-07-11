@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>雨虹智慧门店运营助手 - Demo交互演示</title>
+  <title>雨虹渠道智慧运营助手 - Demo交互演示</title>
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <!-- Chart.js -->
@@ -202,7 +202,7 @@
     <div class="yh-brand">
       <div class="yh-logo">虹</div>
       <div>
-        <div class="yh-brand-title">雨虹智慧门店运营助手</div>
+        <div class="yh-brand-title">雨虹渠道智慧运营助手</div>
         <div class="yh-brand-sub">东方雨虹县域建材零售智慧运营平台 · 2026 AI先锋未来人才大赛</div>
       </div>
     </div>
@@ -214,6 +214,7 @@
     <div class="yh-tab active" data-tab="tab1"><span class="tab-num">1</span>首页仪表盘</div>
     <div class="yh-tab" data-tab="tab2"><span class="tab-num">2</span>门店巡检</div>
     <div class="yh-tab" data-tab="tab3"><span class="tab-num">3</span>AI导购</div>
+    <div class="yh-tab" data-tab="tab5"><span class="tab-num">5</span>渠道管理中枢</div>
     <div class="yh-tab" data-tab="tab4"><span class="tab-num">4</span>3515县域大屏</div>
   </div>
 
@@ -395,6 +396,89 @@
     </div>
   </div>
 
+  <!-- ============ TAB 5: 渠道管理中枢 ============ -->
+  <div class="yh-panel" id="tab5">
+    <div class="section-title">渠道管理中枢 · 标准化看板</div>
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-lg-3">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#eef4ff;color:#1677FF;">网</div>
+          <div class="stat-value" style="color:#1677FF;">13,000+</div>
+          <div class="stat-label">覆盖网点（3000+专卖店/10000+终端）</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#eafaf1;color:#18a558;">标</div>
+          <div class="stat-value" style="color:#18a558;">82%</div>
+          <div class="stat-label">渠道标准化率</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#fff4e6;color:#ed8a09;">约</div>
+          <div class="stat-value" style="color:#ed8a09;">86%</div>
+          <div class="stat-label">紧急订单履约率（原不足60%）</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#fdecec;color:#E8392B;">误</div>
+          <div class="stat-value" style="color:#E8392B;">8%</div>
+          <div class="stat-label">备货失误率（原35%）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <!-- 智能分单 -->
+      <div class="col-lg-7">
+        <div class="yh-card">
+          <div class="section-title" style="margin-top:0;">智能分单模拟</div>
+          <p class="text-muted small mb-3">传统建材交付周期7-10天，智能分单按库存/距离/履约能力自动匹配最优发货网点</p>
+          <div class="mb-2">
+            <label class="form-label fw-semibold small">订单产品</label>
+            <select class="form-select form-select-sm" id="dispatchProduct">
+              <option value="P003">雨虹SBS改性沥青防水卷材 ×50卷</option>
+              <option value="P001">雨虹JS复合防水涂料 ×20桶</option>
+              <option value="P002">雨虹聚氨酯防水涂料 ×15桶</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">紧急程度</label>
+            <div class="d-flex gap-2">
+              <div class="form-check"><input class="form-check-input" type="radio" name="urgency" id="urgNormal" checked><label class="form-check-label small" for="urgNormal">普通</label></div>
+              <div class="form-check"><input class="form-check-input" type="radio" name="urgency" id="urgUrgent"><label class="form-check-label small" for="urgUrgent">紧急（24h内）</label></div>
+            </div>
+          </div>
+          <button class="btn btn-yh w-100 mb-2" id="dispatchBtn">执行智能分单</button>
+          <div id="dispatchResult" class="result-box" style="display:none;background:#f7f9ff;border:1px solid #dbeafe;"></div>
+        </div>
+      </div>
+      <!-- 履约风险监控 -->
+      <div class="col-lg-5">
+        <div class="yh-card">
+          <div class="section-title" style="margin-top:0;">履约风险监控</div>
+          <div id="fulfillAlerts"></div>
+          <button class="btn btn-outline-yh w-100 mt-2" id="channelInsightBtn">渠道经营洞察</button>
+          <div id="channelInsightText" class="mt-3 p-3" style="display:none;background:#f7f9ff;border-radius:8px;font-size:13px;line-height:1.8;color:#374151;border:1px solid #dbeafe;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 渠道拓展进度 -->
+    <div class="yh-card mt-3">
+      <div class="section-title">渠道拓展进度 · 2026Q3</div>
+      <p class="text-muted small mb-3">建材市场租金60-120元/㎡，轻资产模式15天开业</p>
+      <div class="row g-3 text-center">
+        <div class="col-6 col-lg-3"><div class="p-3" style="background:#f7f8fa;border-radius:8px;"><div style="font-size:24px;font-weight:800;color:#1677FF;">500</div><div class="small text-muted">季度目标新网点</div></div></div>
+        <div class="col-6 col-lg-3"><div class="p-3" style="background:#f7f8fa;border-radius:8px;"><div style="font-size:24px;font-weight:800;color:#18a558;">312</div><div class="small text-muted">已开业</div></div></div>
+        <div class="col-6 col-lg-3"><div class="p-3" style="background:#f7f8fa;border-radius:8px;"><div style="font-size:24px;font-weight:800;color:#ed8a09;">128</div><div class="small text-muted">开业中</div></div></div>
+        <div class="col-6 col-lg-3"><div class="p-3" style="background:#f7f8fa;border-radius:8px;"><div style="font-size:24px;font-weight:800;color:#18a558;">15天</div><div class="small text-muted">平均开业周期</div></div></div>
+      </div>
+    </div>
+  </div>
+
   <!-- ============ TAB 4: 3515县域大屏 ============ -->
   <div class="dark-panel" id="darkWrap" style="display:none;">
     <div class="yh-panel" id="tab4" style="max-width:1500px;">
@@ -455,13 +539,13 @@
         </div>
       </div>
 
-      <!-- Four module empowerment effects -->
+      <!-- Five module empowerment effects -->
       <div class="dark-card mt-3">
-        <div class="section-title">四大模块赋能效果</div>
+        <div class="section-title">五大模块赋能效果</div>
         <div id="effectList"></div>
       </div>
 
-      <div class="footer-note" style="color:#5a7090;">数据均为模拟演示数据 · 2026 AI先锋未来人才大赛 · 雨虹智慧门店运营助手</div>
+      <div class="footer-note" style="color:#5a7090;">数据均为模拟演示数据 · 2026 AI先锋未来人才大赛 · 雨虹渠道智慧运营助手</div>
     </div>
   </div>
 
@@ -536,7 +620,8 @@
     { name:"AI导购新员工上手", val:"30天 → 7天", note:"aily智能体7×24赋能" },
     { name:"经营决策响应", val:"2周 → 实时", note:"多维表格AI实时洞察" },
     { name:"私域客户复购率", val:"↑ 15%", note:"AI话术与跟进自动化" },
-    { name:"督导巡检覆盖率", val:"60% → 95%", note:"移动巡检 + 一店一码" }
+    { name:"督导巡检覆盖率", val:"60% → 95%", note:"移动巡检 + 一店一码" },
+    { name:"紧急订单履约率", val:"<60% → 86%", note:"渠道管理中枢·智能分单" }
   ];
 
   const AILY_INSIGHTS = [
@@ -882,6 +967,63 @@
   document.getElementById('refreshInsight').addEventListener('click', () => {
     insightIdx = (insightIdx + 1) % AILY_INSIGHTS.length;
     renderAily();
+  });
+
+  /* =========================================================
+     Tab5: 渠道管理中枢
+  ========================================================= */
+  const FULFILL_ALERTS = [
+    { order:"ORD-088", type:"超期", level:"高", detail:"SH-012 延迟2天 · SBS卷材", tag:"tag-urgent" },
+    { order:"ORD-102", type:"缺货", level:"中", detail:"GZ-007 聚氨酯涂料缺货", tag:"tag-warn" },
+    { order:"ORD-115", type:"正常", level:"低", detail:"BJ-001 按时发货 · JS涂料", tag:"tag-ok" },
+    { order:"ORD-121", type:"预警", level:"中", detail:"CD-004 库存仅剩安全线60%", tag:"tag-warn" }
+  ];
+
+  function renderFulfillAlerts() {
+    document.getElementById('fulfillAlerts').innerHTML = FULFILL_ALERTS.map(a => `
+      <div class="alert-row" style="border-left-color:${a.level==='高'?'#E8392B':a.level==='中'?'#ed8a09':'#18a558'}">
+        <div>
+          <div class="a-name">${a.order} · ${a.type}</div>
+          <div class="a-stock">${a.detail}</div>
+        </div>
+        <span class="tag ${a.tag}">${a.level}</span>
+      </div>`).join('');
+  }
+  renderFulfillAlerts();
+
+  document.getElementById('dispatchBtn').addEventListener('click', () => {
+    const pid = document.getElementById('dispatchProduct').value;
+    const urgent = document.getElementById('urgUrgent').checked;
+    const product = PRODUCTS.find(p => p.id === pid);
+    const box = document.getElementById('dispatchResult');
+    box.style.display = 'block';
+    box.className = 'result-box';
+    box.style.background = '#f7f9ff';
+    box.style.border = '1px solid #dbeafe';
+    const outlet = urgent ? 'BJ-001 雨虹北京总部店' : 'SH-003 雨虹上海南翔店';
+    const days = urgent ? '24小时内' : '2-3天';
+    const rate = urgent ? '紧急履约率86%（原不足60%）' : '常规履约率95%';
+    box.innerHTML = `
+      <b style="color:#1677FF;">智能分单结果（模拟）</b>
+      <div style="font-size:13px;line-height:1.9;margin-top:6px;color:#374151;">
+        订单产品：<b>${product.name}</b><br/>
+        匹配发货网点：<b style="color:#18a558;">${outlet}</b><br/>
+        匹配理由：库存充足(98%)·距离最近(3.2km)·历史履约率96%<br/>
+        预计送达：<b>${days}</b><br/>
+        ${rate} · 备货失误率已降至8%（原35%）<br/>
+        <span style="color:#6b7280;">—— 由渠道管理中枢·智能分单引擎 自动匹配</span>
+      </div>`;
+  });
+
+  document.getElementById('channelInsightBtn').addEventListener('click', () => {
+    const el = document.getElementById('channelInsightText');
+    el.style.display = 'block';
+    el.innerHTML = `<b style="color:#1677FF;">渠道经营洞察（模拟）</b><br/>
+      2026年6月渠道销售额 <b style="color:#18a558;">1.29亿元</b>，同比增长 <b style="color:#18a558;">+18%</b>。<br/>
+      <b style="color:#18a558;">华东</b>渠道标准化率达89%领跑全国，建议将管理经验复制至<b style="color:#E8392B;">西北</b>区域。<br/>
+      紧急订单履约率提升至<b style="color:#18a558;">86%</b>，较改造前不足60%显著改善。<br/>
+      备货失误率降至<b style="color:#18a558;">8%</b>，预计每年减少损耗超<b>200万元</b>。<br/>
+      <span style="color:#6b7280;">—— 由飞书aily智能体 · 多维表格AI 自动生成</span>`;
   });
 
   /* 初始化销售图（首屏即tab1） */

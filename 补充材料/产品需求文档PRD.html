@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>产品需求文档 PRD | 雨虹智慧门店</title>
+<title>产品需求文档 PRD | 雨虹渠道智慧运营</title>
 <style>
   :root{
     --ink:#1e293b;
@@ -161,10 +161,10 @@
   <div class="doc-head">
     <span class="doc-tag">2026 AI先锋未来人才大赛 · 东方雨虹命题</span>
     <h1>产品需求文档（PRD）</h1>
-    <div class="sub">雨虹智慧门店 Yuhong Smart Store · 基于飞书AI的建材县域门店数智化运营平台</div>
+    <div class="sub">雨虹渠道智慧运营 Yuhong Smart Store · 基于飞书AI的建材县域门店数智化运营平台</div>
     <div class="doc-meta">
       <span><b>文档版本：</b>V1.0</span>
-      <span><b>编写方：</b>雨虹智慧门店项目组</span>
+      <span><b>编写方：</b>雨虹渠道智慧运营项目组</span>
       <span><b>状态：</b>评审通过</span>
       <span><b>更新日期：</b>2026-07</span>
     </div>
@@ -191,23 +191,23 @@
     <div class="overview-grid">
       <div class="ov-item">
         <div class="k">产品名称</div>
-        <div class="v">雨虹智慧门店（Yuhong Smart Store）</div>
+        <div class="v">雨虹渠道智慧运营（Yuhong Smart Store）</div>
         <div class="vd">内部代号 YSS，面向东方雨虹分销网络的县域门店数智化 SaaS。</div>
       </div>
       <div class="ov-item">
         <div class="k">产品定位</div>
-        <div class="v">飞书AI驱动的建材县域门店"AI店长"</div>
-        <div class="vd">巡检、导购、分析、私域运营一体化，零硬件零代码、3天上线。</div>
+        <div class="v">飞书AI驱动的建材渠道+门店"一体化AI店长"</div>
+        <div class="vd">巡检、导购、分析、私域运营、渠道管理五大模块一体化，零硬件零代码、3天上线。</div>
       </div>
       <div class="ov-item full">
         <div class="k">目标用户</div>
-        <div class="v">东方雨虹县域建材经销商门店（约2万家分销终端）</div>
-        <div class="vd">核心使用者为县域店员与县域经销商，管理视角覆盖区域督导与总部管理者，最终服务于进店消费者。门店普遍存在"数字素养低、人员流动快、专业能力弱、私域无沉淀"四类痛点。</div>
+        <div class="v">东方雨虹3000余家专卖店和10000余家终端网点（累计覆盖29万分销网点）</div>
+        <div class="vd">核心使用者为县域店员与县域经销商，管理视角覆盖区域督导、渠道经理与总部管理者，最终服务于进店消费者。门店普遍存在"数字素养低、人员流动快、专业能力弱、私域无沉淀"四类痛点；渠道层面存在"标准化难统一、履约周期长、备货失误率高"三类痛点。</div>
       </div>
       <div class="ov-item full">
         <div class="k">核心价值主张</div>
         <div class="v">让县域门店零门槛拥有一个"懂建材、会巡检、能卖货、看数据"的 AI 店长</div>
-        <div class="vd">依托东方雨虹行业知识沉淀 + 飞书生态原生能力，以一部手机实现"巡检—导购—分析—私域"全链闭环，把一线城市数字化能力下沉到县域，让每一家夫妻店都能用上 AI。</div>
+        <div class="vd">依托东方雨虹行业知识沉淀 + 飞书生态原生能力，以一部手机实现"巡检—导购—分析—私域"全链闭环，把一线城市数字化能力下沉到县域，让每一家终端门店都能用上 AI。</div>
       </div>
     </div>
   </section>
@@ -285,7 +285,7 @@
       <div class="sec-num">3</div>
       <h2>功能需求清单</h2>
     </div>
-    <p class="sec-desc">共 20 项功能需求，按模块归组，优先级 P0 为 MVP 必备、P1 为 V1.5、P2 为 V2.0。</p>
+    <p class="sec-desc">共 25 项功能需求，按模块归组（含新增渠道管理中枢 5 项），优先级 P0 为 MVP 必备、P1 为 V1.5、P2 为 V2.0。</p>
 
     <div class="legend-row">
       <div class="item"><span class="pri p0">P0</span> MVP 必备</div>
@@ -326,10 +326,15 @@
           <tr><td class="fr-id">FR-18</td><td><span class="mod">私域运营</span></td><td>一店一码闭环</td><td class="c"><span class="pri p1">P1</span></td><td>每店专属二维码，扫码引流到私域并归因到店到人。</td><td>一店一码生成≤1min；扫码即沉淀；归因准确率100%。</td></tr>
           <tr><td class="fr-id">FR-19</td><td><span class="mod">平台基座</span></td><td>县域适配</td><td class="c"><span class="pri p0">P0</span></td><td>适配低数字素养与弱网环境。</td><td>弱网离线可用≥2h；大字简洁模式；支持语音输入。</td></tr>
           <tr><td class="fr-id">FR-20</td><td><span class="mod">平台基座</span></td><td>飞书生态原生</td><td class="c"><span class="pri p0">P0</span></td><td>深度集成飞书IM/文档/审批/多维表格/日历。</td><td>单点登录；消息/审批/文档原生互通；全程无跳转体验。</td></tr>
+          <tr><td class="fr-id">FR-21</td><td><span class="mod">渠道管理中枢</span></td><td>渠道标准化看板</td><td class="c"><span class="pri p1">P1</span></td><td>聚合3000余家专卖店和10000余家终端网点的陈列/价签/库存达标率，实时呈现渠道标准化水位与门店排名。</td><td>达标率实时更新≤5min；维度≥4项；支持区域/网点类型筛选；门店排名多维度可配。</td></tr>
+          <tr><td class="fr-id">FR-22</td><td><span class="mod">渠道管理中枢</span></td><td>智能分单</td><td class="c"><span class="pri p1">P1</span></td><td>根据订单需求、网点库存、配送距离和履约能力自动匹配最优发货网点，紧急订单履约率从不足60%提升至85%+。</td><td>分单匹配≤3s；匹配维度≥3项（库存/距离/履约率）；紧急订单履约率≥85%；支持备选网点推荐。</td></tr>
+          <tr><td class="fr-id">FR-23</td><td><span class="mod">渠道管理中枢</span></td><td>履约风险监控</td><td class="c"><span class="pri p1">P1</span></td><td>实时预警超期/缺货/备货失误风险，备货失误率从35%降至8%，传统交付周期7-10天缩短至3.5天。</td><td>风险预警延迟≤1h；风险等级≥3级；自动推送责任人；备货失误率≤10%。</td></tr>
+          <tr><td class="fr-id">FR-24</td><td><span class="mod">渠道管理中枢</span></td><td>渠道拓展管理</td><td class="c"><span class="pri p2">P2</span></td><td>跟踪新网点开拓进度（筹备→开业），建材市场租金60-120元/㎡，轻资产模式15天开业。</td><td>拓展全流程可视化；平均开业周期≤15天；租金数据可录入对比；进度自动更新。</td></tr>
+          <tr><td class="fr-id">FR-25</td><td><span class="mod">渠道管理中枢</span></td><td>渠道经营洞察</td><td class="c"><span class="pri p1">P1</span></td><td>整合渠道层销售、标准化、履约数据生成区域/网点维度的综合经营分析报告。</td><td>洞察报告生成≤5min；含关键发现≥3条；含AI建议；支持区域横向对比。</td></tr>
         </tbody>
       </table>
     </div>
-    <div class="note-box"><b>需求统计：</b>P0 共 9 项（MVP）、P1 共 10 项（V1.5）、P2 共 1 项（V2.0）。模块分布：门店巡检 2、AI导购 6、数据分析 5、私域运营 4、平台基座 3。</div>
+    <div class="note-box"><b>需求统计：</b>P0 共 9 项（MVP）、P1 共 14 项（V1.5）、P2 共 2 项（V2.0）。模块分布：门店巡检 2、AI导购 6、数据分析 5、私域运营 4、平台基座 3、<b style="color:var(--accent)">渠道管理中枢 5（新增）</b>。</div>
   </section>
 
   <!-- 4 非功能需求 -->
@@ -419,6 +424,11 @@
           <tr><td>一店一码闭环</td><td>飞书小程序 + 多维表格 + 智能伙伴归因</td><td><code>小程序</code></td><td>扫码进小程序沉淀客户，归因数据回写多维表格。</td></tr>
           <tr><td>县域适配</td><td>飞书小程序 + 妙记语音转写</td><td><code>妙记</code></td><td>大字简洁模式 + 语音输入，妙记转写降低打字门槛。</td></tr>
           <tr><td>飞书生态原生</td><td>飞书开放平台全栈能力</td><td><code>开放平台</code></td><td>单点登录 + IM/文档/审批/日历原生互通，无跳转体验。</td></tr>
+          <tr><td>渠道标准化看板</td><td>多维表格AI字段 + 仪表盘</td><td><code>多维表格AI字段</code></td><td>AI字段聚合达标率，仪表盘呈现渠道标准化水位与门店排名。</td></tr>
+          <tr><td>智能分单</td><td>多维表格公式字段 + 自动化流程</td><td><code>自动化触发器</code></td><td>公式字段计算匹配度，自动化流程触发分单并通知发货网点。</td></tr>
+          <tr><td>履约风险监控</td><td>aily智能体 + 多维表格自动化</td><td><code>aily智能体</code></td><td>aily定时巡检履约状态，自动化触发超期/缺货预警卡片。</td></tr>
+          <tr><td>渠道拓展管理</td><td>多维表格视图 + 仪表盘</td><td><code>多维表格</code></td><td>多维表格视图跟踪筹备→开业进度，仪表盘呈现拓展漏斗。</td></tr>
+          <tr><td>渠道经营洞察</td><td>aily智能体 + 多维表格AI字段</td><td><code>aily智能体</code></td><td>aily整合多源数据生成区域洞察报告，AI字段提取关键发现。</td></tr>
         </tbody>
       </table>
     </div>
@@ -461,7 +471,7 @@
           <div class="when">目标：补齐 AI 导购与私域运营全链</div>
         </div>
         <div class="vb">
-          <div class="goal">交付 10 项 P1 功能，扩展至 500 家门店，复购率提升试点验证。</div>
+          <div class="goal">交付 14 项 P1 功能（含渠道管理中枢 4 项），扩展至 500 家门店，复购率提升试点验证。</div>
           <ul>
             <li>施工方案推荐</li>
             <li>客户偏好记忆</li>
@@ -473,6 +483,10 @@
             <li>一店一码闭环</li>
             <li>零代码搭建</li>
             <li>客流分析</li>
+            <li><b style="color:var(--accent)">渠道标准化看板（新增）</b></li>
+            <li><b style="color:var(--accent)">智能分单（新增）</b></li>
+            <li><b style="color:var(--accent)">履约风险监控（新增）</b></li>
+            <li><b style="color:var(--accent)">渠道经营洞察（新增）</b></li>
           </ul>
         </div>
       </div>
@@ -491,6 +505,7 @@
             <li>总部全网洞察看板</li>
             <li>AI自动外呼回访</li>
             <li>三方 ERP/CRM 集成开放</li>
+            <li><b style="color:#7c3aed">渠道拓展管理（P2·新增）</b></li>
           </ul>
         </div>
       </div>
@@ -536,7 +551,7 @@
 
   <footer>
     <span>2026 AI先锋未来人才大赛 · 东方雨虹命题提交材料 · 产品需求文档 PRD</span>
-    <span>雨虹智慧门店项目组 · V1.0 · 内部资料</span>
+    <span>雨虹渠道智慧运营项目组 · V1.0 · 内部资料</span>
   </footer>
 
 </div>

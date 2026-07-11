@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RESTful API 接口文档 — 雨虹智慧门店运营助手</title>
+<title>RESTful API 接口文档 — 雨虹渠道智慧运营助手</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap');
 
@@ -45,6 +45,8 @@ body {
 .module.m3 .module-title .mod-count { background: var(--good); }
 .module.m4 .module-title { border-left-color: var(--warn); }
 .module.m4 .module-title .mod-count { background: var(--warn); }
+.module.m5 .module-title { border-left-color: #13c2c2; }
+.module.m5 .module-title .mod-count { background: #13c2c2; }
 
 /* API卡片 */
 .api-card { background: var(--bg2); border-radius: 10px; padding: 20px 22px; margin-bottom: 14px; border: 1px solid var(--rule); }
@@ -89,7 +91,7 @@ body {
   <div class="header">
     <span class="badge">API文档</span>
     <h1>RESTful API <span class="grad">接口文档</span></h1>
-    <p class="subtitle">16个API接口 · 4大业务模块 · 完整请求/响应规范</p>
+    <p class="subtitle">22个API接口 · 5大业务模块 · 完整请求/响应规范</p>
   </div>
 
   <!-- 基础信息 -->
@@ -662,7 +664,7 @@ body {
       <span class="js">"推出工作日免费检测活动"</span>,
       <span class="js">"加强私域会员引流"</span>
     ],
-    <span class="jk">"report_content"</span>: <span class="js">"【雨虹智慧门店运营AI洞察报告】\n门店编号：BJ-001\n报告日期：2026-07-10\n\n一、销售概况\n- 月度总销售额：¥486,500.00\n- 总订单数：312单\n- 客单价：¥1,560.00\n- 转化率：34.0%\n\n二、库存健康度\n- SKU总数：6\n- 预警数量：3\n- 健康评分：72.5/100\n\n三、客流分析\n- 日均客流：52人\n- 高峰时段：14:00, 15:00, 10:00\n\n四、AI优化建议\n1. 库存管理：SBS卷材和密封胶需紧急补货\n2. 人员排班：下午14-16点为客流高峰，建议增加1名导购\n3. 营销策略：工作日转化率偏低，建议推出免费检测活动\n4. 产品组合：建议防水涂料与密封胶组合销售，提升客单价\n5. 私域运营：本月到店客户中仅35%加入会员，建议加强私域引流"</span>
+    <span class="jk">"report_content"</span>: <span class="js">"【雨虹渠道智慧运营AI洞察报告】\n门店编号：BJ-001\n报告日期：2026-07-10\n\n一、销售概况\n- 月度总销售额：¥486,500.00\n- 总订单数：312单\n- 客单价：¥1,560.00\n- 转化率：34.0%\n\n二、库存健康度\n- SKU总数：6\n- 预警数量：3\n- 健康评分：72.5/100\n\n三、客流分析\n- 日均客流：52人\n- 高峰时段：14:00, 15:00, 10:00\n\n四、AI优化建议\n1. 库存管理：SBS卷材和密封胶需紧急补货\n2. 人员排班：下午14-16点为客流高峰，建议增加1名导购\n3. 营销策略：工作日转化率偏低，建议推出免费检测活动\n4. 产品组合：建议防水涂料与密封胶组合销售，提升客单价\n5. 私域运营：本月到店客户中仅35%加入会员，建议加强私域引流"</span>
   }
 }</pre></div>
     </div>
@@ -774,6 +776,216 @@ body {
       <span class="jk">"script_scenario"</span>: <span class="js">"festival"</span>
     }
   ]
+}</pre></div>
+    </div>
+  </div>
+
+  <!-- ==================== 模块5：渠道管理中枢（新增） ==================== -->
+  <div class="module m5">
+    <div class="module-title">模块五 · 渠道管理中枢 <span class="mod-count">6个接口</span></div>
+
+    <!-- API 17 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag get">GET</span>
+        <span class="api-path">/api/channel/compliance-dashboard</span>
+      </div>
+      <p class="api-desc">渠道标准化看板，聚合3000余家专卖店和10000余家终端网点的陈列/价签/库存达标率，实时呈现渠道标准化水位</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">region</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">区域筛选，如"华东"、"全国"，默认全国</td></tr>
+          <tr><td class="pname">store_type</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">网点类型，可选 brand_store（专卖店）/ terminal（终端网点）/ all，默认 all</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: {
+    <span class="jk">"region"</span>: <span class="js">"全国"</span>,
+    <span class="jk">"total_outlets"</span>: <span class="jn">13000</span>,
+    <span class="jk">"compliance_rate"</span>: <span class="jn">0.82</span>,
+    <span class="jk">"dimensions"</span>: [
+      { <span class="jk">"name"</span>: <span class="js">"陈列达标率"</span>, <span class="jk">"rate"</span>: <span class="jn">0.85</span>, <span class="jk">"target"</span>: <span class="jn">0.90</span> },
+      { <span class="jk">"name"</span>: <span class="js">"价签准确率"</span>, <span class="jk">"rate"</span>: <span class="jn">0.78</span>, <span class="jk">"target"</span>: <span class="jn">0.95</span> },
+      { <span class="jk">"name"</span>: <span class="js">"库存达标率"</span>, <span class="jk">"rate"</span>: <span class="jn">0.81</span>, <span class="jk">"target"</span>: <span class="jn">0.88</span> },
+      { <span class="jk">"name"</span>: <span class="js">"促销物料规范率"</span>, <span class="jk">"rate"</span>: <span class="jn">0.84</span>, <span class="jk">"target"</span>: <span class="jn">0.90</span> }
+    ],
+    <span class="jk">"lagging_regions"</span>: [<span class="js">"西北"</span>, <span class="js">"西南"</span>],
+    <span class="jk">"ai_suggestion"</span>: <span class="js">"价签准确率78%低于目标95%，西北/西南区域差距最大，建议优先派驻督导整改。"</span>
+  }
+}</pre></div>
+    </div>
+
+    <!-- API 18 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag get">GET</span>
+        <span class="api-path">/api/channel/expansion-tracking</span>
+      </div>
+      <p class="api-desc">渠道拓展管理，跟踪新网点开拓进度，建材市场租金60-120元/㎡，轻资产模式15天开业</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">quarter</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">季度筛选，如"2026Q3"，默认当前季度</td></tr>
+          <tr><td class="pname">status</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">进度状态，可选 planning（筹备中）/ opening（开业中）/ opened（已开业），默认全部</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: {
+    <span class="jk">"quarter"</span>: <span class="js">"2026Q3"</span>,
+    <span class="jk">"target_new_outlets"</span>: <span class="jn">500</span>,
+    <span class="jk">"opened"</span>: <span class="jn">312</span>,
+    <span class="jk">"opening"</span>: <span class="jn">128</span>,
+    <span class="jk">"planning"</span>: <span class="jn">60</span>,
+    <span class="jk">"avg_open_days"</span>: <span class="jn">15</span>,
+    <span class="jk">"avg_rent_per_sqm"</span>: <span class="jn">88</span>,
+    <span class="jk">"pipeline"</span>: [
+      { <span class="jk">"city"</span>: <span class="js">"临沂"</span>, <span class="jk">"type"</span>: <span class="js">"专卖店"</span>, <span class="jk">"status"</span>: <span class="js">"开业中"</span>, <span class="jk">"expected_open"</span>: <span class="js">"2026-07-20"</span>, <span class="jk">"rent"</span>: <span class="jn">72</span> },
+      { <span class="jk">"city"</span>: <span class="js">"徐州"</span>, <span class="jk">"type"</span>: <span class="js">"终端网点"</span>, <span class="jk">"status"</span>: <span class="js">"已开业"</span>, <span class="jk">"open_date"</span>: <span class="js">"2026-07-05"</span>, <span class="jk">"rent"</span>: <span class="jn">65</span> }
+    ]
+  }
+}</pre></div>
+    </div>
+
+    <!-- API 19 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag post">POST</span>
+        <span class="api-path">/api/channel/smart-dispatch</span>
+      </div>
+      <p class="api-desc">智能分单，根据订单需求、网点库存、配送距离和履约能力自动匹配最优发货网点，紧急订单履约率从不足60%提升至85%+</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">order_id</td><td class="ptype">string</td><td class="required">是</td><td class="pdesc">订单编号</td></tr>
+          <tr><td class="pname">product_list</td><td class="ptype">array</td><td class="required">是</td><td class="pdesc">产品清单，含产品ID和数量</td></tr>
+          <tr><td class="pname">delivery_address</td><td class="ptype">string</td><td class="required">是</td><td class="pdesc">收货地址，用于计算配送距离</td></tr>
+          <tr><td class="pname">urgency</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">紧急程度，可选 normal/urgent，默认 normal</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: {
+    <span class="jk">"order_id"</span>: <span class="js">"ORD-20260710-088"</span>,
+    <span class="jk">"dispatched_outlet"</span>: <span class="js">"BJ-001"</span>,
+    <span class="jk">"outlet_name"</span>: <span class="js">"雨虹北京总部店"</span>,
+    <span class="jk">"match_score"</span>: <span class="jn">0.94</span>,
+    <span class="jk">"reason"</span>: <span class="js">"库存充足(98%)·距离最近(3.2km)·历史履约率96%"</span>,
+    <span class="jk">"estimated_delivery"</span>: <span class="js">"2026-07-11 14:00"</span>,
+    <span class="jk">"alternatives"</span>: [
+      { <span class="jk">"outlet_id"</span>: <span class="js">"BJ-003"</span>, <span class="jk">"match_score"</span>: <span class="jn">0.87</span>, <span class="jk">"distance_km"</span>: <span class="jn">5.1</span> }
+    ]
+  }
+}</pre></div>
+    </div>
+
+    <!-- API 20 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag get">GET</span>
+        <span class="api-path">/api/channel/fulfillment-monitor</span>
+      </div>
+      <p class="api-desc">履约风险监控，传统建材交付周期7-10天，本接口实时预警超期/缺货/备货失误风险（备货失误率从35%降至8%）</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">region</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">区域筛选，默认全国</td></tr>
+          <tr><td class="pname">risk_level</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">风险等级筛选，可选 high/medium/low，默认全部</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: {
+    <span class="jk">"monitor_period"</span>: <span class="js">"近7天"</span>,
+    <span class="jk">"total_orders"</span>: <span class="jn">4860</span>,
+    <span class="jk">"on_time_rate"</span>: <span class="jn">0.87</span>,
+    <span class="jk">"urgent_fulfillment_rate"</span>: <span class="jn">0.86</span>,
+    <span class="jk">"stock_mistake_rate"</span>: <span class="jn">0.08</span>,
+    <span class="jk">"avg_delivery_days"</span>: <span class="jn">3.5</span>,
+    <span class="jk">"risk_orders"</span>: [
+      { <span class="jk">"order_id"</span>: <span class="js">"ORD-088"</span>, <span class="jk">"risk_level"</span>: <span class="js">"高"</span>, <span class="jk">"type"</span>: <span class="js">"超期"</span>, <span class="jk">"delay_days"</span>: <span class="jn">2</span>, <span class="jk">"outlet"</span>: <span class="js">"SH-012"</span> },
+      { <span class="jk">"order_id"</span>: <span class="js">"ORD-102"</span>, <span class="jk">"risk_level"</span>: <span class="js">"中"</span>, <span class="jk">"type"</span>: <span class="js">"缺货"</span>, <span class="jk">"product"</span>: <span class="js">"聚氨酯防水涂料"</span>, <span class="jk">"outlet"</span>: <span class="js">"GZ-007"</span> }
+    ],
+    <span class="jk">"ai_suggestion"</span>: <span class="js">"SH-012连续2单超期，建议启用智能分单切换至SH-008发货；GZ-007聚氨酯涂料缺货，建议紧急调拨。"</span>
+  }
+}</pre></div>
+    </div>
+
+    <!-- API 21 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag get">GET</span>
+        <span class="api-path">/api/channel/insight</span>
+      </div>
+      <p class="api-desc">渠道经营洞察，整合渠道层销售、标准化、履约数据生成区域/网点维度的综合经营分析报告</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">region</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">区域筛选，默认全国</td></tr>
+          <tr><td class="pname">period</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">查询周期，可选 week/month/quarter，默认 month</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: {
+    <span class="jk">"period"</span>: <span class="js">"2026-06"</span>,
+    <span class="jk">"channel_sales"</span>: <span class="jn">128660000</span>,
+    <span class="jk">"yoy_growth"</span>: <span class="jn">0.18</span>,
+    <span class="jk">"best_region"</span>: <span class="js">"华东"</span>,
+    <span class="jk">"region_ranking"</span>: [
+      { <span class="jk">"region"</span>: <span class="js">"华东"</span>, <span class="jk">"sales"</span>: <span class="jn">42600000</span>, <span class="jk">"growth"</span>: <span class="jn">0.22</span> },
+      { <span class="jk">"region"</span>: <span class="js">"华北"</span>, <span class="jk">"sales"</span>: <span class="jn">31800000</span>, <span class="jk">"growth"</span>: <span class="jn">0.15</span> }
+    ],
+    <span class="jk">"key_findings"</span>: [
+      <span class="js">"华东渠道销售额同比增长22%，标准化率达89%领跑全国"</span>,
+      <span class="js">"紧急订单履约率提升至86%，较改造前不足60%显著改善"</span>,
+      <span class="js">"备货失误率降至8%，预计每年减少损耗超200万元"</span>
+    ],
+    <span class="jk">"ai_recommendation"</span>: <span class="js">"建议将华东标准化管理经验复制至西北区域；针对履约薄弱网点启用智能分单自动切换。"</span>
+  }
+}</pre></div>
+    </div>
+
+    <!-- API 22 -->
+    <div class="api-card">
+      <div class="api-head">
+        <span class="method-tag get">GET</span>
+        <span class="api-path">/api/channel/store-ranking</span>
+      </div>
+      <p class="api-desc">门店排名，按销售额、标准化得分、履约率、复购率多维度对网点进行综合排名与分级</p>
+      <div class="api-sub">请求参数</div>
+      <table class="param-table">
+        <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td class="pname">metric</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">排名指标，可选 sales/compliance/fulfillment/composite，默认 composite</td></tr>
+          <tr><td class="pname">region</td><td class="ptype">string</td><td class="optional">否</td><td class="pdesc">区域筛选，默认全国</td></tr>
+          <tr><td class="pname">limit</td><td class="ptype">number</td><td class="optional">否</td><td class="pdesc">返回条数，默认20</td></tr>
+        </tbody>
+      </table>
+      <div class="api-sub">响应示例</div>
+      <div class="code-block"><pre>{
+  <span class="jk">"success"</span>: <span class="jb">true</span>,
+  <span class="jk">"data"</span>: {
+    <span class="jk">"metric"</span>: <span class="js">"composite"</span>,
+    <span class="jk">"total_ranked"</span>: <span class="jn">13000</span>,
+    <span class="jk">"ranking"</span>: [
+      { <span class="jk">"rank"</span>: <span class="jn">1</span>, <span class="jk">"store_id"</span>: <span class="js">"SH-001"</span>, <span class="jk">"name"</span>: <span class="js">"雨虹上海旗舰店"</span>, <span class="jk">"composite_score"</span>: <span class="jn">94.5</span>, <span class="jk">"sales"</span>: <span class="jn">1860000</span>, <span class="jk">"compliance"</span>: <span class="jn">0.96</span>, <span class="jk">"fulfillment"</span>: <span class="jn">0.98</span>, <span class="jk">"tier"</span>: <span class="js">"S"</span> },
+      { <span class="jk">"rank"</span>: <span class="jn">2</span>, <span class="jk">"store_id"</span>: <span class="js">"BJ-001"</span>, <span class="jk">"name"</span>: <span class="js">"雨虹北京总部店"</span>, <span class="jk">"composite_score"</span>: <span class="jn">91.2</span>, <span class="jk">"sales"</span>: <span class="jn">1620000</span>, <span class="jk">"compliance"</span>: <span class="jn">0.91</span>, <span class="jk">"fulfillment"</span>: <span class="jn">0.95</span>, <span class="jk">"tier"</span>: <span class="js">"S"</span> },
+      { <span class="jk">"rank"</span>: <span class="jn">3</span>, <span class="jk">"store_id"</span>: <span class="js">"GZ-003"</span>, <span class="jk">"name"</span>: <span class="js">"雨虹广州天河店"</span>, <span class="jk">"composite_score"</span>: <span class="jn">88.7</span>, <span class="jk">"sales"</span>: <span class="jn">1450000</span>, <span class="jk">"compliance"</span>: <span class="jn">0.88</span>, <span class="jk">"fulfillment"</span>: <span class="jn">0.92</span>, <span class="jk">"tier"</span>: <span class="js">"A"</span> }
+    ],
+    <span class="jk">"tier_distribution"</span>: { <span class="jk">"S"</span>: <span class="jn">320</span>, <span class="jk">"A"</span>: <span class="jn">2100</span>, <span class="jk">"B"</span>: <span class="jn">6800</span>, <span class="jk">"C"</span>: <span class="jn">3780</span> }
+  }
 }</pre></div>
     </div>
   </div>

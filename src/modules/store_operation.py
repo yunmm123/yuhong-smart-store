@@ -119,7 +119,7 @@ class StoreOperationModule:
         inventory = self.get_inventory_analysis(store_id)
         flow = self.get_customer_flow(store_id, "week")
 
-        report = f"""【雨虹智慧门店运营AI洞察报告】
+        report = f"""【雨虹渠道智慧运营AI洞察报告】
 门店编号：{store_id}
 报告日期：{datetime.now().strftime("%Y-%m-%d")}
 
