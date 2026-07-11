@@ -357,11 +357,46 @@
 
   /* Responsive */
   @media (max-width: 768px) {
-    .header { padding: 32px 20px; }
-    .header h1 { font-size: 22px; }
-    .container { padding: 20px 14px 40px; }
-    .section-body { padding: 18px 16px; }
+    body { font-size: 14px; }
+    .header { padding: 28px 18px; }
+    .header h1 { font-size: 22px; letter-spacing: 0.5px; }
+    .header p { font-size: 13px; }
+    .header-meta { gap: 14px; font-size: 12px; }
+    .container { padding: 18px 12px 40px; max-width: 100%; }
+    .section { margin-bottom: 20px; border-radius: 10px; }
+    .section-header { padding: 18px 16px 14px; }
+    .section-header h2 { font-size: 17px; gap: 8px; }
+    .section-header h2 .num { width: 28px; height: 28px; font-size: 14px; }
+    .section-body { padding: 16px 14px; }
+    .note-box { padding: 12px 14px; font-size: 13px; margin-bottom: 16px; }
+    /* 触点卡片：保持横向滚动，缩小宽度 */
+    .touchpoints { gap: 10px; padding-bottom: 8px; -webkit-overflow-scrolling: touch; }
     .touchpoint { flex: 0 0 240px; }
+    .touchpoint-head { padding: 10px 12px; font-size: 13px; }
+    .touchpoint-head .step { width: 22px; height: 22px; font-size: 11px; }
+    .touchpoint-body { padding: 12px; }
+    .tp-label { font-size: 11px; }
+    .tp-content { font-size: 12px; line-height: 1.5; }
+    .arrow-flow { font-size: 14px; right: -7px; }
+    /* journey title */
+    .journey-title .badge { font-size: 13px; padding: 6px 14px; }
+    .journey-title .count { font-size: 11px; }
+    /* 表格横向滚动 */
+    .story-table, .ppt-table, .question-table { display: block; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; font-size: 12px; }
+    .story-table th, .ppt-table th, .question-table th { padding: 8px 10px; font-size: 12px; }
+    .story-table td, .ppt-table td, .question-table td { padding: 8px 10px; font-size: 12px; }
+    /* Storyboard */
+    .storyboard-card { padding: 16px 16px; margin-bottom: 14px; }
+    .storyboard-card h3 { font-size: 15px; gap: 8px; }
+    .storyboard-card .story-tag { font-size: 11px; }
+    .storyboard-card .story-text { font-size: 13px; line-height: 1.8; margin-top: 10px; }
+    /* Footer */
+    .footer { padding: 20px 16px; font-size: 12px; }
+  }
+  @media (max-width: 480px) {
+    .touchpoint { flex: 0 0 200px; }
+    .header h1 { font-size: 19px; }
+    .container { padding: 14px 8px 32px; }
   }
 </style>
 </head>

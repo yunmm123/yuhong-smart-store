@@ -125,49 +125,6 @@ body {
 .section-head h2 { font-size: 20px; font-weight: 700; }
 .section-head .desc { font-size: 13px; color: var(--muted); margin-left: auto; }
 
-/* ===== Feature Cards ===== */
-.feature-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
-}
-.feature-card {
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 2px 12px rgba(0,0,0,.05);
-  border: 1px solid var(--border);
-  transition: all .2s;
-}
-.feature-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 24px rgba(0,0,0,.08);
-}
-.feature-card .fc-head {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-.feature-card .fc-icon {
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px;
-}
-.feature-card .fc-title { font-size: 16px; font-weight: 700; }
-.feature-card .fc-desc { font-size: 13px; color: #555; line-height: 1.7; margin-bottom: 14px; }
-.feature-card .fc-data {
-  background: #f7f8fc;
-  border-radius: 8px;
-  padding: 12px 16px;
-  font-size: 12px;
-  color: #555;
-}
-.feature-card .fc-data strong { color: var(--text); }
-.feature-card .fc-data .src { font-size: 11px; color: var(--muted); margin-top: 4px; }
-
 /* ===== Chart Card ===== */
 .chart-card {
   background: var(--card-bg);
@@ -213,6 +170,7 @@ body {
 .badge.red { background: #fff2f0; color: #cf1322; border: 1px solid #ffccc7; }
 .badge.blue { background: #e6f7ff; color: #0958d9; border: 1px solid #91d5ff; }
 .badge.teal { background: #e6fffb; color: #08979c; border: 1px solid #87e8de; }
+.badge.purple { background: #f9f0ff; color: #722ed1; border: 1px solid #d3adf7; }
 
 /* ===== Mapping Table ===== */
 .mapping-card {
@@ -283,17 +241,410 @@ body {
 .arch-new { border: 2px solid var(--primary); background: linear-gradient(135deg, #e6f7ff, #f0f5ff); }
 .arch-new .tag-new { background: var(--primary); color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-left: 8px; }
 
+/* ===== Tabs ===== */
+.tab-nav {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+  background: var(--card-bg);
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.05);
+  border: 1px solid var(--border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.tab-btn {
+  flex: 1;
+  min-width: 120px;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  transition: all .25s;
+  white-space: nowrap;
+  font-family: inherit;
+}
+.tab-btn:hover { background: #f0f5ff; color: var(--primary); }
+.tab-btn.active {
+  background: linear-gradient(135deg, #1677FF, #2f8bff);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(22,119,255,.3);
+}
+.tab-panel { display: none; }
+.tab-panel.active {
+  display: block;
+  animation: fadeInUp .35s ease;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.tab-intro {
+  border-left: 4px solid var(--primary);
+  background: linear-gradient(135deg, #f0f5ff, #f9f0ff);
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: #555;
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+.tab-intro strong { color: var(--text); }
+.hint { font-size: 12px; color: var(--muted); font-weight: 400; margin-left: 8px; }
+.linked-card { animation: fadeInUp .35s ease; }
+
+/* ===== Form ===== */
+.dispatch-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 20px;
+  margin-bottom: 8px;
+}
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
+.form-group label { font-size: 13px; font-weight: 600; color: #333; }
+.form-group select,
+.form-group input[type="number"] {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  background: #fff;
+  color: var(--text);
+  transition: border-color .2s, box-shadow .2s;
+}
+.form-group select:focus,
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(22,119,255,.12);
+}
+.radio-group { display: flex; gap: 10px; }
+.radio-item {
+  display: flex; align-items: center; gap: 6px;
+  padding: 9px 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all .2s;
+  user-select: none;
+}
+.radio-item input { accent-color: var(--primary); margin: 0; }
+.radio-item:hover { border-color: var(--primary); }
+.radio-item.active { border-color: var(--primary); background: #f0f5ff; color: var(--primary); font-weight: 600; }
+.btn-primary {
+  grid-column: 1 / -1;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #fa8c16, #ffc53d);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+  font-family: inherit;
+  box-shadow: 0 4px 12px rgba(250,140,22,.3);
+  letter-spacing: 1px;
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(250,140,22,.42); }
+.btn-primary:disabled { opacity: .65; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-ghost {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  color: #555;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all .2s;
+}
+.btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+
+/* loading */
+.loading-box {
+  display: none;
+  text-align: center;
+  padding: 36px 10px;
+}
+.loading-box.show { display: block; }
+.spinner {
+  width: 42px; height: 42px;
+  border: 4px solid #f0f0f0;
+  border-top-color: var(--orange);
+  border-radius: 50%;
+  margin: 0 auto 12px;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-box .lt { font-size: 13px; color: var(--muted); }
+
+/* result */
+.result-area { display: none; }
+.result-area.show { display: block; animation: fadeInUp .45s ease; }
+.urgent-notice {
+  background: linear-gradient(135deg, #fff2f0, #fff7e6);
+  border: 1px solid #ffccc7;
+  border-left: 4px solid var(--yuhong);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: #cf1322;
+  font-weight: 600;
+}
+.warn-notice {
+  background: #fffbe6;
+  border: 1px solid #ffe58f;
+  border-left: 4px solid var(--orange);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: #ad6800;
+}
+.reco-card {
+  background: linear-gradient(135deg, #f0f5ff, #e6f7ff);
+  border: 2px solid var(--primary);
+  border-radius: 12px;
+  padding: 22px 20px 18px;
+  margin-bottom: 16px;
+  position: relative;
+}
+.reco-card .reco-badge {
+  position: absolute; top: -11px; left: 20px;
+  background: var(--primary); color: #fff;
+  padding: 3px 14px; border-radius: 12px;
+  font-size: 11px; font-weight: 700;
+  box-shadow: 0 2px 6px rgba(22,119,255,.3);
+}
+.reco-head { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+.reco-name { font-size: 18px; font-weight: 800; color: var(--text); }
+.reco-region { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.score-big { text-align: right; }
+.score-big .v { font-size: 34px; font-weight: 900; color: var(--primary); line-height: 1; }
+.score-big .l { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.reco-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.meta-item { background: #fff; border-radius: 8px; padding: 11px 6px; text-align: center; }
+.meta-item .v { font-size: 16px; font-weight: 700; color: var(--text); }
+.meta-item .l { font-size: 11px; color: var(--muted); margin-top: 3px; }
+.alt-title { font-size: 13px; font-weight: 700; color: #555; margin: 4px 0 10px; }
+.alt-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.alt-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.alt-card .alt-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.alt-card .alt-name { font-size: 14px; font-weight: 700; }
+.alt-card .alt-score { font-size: 13px; font-weight: 800; color: var(--primary); }
+.alt-card .alt-meta { display: flex; gap: 14px; font-size: 12px; color: #555; flex-wrap: wrap; }
+.score-formula { margin-top: 14px; font-size: 12px; color: var(--muted); line-height: 1.7; }
+
+/* ===== Expansion: store list ===== */
+.store-row {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  transition: box-shadow .2s, border-color .2s;
+}
+.store-row:hover { box-shadow: 0 4px 16px rgba(0,0,0,.06); }
+.store-row.expanded { box-shadow: 0 4px 18px rgba(22,119,255,.14); border-color: var(--primary); }
+.store-summary {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 18px;
+  cursor: pointer;
+  flex-wrap: wrap;
+}
+.store-summary .s-name { flex: 2 1 200px; font-weight: 700; font-size: 14px; min-width: 170px; display: flex; align-items: center; gap: 8px; }
+.store-summary .s-item { flex: 1 1 96px; font-size: 13px; }
+.store-summary .s-item .muted { font-size: 11px; color: var(--muted); display: block; }
+.store-summary .chev { margin-left: auto; color: var(--muted); transition: transform .25s; font-size: 18px; font-weight: 700; }
+.store-row.expanded .chev { transform: rotate(90deg); color: var(--primary); }
+.store-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .4s ease;
+}
+.store-row.expanded .store-detail { max-height: 900px; }
+.store-detail-inner { padding: 6px 18px 22px; border-top: 1px dashed var(--border); }
+.detail-head { font-size: 13px; font-weight: 700; color: #333; margin: 14px 0 4px; }
+.detail-head .score-num { color: var(--primary); font-size: 16px; }
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 8px; }
+.radar-box { width: 100%; height: 230px; }
+.dim-bars .dim-row { margin-bottom: 11px; }
+.dim-row .dim-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; color: #555; }
+.dim-label .dim-val { font-weight: 700; color: var(--primary); }
+.dim-track { height: 9px; background: #f0f0f0; border-radius: 5px; overflow: hidden; }
+.dim-fill { height: 100%; border-radius: 5px; width: 0; transition: width .9s cubic-bezier(.22,1,.36,1); background: linear-gradient(90deg, #1677FF, #2f8bff); }
+
+/* timeline */
+.timeline { display: flex; align-items: flex-start; margin-top: 12px; position: relative; }
+.timeline::before {
+  content: ''; position: absolute; top: 14px; left: 14px; right: 14px;
+  height: 3px; background: #f0f0f0; border-radius: 2px;
+}
+.tl-step { flex: 1; text-align: center; position: relative; z-index: 1; padding: 0 4px; }
+.tl-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #fff; border: 3px solid #d9d9d9;
+  margin: 0 auto 8px; display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: #bfbfbf; font-weight: 700;
+  transition: all .3s;
+}
+.tl-step.done .tl-dot { background: var(--primary); border-color: var(--primary); color: #fff; }
+.tl-step.current .tl-dot { background: var(--orange); border-color: var(--orange); color: #fff; box-shadow: 0 0 0 4px rgba(250,140,22,.2); }
+.tl-step.stuck .tl-dot { background: var(--yuhong); border-color: var(--yuhong); color: #fff; animation: pulseRed 1.1s ease-in-out infinite; }
+@keyframes pulseRed {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232,57,43,.5); }
+  50% { box-shadow: 0 0 0 7px rgba(232,57,43,0); }
+}
+.tl-step .tl-name { font-size: 12px; color: #999; }
+.tl-step.done .tl-name, .tl-step.current .tl-name, .tl-step.stuck .tl-name { color: var(--text); font-weight: 600; }
+.tl-step .tl-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* ===== Filter bar ===== */
+.filter-bar { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+.filter-btn {
+  padding: 7px 16px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  transition: all .2s;
+  font-family: inherit;
+}
+.filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+.filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.filter-btn .count { font-size: 11px; opacity: .8; margin-left: 4px; }
+
+/* ===== Order list ===== */
+.order-list-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.order-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1.7fr 1fr 1.5fr 1fr 1fr 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  font-size: 13px;
+  min-width: 760px;
+}
+.order-row:hover { border-color: var(--primary); background: #fafbff; }
+.order-row.selected { border-color: var(--primary); background: #f0f5ff; box-shadow: 0 2px 10px rgba(22,119,255,.12); }
+.order-row.timeout {
+  border-color: #ffccc7;
+  animation: blinkBg 1.8s ease-in-out infinite;
+}
+@keyframes blinkBg {
+  0%, 100% { background: #fff2f0; }
+  50% { background: #ffe1e1; }
+}
+.order-row .o-id { font-weight: 600; color: var(--primary-dark); }
+.order-detail {
+  display: none;
+  margin-top: 14px;
+  background: #f7f8fc;
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid var(--border);
+}
+.order-detail.show { display: block; animation: fadeInUp .3s ease; }
+.od-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 18px; }
+.od-item { background: #fff; border-radius: 8px; padding: 10px 12px; }
+.od-item .v { font-size: 14px; font-weight: 700; }
+.od-item .l { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+.od-section-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; color: #333; }
+
+/* detail table (dashboard linkage) */
+.detail-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.detail-table th { background: #f7f8fc; padding: 10px 14px; text-align: left; font-weight: 600; color: #555; border-bottom: 2px solid var(--border); }
+.detail-table td { padding: 9px 14px; border-bottom: 1px solid #f0f0f0; }
+.detail-table tr:hover td { background: #fafbff; }
+.dim-mini-row { margin-bottom: 9px; }
+.dim-mini-row .dim-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px; color: #555; }
+
+/* toast */
+.toast {
+  position: fixed; top: 24px; left: 50%;
+  transform: translateX(-50%) translateY(-24px);
+  background: rgba(0,0,0,.85); color: #fff;
+  padding: 10px 22px; border-radius: 8px;
+  font-size: 14px; z-index: 9999; opacity: 0; pointer-events: none;
+  transition: all .3s;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
-  .feature-grid { grid-template-columns: 1fr; }
-  .navbar { padding: 12px 16px; }
-  .navbar-title { font-size: 15px; }
-  .hero { padding: 32px 20px; }
+  body { font-size: 14px; }
+  .navbar { padding: 10px 14px; flex-wrap: wrap; gap: 8px; }
+  .navbar-logo { width: 34px; height: 34px; font-size: 18px; border-radius: 8px; }
+  .navbar-title { font-size: 14px; }
+  .navbar-sub { font-size: 11px; }
+  .navbar-badge { font-size: 11px; padding: 4px 10px; }
+  .hero { padding: 32px 18px; }
   .hero h1 { font-size: 24px; }
-  .hero-stats { gap: 16px; }
+  .hero p { font-size: 14px; }
+  .hero-stats { gap: 14px; margin-top: 22px; }
   .hero-stat .v { font-size: 22px; }
-  .mapping-row { grid-template-columns: 1fr; gap: 6px; }
-  .container { padding: 20px 16px 48px; }
+  .hero-stat .l { font-size: 11px; }
+  .container { padding: 18px 14px 40px; }
+  .section { margin-bottom: 28px; }
+  .section-head { flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .section-head .icon { width: 32px; height: 32px; font-size: 16px; border-radius: 8px; }
+  .section-head h2 { font-size: 17px; }
+  .section-head .desc { font-size: 12px; margin-left: 0; width: 100%; }
+  .chart-card { padding: 16px 14px; margin-bottom: 12px; }
+  .chart-card h3 { font-size: 14px; margin-bottom: 12px; }
+  .chart-box { height: 260px; }
+  .data-table { display: block; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; font-size: 12px; }
+  .data-table th, .data-table td { padding: 8px 12px; }
+  .mapping-card { padding: 18px 16px; }
+  .mapping-row { grid-template-columns: 1fr; gap: 6px; padding: 12px 0; }
+  .mapping-target { font-size: 13px; }
+  .mapping-modules { font-size: 12px; }
+  .arch-box { padding: 16px; }
+  .arch-layer { padding: 10px 14px; font-size: 13px; flex-wrap: wrap; gap: 8px; }
+  .arch-layer .layer-name { min-width: 64px; font-size: 13px; }
+  .arch-layer .layer-desc { font-size: 12px; }
+  /* tabs */
+  .tab-nav { padding: 6px; gap: 4px; }
+  .tab-btn { min-width: 96px; padding: 10px 12px; font-size: 13px; }
+  /* form */
+  .dispatch-form { grid-template-columns: 1fr; gap: 12px; }
+  .reco-meta { grid-template-columns: repeat(2, 1fr); }
+  .alt-list { grid-template-columns: 1fr; }
+  .detail-grid { grid-template-columns: 1fr; }
+  .radar-box { height: 220px; }
+  .od-grid { grid-template-columns: repeat(2, 1fr); }
+  .store-summary { gap: 10px 14px; }
+  .store-summary .s-name { flex: 1 1 100%; min-width: 0; }
+  .timeline::before { left: 10px; right: 10px; }
+  .tl-step .tl-name { font-size: 11px; }
+  .tl-step .tl-date { font-size: 10px; }
 }
 </style>
 </head>
@@ -325,271 +676,140 @@ body {
 
 <div class="container">
 
-  <!-- 四大功能 -->
+  <!-- 四大功能 Tab -->
   <div class="section">
     <div class="section-head">
       <div class="icon" style="background: linear-gradient(135deg, #1677FF, #2f8bff);">📡</div>
       <h2>四大核心功能</h2>
-      <span class="desc">从渠道层视角管理全局</span>
+      <span class="desc">点击 Tab 切换功能模块 · 支持表单与图表联动</span>
     </div>
 
-    <div class="feature-grid">
-      <!-- 功能1 -->
-      <div class="feature-card">
-        <div class="fc-head">
-          <div class="fc-icon" style="background: #e6f7ff; color: #1677FF;">📊</div>
-          <div class="fc-title">渠道标准化看板</div>
-        </div>
-        <div class="fc-desc">汇总全渠道巡检数据，按区域/门店类型/经销商排名合规率，生成全国合规率热力图，追踪整改完成率。数据来源于门店巡检模块自动上卷。</div>
-        <div class="fc-data">
-          <strong>监控维度：</strong>6大区域（华东/华南/华北/华西/东北/西南）合规率实时排名<br>
-          <strong>数据源：</strong>门店巡检模块 → 区域汇总 → 全国看板<br>
-          <div class="src">参考：东方雨虹"曙光计划"2026年从"规模扩张"转向"质量提升"</div>
-        </div>
-      </div>
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="dashboard">标准化看板</button>
+      <button class="tab-btn" data-tab="expansion">渠道拓展</button>
+      <button class="tab-btn" data-tab="dispatch">智能分单</button>
+      <button class="tab-btn" data-tab="insight">经营洞察</button>
+    </div>
 
-      <!-- 功能2 -->
-      <div class="feature-card">
-        <div class="fc-head">
-          <div class="fc-icon" style="background: #f6ffed; color: #52c41a;">📈</div>
-          <div class="fc-title">渠道拓展管理</div>
-        </div>
-        <div class="fc-desc">新网点开发全流程管理：选址评分（租金/客流/竞品密度）、开业进度跟踪（装修→铺货→培训→开业）、新店首月业绩追踪与扶持计划。</div>
-        <div class="fc-data">
-          <strong>选址数据：</strong>建材市场租金60-120元/㎡（一线城市），三线城市40+元/㎡<br>
-          <strong>开业周期：</strong>轻资产模式15天开业，100㎡开店投资10余万元<br>
-          <div class="src">数据来源：新浪财经建材市场报告 / 中国经济新闻网</div>
-        </div>
+    <!-- Tab 1: 标准化看板 -->
+    <div class="tab-panel active" id="tab-dashboard">
+      <div class="tab-intro" style="border-left-color:#1677FF;">
+        <strong>渠道标准化看板</strong>：汇总全渠道巡检数据，按区域/门店类型/经销商排名合规率，生成全国合规率热力图，追踪整改完成率。数据来源于门店巡检模块自动上卷。
+        <br><small style="color:#999;">参考：东方雨虹"曙光计划"2026年从"规模扩张"转向"质量提升"</small>
       </div>
-
-      <!-- 功能3 -->
-      <div class="feature-card">
-        <div class="fc-head">
-          <div class="fc-icon" style="background: #fff7e6; color: #fa8c16;">⚡</div>
-          <div class="fc-title">智能分单与履约监控</div>
-        </div>
-        <div class="fc-desc">根据网点位置、库存充足度、配送能力、门店评分自动分配订单；实时监控履约进度（已下单→已发货→已到货→已施工），超时预警与断货预警。</div>
-        <div class="fc-data">
-          <strong>行业痛点：</strong>传统模式平均交付周期7-10天，紧急订单履约率不足60%<br>
-          <strong>库存风险：</strong>经销商备货失误率高达35%，库存周转率仅3.8次/年<br>
-          <div class="src">数据来源：数商云建材行业B2B报告 / 财经头条行业调研</div>
-        </div>
+      <div class="chart-card">
+        <h3>全国6大区域巡检合规率排名<span class="hint">点击柱子查看该区域门店明细</span></h3>
+        <div class="chart-box" id="chartCompliance"></div>
       </div>
+      <div class="chart-card" id="regionDetailCard" style="display:none;">
+        <h3 id="regionDetailTitle">区域门店明细</h3>
+        <div id="regionDetailContent"></div>
+      </div>
+      <div class="chart-card">
+        <h3>门店类型合规率对比<span class="hint">点击柱子查看该类型合规率明细</span></h3>
+        <div class="chart-box" id="chartStoreType"></div>
+      </div>
+      <div class="chart-card" id="typeDetailCard" style="display:none;">
+        <h3 id="typeDetailTitle">类型合规率明细</h3>
+        <div id="typeDetailContent"></div>
+      </div>
+    </div>
 
-      <!-- 功能4 -->
-      <div class="feature-card">
-        <div class="fc-head">
-          <div class="fc-icon" style="background: #f9f0ff; color: #722ed1;">💡</div>
-          <div class="fc-title">渠道经营洞察</div>
-        </div>
-        <div class="fc-desc">跨门店销售对比分析，省/市/县三级区域排名，产品动销TOP5分析（哪些产品在哪些区域卖得好），AI自动生成渠道经营洞察报告。</div>
-        <div class="fc-data">
-          <strong>数据维度：</strong>7大区域销售排名 + 产品动销TOP5 + 趋势分析<br>
-          <strong>AI能力：</strong>多维表格AI字段自动分析 + aily智能体对话式查询<br>
-          <div class="src">参考：东方雨虹2025年零售业务营收99.44亿元，占36.06%</div>
+    <!-- Tab 2: 渠道拓展 -->
+    <div class="tab-panel" id="tab-expansion">
+      <div class="tab-intro" style="border-left-color:#52c41a;">
+        <strong>渠道拓展管理</strong>：新网点开发全流程管理——选址评分（租金/客流/竞品密度/交通便利/市场潜力5维度）、开业进度跟踪（选址确认→装修→铺货→培训→开业）、新店首月业绩追踪与扶持计划。
+        <br><small style="color:#999;">数据来源：新浪财经建材市场报告 / 中国经济新闻网</small>
+      </div>
+      <div class="chart-card">
+        <h3>2026年Q3新网点开发进度<span class="hint">点击网点行展开选址评分与开业时间线</span></h3>
+        <div id="storeList"></div>
+        <div style="margin-top:12px;font-size:12px;color:var(--muted);">
+          <strong>选址评分模型：</strong>租金成本(30%) + 客流密度(25%) + 竞品距离(20%) + 交通便利(15%) + 市场潜力(10%)。参考：建材市场租金60-120元/㎡（一线），三线40+元/㎡；轻资产模式15天开业。
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- 标准化看板图表 -->
-  <div class="section">
-    <div class="section-head">
-      <div class="icon" style="background: linear-gradient(135deg, #1677FF, #2f8bff);">📊</div>
-      <h2>渠道标准化看板 — 区域合规率</h2>
-    </div>
-    <div class="chart-card">
-      <h3>全国6大区域巡检合规率排名</h3>
-      <div class="chart-box" id="chartCompliance"></div>
-    </div>
-    <div class="chart-card">
-      <h3>门店类型合规率对比</h3>
-      <div class="chart-box" id="chartStoreType"></div>
-    </div>
-  </div>
+    <!-- Tab 3: 智能分单 -->
+    <div class="tab-panel" id="tab-dispatch">
+      <div class="tab-intro" style="border-left-color:#fa8c16;">
+        <strong>智能分单与履约监控</strong>：根据网点位置、库存充足度、配送能力、门店评分自动分配订单；实时监控履约进度（已下单→已发货→已到货→已施工），超时预警与断货预警。
+        <br><small style="color:#999;">行业痛点：传统模式平均交付周期7-10天，紧急订单履约率不足60%；经销商备货失误率高达35%</small>
+      </div>
 
-  <!-- 智能分单 -->
-  <div class="section">
-    <div class="section-head">
-      <div class="icon" style="background: linear-gradient(135deg, #fa8c16, #ffc53d);">⚡</div>
-      <h2>智能分单 — 履约风险监控</h2>
-    </div>
-    <div class="chart-card">
-      <h3>在途订单履约状态（8笔订单实时追踪）</h3>
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>订单号</th>
-            <th>产品</th>
-            <th>收货区域</th>
-            <th>分配网点</th>
-            <th>状态</th>
-            <th>预计交付</th>
-            <th>风险</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>DD-20260711-001</td>
-            <td>HCA-122 防水涂料×20桶</td>
-            <td>河南郑州</td>
-            <td>郑州新郑专卖店</td>
-            <td><span class="badge blue">已发货</span></td>
-            <td>2天</td>
-            <td><span class="badge green">正常</span></td>
-          </tr>
-          <tr>
-            <td>DD-20260710-003</td>
-            <td>SBS卷材×50卷</td>
-            <td>山东临沂</td>
-            <td>临沂兰山专卖店</td>
-            <td><span class="badge teal">已到货</span></td>
-            <td>已交付</td>
-            <td><span class="badge green">正常</span></td>
-          </tr>
-          <tr>
-            <td>DD-20260709-007</td>
-            <td>瓷砖胶×30包</td>
-            <td>四川成都</td>
-            <td>成都龙泉驿专卖店</td>
-            <td><span class="badge orange">已下单</span></td>
-            <td><strong style="color:#cf1322">已超时2天</strong></td>
-            <td><span class="badge red">超时预警</span></td>
-          </tr>
-          <tr>
-            <td>DD-20260710-005</td>
-            <td>美缝剂×40支</td>
-            <td>湖南长沙</td>
-            <td>长沙雨花专卖店</td>
-            <td><span class="badge blue">已发货</span></td>
-            <td>1天</td>
-            <td><span class="badge green">正常</span></td>
-          </tr>
-          <tr>
-            <td>DD-20260708-012</td>
-            <td>JS防水涂料×15桶</td>
-            <td>陕西西安</td>
-            <td>西安雁塔专卖店</td>
-            <td><span class="badge orange">已下单</span></td>
-            <td><strong style="color:#cf1322">已超时1天</strong></td>
-            <td><span class="badge red">超时预警</span></td>
-          </tr>
-          <tr>
-            <td>DD-20260710-008</td>
-            <td>聚氨酯防水×10桶</td>
-            <td>江苏南京</td>
-            <td>南京江宁专卖店</td>
-            <td><span class="badge teal">已到货</span></td>
-            <td>已交付</td>
-            <td><span class="badge green">正常</span></td>
-          </tr>
-          <tr>
-            <td>DD-20260711-002</td>
-            <td>SBS卷材×30卷</td>
-            <td>浙江杭州</td>
-            <td>杭州余杭专卖店</td>
-            <td><span class="badge blue">已发货</span></td>
-            <td>3天</td>
-            <td><span class="badge green">正常</span></td>
-          </tr>
-          <tr>
-            <td>DD-20260710-010</td>
-            <td>防水涂料×25桶</td>
-            <td>湖北武汉</td>
-            <td>武汉光谷专卖店</td>
-            <td><span class="badge blue">已发货</span></td>
-            <td>2天</td>
-            <td><span class="badge green">正常</span></td>
-          </tr>
-        </tbody>
-      </table>
-      <div style="margin-top:12px;font-size:12px;color:var(--muted);">
-        <strong>行业对比：</strong>传统模式紧急订单履约率不足60%，本方案通过智能分单+实时监控，目标将履约率提升至86%+。数据来源：数商云建材行业B2B报告。
+      <div class="chart-card">
+        <h3>智能分单引擎<span class="hint">填写订单信息，系统自动推荐最优网点</span></h3>
+        <form class="dispatch-form" id="dispatchForm">
+          <div class="form-group">
+            <label>产品选择</label>
+            <select name="product" id="fProduct">
+              <option value="">请选择产品</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>数量</label>
+            <input type="number" name="qty" id="fQty" min="1" value="20" placeholder="请输入数量">
+          </div>
+          <div class="form-group">
+            <label>收货区域</label>
+            <select name="region" id="fRegion">
+              <option value="">请选择区域</option>
+              <option>华东</option>
+              <option>华南</option>
+              <option>华北</option>
+              <option>华西</option>
+              <option>东北</option>
+              <option>西南</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>紧急程度</label>
+            <div class="radio-group" id="fUrgent">
+              <label class="radio-item active"><input type="radio" name="urgent" value="普通" checked> 普通</label>
+              <label class="radio-item"><input type="radio" name="urgent" value="加急"> 加急</label>
+            </div>
+          </div>
+          <button type="submit" class="btn-primary" id="dispatchBtn">开始智能分单</button>
+        </form>
+
+        <div class="loading-box" id="loadingBox">
+          <div class="spinner"></div>
+          <div class="lt">正在匹配最优网点，综合考虑库存 · 距离 · 评分 · 配送速度...</div>
+        </div>
+
+        <div class="result-area" id="resultArea"></div>
+      </div>
+
+      <div class="chart-card">
+        <h3>履约风险监控<span class="hint">8笔在途订单实时追踪 · 点击订单查看详情 · 超时订单闪烁</span></h3>
+        <div class="filter-bar" id="filterBar"></div>
+        <div class="order-list-wrap">
+          <div id="orderList"></div>
+        </div>
+        <div class="order-detail" id="orderDetail"></div>
+        <div style="margin-top:12px;font-size:12px;color:var(--muted);">
+          <strong>行业对比：</strong>传统模式紧急订单履约率不足60%，本方案通过智能分单+实时监控，目标将履约率提升至86%+。数据来源：数商云建材行业B2B报告。
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- 渠道拓展 -->
-  <div class="section">
-    <div class="section-head">
-      <div class="icon" style="background: linear-gradient(135deg, #52c41a, #95de64);">📈</div>
-      <h2>渠道拓展管理 — 新网点开发档案</h2>
-    </div>
-    <div class="chart-card">
-      <h3>2026年Q3新网点开发进度</h3>
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>网点名称</th>
-            <th>区域</th>
-            <th>选址评分</th>
-            <th>月租金评估</th>
-            <th>开业进度</th>
-            <th>预计开业</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>郑州新郑专卖店</td>
-            <td>华中</td>
-            <td><span class="badge green">92分</span></td>
-            <td>75元/㎡</td>
-            <td><span class="badge teal">铺货中</span></td>
-            <td>7月20日</td>
-          </tr>
-          <tr>
-            <td>临沂兰山专卖店</td>
-            <td>华东</td>
-            <td><span class="badge green">88分</span></td>
-            <td>80元/㎡</td>
-            <td><span class="badge orange">装修中</span></td>
-            <td>7月28日</td>
-          </tr>
-          <tr>
-            <td>成都龙泉驿专卖店</td>
-            <td>西南</td>
-            <td><span class="badge green">85分</span></td>
-            <td>55元/㎡</td>
-            <td><span class="badge orange">装修中</span></td>
-            <td>8月5日</td>
-          </tr>
-          <tr>
-            <td>长沙雨花专卖店</td>
-            <td>华中</td>
-            <td><span class="badge orange">78分</span></td>
-            <td>65元/㎡</td>
-            <td><span class="badge blue">选址确认</span></td>
-            <td>8月15日</td>
-          </tr>
-          <tr>
-            <td>西安雁塔专卖店</td>
-            <td>西北</td>
-            <td><span class="badge orange">76分</span></td>
-            <td>50元/㎡</td>
-            <td><span class="badge blue">选址确认</span></td>
-            <td>8月20日</td>
-          </tr>
-        </tbody>
-      </table>
-      <div style="margin-top:12px;font-size:12px;color:var(--muted);">
-        <strong>选址评分模型：</strong>租金成本(30%) + 客流密度(25%) + 竞品距离(20%) + 交通便利(15%) + 市场潜力(10%)。参考数据：建材市场租金60-120元/㎡（一线），三线40+元/㎡。数据来源：新浪财经建材市场报告。
+    <!-- Tab 4: 经营洞察 -->
+    <div class="tab-panel" id="tab-insight">
+      <div class="tab-intro" style="border-left-color:#722ed1;">
+        <strong>渠道经营洞察</strong>：跨门店销售对比分析，省/市/县三级区域排名，产品动销TOP5分析（哪些产品在哪些区域卖得好），AI自动生成渠道经营洞察报告。
+        <br><small style="color:#999;">参考：东方雨虹2025年零售业务营收99.44亿元，占36.06%</small>
       </div>
-    </div>
-  </div>
-
-  <!-- 经营洞察 -->
-  <div class="section">
-    <div class="section-head">
-      <div class="icon" style="background: linear-gradient(135deg, #722ed1, #9254de);">💡</div>
-      <h2>渠道经营洞察 — 区域排名与动销分析</h2>
-    </div>
-    <div class="chart-card">
-      <h3>7大区域销售额排名（2026年Q2）</h3>
-      <div class="chart-box" id="chartRegion"></div>
-    </div>
-    <div class="chart-card">
-      <h3>产品动销TOP5（全渠道）</h3>
-      <div class="chart-box" id="chartProducts"></div>
+      <div class="chart-card">
+        <h3>7大区域销售额排名（2026年Q2）<span class="hint">点击区域柱子联动下方产品动销</span></h3>
+        <div class="chart-box" id="chartRegion"></div>
+      </div>
+      <div class="chart-card">
+        <h3 id="productPieTitle">产品动销TOP5（全渠道）<span class="hint">点击左侧区域柱子联动</span></h3>
+        <div class="chart-box" id="chartProducts"></div>
+        <div style="margin-top:8px;">
+          <button class="btn-ghost" id="resetPieBtn">恢复全渠道数据</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -685,120 +905,675 @@ body {
 
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
-// ===== 合规率柱状图 =====
-var chart1 = echarts.init(document.getElementById('chartCompliance'));
-chart1.setOption({
-  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-  grid: { left: 80, right: 40, top: 30, bottom: 40 },
-  xAxis: {
-    type: 'value', max: 100,
-    axisLabel: { formatter: '{value}%', fontSize: 12 }
-  },
-  yAxis: {
-    type: 'category',
-    data: ['东北区', '华西区', '华北区', '西南区', '华南区', '华东区'],
-    axisLabel: { fontSize: 13 }
-  },
-  series: [{
-    type: 'bar',
-    data: [
-      { value: 82, itemStyle: { color: '#ff7875' } },
-      { value: 85, itemStyle: { color: '#ffa940' } },
-      { value: 88, itemStyle: { color: '#ffc53d' } },
-      { value: 90, itemStyle: { color: '#bae637' } },
-      { value: 92, itemStyle: { color: '#73d13d' } },
-      { value: 95, itemStyle: { color: '#52c41a' } }
-    ],
-    barWidth: 24,
-    label: { show: true, position: 'right', formatter: '{c}%', fontSize: 13, fontWeight: 'bold' }
-  }]
-});
+/* =========================================================
+ * 数据层
+ * ========================================================= */
+// 产品清单（与门店库存 key 对齐）
+const products = [
+  { name: 'HCA-122防水涂料', unit: '桶' },
+  { name: 'SBS卷材',        unit: '卷' },
+  { name: '瓷砖胶',          unit: '包' },
+  { name: '美缝剂',          unit: '支' },
+  { name: 'JS防水涂料',      unit: '桶' },
+  { name: '聚氨酯防水',      unit: '桶' }
+];
+const unitOf = (p) => (products.find(x => x.name === p) || {}).unit || '';
 
-// ===== 门店类型合规率 =====
-var chart2 = echarts.init(document.getElementById('chartStoreType'));
-chart2.setOption({
-  tooltip: { trigger: 'axis' },
-  legend: { data: ['合规率', '整改完成率'], top: 5 },
-  grid: { left: 50, right: 40, top: 50, bottom: 40 },
-  xAxis: {
-    type: 'category',
-    data: ['品牌专卖店', '零售经销商', '终端网点'],
-    axisLabel: { fontSize: 13 }
-  },
-  yAxis: {
-    type: 'value', max: 100,
-    axisLabel: { formatter: '{value}%', fontSize: 12 }
-  },
-  series: [
-    {
-      name: '合规率', type: 'bar', barWidth: 30,
-      data: [94, 89, 83],
-      itemStyle: { color: '#1677FF', borderRadius: [6,6,0,0] },
-      label: { show: true, position: 'top', formatter: '{c}%', fontSize: 12 }
-    },
-    {
-      name: '整改完成率', type: 'bar', barWidth: 30,
-      data: [96, 91, 78],
-      itemStyle: { color: '#52c41a', borderRadius: [6,6,0,0] },
-      label: { show: true, position: 'top', formatter: '{c}%', fontSize: 12 }
-    }
+// 门店数据（库存 key 与 products.name 完全一致）
+const stores = [
+  { name: '郑州新郑专卖店', region: '华中', stock: { 'HCA-122防水涂料': 50, 'SBS卷材': 80, '瓷砖胶': 30 }, rating: 92, delivery: 2 },
+  { name: '临沂兰山专卖店', region: '华东', stock: { 'HCA-122防水涂料': 40, 'SBS卷材': 60, '美缝剂': 25 }, rating: 88, delivery: 1 },
+  { name: '成都龙泉驿专卖店', region: '西南', stock: { 'HCA-122防水涂料': 35, 'JS防水涂料': 45, '瓷砖胶': 20 }, rating: 85, delivery: 3 },
+  { name: '长沙雨花专卖店', region: '华中', stock: { 'HCA-122防水涂料': 45, '美缝剂': 30, '聚氨酯防水': 15 }, rating: 78, delivery: 2 },
+  { name: '西安雁塔专卖店', region: '西北', stock: { 'SBS卷材': 70, 'JS防水涂料': 30, '瓷砖胶': 25 }, rating: 76, delivery: 3 },
+  { name: '杭州余杭专卖店', region: '华东', stock: { 'HCA-122防水涂料': 60, 'SBS卷材': 90, '美缝剂': 40 }, rating: 94, delivery: 1 },
+  { name: '武汉光谷专卖店', region: '华中', stock: { 'HCA-122防水涂料': 55, '瓷砖胶': 35, '聚氨酯防水': 20 }, rating: 90, delivery: 2 },
+  { name: '南京江宁专卖店', region: '华东', stock: { 'HCA-122防水涂料': 48, 'SBS卷材': 65, 'JS防水涂料': 38 }, rating: 91, delivery: 1 }
+];
+
+// 区域中心坐标（用于按收货区域估算配送距离，单位 km）
+const regionCoords = {
+  '华东': { x: 1200, y: 850 },  '华南': { x: 1130, y: 230 },
+  '华北': { x: 1160, y: 1320 }, '华西': { x: 700,  y: 780 },
+  '东北': { x: 1230, y: 1750 }, '西南': { x: 760,  y: 450 },
+  '华中': { x: 1040, y: 760 },  '西北': { x: 600,  y: 950 }
+};
+function distBetween(r1, r2) {
+  const a = regionCoords[r1], b = regionCoords[r2];
+  if (!a || !b) return 9999;
+  return Math.round(Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2));
+}
+
+// 新网点开发档案
+const stageNames = ['选址确认', '装修', '铺货', '培训', '开业'];
+const newStores = [
+  { name: '郑州新郑专卖店', region: '华中', score: 92, rent: 75, stage: '铺货中',   currentStage: 2, openDate: '7月20日', dims: { rent: 88, traffic: 90, competitor: 85, transport: 95, potential: 92 }, dates: ['6-25', '7-02', '7-12', '7-16', '7-20'] },
+  { name: '临沂兰山专卖店', region: '华东', score: 88, rent: 80, stage: '装修中',   currentStage: 1, openDate: '7月28日', dims: { rent: 82, traffic: 92, competitor: 88, transport: 85, potential: 90 }, dates: ['6-28', '7-08', '7-18', '7-24', '7-28'] },
+  { name: '成都龙泉驿专卖店', region: '西南', score: 85, rent: 55, stage: '装修中', currentStage: 1, openDate: '8月5日',  dims: { rent: 95, traffic: 78, competitor: 82, transport: 80, potential: 88 }, dates: ['7-02', '7-14', '7-24', '7-30', '8-05'] },
+  { name: '长沙雨花专卖店', region: '华中', score: 78, rent: 65, stage: '选址确认', currentStage: 0, openDate: '8月15日', dims: { rent: 90, traffic: 72, competitor: 75, transport: 78, potential: 75 }, dates: ['7-10', '7-22', '8-02', '8-10', '8-15'] },
+  { name: '西安雁塔专卖店', region: '西北', score: 76, rent: 50, stage: '选址确认', currentStage: 0, openDate: '8月20日', dims: { rent: 96, traffic: 68, competitor: 72, transport: 75, potential: 70 }, dates: ['7-12', '7-26', '8-06', '8-14', '8-20'] }
+];
+
+// 在途订单
+const orderStages = ['已下单', '已发货', '已到货', '已施工'];
+const orders = [
+  { id: 'DD-20260711-001', product: 'HCA-122 防水涂料', qty: 20, unit: '桶', region: '河南郑州', store: '郑州新郑专卖店', status: '已发货', eta: '2天',     risk: '正常', step: 1, dates: ['07-11 09:20', '07-11 14:30', '—', '—'] },
+  { id: 'DD-20260710-003', product: 'SBS卷材',         qty: 50, unit: '卷', region: '山东临沂', store: '临沂兰山专卖店', status: '已到货', eta: '已交付',   risk: '正常', step: 2, dates: ['07-10 10:00', '07-10 16:00', '07-11 09:00', '—'] },
+  { id: 'DD-20260709-007', product: '瓷砖胶',           qty: 30, unit: '包', region: '四川成都', store: '成都龙泉驿专卖店', status: '已下单', eta: '已超时2天', risk: '超时', step: 0, dates: ['07-09 11:30', '—', '—', '—'] },
+  { id: 'DD-20260710-005', product: '美缝剂',           qty: 40, unit: '支', region: '湖南长沙', store: '长沙雨花专卖店', status: '已发货', eta: '1天',     risk: '正常', step: 1, dates: ['07-10 13:00', '07-11 08:30', '—', '—'] },
+  { id: 'DD-20260708-012', product: 'JS防水涂料',       qty: 15, unit: '桶', region: '陕西西安', store: '西安雁塔专卖店', status: '已下单', eta: '已超时1天', risk: '超时', step: 0, dates: ['07-08 10:00', '—', '—', '—'] },
+  { id: 'DD-20260710-008', product: '聚氨酯防水',       qty: 10, unit: '桶', region: '江苏南京', store: '南京江宁专卖店', status: '已到货', eta: '已交付',   risk: '正常', step: 2, dates: ['07-10 09:00', '07-10 15:00', '07-11 10:00', '—'] },
+  { id: 'DD-20260711-002', product: 'SBS卷材',         qty: 30, unit: '卷', region: '浙江杭州', store: '杭州余杭专卖店', status: '已发货', eta: '3天',     risk: '预警', step: 1, dates: ['07-11 08:00', '07-11 12:00', '—', '—'] },
+  { id: 'DD-20260710-010', product: '防水涂料',         qty: 25, unit: '桶', region: '湖北武汉', store: '武汉光谷专卖店', status: '已发货', eta: '2天',     risk: '预警', step: 1, dates: ['07-10 14:00', '07-11 09:30', '—', '—'] }
+];
+
+// 区域门店明细（标准化看板联动）
+const regionStores = {
+  '华东区': [
+    { name: '杭州余杭专卖店', city: '浙江杭州', rate: 96, items: '陈列·价签·培训', last: '07-10' },
+    { name: '南京江宁专卖店', city: '江苏南京', rate: 94, items: '陈列·价签·培训', last: '07-09' },
+    { name: '临沂兰山专卖店', city: '山东临沂', rate: 93, items: '陈列·价签',     last: '07-08' },
+    { name: '上海浦东专卖店', city: '上海',     rate: 92, items: '陈列·培训',     last: '07-10' }
+  ],
+  '华南区': [
+    { name: '广州天河专卖店', city: '广东广州', rate: 93, items: '陈列·价签·培训', last: '07-09' },
+    { name: '深圳南山专卖店', city: '广东深圳', rate: 92, items: '陈列·价签',     last: '07-10' },
+    { name: '东莞长安专卖店', city: '广东东莞', rate: 91, items: '陈列·培训',     last: '07-08' },
+    { name: '佛山禅城专卖店', city: '广东佛山', rate: 90, items: '陈列·价签',     last: '07-09' }
+  ],
+  '华北区': [
+    { name: '北京朝阳专卖店', city: '北京',     rate: 90, items: '陈列·价签·培训', last: '07-10' },
+    { name: '天津滨海专卖店', city: '天津',     rate: 89, items: '陈列·价签',     last: '07-09' },
+    { name: '石家庄新华专卖店', city: '河北石家庄', rate: 87, items: '陈列·培训', last: '07-08' },
+    { name: '太原小店专卖店', city: '山西太原', rate: 86, items: '陈列',         last: '07-07' }
+  ],
+  '西南区': [
+    { name: '成都龙泉驿专卖店', city: '四川成都', rate: 91, items: '陈列·价签·培训', last: '07-10' },
+    { name: '重庆渝北专卖店', city: '重庆',     rate: 90, items: '陈列·价签',     last: '07-09' },
+    { name: '昆明盘龙专卖店', city: '云南昆明', rate: 89, items: '陈列·培训',     last: '07-08' },
+    { name: '贵阳南明专卖店', city: '贵州贵阳', rate: 88, items: '陈列',         last: '07-07' }
+  ],
+  '华西区': [
+    { name: '西安雁塔专卖店', city: '陕西西安', rate: 87, items: '陈列·价签',     last: '07-09' },
+    { name: '兰州城关专卖店', city: '甘肃兰州', rate: 85, items: '陈列·培训',     last: '07-08' },
+    { name: '银川金凤专卖店', city: '宁夏银川', rate: 84, items: '陈列',         last: '07-07' },
+    { name: '西宁城中专卖店', city: '青海西宁', rate: 83, items: '陈列',         last: '07-06' }
+  ],
+  '东北区': [
+    { name: '沈阳沈河专卖店', city: '辽宁沈阳',   rate: 84, items: '陈列·价签', last: '07-08' },
+    { name: '大连中山专卖店', city: '辽宁大连',   rate: 83, items: '陈列·培训', last: '07-07' },
+    { name: '长春朝阳专卖店', city: '吉林长春',   rate: 82, items: '陈列',     last: '07-07' },
+    { name: '哈尔滨南岗专卖店', city: '黑龙江哈尔滨', rate: 80, items: '陈列', last: '07-06' }
   ]
+};
+
+// 门店类型合规明细
+const typeDetail = {
+  '品牌专卖店': { total: 3000, compliant: 2820, rate: 94, rect: 96, items: [{ n: '陈列规范', v: 96 }, { n: '价签准确', v: 98 }, { n: '培训达标', v: 92 }, { n: '形象统一', v: 95 }, { n: '库存合规', v: 89 }] },
+  '零售经销商': { total: 4500, compliant: 4005, rate: 89, rect: 91, items: [{ n: '陈列规范', v: 90 }, { n: '价签准确', v: 92 }, { n: '培训达标', v: 85 }, { n: '形象统一', v: 88 }, { n: '库存合规', v: 86 }] },
+  '终端网点':   { total: 10000, compliant: 8300, rate: 83, rect: 78, items: [{ n: '陈列规范', v: 84 }, { n: '价签准确', v: 86 }, { n: '培训达标', v: 78 }, { n: '形象统一', v: 82 }, { n: '库存合规', v: 80 }] }
+};
+
+// 经营洞察：各区域产品动销 TOP5
+const productNames = ['HCA-122 墙面防水涂料', 'SBS 改性沥青卷材', 'JS 防水涂料', '瓷砖胶', '美缝剂'];
+const productColors = ['#1677FF', '#52c41a', '#fa8c16', '#722ed1', '#13c2c2'];
+const regionProductData = {
+  '华东区': [980, 720, 540, 420, 240],
+  '华南区': [720, 560, 380, 280, 160],
+  '华北区': [580, 450, 320, 240, 140],
+  '西南区': [460, 380, 260, 200, 120],
+  '华西区': [380, 300, 220, 160, 100],
+  '东北区': [280, 220, 160, 120, 70],
+  '西北区': [240, 180, 130, 90, 50]
+};
+const allChannelProducts = productNames.map((_, i) =>
+  Object.keys(regionProductData).reduce((s, r) => s + regionProductData[r][i], 0)
+);
+function pieData(region) {
+  const arr = region ? regionProductData[region] : allChannelProducts;
+  return arr.map((v, i) => ({ value: v, name: productNames[i], itemStyle: { color: productColors[i] } }));
+}
+
+/* =========================================================
+ * 工具
+ * ========================================================= */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+function statusBadge(s) {
+  const map = { '已下单': 'orange', '已发货': 'blue', '已到货': 'teal', '已施工': 'green' };
+  return `<span class="badge ${map[s] || 'blue'}">${s}</span>`;
+}
+function riskBadge(r) {
+  const map = { '正常': 'green', '预警': 'orange', '超时': 'red' };
+  return `<span class="badge ${map[r] || 'green'}">${r}</span>`;
+}
+function stageBadge(s) {
+  const map = { '选址确认': 'blue', '装修中': 'orange', '铺货中': 'teal', '培训中': 'purple', '已开业': 'green' };
+  return `<span class="badge ${map[s] || 'blue'}">${s}</span>`;
+}
+
+/* =========================================================
+ * Tab 切换
+ * ========================================================= */
+const tabInited = { dashboard: false, expansion: false, dispatch: false, insight: false };
+let chartCompliance, chartStoreType, chartRegion, chartProducts;
+const radarCharts = {};
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+
+  if (tab === 'dashboard' && !tabInited.dashboard) { initDashboardCharts(); tabInited.dashboard = true; }
+  if (tab === 'insight' && !tabInited.insight) { initInsightCharts(); tabInited.insight = true; }
+
+  setTimeout(() => {
+    if (tab === 'dashboard') { chartCompliance && chartCompliance.resize(); chartStoreType && chartStoreType.resize(); }
+    if (tab === 'insight') { chartRegion && chartRegion.resize(); chartProducts && chartProducts.resize(); }
+    if (tab === 'expansion') { Object.values(radarCharts).forEach(c => c && c.resize()); }
+  }, 60);
+}
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
 });
 
-// ===== 区域销售排名 =====
-var chart3 = echarts.init(document.getElementById('chartRegion'));
-chart3.setOption({
-  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-  grid: { left: 80, right: 40, top: 30, bottom: 40 },
-  xAxis: {
-    type: 'value',
-    axisLabel: { formatter: '{value}万', fontSize: 12 }
-  },
-  yAxis: {
-    type: 'category',
-    data: ['西北区', '东北区', '华西区', '西南区', '华北区', '华南区', '华东区'],
-    axisLabel: { fontSize: 13 }
-  },
-  series: [{
-    type: 'bar',
-    data: [
-      { value: 380, itemStyle: { color: '#ffa940' } },
-      { value: 450, itemStyle: { color: '#ffc53d' } },
-      { value: 620, itemStyle: { color: '#bae637' } },
-      { value: 780, itemStyle: { color: '#73d13d' } },
-      { value: 950, itemStyle: { color: '#36cfc9' } },
-      { value: 1180, itemStyle: { color: '#4096ff' } },
-      { value: 1520, itemStyle: { color: '#1677FF' } }
-    ],
-    barWidth: 24,
-    label: { show: true, position: 'right', formatter: '{c}万', fontSize: 12, fontWeight: 'bold' }
-  }]
+/* =========================================================
+ * 标准化看板图表 + 联动
+ * ========================================================= */
+function initDashboardCharts() {
+  // 区域合规率
+  chartCompliance = echarts.init(document.getElementById('chartCompliance'));
+  chartCompliance.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    grid: { left: 80, right: 50, top: 30, bottom: 40 },
+    xAxis: { type: 'value', max: 100, axisLabel: { formatter: '{value}%', fontSize: 12 } },
+    yAxis: { type: 'category', data: ['东北区', '华西区', '华北区', '西南区', '华南区', '华东区'], axisLabel: { fontSize: 13 } },
+    series: [{
+      type: 'bar',
+      data: [
+        { value: 82, itemStyle: { color: '#ff7875' } },
+        { value: 85, itemStyle: { color: '#ffa940' } },
+        { value: 88, itemStyle: { color: '#ffc53d' } },
+        { value: 90, itemStyle: { color: '#bae637' } },
+        { value: 92, itemStyle: { color: '#73d13d' } },
+        { value: 95, itemStyle: { color: '#52c41a' } }
+      ],
+      barWidth: 24,
+      cursor: 'pointer',
+      emphasis: { itemStyle: { shadowBlur: 10, shadowColor: 'rgba(22,119,255,.4)' } },
+      label: { show: true, position: 'right', formatter: '{c}%', fontSize: 13, fontWeight: 'bold' }
+    }]
+  });
+  chartCompliance.on('click', p => { if (p.name && regionStores[p.name]) showRegionDetail(p.name); });
+
+  // 门店类型合规率
+  chartStoreType = echarts.init(document.getElementById('chartStoreType'));
+  chartStoreType.setOption({
+    tooltip: { trigger: 'axis' },
+    legend: { data: ['合规率', '整改完成率'], top: 5 },
+    grid: { left: 50, right: 40, top: 50, bottom: 40 },
+    xAxis: { type: 'category', data: ['品牌专卖店', '零售经销商', '终端网点'], axisLabel: { fontSize: 13 } },
+    yAxis: { type: 'value', max: 100, axisLabel: { formatter: '{value}%', fontSize: 12 } },
+    series: [
+      { name: '合规率', type: 'bar', barWidth: 30, cursor: 'pointer', data: [94, 89, 83], itemStyle: { color: '#1677FF', borderRadius: [6, 6, 0, 0] }, label: { show: true, position: 'top', formatter: '{c}%', fontSize: 12 }, emphasis: { itemStyle: { shadowBlur: 10, shadowColor: 'rgba(22,119,255,.4)' } } },
+      { name: '整改完成率', type: 'bar', barWidth: 30, cursor: 'pointer', data: [96, 91, 78], itemStyle: { color: '#52c41a', borderRadius: [6, 6, 0, 0] }, label: { show: true, position: 'top', formatter: '{c}%', fontSize: 12 }, emphasis: { itemStyle: { shadowBlur: 10, shadowColor: 'rgba(82,196,26,.4)' } } }
+    ]
+  });
+  chartStoreType.on('click', p => { if (p.name && typeDetail[p.name]) showTypeDetail(p.name); });
+}
+
+function showRegionDetail(region) {
+  const list = regionStores[region] || [];
+  const card = document.getElementById('regionDetailCard');
+  document.getElementById('regionDetailTitle').innerHTML = `${region} — 门店合规率明细 <span class="hint">共 ${list.length} 家代表门店 · 巡检合规率由门店巡检模块上卷</span>`;
+  const html = `<table class="detail-table"><thead><tr><th>门店名称</th><th>所在城市</th><th>合规率</th><th>达标项</th><th>最近巡检</th></tr></thead><tbody>
+    ${list.map(s => `<tr><td><strong>${s.name}</strong></td><td>${s.city}</td><td><span class="badge green">${s.rate}%</span></td><td>${s.items}</td><td>${s.last}</td></tr>`).join('')}
+  </tbody></table>`;
+  document.getElementById('regionDetailContent').innerHTML = html;
+  card.style.display = 'block';
+  card.classList.remove('linked-card'); void card.offsetWidth; card.classList.add('linked-card');
+  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function showTypeDetail(type) {
+  const d = typeDetail[type];
+  const card = document.getElementById('typeDetailCard');
+  document.getElementById('typeDetailTitle').innerHTML = `${type} — 合规率明细 <span class="hint">门店总数 ${d.total} · 已合规 ${d.compliant} · 整改完成率 ${d.rect}%</span>`;
+  const bars = d.items.map(it => `
+    <div class="dim-mini-row">
+      <div class="dim-label"><span>${it.n}</span><span class="dim-val">${it.v}%</span></div>
+      <div class="dim-track"><div class="dim-fill" data-w="${it.v}"></div></div>
+    </div>`).join('');
+  const html = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;">
+      <div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;">
+          <div class="meta-item" style="flex:1;min-width:90px;"><div class="v">${d.rate}%</div><div class="l">整体合规率</div></div>
+          <div class="meta-item" style="flex:1;min-width:90px;"><div class="v">${d.rect}%</div><div class="l">整改完成率</div></div>
+          <div class="meta-item" style="flex:1;min-width:90px;"><div class="v">${d.compliant}</div><div class="l">已合规门店</div></div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);">该类型门店合规率由陈列规范、价签准确、培训达标、形象统一、库存合规5项指标加权得出，数据来源于门店巡检模块。</div>
+      </div>
+      <div class="dim-bars">${bars}</div>
+    </div>`;
+  document.getElementById('typeDetailContent').innerHTML = html;
+  card.style.display = 'block';
+  card.classList.remove('linked-card'); void card.offsetWidth; card.classList.add('linked-card');
+  // 触发进度条动画
+  setTimeout(() => {
+    card.querySelectorAll('.dim-fill').forEach(f => { f.style.width = f.dataset.w + '%'; });
+  }, 80);
+  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/* =========================================================
+ * 经营洞察图表 + 联动
+ * ========================================================= */
+function initInsightCharts() {
+  // 区域销售排名
+  chartRegion = echarts.init(document.getElementById('chartRegion'));
+  chartRegion.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    grid: { left: 80, right: 50, top: 30, bottom: 40 },
+    xAxis: { type: 'value', axisLabel: { formatter: '{value}万', fontSize: 12 } },
+    yAxis: { type: 'category', data: ['西北区', '东北区', '华西区', '西南区', '华北区', '华南区', '华东区'], axisLabel: { fontSize: 13 } },
+    series: [{
+      type: 'bar',
+      data: [
+        { value: 380, itemStyle: { color: '#ffa940' } },
+        { value: 450, itemStyle: { color: '#ffc53d' } },
+        { value: 620, itemStyle: { color: '#bae637' } },
+        { value: 780, itemStyle: { color: '#73d13d' } },
+        { value: 950, itemStyle: { color: '#36cfc9' } },
+        { value: 1180, itemStyle: { color: '#4096ff' } },
+        { value: 1520, itemStyle: { color: '#1677FF' } }
+      ],
+      barWidth: 24,
+      cursor: 'pointer',
+      emphasis: { itemStyle: { shadowBlur: 10, shadowColor: 'rgba(22,119,255,.4)' } },
+      label: { show: true, position: 'right', formatter: '{c}万', fontSize: 12, fontWeight: 'bold' }
+    }]
+  });
+  chartRegion.on('click', p => { if (p.name && regionProductData[p.name]) updateProductPie(p.name); });
+
+  // 产品动销 TOP5
+  chartProducts = echarts.init(document.getElementById('chartProducts'));
+  chartProducts.setOption({
+    tooltip: { trigger: 'item', formatter: '{b}<br/>销量：{c} 万元 ({d}%)' },
+    legend: { orient: 'vertical', left: 'right', top: 'center', fontSize: 12, textStyle: { fontSize: 12 } },
+    series: [{
+      type: 'pie',
+      radius: ['40%', '70%'],
+      center: ['38%', '50%'],
+      avoidLabelOverlap: true,
+      data: pieData(null),
+      label: { fontSize: 12, formatter: '{b}\n{d}%' },
+      emphasis: { itemStyle: { shadowBlur: 14, shadowColor: 'rgba(0,0,0,.2)' } }
+    }]
+  });
+}
+
+function updateProductPie(region) {
+  if (!chartProducts) return;
+  chartProducts.setOption({ series: [{ data: pieData(region) }] });
+  document.getElementById('productPieTitle').innerHTML = `产品动销TOP5（${region}） <span class="hint">已联动 · 点击"恢复全渠道数据"重置</span>`;
+}
+document.getElementById('resetPieBtn').addEventListener('click', () => {
+  if (!chartProducts) return;
+  chartProducts.setOption({ series: [{ data: pieData(null) }] });
+  document.getElementById('productPieTitle').innerHTML = '产品动销TOP5（全渠道） <span class="hint">点击左侧区域柱子联动</span>';
 });
 
-// ===== 产品动销TOP5 =====
-var chart4 = echarts.init(document.getElementById('chartProducts'));
-chart4.setOption({
-  tooltip: { trigger: 'item' },
-  legend: { orient: 'vertical', left: 'right', top: 'center', fontSize: 13 },
-  series: [{
-    type: 'pie',
-    radius: ['40%', '70%'],
-    center: ['40%', '50%'],
-    data: [
-      { value: 3280, name: 'HCA-122 墙面防水涂料', itemStyle: { color: '#1677FF' } },
-      { value: 2650, name: 'SBS 改性沥青卷材', itemStyle: { color: '#52c41a' } },
-      { value: 1980, name: 'JS 防水涂料', itemStyle: { color: '#fa8c16' } },
-      { value: 1520, name: '瓷砖胶', itemStyle: { color: '#722ed1' } },
-      { value: 860, name: '美缝剂', itemStyle: { color: '#13c2c2' } }
-    ],
-    label: { fontSize: 12, formatter: '{b}\n{d}%' }
-  }]
+/* =========================================================
+ * 渠道拓展：可展开网点列表
+ * ========================================================= */
+function renderStoreList() {
+  const html = newStores.map((s, i) => `
+    <div class="store-row" data-idx="${i}">
+      <div class="store-summary">
+        <div class="s-name">${s.name} <span class="chev">›</span></div>
+        <div class="s-item"><span class="muted">区域</span><strong>${s.region}</strong></div>
+        <div class="s-item"><span class="muted">选址评分</span><span class="badge green">${s.score}分</span></div>
+        <div class="s-item"><span class="muted">月租金</span><strong>${s.rent}元/㎡</strong></div>
+        <div class="s-item"><span class="muted">开业进度</span>${stageBadge(s.stage)}</div>
+        <div class="s-item"><span class="muted">预计开业</span><strong>${s.openDate}</strong></div>
+      </div>
+      <div class="store-detail">
+        <div class="store-detail-inner">
+          <div class="detail-head">选址评分明细 · 综合总分 <span class="score-num">${s.score}</span> 分 <span class="hint">5维度雷达图 + 进度条</span></div>
+          <div class="detail-grid">
+            <div class="radar-box" id="radar-${i}"></div>
+            <div class="dim-bars">
+              <div class="dim-row"><div class="dim-label"><span>租金成本</span><span class="dim-val">${s.dims.rent}</span></div><div class="dim-track"><div class="dim-fill" data-w="${s.dims.rent}" style="background:linear-gradient(90deg,#1677FF,#2f8bff);"></div></div></div>
+              <div class="dim-row"><div class="dim-label"><span>客流密度</span><span class="dim-val">${s.dims.traffic}</span></div><div class="dim-track"><div class="dim-fill" data-w="${s.dims.traffic}" style="background:linear-gradient(90deg,#52c41a,#95de64);"></div></div></div>
+              <div class="dim-row"><div class="dim-label"><span>竞品距离</span><span class="dim-val">${s.dims.competitor}</span></div><div class="dim-track"><div class="dim-fill" data-w="${s.dims.competitor}" style="background:linear-gradient(90deg,#fa8c16,#ffc53d);"></div></div></div>
+              <div class="dim-row"><div class="dim-label"><span>交通便利</span><span class="dim-val">${s.dims.transport}</span></div><div class="dim-track"><div class="dim-fill" data-w="${s.dims.transport}" style="background:linear-gradient(90deg,#722ed1,#9254de);"></div></div></div>
+              <div class="dim-row"><div class="dim-label"><span>市场潜力</span><span class="dim-val">${s.dims.potential}</span></div><div class="dim-track"><div class="dim-fill" data-w="${s.dims.potential}" style="background:linear-gradient(90deg,#13c2c2,#36cfc9);"></div></div></div>
+            </div>
+          </div>
+          <div class="detail-head" style="margin-top:20px;">开业进度时间线 · 预计 <span class="score-num">${s.openDate}</span> 开业</div>
+          ${timelineHtml(s)}
+        </div>
+      </div>
+    </div>`).join('');
+  document.getElementById('storeList').innerHTML = html;
+
+  document.querySelectorAll('.store-row').forEach(row => {
+    row.querySelector('.store-summary').addEventListener('click', () => {
+      const isExp = row.classList.toggle('expanded');
+      const idx = +row.dataset.idx;
+      if (isExp) {
+        initStoreRadar(idx);
+        setTimeout(() => {
+          row.querySelectorAll('.dim-fill').forEach(f => { f.style.width = f.dataset.w + '%'; });
+        }, 120);
+      } else {
+        row.querySelectorAll('.dim-fill').forEach(f => { f.style.width = '0%'; });
+      }
+    });
+  });
+}
+
+function timelineHtml(s) {
+  return '<div class="timeline">' + stageNames.map((n, i) => {
+    let cls = '';
+    if (i < s.currentStage) cls = 'done';
+    else if (i === s.currentStage) cls = 'current';
+    return `<div class="tl-step ${cls}"><div class="tl-dot">${i + 1}</div><div class="tl-name">${n}</div><div class="tl-date">${s.dates[i]}</div></div>`;
+  }).join('') + '</div>';
+}
+
+function initStoreRadar(idx) {
+  const s = newStores[idx];
+  const el = document.getElementById('radar-' + idx);
+  if (!el) return;
+  if (radarCharts[idx]) { radarCharts[idx].resize(); return; }
+  const chart = echarts.init(el);
+  chart.setOption({
+    tooltip: { trigger: 'item' },
+    radar: {
+      indicator: [
+        { name: '租金成本', max: 100 },
+        { name: '客流密度', max: 100 },
+        { name: '竞品距离', max: 100 },
+        { name: '交通便利', max: 100 },
+        { name: '市场潜力', max: 100 }
+      ],
+      radius: '62%',
+      center: ['50%', '54%'],
+      splitArea: { areaStyle: { color: ['#f7f8fc', '#fff'] } },
+      splitLine: { lineStyle: { color: '#e8e8e8' } },
+      axisName: { fontSize: 12, color: '#555' }
+    },
+    series: [{
+      type: 'radar',
+      data: [{
+        value: [s.dims.rent, s.dims.traffic, s.dims.competitor, s.dims.transport, s.dims.potential],
+        name: s.name,
+        areaStyle: { color: 'rgba(22,119,255,.22)' },
+        lineStyle: { color: '#1677FF', width: 2 },
+        itemStyle: { color: '#1677FF' },
+        label: { show: true, fontSize: 11, color: '#0958d9', fontWeight: 600 }
+      }]
+    }]
+  });
+  radarCharts[idx] = chart;
+}
+
+/* =========================================================
+ * 智能分单：表单 + 匹配逻辑
+ * ========================================================= */
+function runDispatch(product, qty, region, urgent) {
+  // 仅保留有该产品库存的网点
+  const candidates = stores.filter(s => s.stock[product] != null);
+  if (!candidates.length) return [];
+
+  const scored = candidates.map(s => {
+    const stockQty = s.stock[product];
+    const stockScore = Math.min(100, Math.round((stockQty / qty) * 100));
+    const dist = distBetween(region, s.region);
+    const ratingScore = s.rating;
+    const speedScore = s.delivery === 1 ? 100 : s.delivery === 2 ? 70 : 40;
+    return { ...s, stockQty, dist, stockScore, ratingScore, speedScore };
+  });
+
+  // 距离归一化（越近得分越高）
+  const maxDist = Math.max(...scored.map(s => s.dist));
+  scored.forEach(s => { s.distScore = Math.round((1 - s.dist / maxDist) * 100); });
+
+  // 加权：普通 [库存.4, 距离.35, 评分.15, 速度.1]；加急 提升速度与距离权重
+  const w = urgent
+    ? { s: 0.30, d: 0.30, r: 0.10, v: 0.30 }
+    : { s: 0.40, d: 0.35, r: 0.15, v: 0.10 };
+  scored.forEach(s => {
+    s.total = Math.round((s.stockScore * w.s + s.distScore * w.d + s.ratingScore * w.r + s.speedScore * w.v) * 10) / 10;
+  });
+  scored.sort((a, b) => b.total - a.total);
+  return scored;
+}
+
+function renderResult(results, ctx) {
+  const { product, qty, region, urgent } = ctx;
+  const unit = unitOf(product);
+  const area = document.getElementById('resultArea');
+
+  if (!results.length) {
+    area.innerHTML = `<div class="warn-notice">未找到有「${product}」库存的网点，请调整产品或联系区域经理调货。</div>`;
+    return;
+  }
+
+  const top = results[0];
+  const alts = results.slice(1, 3);
+  const stockShort = top.stockQty < qty;
+  let html = '';
+
+  if (urgent) {
+    html += `<div class="urgent-notice">⚡ 加急订单已启用加速权重（配送速度 30% / 距离 30% / 库存 30% / 评分 10%），优先推荐配送最快的有库存网点，预计 ${top.delivery} 天内送达。</div>`;
+  }
+  if (stockShort) {
+    html += `<div class="warn-notice">提示：推荐网点「${top.name}」当前库存 ${top.stockQty}${unit}，不足以满足订单 ${qty}${unit}，建议同时从备选网点调拨或安排补货。</div>`;
+  }
+
+  html += `
+    <div class="reco-card">
+      <div class="reco-badge">推荐网点</div>
+      <div class="reco-head">
+        <div>
+          <div class="reco-name">${top.name}</div>
+          <div class="reco-region">所在区域：${top.region} · 库存 ${top.stockQty}${unit} · 门店评分 ${top.rating} · 配送 ${top.delivery} 天</div>
+        </div>
+        <div class="score-big"><div class="v">${top.total}</div><div class="l">综合匹配得分</div></div>
+      </div>
+      <div class="reco-meta">
+        <div class="meta-item"><div class="v">${top.delivery} 天</div><div class="l">预计配送时间</div></div>
+        <div class="meta-item"><div class="v">${top.dist} km</div><div class="l">配送距离</div></div>
+        <div class="meta-item"><div class="v">${top.stockScore}</div><div class="l">库存充足度</div></div>
+        <div class="meta-item"><div class="v">${top.speedScore}</div><div class="l">配送速度分</div></div>
+      </div>
+    </div>`;
+
+  if (alts.length) {
+    html += `<div class="alt-title">备选网点（${alts.length}）</div><div class="alt-list">`;
+    alts.forEach(a => {
+      html += `
+        <div class="alt-card">
+          <div class="alt-head"><div class="alt-name">${a.name}</div><div class="alt-score">得分 ${a.total}</div></div>
+          <div class="alt-meta">
+            <span>区域 ${a.region}</span>
+            <span>距离 ${a.dist}km</span>
+            <span>配送 ${a.delivery}天</span>
+            <span>库存 ${a.stockQty}${unit}</span>
+            <span>评分 ${a.rating}</span>
+          </div>
+        </div>`;
+    });
+    html += `</div>`;
+  }
+
+  html += `<div class="score-formula">
+    <strong>匹配算法：</strong>综合得分 = 库存充足度 × 40% + 距离权重 × 35% + 门店评分 × 15% + 配送速度 × 10%
+    ${urgent ? '（加急模式调整为 30% / 30% / 10% / 30%）' : ''}<br>
+    库存充足度 = 库存量 ÷ 需求量（上限100）；距离权重 = 距离归一化后取反；配送速度 = 1天100分 / 2天70分 / 3天40分。
+  </div>`;
+
+  area.innerHTML = html;
+}
+
+// 表单初始化
+const fProduct = document.getElementById('fProduct');
+products.forEach(p => {
+  const o = document.createElement('option');
+  o.value = p.name;
+  o.textContent = `${p.name}（单位：${p.unit}）`;
+  fProduct.appendChild(o);
+});
+fProduct.value = 'HCA-122防水涂料';
+document.getElementById('fRegion').value = '华东';
+
+// 紧急程度单选样式联动
+document.querySelectorAll('#fUrgent .radio-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('#fUrgent .radio-item').forEach(x => x.classList.remove('active'));
+    item.classList.add('active');
+    item.querySelector('input').checked = true;
+  });
 });
 
-// ===== 响应式 =====
-window.addEventListener('resize', function() {
-  chart1.resize(); chart2.resize(); chart3.resize(); chart4.resize();
+// 提交分单
+document.getElementById('dispatchForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const product = fProduct.value;
+  const qty = parseInt(document.getElementById('fQty').value, 10);
+  const region = document.getElementById('fRegion').value;
+  const urgent = document.querySelector('input[name="urgent"]:checked').value === '加急';
+
+  if (!product) { showToast('请选择产品'); return; }
+  if (!qty || qty <= 0) { showToast('请输入有效的数量'); return; }
+  if (!region) { showToast('请选择收货区域'); return; }
+
+  const btn = document.getElementById('dispatchBtn');
+  const loadingBox = document.getElementById('loadingBox');
+  const resultArea = document.getElementById('resultArea');
+
+  resultArea.classList.remove('show');
+  loadingBox.classList.add('show');
+  btn.disabled = true;
+  btn.textContent = '智能匹配中...';
+
+  setTimeout(() => {
+    const results = runDispatch(product, qty, region, urgent);
+    renderResult(results, { product, qty, region, urgent });
+    loadingBox.classList.remove('show');
+    resultArea.classList.add('show');
+    btn.disabled = false;
+    btn.textContent = '开始智能分单';
+    resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 1300);
+});
+
+/* =========================================================
+ * 履约监控：筛选 + 详情
+ * ========================================================= */
+let currentFilter = '全部';
+const orderListEl = document.getElementById('orderList');
+const orderDetailEl = document.getElementById('orderDetail');
+
+function renderFilterBar() {
+  const counts = {
+    '全部': orders.length,
+    '正常': orders.filter(o => o.risk === '正常').length,
+    '预警': orders.filter(o => o.risk === '预警').length,
+    '超时': orders.filter(o => o.risk === '超时').length
+  };
+  document.getElementById('filterBar').innerHTML = Object.keys(counts).map(k => `
+    <button class="filter-btn ${currentFilter === k ? 'active' : ''}" data-filter="${k}">${k}<span class="count">${counts[k]}</span></button>`).join('');
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.addEventListener('click', () => { currentFilter = b.dataset.filter; renderFilterBar(); renderOrders(); });
+  });
+}
+
+function renderOrders() {
+  const list = currentFilter === '全部' ? orders : orders.filter(o => o.risk === currentFilter);
+  if (!list.length) {
+    orderListEl.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px;">该筛选下暂无在途订单</div>';
+    orderDetailEl.classList.remove('show');
+    return;
+  }
+  orderListEl.innerHTML = list.map(o => {
+    const realIdx = orders.indexOf(o);
+    return `<div class="order-row ${o.risk === '超时' ? 'timeout' : ''}" data-idx="${realIdx}">
+      <div class="o-id">${o.id}</div>
+      <div>${o.product} × ${o.qty}${o.unit}</div>
+      <div>${o.region}</div>
+      <div>${o.store}</div>
+      <div>${statusBadge(o.status)}</div>
+      <div>${o.eta}</div>
+      <div>${riskBadge(o.risk)}</div>
+    </div>`;
+  }).join('');
+  orderListEl.querySelectorAll('.order-row').forEach(row => {
+    row.addEventListener('click', () => {
+      orderListEl.querySelectorAll('.order-row').forEach(r => r.classList.remove('selected'));
+      row.classList.add('selected');
+      showOrderDetail(orders[+row.dataset.idx]);
+    });
+  });
+}
+
+function showOrderDetail(o) {
+  const tl = '<div class="timeline">' + orderStages.map((n, i) => {
+    let cls = '';
+    if (i < o.step) cls = 'done';
+    else if (i === o.step) cls = (o.risk === '超时') ? 'stuck' : 'current';
+    return `<div class="tl-step ${cls}"><div class="tl-dot">${i + 1}</div><div class="tl-name">${n}</div><div class="tl-date">${o.dates[i]}</div></div>`;
+  }).join('') + '</div>';
+
+  const riskDesc = {
+    '正常': '订单履约进度正常，按预计时间送达。',
+    '预警': '订单接近超时阈值，已通知网点关注配送进度，必要时启动加急。',
+    '超时': '订单已超时，系统已触发红色预警并通知网点负责人加快履约，建议立即介入。'
+  }[o.risk];
+
+  orderDetailEl.innerHTML = `
+    <div class="od-section-title">订单详情 · ${o.id}</div>
+    <div class="od-grid">
+      <div class="od-item"><div class="l">产品</div><div class="v">${o.product} × ${o.qty}${o.unit}</div></div>
+      <div class="od-item"><div class="l">收货区域</div><div class="v">${o.region}</div></div>
+      <div class="od-item"><div class="l">分配网点</div><div class="v">${o.store}</div></div>
+      <div class="od-item"><div class="l">当前状态</div><div class="v">${statusBadge(o.status)} ${riskBadge(o.risk)}</div></div>
+    </div>
+    <div class="od-section-title">履约进度时间线 · 预计交付：${o.eta}</div>
+    ${tl}
+    <div style="margin-top:18px;padding:12px 14px;border-radius:8px;background:#fff;font-size:12px;color:#555;">
+      <strong>风险研判：</strong>${riskDesc}
+    </div>`;
+  orderDetailEl.classList.add('show');
+  orderDetailEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/* =========================================================
+ * 初始化
+ * ========================================================= */
+renderStoreList();
+renderFilterBar();
+renderOrders();
+initDashboardCharts();
+tabInited.dashboard = true;
+
+window.addEventListener('resize', function () {
+  chartCompliance && chartCompliance.resize();
+  chartStoreType && chartStoreType.resize();
+  chartRegion && chartRegion.resize();
+  chartProducts && chartProducts.resize();
+  Object.values(radarCharts).forEach(c => c && c.resize());
 });
 </script>
 

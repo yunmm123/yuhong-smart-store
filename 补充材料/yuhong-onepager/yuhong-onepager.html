@@ -370,6 +370,60 @@ body {
   .page { padding: 24px 32px; max-width: 100%; }
   .stat-card, .module-card, .deploy-card, .compare-side { break-inside: avoid; }
 }
+
+/* === Mobile Responsive === */
+@media (max-width: 768px) {
+  body { font-size: 14px; }
+  .page { padding: 20px 14px; max-width: 100%; min-height: auto; }
+  /* Header */
+  .header { flex-direction: column; gap: 12px; }
+  .header-right { text-align: left; font-size: 11px; }
+  .header-left h1 { font-size: 24px; }
+  .header-left .subtitle { font-size: 13px; }
+  /* Stats */
+  .stat-row { grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 12px 0 20px; }
+  .stat-card { padding: 14px 10px; }
+  .stat-card .num { font-size: 24px; }
+  .stat-card .label { font-size: 11px; }
+  /* Main grid → single column */
+  .main-grid { grid-template-columns: 1fr; gap: 20px; }
+  /* Module grid */
+  .module-grid { grid-template-columns: 1fr; }
+  .module-card { padding: 12px 14px; }
+  .module-card h4 { font-size: 13px; }
+  .module-card p { font-size: 12px; }
+  /* Architecture */
+  .arch-row { padding: 8px 12px; font-size: 12px; gap: 8px; }
+  .arch-row .tag { font-size: 10px; min-width: 60px; padding: 2px 8px; }
+  .arch-row .desc { font-size: 11px; }
+  /* Deploy grid */
+  .deploy-grid { grid-template-columns: 1fr; gap: 10px; }
+  .deploy-card { padding: 14px; }
+  .deploy-card .highlight { font-size: 16px; }
+  .deploy-card p { font-size: 11px; }
+  /* Compare row */
+  .compare-row { grid-template-columns: 1fr; gap: 10px; }
+  .compare-side { padding: 12px 14px; font-size: 12px; }
+  /* Business value stat-row override */
+  .section .stat-row[style*="grid-template-columns:repeat(2"] { grid-template-columns: repeat(2, 1fr) !important; }
+  .stat-card[style*="padding:12px"] .num[style*="font-size:22px"] { font-size: 18px !important; }
+  /* Highlight box */
+  .highlight-box { padding: 12px 16px; font-size: 12px; margin: 10px 0; }
+  /* Section */
+  .section-title { font-size: 12px; }
+  .section-content { font-size: 13px; }
+  /* Footer */
+  .footer { flex-direction: column; gap: 14px; align-items: flex-start; }
+  .footer-links { flex-wrap: wrap; gap: 12px; font-size: 12px; }
+  .footer-links a { min-height: 44px; display: inline-flex; align-items: center; }
+  .footer-team { text-align: left; font-size: 11px; }
+}
+@media (max-width: 480px) {
+  .stat-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-card .num { font-size: 20px; }
+  .header-left h1 { font-size: 21px; }
+  .page { padding: 16px 10px; }
+}
 </style>
 </head>
 <body>

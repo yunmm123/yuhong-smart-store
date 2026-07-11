@@ -131,13 +131,58 @@ input[type=range].slider::-moz-range-thumb {
 .notes strong { color: var(--ink); font-weight: 600; }
 .notes .note-title { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
 
+@media (max-width: 768px) {
+  body { padding: 10px; font-size: 14px; }
+  .page { padding: 24px 16px; max-width: 100%; border-radius: 10px; }
+  .header h1 { font-size: 22px; }
+  .header .subtitle { font-size: 13px; }
+  .section { margin-bottom: 24px; }
+  .section-title { font-size: 14px; }
+  /* 控制区 */
+  .control-box { padding: 18px 16px; }
+  .store-display .value { font-size: 40px; }
+  .store-display .label { font-size: 12px; }
+  /* 滑块触摸区域加大 */
+  input[type=range].slider { height: 12px; }
+  input[type=range].slider::-webkit-slider-thumb {
+    width: 32px; height: 32px; border-width: 4px;
+  }
+  input[type=range].slider::-moz-range-thumb {
+    width: 32px; height: 32px; border-width: 4px;
+  }
+  .slider-scale { font-size: 10px; }
+  /* 快捷按钮 */
+  .quick-btns { gap: 8px; }
+  .quick-btn { min-width: 0; flex: 1 1 calc(50% - 4px); padding: 12px 8px; min-height: 44px; font-size: 12px; }
+  .quick-btn .qb-num { font-size: 16px; }
+  /* 对比 */
+  .compare-grid { grid-template-columns: 1fr; gap: 14px; }
+  .cost-col { padding: 18px 16px; }
+  .cost-item .ci-label { font-size: 12px; }
+  .cost-item .ci-val { font-size: 13px; }
+  .total-row .tv { font-size: 22px; }
+  /* 节省金额 */
+  .savings-box { grid-template-columns: 1fr; gap: 14px; padding: 20px 16px; }
+  .sav-divider { display: none; }
+  .sav-main .sav-amount { font-size: 32px; }
+  .sav-stat .v { font-size: 26px; }
+  /* 图表 */
+  .chart-box { padding: 18px 14px 14px; }
+  .chart-area { gap: 32px; height: 200px; padding: 0 8px; }
+  .bar-group { width: 70px; }
+  .bar { width: 60px; }
+  .chart-labels { gap: 32px; padding: 8px 8px 0; }
+  .chart-labels .cl { width: 70px; font-size: 12px; }
+  /* 说明 */
+  .notes { padding: 14px 16px; font-size: 11px; line-height: 1.8; }
+}
 @media (max-width: 720px) {
-  .page { padding: 28px 20px; }
+  .page { padding: 24px 16px; }
   .compare-grid { grid-template-columns: 1fr; }
   .savings-box { grid-template-columns: 1fr; gap: 16px; }
   .sav-divider { display: none; }
-  .chart-area { gap: 36px; }
-  .chart-labels { gap: 36px; }
+  .chart-area { gap: 32px; }
+  .chart-labels { gap: 32px; }
   .header h1 { font-size: 22px; }
   .store-display .value { font-size: 40px; }
 }

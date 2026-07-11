@@ -71,9 +71,33 @@ body {
 
 @media print { body { background: #fff; } .page { box-shadow: none; } }
 @media (max-width: 768px) {
-  .competitor-grid { grid-template-columns: 1fr; }
-  .compare-table, .feature-matrix { font-size: 11px; }
-  .page { padding: 24px 20px; }
+  body { padding: 10px; font-size: 14px; }
+  .page { padding: 24px 16px; max-width: 100%; border-radius: 10px; }
+  .header h1 { font-size: 22px; }
+  .header .subtitle { font-size: 13px; }
+  .section { margin-bottom: 24px; }
+  .section-title { font-size: 14px; }
+  /* 竞品卡片改单列 */
+  .competitor-grid { grid-template-columns: 1fr; gap: 12px; }
+  .comp-card { padding: 16px; }
+  .comp-card.highlight[style*="grid-column"] { grid-column: auto !important; }
+  .comp-card h3 { font-size: 14px; }
+  .comp-card .price { font-size: 12px; }
+  .comp-card li { font-size: 12px; }
+  /* 表格横向滚动 */
+  .compare-table, .feature-matrix {
+    display: block; overflow-x: auto; white-space: nowrap;
+    -webkit-overflow-scrolling: touch; max-width: 100%;
+    font-size: 12px;
+  }
+  .compare-table th, .compare-table td { padding: 8px 10px; }
+  .feature-matrix th, .feature-matrix td { padding: 6px 8px; }
+  /* 优势总结 */
+  .advantage-box { padding: 18px 16px; }
+  .advantage-box h3 { font-size: 15px; }
+  .advantage-box li { font-size: 13px; line-height: 1.7; }
+  /* 数据来源 */
+  .section > p { font-size: 11px; line-height: 1.7; }
 }
 </style>
 </head>

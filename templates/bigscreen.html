@@ -7,35 +7,205 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        :root { --primary: #1677FF; --yuhong: #E8392B; --gold: #fa8c16; }
+        :root { --primary: #1677FF; --yuhong: #E8392B; --gold: #fa8c16; --cyan: #00d4ff; --purple: #722ed1; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #0a1628; color: #e0e6ed; font-family: -apple-system, "PingFang SC", sans-serif; overflow-x: hidden; }
-        .navbar { background: linear-gradient(135deg, #0d1f3c 0%, #1a2f52 100%); border-bottom: 1px solid rgba(22,119,255,0.3); }
+
+        body {
+            background: linear-gradient(135deg, #0a1628 0%, #0d1b3e 30%, #1a1040 70%, #0a1628 100%);
+            background-size: 400% 400%;
+            animation: bgGradient 15s ease infinite;
+            color: #e0e6ed;
+            font-family: -apple-system, "PingFang SC", sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        @keyframes bgGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        /* Grid pattern overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image:
+                linear-gradient(rgba(22,119,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(22,119,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .navbar { background: linear-gradient(135deg, #0d1f3c 0%, #1a2f52 100%); border-bottom: 1px solid rgba(22,119,255,0.3); position: relative; z-index: 10; }
         .navbar-brand { color: #fff !important; font-weight: 700; }
         .navbar .badge { background: var(--gold); }
-        .bigscreen-header { text-align: center; padding: 20px 0; background: linear-gradient(180deg, rgba(22,119,255,0.15) 0%, transparent 100%); }
-        .bigscreen-header h2 { font-size: 28px; color: #fff; letter-spacing: 4px; }
-        .bigscreen-header .subtitle { color: rgba(255,255,255,0.5); font-size: 13px; margin-top: 4px; }
-        .kpi-row { display: flex; justify-content: center; gap: 30px; margin: 20px 0; flex-wrap: wrap; }
-        .kpi-item { text-align: center; }
-        .kpi-value { font-size: 36px; font-weight: 800; background: linear-gradient(135deg, #1677FF, #00d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .content-wrapper { position: relative; z-index: 1; }
+
+        /* Header with glow */
+        .bigscreen-header { text-align: center; padding: 24px 0 16px; background: linear-gradient(180deg, rgba(22,119,255,0.15) 0%, transparent 100%); }
+        .bigscreen-header h2 {
+            font-size: 30px; letter-spacing: 6px; font-weight: 800;
+            background: linear-gradient(90deg, #1677FF, #00d4ff, #722ed1, #00d4ff, #1677FF);
+            background-size: 200% auto;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: titleGlow 3s linear infinite;
+        }
+        @keyframes titleGlow {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+        .bigscreen-header .subtitle { color: rgba(255,255,255,0.5); font-size: 13px; margin-top: 6px; }
+        .header-time {
+            display: inline-block; margin-top: 8px; padding: 4px 16px;
+            background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.2);
+            border-radius: 20px; font-size: 12px; color: var(--cyan);
+        }
+        .header-time .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #52c41a; margin-right: 6px; animation: liveBlink 1.5s ease infinite; }
+        @keyframes liveBlink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* KPI Row */
+        .kpi-row { display: flex; justify-content: center; gap: 36px; margin: 20px 0 8px; flex-wrap: wrap; }
+        .kpi-item { text-align: center; position: relative; }
+        .kpi-item::after { content: ''; position: absolute; right: -18px; top: 15%; height: 70%; width: 1px; background: rgba(255,255,255,0.08); }
+        .kpi-item:last-child::after { display: none; }
+        .kpi-value { font-size: 38px; font-weight: 800; background: linear-gradient(135deg, #1677FF, #00d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1.2; }
         .kpi-label { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 2px; }
-        .panel { background: rgba(13,31,60,0.6); border: 1px solid rgba(22,119,255,0.2); border-radius: 12px; padding: 20px; margin-bottom: 16px; backdrop-filter: blur(10px); }
-        .panel-title { font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+
+        /* Panels */
+        .panel {
+            background: rgba(13,31,60,0.6); border: 1px solid rgba(22,119,255,0.2);
+            border-radius: 12px; padding: 18px; margin-bottom: 14px;
+            backdrop-filter: blur(10px); transition: all 0.3s ease;
+            position: relative; overflow: hidden;
+        }
+        .panel::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            transition: left 0.6s ease;
+        }
+        .panel:hover { border-color: rgba(0,212,255,0.5); box-shadow: 0 0 24px rgba(0,212,255,0.12), 0 0 48px rgba(22,119,255,0.08); transform: translateY(-2px); }
+        .panel:hover::before { left: 100%; }
+        .panel-title { font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 14px; display: flex; align-items: center; gap: 6px; font-weight: 600; }
         .panel-title::before { content: ""; width: 3px; height: 14px; background: var(--primary); border-radius: 2px; }
-        .county-card { background: rgba(22,119,255,0.08); border: 1px solid rgba(22,119,255,0.15); border-radius: 8px; padding: 12px; margin-bottom: 8px; transition: all 0.3s; cursor: pointer; }
-        .county-card:hover { background: rgba(22,119,255,0.15); border-color: var(--primary); transform: translateX(4px); }
+
+        .county-card { background: rgba(22,119,255,0.08); border: 1px solid rgba(22,119,255,0.15); border-radius: 8px; padding: 10px 12px; margin-bottom: 6px; transition: all 0.3s; cursor: pointer; }
+        .county-card:hover { background: rgba(22,119,255,0.18); border-color: var(--primary); transform: translateX(4px); box-shadow: 0 0 12px rgba(22,119,255,0.2); }
         .county-name { font-weight: 600; color: #fff; font-size: 14px; }
         .county-stat { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
         .ai-insight { background: linear-gradient(135deg, rgba(22,119,255,0.1), rgba(0,212,255,0.05)); border: 1px solid rgba(0,212,255,0.2); border-radius: 12px; padding: 16px; }
-        .ai-insight-title { color: #00d4ff; font-size: 13px; font-weight: 600; margin-bottom: 8px; }
-        .ai-insight-text { color: rgba(255,255,255,0.7); font-size: 13px; line-height: 1.8; }
+        .ai-insight-title { color: var(--cyan); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+        .ai-insight-text { color: rgba(255,255,255,0.7); font-size: 13px; line-height: 1.8; white-space: pre-line; }
+
         .progress-bar-container { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; margin-top: 4px; }
-        .progress-bar-fill { height: 100%; border-radius: 3px; transition: width 1s; }
-        .scan-demo { text-align: center; padding: 20px; }
-        .scan-code { display: inline-block; width: 120px; height: 120px; background: #fff; border-radius: 12px; margin: 10px 0; display: flex; align-items: center; justify-content: center; font-size: 60px; }
+        .progress-bar-fill { height: 100%; border-radius: 3px; transition: width 1.5s ease; }
+
+        .scan-demo { text-align: center; padding: 16px; }
+        .scan-code { display: inline-flex; width: 100px; height: 100px; background: #fff; border-radius: 12px; margin: 8px 0; align-items: center; justify-content: center; font-size: 50px; }
         .scan-text { color: rgba(255,255,255,0.6); font-size: 12px; }
         .highlight-box { background: rgba(250,140,22,0.1); border: 1px solid rgba(250,140,22,0.3); border-radius: 8px; padding: 10px 14px; margin: 8px 0; font-size: 13px; color: var(--gold); }
+
+        /* Real-time data stream */
+        .stream-container { height: 260px; overflow: hidden; position: relative; }
+        .stream-item {
+            display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px; margin-bottom: 6px;
+            background: rgba(22,119,255,0.06); border: 1px solid rgba(22,119,255,0.12);
+            border-radius: 8px; font-size: 12px; animation: streamIn 0.5s ease; transition: all 0.3s;
+        }
+        .stream-item:hover { background: rgba(0,212,255,0.1); border-color: rgba(0,212,255,0.3); }
+        @keyframes streamIn { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
+        .stream-icon { font-size: 18px; flex-shrink: 0; line-height: 1; }
+        .stream-content { flex: 1; min-width: 0; }
+        .stream-text { color: rgba(255,255,255,0.85); font-weight: 500; }
+        .stream-detail { color: rgba(255,255,255,0.5); margin-top: 2px; font-size: 11px; }
+        .stream-time { color: rgba(255,255,255,0.3); font-size: 10px; flex-shrink: 0; }
+        .stream-tag { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; margin-left: 4px; }
+        .tag-order { background: rgba(82,196,26,0.2); color: #52c41a; }
+        .tag-inspection { background: rgba(22,119,255,0.2); color: var(--primary); }
+        .tag-ai { background: rgba(0,212,255,0.2); color: var(--cyan); }
+        .tag-warning { background: rgba(250,140,22,0.2); color: var(--gold); }
+        .tag-customer { background: rgba(114,46,209,0.2); color: var(--purple); }
+        .tag-report { background: rgba(255,77,79,0.2); color: #ff4d4f; }
+
+        /* Regional map (CSS blocks) */
+        .region-map { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 4px 0; }
+        .region-block {
+            position: relative; padding: 18px 12px; border-radius: 10px; text-align: center;
+            cursor: pointer; transition: all 0.3s; overflow: hidden;
+            border: 1px solid rgba(22,119,255,0.2);
+        }
+        .region-block:hover { transform: scale(1.05); border-color: var(--cyan); box-shadow: 0 0 16px rgba(0,212,255,0.25); z-index: 5; }
+        .region-bg {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            opacity: var(--density, 0.3);
+            background: linear-gradient(135deg, #1677FF, #00d4ff);
+            transition: opacity 0.3s;
+        }
+        .region-block:hover .region-bg { opacity: calc(var(--density, 0.3) + 0.15); }
+        .region-content { position: relative; z-index: 1; }
+        .region-name { font-size: 15px; font-weight: 700; color: #fff; }
+        .region-count { font-size: 20px; font-weight: 800; color: var(--cyan); margin-top: 4px; }
+        .region-count small { font-size: 12px; font-weight: 400; }
+        .region-label { font-size: 10px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+        .region-density-bar { width: 100%; height: 3px; background: rgba(255,255,255,0.12); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+        .region-density-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--cyan)); border-radius: 2px; transition: width 1.2s ease; }
+
+        /* Six-layer architecture 3D */
+        .arch-section {
+            margin: 10px 0 0; padding: 20px;
+            background: rgba(13,31,60,0.4); border: 1px solid rgba(22,119,255,0.15);
+            border-radius: 14px; backdrop-filter: blur(10px);
+        }
+        .arch-3d-container { perspective: 1000px; padding: 36px 0 16px; }
+        .arch-3d-stack { transform: rotateX(42deg) rotateZ(0deg); transform-style: preserve-3d; }
+        .arch-layer {
+            position: relative; margin: 0 auto 6px; padding: 14px 24px; border-radius: 10px;
+            width: 85%; max-width: 720px;
+            transform: translateZ(calc(var(--depth, 0) * 26px));
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer; border: 1px solid rgba(22,119,255,0.25); background: rgba(13,31,60,0.85);
+        }
+        .arch-layer:hover {
+            transform: translateZ(calc(var(--depth, 0) * 26px + 42px)) translateX(16px);
+            border-color: var(--cyan); box-shadow: 0 0 30px rgba(0,212,255,0.3); z-index: 100;
+        }
+        .arch-layer-new {
+            background: linear-gradient(135deg, rgba(250,140,22,0.28), rgba(228,93,56,0.15));
+            border: 1px solid rgba(250,140,22,0.55);
+        }
+        .arch-layer-new:hover { border-color: var(--gold); box-shadow: 0 0 30px rgba(250,140,22,0.4); }
+        .arch-layer-name { display: inline-block; font-size: 15px; font-weight: 700; color: #fff; min-width: 56px; }
+        .arch-layer-desc { display: inline-block; font-size: 12px; color: rgba(255,255,255,0.6); margin-left: 12px; }
+        .arch-new-badge { display: inline-block; padding: 2px 8px; background: var(--gold); color: #fff; border-radius: 4px; font-size: 10px; font-weight: 700; margin-left: 8px; vertical-align: middle; }
+
+        /* Pulse footer */
+        .update-footer { text-align: center; padding: 20px 0 24px; }
+        .update-footer .pulse-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); margin-right: 8px; animation: pulseDot 1.5s ease infinite; }
+        @keyframes pulseDot {
+            0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,212,255,0.5); }
+            50% { opacity: 0.5; box-shadow: 0 0 0 10px rgba(0,212,255,0); }
+        }
+        .update-footer span { color: rgba(0,212,255,0.6); font-size: 13px; }
+
+        /* Responsive */
+        @media (max-width: 991px) {
+            .kpi-row { gap: 20px; }
+            .kpi-value { font-size: 30px; }
+            .kpi-item::after { display: none; }
+            .bigscreen-header h2 { font-size: 22px; letter-spacing: 3px; }
+            .arch-3d-stack { transform: rotateX(28deg); }
+            .arch-layer { width: 95%; }
+        }
+        @media (max-width: 576px) {
+            .kpi-row { gap: 14px; }
+            .kpi-value { font-size: 24px; }
+            .bigscreen-header h2 { font-size: 18px; letter-spacing: 2px; }
+            .region-map { grid-template-columns: repeat(2, 1fr); }
+            .arch-3d-stack { transform: none; }
+            .arch-layer { transform: none !important; width: 100%; }
+            .arch-layer:hover { transform: translateX(8px) !important; }
+        }
     </style>
 </head>
 <body>
@@ -59,50 +229,59 @@
         </div>
     </nav>
 
+    <div class="content-wrapper">
     <div class="bigscreen-header">
         <h2>千万县城 · 万亿商机 · AI赋能</h2>
         <div class="subtitle">基于飞书AI的县域建材零售智慧运营平台 | 2026 AI先锋未来人才大赛</div>
+        <div class="header-time"><span class="live-dot"></span><span id="liveTime">实时数据</span></div>
         <div class="kpi-row">
             <div class="kpi-item">
-                <div class="kpi-value">507</div>
+                <div class="kpi-value" data-target="507" data-decimals="0">0</div>
                 <div class="kpi-label">目标县城</div>
             </div>
             <div class="kpi-item">
-                <div class="kpi-value">¥50亿+</div>
-                <div class="kpi-label">目标产值</div>
+                <div class="kpi-value" data-target="99.44" data-decimals="2" data-prefix="¥" data-suffix="亿">¥0</div>
+                <div class="kpi-label">营收目标</div>
             </div>
             <div class="kpi-item">
-                <div class="kpi-value">29万+</div>
+                <div class="kpi-value" data-target="29" data-decimals="0" data-suffix="万+">0</div>
                 <div class="kpi-label">覆盖网点</div>
             </div>
             <div class="kpi-item">
-                <div class="kpi-value">8亿</div>
-                <div class="kpi-label">县域人口</div>
+                <div class="kpi-value" data-target="3000" data-decimals="0" data-suffix="+">0</div>
+                <div class="kpi-label">专卖店</div>
             </div>
             <div class="kpi-item">
-                <div class="kpi-value">10分钟</div>
+                <div class="kpi-value" data-target="10000" data-decimals="0" data-suffix="+">0</div>
+                <div class="kpi-label">终端网点</div>
+            </div>
+            <div class="kpi-item">
+                <div class="kpi-value" data-target="10" data-decimals="0" data-suffix="分钟">0</div>
                 <div class="kpi-label">AI赋能上手</div>
             </div>
         </div>
     </div>
 
-    <div class="container-fluid px-4 pb-4">
+    <div class="container-fluid px-4 pb-2">
         <div class="row g-3">
-            <!-- 左侧：县域门店排行 -->
-            <div class="col-lg-4">
+            <!-- Left: County ranking + Real-time stream -->
+            <div class="col-12 col-lg-3">
                 <div class="panel">
                     <div class="panel-title">🏆 县域门店运营排行TOP10</div>
                     <div id="countyList"></div>
                 </div>
-
                 <div class="panel">
-                    <div class="panel-title">📦 县域库存健康度</div>
-                    <canvas id="inventoryChart" height="120"></canvas>
+                    <div class="panel-title">📡 实时数据流</div>
+                    <div class="stream-container" id="streamContainer"></div>
                 </div>
             </div>
 
-            <!-- 中间：核心指标 -->
-            <div class="col-lg-4">
+            <!-- Center: Regional map + Progress + Sales trend -->
+            <div class="col-12 col-lg-6">
+                <div class="panel">
+                    <div class="panel-title">🗺️ 507城网点密度分布（六大区域）</div>
+                    <div class="region-map" id="regionMap"></div>
+                </div>
                 <div class="panel">
                     <div class="panel-title">📊 3515计划进度看板</div>
                     <div style="margin-bottom:12px;">
@@ -138,26 +317,14 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="panel">
                     <div class="panel-title">📈 县域销售增长趋势</div>
-                    <canvas id="salesTrendChart" height="140"></canvas>
-                </div>
-
-                <div class="panel">
-                    <div class="panel-title">💡 "一店一码"扫码赋能</div>
-                    <div class="scan-demo">
-                        <div class="scan-code">📱</div>
-                        <div class="scan-text">县域经销商扫码即用<br>飞书aily智能体 + 多维表格看板</div>
-                        <div class="highlight-box" style="text-align:left; margin-top:12px;">
-                            ⚡ 两零一轻理念：零硬件部署 · 零代码开发 · 轻量培训上手
-                        </div>
-                    </div>
+                    <canvas id="salesTrendChart" height="100"></canvas>
                 </div>
             </div>
 
-            <!-- 右侧：AI洞察 -->
-            <div class="col-lg-4">
+            <!-- Right: AI insights + Inventory + Module effects + Scan demo -->
+            <div class="col-12 col-lg-3">
                 <div class="panel">
                     <div class="panel-title">🤖 AI经营洞察</div>
                     <div class="ai-insight">
@@ -173,65 +340,134 @@
                     </div>
                     <button class="btn btn-outline-info btn-sm w-100 mt-2" onclick="refreshInsight()">刷新AI洞察</button>
                 </div>
-
+                <div class="panel">
+                    <div class="panel-title">📦 县域库存健康度</div>
+                    <canvas id="inventoryChart" height="100"></canvas>
+                </div>
                 <div class="panel">
                     <div class="panel-title">🎯 五大模块赋能效果</div>
-                    <div style="font-size:13px;">
-                        <div class="d-flex justify-content-between py-2 border-bottom border-secondary">
-                            <span>🔍 门店巡检效率</span>
-                            <span style="color:#52c41a;">↑ 50%</span>
+                    <div style="font-size:12px;">
+                        <div class="d-flex justify-content-between py-1 border-bottom border-secondary">
+                            <span>🔍 门店巡检效率</span><span style="color:#52c41a;">↑ 50%</span>
                         </div>
-                        <div class="d-flex justify-content-between py-2 border-bottom border-secondary">
-                            <span>🤖 AI导购新员工上手</span>
-                            <span style="color:#52c41a;">30天→7天</span>
+                        <div class="d-flex justify-content-between py-1 border-bottom border-secondary">
+                            <span>🤖 AI导购上手</span><span style="color:#52c41a;">30天→7天</span>
                         </div>
-                        <div class="d-flex justify-content-between py-2 border-bottom border-secondary">
-                            <span>📊 经营决策响应</span>
-                            <span style="color:#52c41a;">2周→实时</span>
+                        <div class="d-flex justify-content-between py-1 border-bottom border-secondary">
+                            <span>📊 经营决策响应</span><span style="color:#52c41a;">2周→实时</span>
                         </div>
-                        <div class="d-flex justify-content-between py-2 border-bottom border-secondary">
-                            <span>💬 私域客户复购率</span>
-                            <span style="color:#52c41a;">↑ 15%</span>
+                        <div class="d-flex justify-content-between py-1 border-bottom border-secondary">
+                            <span>💬 客户复购率</span><span style="color:#52c41a;">↑ 15%</span>
                         </div>
-                        <div class="d-flex justify-content-between py-2 border-bottom border-secondary">
-                            <span>🏪 督导巡检覆盖率</span>
-                            <span style="color:#52c41a;">60%→95%</span>
+                        <div class="d-flex justify-content-between py-1 border-bottom border-secondary">
+                            <span>🏪 督导巡检覆盖</span><span style="color:#52c41a;">60%→95%</span>
                         </div>
-                        <div class="d-flex justify-content-between py-2">
-                            <span>🌐 渠道交付周期</span>
-                            <span style="color:#52c41a;">7-10天→当日达</span>
+                        <div class="d-flex justify-content-between py-1">
+                            <span>🌐 渠道交付周期</span><span style="color:#52c41a;">7-10天→当日</span>
                         </div>
                     </div>
                 </div>
-
                 <div class="panel">
-                    <div class="panel-title">🔮 飞书AI能力矩阵</div>
-                    <div style="font-size:12px;">
-                        <div class="d-flex justify-content-between py-1">
-                            <span>aily智能体（AI导购+私域）</span>
-                            <span class="badge bg-info">M3</span>
-                        </div>
-                        <div class="d-flex justify-content-between py-1">
-                            <span>多维表格AI（运营分析）</span>
-                            <span class="badge bg-info">M3</span>
-                        </div>
-                        <div class="d-flex justify-content-between py-1">
-                            <span>妙搭低代码（巡检应用）</span>
-                            <span class="badge bg-info">M3</span>
-                        </div>
-                        <div class="d-flex justify-content-between py-1">
-                            <span>智能会议纪要（督导复盘）</span>
-                            <span class="badge bg-success">M4</span>
+                    <div class="panel-title">💡 "一店一码"扫码赋能</div>
+                    <div class="scan-demo">
+                        <div class="scan-code">📱</div>
+                        <div class="scan-text">县域经销商扫码即用<br>飞书aily智能体 + 多维表格看板</div>
+                        <div class="highlight-box" style="text-align:left; margin-top:10px;">
+                            ⚡ 两零一轻：零硬件 · 零代码 · 轻量培训
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Six-layer architecture 3D -->
+        <div class="arch-section">
+            <div class="panel-title" style="font-size:15px; margin-bottom:0;">🏗️ 技术架构 · 六层设计（3D可视化）</div>
+            <div class="arch-3d-container">
+                <div class="arch-3d-stack">
+                    <div class="arch-layer arch-layer-new" style="--depth:6;">
+                        <span class="arch-layer-name">渠道层</span>
+                        <span class="arch-layer-desc">渠道管理中枢：标准化看板 / 拓展管理 / 分单监控 / 经营洞察</span>
+                        <span class="arch-new-badge">新增</span>
+                    </div>
+                    <div class="arch-layer" style="--depth:5;">
+                        <span class="arch-layer-name">应用层</span>
+                        <span class="arch-layer-desc">Flask Web + 妙搭低代码：仪表盘 / 巡检 / AI导购 / 渠道中枢 / 3515大屏</span>
+                    </div>
+                    <div class="arch-layer" style="--depth:4;">
+                        <span class="arch-layer-name">AI 层</span>
+                        <span class="arch-layer-desc">aily智能体 + 多维表格AI字段：自然语言对话 / AI分析 / 客户标签</span>
+                    </div>
+                    <div class="arch-layer" style="--depth:3;">
+                        <span class="arch-layer-name">数据层</span>
+                        <span class="arch-layer-desc">飞书多维表格（轻量ERP）：5表39条记录 / 门店 / 巡检 / 库存 / 客户 / 销售 / 渠道</span>
+                    </div>
+                    <div class="arch-layer" style="--depth:2;">
+                        <span class="arch-layer-name">接口层</span>
+                        <span class="arch-layer-desc">飞书开放平台API：Token / Aily / Bitable / 妙搭</span>
+                    </div>
+                    <div class="arch-layer" style="--depth:1;">
+                        <span class="arch-layer-name">基建层</span>
+                        <span class="arch-layer-desc">GitHub Pages + 飞书云：无需自建服务器</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pulse footer -->
+        <div class="update-footer">
+            <span class="pulse-dot"></span>
+            <span>数据更新中... 飞书AI实时同步 · 最后更新：<span id="updateTime">--:--:--</span></span>
+        </div>
+    </div>
     </div>
 
     <script>
-        // 县域门店排行
-        const counties = [
+        // ===== CountUp Animation =====
+        function countUp(el, target, duration, decimals, prefix, suffix) {
+            var startTime = performance.now();
+            function update(currentTime) {
+                var elapsed = currentTime - startTime;
+                var progress = Math.min(elapsed / duration, 1);
+                var eased = 1 - Math.pow(1 - progress, 3);
+                var current = target * eased;
+                el.textContent = prefix + current.toFixed(decimals) + suffix;
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    el.textContent = prefix + target.toFixed(decimals) + suffix;
+                }
+            }
+            requestAnimationFrame(update);
+        }
+
+        // Trigger CountUp on load
+        document.querySelectorAll('[data-target]').forEach(function(el) {
+            var target = parseFloat(el.dataset.target);
+            var decimals = parseInt(el.dataset.decimals || '0');
+            var suffix = el.dataset.suffix || '';
+            var prefix = el.dataset.prefix || '';
+            // Delay slightly for visual effect
+            setTimeout(function() {
+                countUp(el, target, 2000, decimals, prefix, suffix);
+            }, 200);
+        });
+
+        // ===== Live Clock =====
+        function updateClock() {
+            var now = new Date();
+            var timeStr = now.toLocaleTimeString('zh-CN', { hour12: false });
+            var dateStr = now.toLocaleDateString('zh-CN');
+            var liveEl = document.getElementById('liveTime');
+            if (liveEl) liveEl.textContent = '实时数据 · ' + dateStr + ' ' + timeStr;
+            var updateEl = document.getElementById('updateTime');
+            if (updateEl) updateEl.textContent = timeStr;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // ===== County Ranking =====
+        var counties = [
             {name: "河南新郑市", sales: 86.5, growth: 35, ai: true, rank: 1},
             {name: "山东沂南县", sales: 78.2, growth: 28, ai: true, rank: 2},
             {name: "四川广安市", sales: 72.8, growth: 22, ai: true, rank: 3},
@@ -244,27 +480,52 @@
             {name: "江西丰城市", sales: 38.5, growth: 4, ai: false, rank: 10}
         ];
 
-        let countyHTML = '';
-        counties.forEach(c => {
-            const aiBadge = c.ai ? '<span class="badge bg-info ms-1" style="font-size:10px;">AI</span>' : '';
-            countyHTML += `<div class="county-card">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <span class="county-name">${c.rank}. ${c.name}</span>${aiBadge}
-                    </div>
-                    <div style="color:${c.growth > 15 ? '#52c41a' : '#fa8c16'}; font-size:13px; font-weight:600;">
-                        ${c.growth > 0 ? '↑' : ''} ${c.growth}%
-                    </div>
-                </div>
-                <div class="county-stat">
-                    <span>月销售额: ¥${c.sales}万</span>
-                    <span>${c.ai ? '已AI赋能' : '待AI赋能'}</span>
-                </div>
-            </div>`;
+        var countyHTML = '';
+        counties.forEach(function(c) {
+            var aiBadge = c.ai ? '<span class="badge bg-info ms-1" style="font-size:10px;">AI</span>' : '';
+            countyHTML += '<div class="county-card">' +
+                '<div class="d-flex justify-content-between align-items-center">' +
+                    '<div><span class="county-name">' + c.rank + '. ' + c.name + '</span>' + aiBadge + '</div>' +
+                    '<div style="color:' + (c.growth > 15 ? '#52c41a' : '#fa8c16') + '; font-size:13px; font-weight:600;">' + (c.growth > 0 ? '↑ ' : '') + c.growth + '%</div>' +
+                '</div>' +
+                '<div class="county-stat"><span>月销售额: ¥' + c.sales + '万</span><span>' + (c.ai ? '已AI赋能' : '待AI赋能') + '</span></div>' +
+            '</div>';
         });
         document.getElementById('countyList').innerHTML = countyHTML;
 
-        // 库存健康度图
+        // ===== Regional Map (CSS blocks) =====
+        var regions = [
+            { name: '华东', cities: 128, points: '8.2万', density: 1.0 },
+            { name: '华北', cities: 92,  points: '4.8万', density: 0.72 },
+            { name: '华南', cities: 85,  points: '5.2万', density: 0.66 },
+            { name: '西南', cities: 89,  points: '3.8万', density: 0.62 },
+            { name: '华西', cities: 65,  points: '4.2万', density: 0.51 },
+            { name: '东北', cities: 48,  points: '2.8万', density: 0.37 }
+        ];
+
+        var regionHTML = '';
+        regions.forEach(function(r) {
+            regionHTML += '<div class="region-block" style="--density:' + r.density + ';" title="' + r.name + '：' + r.cities + '城 / ' + r.points + '网点">' +
+                '<div class="region-bg"></div>' +
+                '<div class="region-content">' +
+                    '<div class="region-name">' + r.name + '</div>' +
+                    '<div class="region-count">' + r.cities + '<small>城</small></div>' +
+                    '<div class="region-label">' + r.points + ' 网点</div>' +
+                    '<div class="region-density-bar"><div class="region-density-fill" style="width:0%;"></div></div>' +
+                '</div>' +
+            '</div>';
+        });
+        document.getElementById('regionMap').innerHTML = regionHTML;
+
+        // Animate density bars after render
+        setTimeout(function() {
+            var fills = document.querySelectorAll('.region-density-fill');
+            fills.forEach(function(fill, i) {
+                fill.style.width = (regions[i].density * 100) + '%';
+            });
+        }, 500);
+
+        // ===== Charts =====
         new Chart(document.getElementById('inventoryChart'), {
             type: 'doughnut',
             data: {
@@ -278,12 +539,10 @@
             options: { plugins: { legend: { position: 'bottom', labels: { color: '#e0e6ed', font: { size: 11 } } } } }
         });
 
-        // 销售趋势图
-        const months = ['1月','2月','3月','4月','5月','6月'];
         new Chart(document.getElementById('salesTrendChart'), {
             type: 'line',
             data: {
-                labels: months,
+                labels: ['1月','2月','3月','4月','5月','6月'],
                 datasets: [
                     { label: 'AI赋能门店', data: [120, 145, 180, 220, 268, 320], borderColor: '#00d4ff', backgroundColor: 'rgba(0,212,255,0.1)', fill: true, tension: 0.3 },
                     { label: '未赋能门店', data: [100, 98, 102, 95, 92, 88], borderColor: 'rgba(255,255,255,0.3)', borderDash: [5,5], fill: false, tension: 0.3 }
@@ -298,17 +557,68 @@
             }
         });
 
-        // AI洞察刷新
-        const insights = [
-            `[县域机会识别]\n河南新郑县本月销售额环比增长35%，但库存周转天数高达45天（行业平均28天）。\n\n[AI建议]\n1. 该县瓷砖胶库存积压，建议启动"买防水送瓷砖胶"组合促销\n2. SBS卷材库存预警，建议立即补货80卷\n3. 该县工长复购率仅12%，建议启用aily智能体自动跟进`,
-            `[督导效率分析]\n华北区域128家县域门店中，AI巡检覆盖率已达95%，但仍有6家门店连续3个月未巡检。\n\n[AI建议]\n1. 对6家未巡检门店自动生成督办任务\n2. 建议采用飞书妙搭移动巡检，店长自拍上传即可\n3. 对巡检得分低于80分的门店启动整改流程`,
-            `[客户洞察]\n山东沂南县工长"虹哥汇"注册数达342人，但活跃率仅28%。\n\n[AI建议]\n1. 启用aily智能体对沉默工长自动发送个性化跟进消息\n2. 推送"雨虹施工方案知识库"提升工长专业能力\n3. 设置复购优惠券，预计可提升活跃率至45%`
+        // ===== AI Insights =====
+        var insights = [
+            "[县域机会识别]\n河南新郑县本月销售额环比增长35%，但库存周转天数高达45天（行业平均28天）。\n\n[AI建议]\n1. 该县瓷砖胶库存积压，建议启动"买防水送瓷砖胶"组合促销\n2. SBS卷材库存预警，建议立即补货80卷\n3. 该县工长复购率仅12%，建议启用aily智能体自动跟进",
+            "[督导效率分析]\n华北区域128家县域门店中，AI巡检覆盖率已达95%，但仍有6家门店连续3个月未巡检。\n\n[AI建议]\n1. 对6家未巡检门店自动生成督办任务\n2. 建议采用飞书妙搭移动巡检，店长自拍上传即可\n3. 对巡检得分低于80分的门店启动整改流程",
+            "[客户洞察]\n山东沂南县工长"虹哥汇"注册数达342人，但活跃率仅28%。\n\n[AI建议]\n1. 启用aily智能体对沉默工长自动发送个性化跟进消息\n2. 推送"雨虹施工方案知识库"提升工长专业能力\n3. 设置复购优惠券，预计可提升活跃率至45%"
         ];
-        let insightIndex = 0;
+        var insightIndex = 0;
         function refreshInsight() {
             insightIndex = (insightIndex + 1) % insights.length;
             document.getElementById('aiInsight').textContent = insights[insightIndex];
         }
+
+        // ===== Real-time Data Stream =====
+        var streamData = [
+            { icon: '📦', text: '新订单', detail: '山东沂南县 · ¥12,580 · SBS防水卷材200卷', tag: '订单', tagClass: 'tag-order' },
+            { icon: '🔍', text: '巡检完成', detail: '河南新郑市 · 评分92分 · 优秀', tag: '巡检', tagClass: 'tag-inspection' },
+            { icon: '🤖', text: 'AI咨询', detail: '四川广安市 · 卫生间防水方案推荐', tag: 'AI', tagClass: 'tag-ai' },
+            { icon: '📦', text: '新订单', detail: '湖南邵东市 · ¥8,360 · 瓷砖胶500kg', tag: '订单', tagClass: 'tag-order' },
+            { icon: '⚠️', text: '库存预警', detail: '河北正定县 · SBS卷材库存不足', tag: '预警', tagClass: 'tag-warning' },
+            { icon: '👥', text: '客户跟进', detail: '江苏邳州市 · 工长复购提醒已发送', tag: '客户', tagClass: 'tag-customer' },
+            { icon: '🤖', text: 'AI导购', detail: '安徽肥东县 · JS防水用量计算完成', tag: 'AI', tagClass: 'tag-ai' },
+            { icon: '📊', text: '经营报告', detail: '浙江安吉县 · 周报已推送至飞书', tag: '报告', tagClass: 'tag-report' },
+            { icon: '📦', text: '新订单', detail: '湖北仙桃市 · ¥15,200 · 非固化涂料', tag: '订单', tagClass: 'tag-order' },
+            { icon: '🔍', text: '巡检完成', detail: '江西丰城市 · 评分85分 · 合格', tag: '巡检', tagClass: 'tag-inspection' },
+            { icon: '🤖', text: 'AI测评', detail: '河南新郑市 · 新员工话术测评通过', tag: 'AI', tagClass: 'tag-ai' },
+            { icon: '⚠️', text: '流失预警', detail: '山东沂南县 · 3名工长活跃度下降', tag: '预警', tagClass: 'tag-warning' },
+            { icon: '👥', text: '客户画像', detail: '四川广安市 · VIP客户标签已更新', tag: '客户', tagClass: 'tag-customer' },
+            { icon: '📦', text: '新订单', detail: '安徽肥东县 · ¥6,890 · 聚氨酯防水涂料', tag: '订单', tagClass: 'tag-order' }
+        ];
+
+        var streamIndex = 0;
+        function getTimeStr() {
+            return new Date().toLocaleTimeString('zh-CN', { hour12: false });
+        }
+
+        function addStreamMessage() {
+            var container = document.getElementById('streamContainer');
+            if (!container) return;
+            var msg = streamData[streamIndex % streamData.length];
+            streamIndex++;
+            var item = document.createElement('div');
+            item.className = 'stream-item';
+            item.innerHTML =
+                '<span class="stream-icon">' + msg.icon + '</span>' +
+                '<div class="stream-content">' +
+                    '<div class="stream-text">' + msg.text + '<span class="stream-tag ' + msg.tagClass + '">' + msg.tag + '</span></div>' +
+                    '<div class="stream-detail">' + msg.detail + '</div>' +
+                '</div>' +
+                '<span class="stream-time">' + getTimeStr() + '</span>';
+            container.insertBefore(item, container.firstChild);
+            // Keep max 7 items
+            while (container.children.length > 7) {
+                container.removeChild(container.lastChild);
+            }
+        }
+
+        // Initialize with a few messages
+        for (var i = 0; i < 4; i++) {
+            addStreamMessage();
+        }
+        // Add new message every 3.5 seconds
+        setInterval(addStreamMessage, 3500);
     </script>
 </body>
 </html>

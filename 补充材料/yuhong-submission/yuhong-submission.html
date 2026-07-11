@@ -69,7 +69,32 @@ footer .end-note { text-align: center; color: var(--muted); font-size: 13px; mar
 
 sup a { color: var(--accent); text-decoration: none; font-size: 0.75em; font-weight: 600; }
 
-@media (max-width: 600px) { .container { padding: 0 16px; } .cover h1 { font-size: 24px; } }
+@media (max-width: 768px) {
+  body { font-size: 14px; }
+  .container { padding: 0 14px; max-width: 100%; }
+  .cover { padding: 36px 18px; }
+  .cover h1 { font-size: 22px; }
+  .cover .subtitle { font-size: 13px; }
+  .cover .meta { font-size: 11px; gap: 12px; padding: 6px 14px; flex-wrap: wrap; }
+  section { padding: 24px 16px; }
+  h2 { font-size: 18px; }
+  h3 { font-size: 15px; }
+  /* KPI 网格改 2 列 */
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .kpi-card .kpi-num { font-size: 20px; }
+  .kpi-card .kpi-label { font-size: 11px; }
+  /* 表格：table-wrap 已有 overflow-x:auto，确保字号适配 */
+  table { min-width: 480px; font-size: 12px; }
+  th, td { padding: 6px 8px; }
+  /* 段落和列表 */
+  p { font-size: 13px; line-height: 1.8; }
+  li { font-size: 13px; line-height: 1.8; }
+  /* 图表高度 */
+  .chart { height: 240px; }
+  .two-col { grid-template-columns: 1fr !important; }
+  .float-right { float: none; margin: 12px 0; width: 100%; }
+}
+@media (max-width: 600px) { .container { padding: 0 12px; } .cover h1 { font-size: 20px; } }
 </style>
 </head>
 <body>

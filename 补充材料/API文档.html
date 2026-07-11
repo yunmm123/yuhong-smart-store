@@ -82,6 +82,36 @@ body {
 .no-params { font-size: 12.5px; color: var(--muted); font-style: italic; padding: 4px 0; }
 
 @media print { body { background: #fff; } .page { box-shadow: none; } }
+
+/* === Mobile Responsive === */
+@media (max-width: 768px) {
+  body { padding: 10px; font-size: 14px; }
+  .page { padding: 22px 16px; max-width: 100%; border-radius: 10px; }
+  .header h1 { font-size: 22px; }
+  .header .subtitle { font-size: 13px; }
+  /* 模块 */
+  .module { margin-bottom: 24px; }
+  .module-title { font-size: 15px; padding: 4px 0 4px 12px; margin-bottom: 12px; }
+  .module-title .mod-count { font-size: 11px; }
+  /* API 卡片 */
+  .api-card { padding: 14px 16px; margin-bottom: 12px; }
+  .api-head { gap: 8px; }
+  .method-tag { font-size: 10px; padding: 3px 8px; }
+  .api-path { font-size: 12px; word-break: break-all; }
+  .api-desc { font-size: 12px; margin-bottom: 10px; }
+  /* 参数表横向滚动 */
+  .param-table { display: block; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; font-size: 12px; min-width: 100%; }
+  .param-table th, .param-table td { padding: 6px 10px; font-size: 11px; }
+  /* 代码块 */
+  .code-block { padding: 12px 14px; }
+  .code-block pre { font-size: 11px; line-height: 1.6; }
+  .no-params { font-size: 12px; }
+}
+@media (max-width: 480px) {
+  .page { padding: 16px 12px; }
+  .header h1 { font-size: 19px; }
+  .api-card { padding: 12px 14px; }
+}
 </style>
 </head>
 <body>

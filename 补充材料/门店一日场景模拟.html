@@ -121,6 +121,42 @@ body {
 .ending .stat .label { font-size: 11px; color: var(--muted); }
 
 @media print { body { background: #fff; } .page { box-shadow: none; } }
+
+/* === Mobile Responsive === */
+@media (max-width: 768px) {
+  body { padding: 10px; font-size: 14px; }
+  .page { padding: 22px 16px; max-width: 100%; border-radius: 10px; }
+  .header h1 { font-size: 22px; }
+  .header .subtitle { font-size: 13px; }
+  .section-title { font-size: 15px; }
+  /* 场景卡片 */
+  .scenario { padding: 18px 16px; margin-bottom: 16px; }
+  .scenario h2 { font-size: 17px; }
+  .scenario-meta { font-size: 12px; flex-wrap: wrap; gap: 8px; }
+  /* 对话 */
+  .dialog .msg .bubble { max-width: 85%; font-size: 13px; padding: 9px 13px; }
+  .dialog .msg .role { font-size: 10px; }
+  /* 动作卡 */
+  .action-card { padding: 12px 14px; font-size: 13px; margin: 8px 0; }
+  .action-card .label { font-size: 10px; }
+  .action-card .result { font-size: 11px; }
+  /* 对比卡改单列 */
+  .before-after { grid-template-columns: 1fr; gap: 8px; }
+  .before-after .ba-card { padding: 10px 14px; }
+  .before-after .ba-card .title { font-size: 11px; }
+  /* 结尾 */
+  .ending { padding: 18px 16px; margin-top: 20px; }
+  .ending h3 { font-size: 15px; }
+  .ending p { font-size: 12px; }
+  .ending .stats { gap: 16px; flex-wrap: wrap; }
+  .ending .stat .v { font-size: 22px; }
+  .ending .stat .l { font-size: 11px; }
+}
+@media (max-width: 480px) {
+  .page { padding: 16px 12px; }
+  .header h1 { font-size: 19px; }
+  .scenario { padding: 14px 12px; }
+}
 </style>
 </head>
 <body>

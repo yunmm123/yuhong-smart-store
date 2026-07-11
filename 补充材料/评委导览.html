@@ -168,13 +168,30 @@ body {
 .footer .brand { font-weight: 600; color: var(--ink); }
 .footer .dot { margin: 0 8px; opacity: .5; }
 
-@media (max-width: 640px) {
-  body { padding: 12px; }
-  .page { padding: 28px 20px; }
-  .step { flex-direction: column; gap: 14px; padding: 20px; }
-  .step-num { width: 48px; height: 48px; font-size: 18px; }
-  .more-grid { grid-template-columns: 1fr; }
+@media (max-width: 768px) {
+  body { padding: 12px; font-size: 14px; }
+  .page { padding: 28px 20px; max-width: 100%; border-radius: 10px; }
   .header h1 { font-size: 24px; }
+  .header .subtitle { font-size: 13px; }
+  .step { flex-direction: column; gap: 14px; padding: 20px 18px; }
+  .step-num { width: 48px; height: 48px; font-size: 18px; }
+  .step-head h3 { font-size: 17px; }
+  .step-why { font-size: 13px; }
+  .step-points li { font-size: 13px; }
+  .step-btn { font-size: 14px; padding: 12px 22px; min-height: 44px; display: inline-flex; }
+  .more-grid { grid-template-columns: 1fr; }
+  .more-card { padding: 16px; min-height: 44px; }
+  .more-card .mc-label { font-size: 14px; }
+  .more-card .mc-desc { font-size: 12px; }
+  .intro { font-size: 12px; }
+  .intro .pill { font-size: 11px; }
+}
+@media (max-width: 640px) {
+  body { padding: 8px; }
+  .page { padding: 20px 14px; }
+  .step { padding: 16px 14px; }
+  .step-num { width: 42px; height: 42px; font-size: 16px; }
+  .header h1 { font-size: 21px; }
 }
 @media print { body { background: #fff; } .page { box-shadow: none; } .step:hover { transform: none; box-shadow: none; } }
 </style>

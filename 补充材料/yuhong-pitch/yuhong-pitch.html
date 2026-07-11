@@ -69,6 +69,27 @@
 .vs ul{padding-left:18px;font-size:14px;line-height:1.8;color:var(--text-2)}
 .vs li::marker{color:var(--bad)}
 .vs .good-side li::marker{color:var(--good)}
+
+/* === Mobile Responsive === */
+@media (max-width: 768px) {
+  /* scroll mode: 减小页间距，优化触摸滚动 */
+  body.scroll-mode .deck { gap: 10px; padding: 10px 0; }
+  /* deck-header / deck-footer 位置调整 */
+  .deck-header { top: 10px; left: 14px; right: 14px; font-size: 10px; }
+  .deck-footer { bottom: 10px; left: 14px; right: 14px; font-size: 10px; }
+  /* 进度条加粗便于触屏可见 */
+  .progress-bar { height: 4px; }
+  /* overview 网格在手机上改为2列 */
+  .overview.open { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; padding: 16px !important; }
+  .overview .thumb { border-radius: 8px; }
+  /* notes overlay 字体调整 */
+  .notes-overlay { padding: 14px 18px; font-size: 14px; max-height: 38vh; }
+}
+@media (max-width: 480px) {
+  .overview.open { grid-template-columns: 1fr !important; }
+  .deck-header { font-size: 9px; }
+  .deck-footer { font-size: 9px; }
+}
 </style>
 </head>
 <body data-themes="pitch-deck-vc,neo-brutalism,glassmorphism" data-theme-base="./_shared/themes/">
@@ -428,4 +449,36 @@
 <script src="./_shared/runtime.js"></script>
 <script src="./_shared/echarts-theme-sync.js"></script>
 <script src="./_shared/animations/fx-runtime.js"></script>
+<script>
+/* === 移动端触摸滑动导航 === */
+(function(){
+  var touchStartX = 0, touchStartY = 0, touchEndX = 0, touchEndY = 0;
+  var SWIPE_THRESHOLD = 50; // 最小滑动距离
+
+  document.addEventListener('touchstart', function(e){
+    if (e.touches.length === 1) {
+      touchStartX = e.touches[0].screenX;
+      touchStartY = e.touches[0].screenY;
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e){
+    if (e.changedTouches.length === 1) {
+      touchEndX = e.changedTouches[0].screenX;
+      touchEndY = e.changedTouches[0].screenY;
+      handleSwipe();
+    }
+  }, { passive: true });
+
+  function handleSwipe(){
+    var dx = touchEndX - touchStartX;
+    var dy = touchEndY - touchStartY;
+    // 只处理水平滑动（水平位移大于垂直位移且超过阈值）
+    if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      var key = dx < 0 ? 'ArrowRight' : 'ArrowLeft';
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: key, bubbles: true }));
+    }
+  }
+})();
+</script>
 </body></html>

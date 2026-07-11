@@ -221,19 +221,39 @@ body {
 
 /* Responsive */
 @media (max-width: 768px) {
+  body { font-size: 14px; }
+  .container { padding: 16px 14px 36px; }
   .stats-row { grid-template-columns: repeat(2, 1fr); }
   .card-grid { grid-template-columns: 1fr; }
-  .header { padding: 32px 20px; }
+  .header { padding: 32px 20px; margin-bottom: 24px; border-radius: 12px; }
   .header h1 { font-size: 24px; }
-  .header .quick-links { gap: 8px; }
-  .header .quick-links a { font-size: 12px; padding: 6px 12px; }
+  .header .subtitle { font-size: 14px; }
+  .header .quick-links { gap: 8px; margin-top: 20px; }
+  .header .quick-links a {
+    font-size: 13px; padding: 10px 14px; min-height: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .section-title { font-size: 15px; margin: 28px 0 12px; }
+  .stat-card { padding: 16px 12px; }
+  .stat-card .num { font-size: 24px; }
+  .stat-card .label { font-size: 11px; }
+  .card { padding: 16px 18px; min-height: 44px; }
+  .card h3 { font-size: 15px; }
+  .card p { font-size: 13px; }
+  .card .arrow { right: 16px; font-size: 16px; }
+  .footer { padding: 32px 16px 16px; }
+  .footer .links { gap: 14px; }
+  .footer .links a { font-size: 13px; min-height: 44px; display: inline-flex; align-items: center; }
 }
 @media (max-width: 480px) {
   .stats-row { grid-template-columns: 1fr 1fr; gap: 8px; }
-  .stat-card { padding: 14px 10px; }
-  .stat-card .num { font-size: 22px; }
-  .container { padding: 16px 12px 32px; }
-  .card { padding: 16px; }
+  .stat-card { padding: 14px 8px; }
+  .stat-card .num { font-size: 20px; }
+  .container { padding: 12px 10px 28px; }
+  .card { padding: 14px 16px; }
+  .header { padding: 28px 16px; }
+  .header h1 { font-size: 21px; }
+  .header .quick-links a { font-size: 12px; padding: 8px 12px; }
 }
 </style>
 </head>
