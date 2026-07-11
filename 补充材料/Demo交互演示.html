@@ -194,6 +194,138 @@
     .recommend-card { background:#fff; border:1px solid #eef0f3; border-radius:10px; padding:12px 14px; margin-bottom:10px; border-left:4px solid var(--primary); }
     .footer-note { text-align:center; color:#9ca3af; font-size:12px; padding:20px; }
 
+    /* ===== 3515大屏视觉升级 ===== */
+    .dark-panel-upgraded {
+      background: linear-gradient(135deg, #060d1a 0%, #0d1b3a 30%, #14204a 60%, #1a1240 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .dark-panel-upgraded::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image:
+        linear-gradient(rgba(0,140,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,140,255,.04) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+    }
+    .dark-panel-upgraded::after {
+      content: '';
+      position: absolute;
+      top: -30%; left: -10%;
+      width: 50%; height: 160%;
+      background: radial-gradient(circle, rgba(0,112,243,.12), transparent 60%);
+      animation: bgPulse 15s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes bgPulse {
+      0% { transform: translate(0,0) scale(1); }
+      100% { transform: translate(30%,20%) scale(1.3); }
+    }
+    .bigscreen-title {
+      font-size: 26px; font-weight: 900; letter-spacing: 4px;
+      background: linear-gradient(90deg, #00d4ff, #7fe9ff, #c084fc, #00d4ff);
+      background-size: 200% auto;
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: titleShimmer 3s linear infinite;
+    }
+    @keyframes titleShimmer {
+      0% { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+    .dark-card-glow {
+      transition: all .3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .dark-card-glow:hover {
+      border-color: rgba(0,212,255,.5) !important;
+      box-shadow: 0 0 24px rgba(0,212,255,.2), 0 0 48px rgba(0,140,255,.1) inset !important;
+      transform: translateY(-2px);
+    }
+    .dark-card-glow::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,212,255,.6), transparent);
+      transition: left .6s;
+    }
+    .dark-card-glow:hover::after { left: 100%; }
+    .clock-display { font-size: 12px; color: #5a7090; margin-top: 6px; }
+
+    /* 实时数据流 */
+    .data-stream {
+      height: 200px; overflow: hidden;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .stream-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 10px; border-radius: 6px;
+      background: rgba(0,212,255,.06); border: 1px solid rgba(0,212,255,.1);
+      font-size: 12px; color: #cfe3ff;
+      animation: streamIn .4s ease;
+    }
+    @keyframes streamIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .stream-icon { width: 24px; height: 24px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+    .stream-tag { font-size: 10px; padding: 1px 6px; border-radius: 3px; font-weight: 600; flex-shrink: 0; }
+    .stream-time { color: #5a7090; font-size: 11px; margin-left: auto; }
+
+    /* 区域热力图 */
+    .region-map { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .region-block {
+      border-radius: 8px; padding: 14px;
+      cursor: default; transition: all .25s;
+      border: 1px solid rgba(0,212,255,.15);
+    }
+    .region-block:hover { transform: scale(1.05); border-color: rgba(0,212,255,.4); }
+    .region-name { font-size: 14px; font-weight: 700; color: #fff; }
+    .region-cities { font-size: 11px; color: #8ba3be; margin-top: 2px; }
+    .region-density-bar { height: 5px; background: rgba(255,255,255,.08); border-radius: 3px; margin-top: 8px; overflow: hidden; }
+    .region-density-fill { height: 100%; border-radius: 3px; transition: width 1.5s ease; }
+
+    /* 六层架构3D */
+    .arch-3d-wrap {
+      perspective: 800px;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 20px 0;
+    }
+    .arch-layer-3d {
+      width: 80%; padding: 10px 20px; margin-bottom: 4px;
+      border-radius: 6px; font-size: 12px;
+      transform: rotateX(40deg);
+      transition: all .3s; cursor: default;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .arch-layer-3d:hover {
+      transform: rotateX(40deg) translateZ(30px) translateX(10px);
+      box-shadow: 0 0 20px rgba(0,212,255,.3);
+    }
+    .arch-layer-new {
+      background: linear-gradient(135deg, rgba(255,193,7,.25), rgba(255,152,0,.2));
+      border: 1px solid rgba(255,193,7,.4);
+    }
+    .arch-tag-new {
+      background: #ffc107; color: #0a1628; font-size: 10px;
+      padding: 2px 6px; border-radius: 3px; font-weight: 700;
+    }
+
+    /* 脉冲动画 */
+    .pulse-dot {
+      display: inline-block; width: 8px; height: 8px;
+      border-radius: 50%; background: #00d4ff;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0,212,255,.4); }
+      50% { box-shadow: 0 0 0 8px rgba(0,212,255,0); }
+    }
+
     /* ===== Mobile Responsive ===== */
     @media (max-width: 768px) {
       body { font-size: 14px; }
@@ -530,39 +662,56 @@
   </div>
 
   <!-- ============ TAB 4: 3515县域大屏 ============ -->
-  <div class="dark-panel" id="darkWrap" style="display:none;">
-    <div class="yh-panel" id="tab4" style="max-width:1500px;">
+  <div class="dark-panel dark-panel-upgraded" id="darkWrap" style="display:none;">
+    <div class="yh-panel" id="tab4" style="max-width:1500px; position:relative; z-index:1;">
       <div class="text-center mb-3">
-        <div style="font-size:22px;font-weight:800;color:#fff;letter-spacing:2px;">千万县城 · 万亿商机 · AI赋能</div>
+        <div class="bigscreen-title">千万县城 · 万亿商机 · AI赋能</div>
         <div style="font-size:13px;color:#8ba3be;margin-top:4px;">雨虹3515县域智慧运营大屏 · 与东方雨虹"3515计划"战略绑定</div>
+        <div class="clock-display" id="bigscreenClock"></div>
       </div>
 
-      <!-- 5 core KPIs -->
-      <div class="dark-card mb-3">
+      <!-- 5 core KPIs with CountUp -->
+      <div class="dark-card dark-card-glow mb-3">
         <div class="row g-2">
-          <div class="col"><div class="kpi-box"><div class="kpi-value">507</div><div class="kpi-label">目标县城</div></div></div>
-          <div class="col"><div class="kpi-box"><div class="kpi-value">50亿+</div><div class="kpi-label">目标产值</div></div></div>
-          <div class="col"><div class="kpi-box"><div class="kpi-value">29万+</div><div class="kpi-label">覆盖网点</div></div></div>
-          <div class="col"><div class="kpi-box"><div class="kpi-value">8亿</div><div class="kpi-label">县域人口</div></div></div>
-          <div class="col"><div class="kpi-box"><div class="kpi-value">10分钟</div><div class="kpi-label">AI赋能上手</div></div></div>
+          <div class="col"><div class="kpi-box"><div class="kpi-value" data-target="507" data-decimals="0">0</div><div class="kpi-label">目标县城</div></div></div>
+          <div class="col"><div class="kpi-box"><div class="kpi-value" data-target="50" data-decimals="0" data-suffix="亿+">0</div><div class="kpi-label">目标产值</div></div></div>
+          <div class="col"><div class="kpi-box"><div class="kpi-value" data-target="29" data-decimals="0" data-suffix="万+">0</div><div class="kpi-label">覆盖网点</div></div></div>
+          <div class="col"><div class="kpi-box"><div class="kpi-value" data-target="8" data-decimals="0" data-suffix="亿">0</div><div class="kpi-label">县域人口</div></div></div>
+          <div class="col"><div class="kpi-box"><div class="kpi-value" data-target="10" data-decimals="0" data-suffix="分钟">0</div><div class="kpi-label">AI赋能上手</div></div></div>
         </div>
       </div>
 
       <div class="row g-3">
-        <!-- Left: TOP10 -->
+        <!-- Left: 实时数据流 + TOP10 -->
         <div class="col-lg-4">
-          <div class="dark-card" style="height:100%;">
+          <div class="dark-card dark-card-glow mb-3">
+            <div class="section-title">实时数据流 <span class="pulse-dot"></span></div>
+            <div class="data-stream" id="dataStream"></div>
+          </div>
+          <div class="dark-card dark-card-glow" style="height:auto;">
             <div class="section-title">县域门店运营排行 TOP10</div>
             <div id="rankList"></div>
           </div>
         </div>
-        <!-- Center: progress + QR -->
+        <!-- Center: 进度看板 + 区域热力图 -->
         <div class="col-lg-4">
-          <div class="dark-card mb-3">
+          <div class="dark-card dark-card-glow mb-3">
             <div class="section-title">3515计划进度看板</div>
             <div id="progressBoard"></div>
           </div>
-          <div class="dark-card">
+          <div class="dark-card dark-card-glow">
+            <div class="section-title">6大区域网点热力分布</div>
+            <div class="region-map" id="regionMap"></div>
+          </div>
+        </div>
+        <!-- Right: AI洞察 + 能力矩阵 -->
+        <div class="col-lg-4">
+          <div class="dark-card dark-card-glow mb-3">
+            <div class="section-title">飞书aily智能体实时分析</div>
+            <div class="insight-text" id="ailyInsight"></div>
+            <button class="btn btn-sm btn-outline-yh w-100 mt-2" id="refreshInsight" style="color:#00d4ff;border-color:#00d4ff;">刷新AI洞察</button>
+          </div>
+          <div class="dark-card dark-card-glow">
             <div class="section-title">一店一码 扫码赋能</div>
             <div class="d-flex align-items-center gap-3">
               <div class="qrcode-box"></div>
@@ -570,32 +719,28 @@
                 每家门店生成专属二维码，客户扫码即可进入<br/>
                 <span class="hl">AI导购咨询</span> · <span class="hl">产品查询</span> · <span class="hl">施工指导</span><br/>
                 <span class="hl">一键复购</span> · <span class="hl">售后反馈</span><br/>
-                自动沉淀客户数据至多维表格，赋能私域运营
+                自动沉淀客户数据至多维表格
               </div>
             </div>
           </div>
         </div>
-        <!-- Right: AI insights + matrix -->
-        <div class="col-lg-4">
-          <div class="dark-card mb-3">
-            <div class="section-title">飞书aily智能体实时分析</div>
-            <div class="insight-text" id="ailyInsight"></div>
-            <button class="btn btn-sm btn-outline-yh w-100 mt-2" id="refreshInsight" style="color:#00d4ff;border-color:#00d4ff;">刷新AI洞察</button>
-          </div>
-          <div class="dark-card">
-            <div class="section-title">飞书AI能力矩阵</div>
-            <div id="aiMatrix"></div>
-          </div>
-        </div>
       </div>
 
-      <!-- Five module empowerment effects -->
-      <div class="dark-card mt-3">
+      <!-- 五大模块赋能效果 -->
+      <div class="dark-card dark-card-glow mt-3">
         <div class="section-title">五大模块赋能效果</div>
         <div id="effectList"></div>
       </div>
 
-      <div class="footer-note" style="color:#5a7090;">数据均为模拟演示数据 · 2026 AI先锋未来人才大赛 · 雨虹渠道智慧运营助手</div>
+      <!-- 六层架构3D -->
+      <div class="dark-card dark-card-glow mt-3">
+        <div class="section-title">六层架构（新增渠道层）</div>
+        <div class="arch-3d-wrap" id="arch3d"></div>
+      </div>
+
+      <div class="footer-note" style="color:#5a7090;">
+        <span class="pulse-dot"></span> 数据更新中... · 数据均为模拟演示数据 · 2026 AI先锋未来人才大赛 · 雨虹渠道智慧运营助手
+      </div>
     </div>
   </div>
 
@@ -716,6 +861,7 @@
       // 大屏深色背景仅在第4个Tab显示
       document.getElementById('darkWrap').style.display = (tab.dataset.tab === 'tab4') ? 'block' : 'none';
       if (tab.dataset.tab === 'tab1' && !window._salesCharted) initSalesChart();
+      if (tab.dataset.tab === 'tab4') initBigscreen();
     });
   });
 
@@ -996,6 +1142,159 @@
       </div>`).join('');
   }
   renderMatrix();
+
+  /* ===== 3515大屏视觉升级 ===== */
+
+  // CountUp 动画
+  function countUp(el) {
+    const target = parseFloat(el.dataset.target);
+    const decimals = parseInt(el.dataset.decimals || '0');
+    const suffix = el.dataset.suffix || '';
+    const prefix = el.dataset.prefix || '';
+    const duration = 1800;
+    const start = performance.now();
+    function step(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const val = target * eased;
+      el.textContent = prefix + val.toFixed(decimals) + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function initCountUp() {
+    document.querySelectorAll('#tab4 .kpi-value[data-target]').forEach(el => {
+      if (!el.dataset._counted) {
+        el.dataset._counted = '1';
+        countUp(el);
+      }
+    });
+  }
+
+  // 实时时钟
+  function initClock() {
+    const el = document.getElementById('bigscreenClock');
+    if (!el) return;
+    function update() {
+      const now = new Date();
+      el.textContent = now.toLocaleString('zh-CN', { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit' });
+    }
+    update();
+    setInterval(update, 1000);
+  }
+
+  // 实时数据流
+  const STREAM_DATA = [
+    { icon:'📦', tag:'新订单', tagColor:'#1677FF', text:'郑州新郑店 HCA-122防水涂料×20桶', time:'刚刚' },
+    { icon:'✅', tag:'巡检完成', tagColor:'#52c41a', text:'临沂兰山店 巡检评分92分 合格', time:'1分钟前' },
+    { icon:'🤖', tag:'AI咨询', tagColor:'#722ed1', text:'成都龙泉驿店 客户咨询卫生间防水方案', time:'2分钟前' },
+    { icon:'⚠️', tag:'库存预警', tagColor:'#fa8c16', text:'西安雁塔店 SBS卷材库存低于安全线', time:'3分钟前' },
+    { icon:'👥', tag:'客户跟进', tagColor:'#13c2c2', text:'长沙雨花店 工长复购意向 已自动跟进', time:'5分钟前' },
+    { icon:'📦', tag:'新订单', tagColor:'#1677FF', text:'杭州余杭店 瓷砖胶×30包 紧急', time:'7分钟前' },
+    { icon:'🎯', tag:'AI测评', tagColor:'#eb2f96', text:'武汉光谷店 导购话术训练 评分85分', time:'9分钟前' },
+    { icon:'📊', tag:'经营报告', tagColor:'#1677FF', text:'华东区Q2销售报告已自动生成', time:'12分钟前' },
+    { icon:'⚠️', tag:'流失预警', tagColor:'#ff4d4f', text:'南京江宁店 3名高价值客户15天未到店', time:'15分钟前' },
+    { icon:'🏷️', tag:'客户画像', tagColor:'#722ed1', text:'郑州新郑店 新增工长标签: 屋顶防水偏好', time:'18分钟前' }
+  ];
+
+  let streamIdx = 0;
+  function initDataStream() {
+    const container = document.getElementById('dataStream');
+    if (!container) return;
+    container.innerHTML = '';
+
+    function addStreamItem() {
+      const item = STREAM_DATA[streamIdx % STREAM_DATA.length];
+      streamIdx++;
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('zh-CN', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+      const div = document.createElement('div');
+      div.className = 'stream-item';
+      div.innerHTML = `
+        <div class="stream-icon" style="background:${item.tagColor}22;color:${item.tagColor};">${item.icon}</div>
+        <span class="stream-tag" style="background:${item.tagColor}22;color:${item.tagColor};">${item.tag}</span>
+        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${item.text}</span>
+        <span class="stream-time">${timeStr}</span>
+      `;
+      container.insertBefore(div, container.firstChild);
+      while (container.children.length > 5) container.removeChild(container.lastChild);
+    }
+
+    // 初始3条
+    addStreamItem(); addStreamItem(); addStreamItem();
+    // 每3.5秒新增
+    setInterval(addStreamItem, 3500);
+  }
+
+  // 区域热力图
+  const REGIONS = [
+    { name:'华东', cities:128, stores:52000, density:1.0, color:'#1677FF' },
+    { name:'华北', cities:92, stores:38000, density:0.73, color:'#2f8bff' },
+    { name:'华南', cities:85, stores:35000, density:0.67, color:'#4096ff' },
+    { name:'华中', cities:78, stores:32000, density:0.62, color:'#597ef7' },
+    { name:'西南', cities:65, stores:28000, density:0.54, color:'#722ed1' },
+    { name:'西北', cities:42, stores:18000, density:0.35, color:'#9254de' },
+    { name:'东北', cities:17, stores:12000, density:0.23, color:'#b37feb' }
+  ];
+
+  function initRegionMap() {
+    const container = document.getElementById('regionMap');
+    if (!container) return;
+    container.innerHTML = REGIONS.map(r => `
+      <div class="region-block" style="background:rgba(${r.name==='华东'?'22,119,255':r.name==='华北'?'47,139,255':r.name==='华南'?'64,150,255':r.name==='华中'?'89,126,247':r.name==='西南'?'114,46,209':r.name==='西北'?'146,84,222':'179,127,235'},${r.density*0.15});">
+        <div class="region-name">${r.name}</div>
+        <div class="region-cities">${r.cities}城 · ${r.stores}网点</div>
+        <div class="region-density-bar">
+          <div class="region-density-fill" style="width:0%;background:${r.color};" data-width="${r.density*100}%"></div>
+        </div>
+      </div>
+    `).join('');
+
+    // 动画填充进度条
+    setTimeout(() => {
+      container.querySelectorAll('.region-density-fill').forEach(bar => {
+        bar.style.width = bar.dataset.width;
+      });
+    }, 300);
+  }
+
+  // 六层架构3D
+  const ARCH_LAYERS = [
+    { name:'渠道层', desc:'标准化看板/拓展管理/分单监控/经营洞察', isNew:true, color:'rgba(255,193,7,.2)' },
+    { name:'应用层', desc:'Flask Web + 妙搭: 5页面22API', isNew:false, color:'rgba(22,119,255,.15)' },
+    { name:'AI层', desc:'aily智能体 + 多维表格AI字段', isNew:false, color:'rgba(82,196,26,.15)' },
+    { name:'数据层', desc:'飞书多维表格(轻量ERP)', isNew:false, color:'rgba(250,140,22,.15)' },
+    { name:'接口层', desc:'飞书开放平台API', isNew:false, color:'rgba(114,46,209,.15)' },
+    { name:'基建层', desc:'GitHub Pages + 飞书云', isNew:false, color:'rgba(100,100,100,.15)' }
+  ];
+
+  function initArch3D() {
+    const container = document.getElementById('arch3d');
+    if (!container) return;
+    container.innerHTML = ARCH_LAYERS.map((l, i) => `
+      <div class="arch-layer-3d ${l.isNew?'arch-layer-new':''}" style="background:${l.color};border:1px solid ${l.isNew?'rgba(255,193,7,.4)':'rgba(0,212,255,.12)'};">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-weight:700;color:#fff;font-size:13px;">${l.name}</span>
+          ${l.isNew?'<span class="arch-tag-new">新增</span>':''}
+        </div>
+        <span style="color:#8ba3be;font-size:11px;">${l.desc}</span>
+      </div>
+    `).join('');
+  }
+
+  // 初始化大屏（在Tab切换时触发）
+  let bigscreenInited = false;
+  function initBigscreen() {
+    if (bigscreenInited) return;
+    bigscreenInited = true;
+    initCountUp();
+    initClock();
+    initDataStream();
+    initRegionMap();
+    initArch3D();
+  }
 
   function renderEffects() {
     document.getElementById('effectList').innerHTML = EFFECTS.map(e => `
