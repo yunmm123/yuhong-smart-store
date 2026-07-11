@@ -120,7 +120,7 @@ yuhong-smart-store/
 │   └── 06_飞书AI实操配置手册.md
 ├── 补充材料/                      # 线上验证材料
 │   ├── yuhong-onepager/          # 一页纸执行摘要
-│   ├── yuhong-pitch/             # 13页路演PPT
+│   ├── yuhong-pitch/             # 15页路演PPT
 │   ├── yuhong-submission/        # 综合补充材料报告
 │   ├── Demo交互演示.html
 │   ├── 飞书aily智能体部署验证.html
@@ -187,9 +187,11 @@ python -m pytest tests/test_core.py -v
 |------|------|
 | 🗺️ 评委导览（3分钟看懂） | [打开](补充材料/评委导览.html) |
 | 📄 一页纸执行摘要（评委必看） | [打开](补充材料/yuhong-onepager/yuhong-onepager.html) |
-| 📊 路演PPT（14页） | [打开](补充材料/yuhong-pitch/yuhong-pitch.html) |
+| 📊 路演PPT（15页） | [打开](补充材料/yuhong-pitch/yuhong-pitch.html) |
 | 🏪 门店一日场景模拟 | [打开](补充材料/门店一日场景模拟.html) |
 | 📈 可落地性分析 | [打开](补充材料/可落地性分析.html) |
+| 📄 AI解决方案总结报告（PDF） | [打开](补充材料/AI解决方案总结报告.pdf) |
+| 📡 渠道管理中枢展示 | [打开](补充材料/渠道管理中枢.html) |
 | 🧮 交互式ROI计算器 | [打开](补充材料/ROI计算器.html) |
 | 📊 竞品实名深度对比 | [打开](补充材料/竞品实名深度对比.html) |
 | 📡 API接口文档（22接口） | [打开](补充材料/API文档.html) |
