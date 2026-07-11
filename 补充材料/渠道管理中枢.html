@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>渠道管理中枢 — 雨虹渠道智慧运营助手</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+:root {
+  --primary: #1677FF;
+  --primary-dark: #0958d9;
+  --yuhong: #E8392B;
+  --teal: #13c2c2;
+  --green: #52c41a;
+  --orange: #fa8c16;
+  --purple: #722ed1;
+  --bg: #f0f2f5;
+  --card-bg: #fff;
+  --text: #1a1a2e;
+  --muted: #8c8c8c;
+  --border: #e8e8e8;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+  background: linear-gradient(90deg, #0d47d1 0%, #1677FF 55%, #2f8bff 100%);
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 12px rgba(22,119,255,.25);
+}
+.navbar-brand {
+  display: flex; align-items: center; gap: 12px; color: #fff;
+  text-decoration: none;
+}
+.navbar-logo {
+  width: 40px; height: 40px; border-radius: 9px;
+  background: var(--yuhong);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 800; font-size: 22px;
+  box-shadow: 0 2px 8px rgba(232,57,43,.4);
+}
+.navbar-title { font-size: 18px; font-weight: 700; }
+.navbar-sub { font-size: 12px; opacity: .85; }
+.navbar-badge {
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 13px;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ===== Hero ===== */
+.hero {
+  background: linear-gradient(135deg, #0b1024 0%, #1a2238 40%, #1e3a5f 100%);
+  color: #fff;
+  padding: 48px 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -20%;
+  width: 60%; height: 200%;
+  background: radial-gradient(circle, rgba(0,112,243,.2), transparent 60%);
+  pointer-events: none;
+}
+.hero h1 { font-size: 32px; font-weight: 900; position: relative; z-index: 1; }
+.hero h1 .grad {
+  background: linear-gradient(135deg, #60a5fa, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero p { font-size: 15px; opacity: .82; margin-top: 12px; max-width: 680px; margin-left: auto; margin-right: auto; position: relative; z-index: 1; }
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 28px;
+  position: relative;
+  z-index: 1;
+  flex-wrap: wrap;
+}
+.hero-stat { text-align: center; }
+.hero-stat .v { font-size: 28px; font-weight: 900; color: #60a5fa; }
+.hero-stat .l { font-size: 12px; opacity: .7; margin-top: 2px; }
+
+/* ===== Container ===== */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+
+/* ===== Section ===== */
+.section {
+  margin-bottom: 40px;
+}
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.section-head .icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  color: #fff;
+}
+.section-head h2 { font-size: 20px; font-weight: 700; }
+.section-head .desc { font-size: 13px; color: var(--muted); margin-left: auto; }
+
+/* ===== Feature Cards ===== */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.feature-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.05);
+  border: 1px solid var(--border);
+  transition: all .2s;
+}
+.feature-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 24px rgba(0,0,0,.08);
+}
+.feature-card .fc-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.feature-card .fc-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.feature-card .fc-title { font-size: 16px; font-weight: 700; }
+.feature-card .fc-desc { font-size: 13px; color: #555; line-height: 1.7; margin-bottom: 14px; }
+.feature-card .fc-data {
+  background: #f7f8fc;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: #555;
+}
+.feature-card .fc-data strong { color: var(--text); }
+.feature-card .fc-data .src { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+/* ===== Chart Card ===== */
+.chart-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.05);
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.chart-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
+.chart-box { width: 100%; height: 320px; }
+
+/* ===== Table ===== */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.data-table th {
+  background: #f7f8fc;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #555;
+  border-bottom: 2px solid var(--border);
+}
+.data-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.data-table tr:hover td { background: #fafbff; }
+
+/* ===== Badge ===== */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge.green { background: #f6ffed; color: #389e0d; border: 1px solid #b7eb8f; }
+.badge.orange { background: #fff7e6; color: #d46b08; border: 1px solid #ffd591; }
+.badge.red { background: #fff2f0; color: #cf1322; border: 1px solid #ffccc7; }
+.badge.blue { background: #e6f7ff; color: #0958d9; border: 1px solid #91d5ff; }
+.badge.teal { background: #e6fffb; color: #08979c; border: 1px solid #87e8de; }
+
+/* ===== Mapping Table ===== */
+.mapping-card {
+  background: linear-gradient(135deg, #f0f5ff 0%, #f9f0ff 100%);
+  border-radius: 12px;
+  padding: 28px;
+  border: 1px solid #d6e4ff;
+}
+.mapping-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+.mapping-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px dashed #d6e4ff;
+  align-items: start;
+}
+.mapping-row:last-child { border-bottom: none; }
+.mapping-target {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+.mapping-target .num {
+  display: inline-flex;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  align-items: center; justify-content: center;
+  font-size: 12px;
+  margin-right: 6px;
+}
+.mapping-modules {
+  font-size: 13px;
+  color: #555;
+}
+.mapping-modules .mod {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 6px;
+  margin-right: 6px;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+/* ===== Architecture ===== */
+.arch-box {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.05);
+  border: 1px solid var(--border);
+}
+.arch-layer {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+.arch-layer .layer-name {
+  font-weight: 700;
+  min-width: 80px;
+}
+.arch-layer .layer-desc { color: #555; font-size: 13px; }
+.arch-new { border: 2px solid var(--primary); background: linear-gradient(135deg, #e6f7ff, #f0f5ff); }
+.arch-new .tag-new { background: var(--primary); color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-left: 8px; }
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .feature-grid { grid-template-columns: 1fr; }
+  .navbar { padding: 12px 16px; }
+  .navbar-title { font-size: 15px; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 24px; }
+  .hero-stats { gap: 16px; }
+  .hero-stat .v { font-size: 22px; }
+  .mapping-row { grid-template-columns: 1fr; gap: 6px; }
+  .container { padding: 20px 16px 48px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <a class="navbar-brand" href="../index.html">
+    <div class="navbar-logo">虹</div>
+    <div>
+      <div class="navbar-title">雨虹渠道智慧运营助手</div>
+      <div class="navbar-sub">渠道管理中枢模块</div>
+    </div>
+  </a>
+  <div class="navbar-badge">新增模块 · 第5大模块</div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>渠道管理<span class="grad">中枢</span></h1>
+  <p>站在东方雨虹总部/区域经理视角，管理全渠道3000余家专卖店和10000余家终端网点的标准化、拓展、分单和经营洞察——渠道层管标准、管资源、管全局，门店层做执行、做服务、做反馈，数据双向流通。</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="v">6</div><div class="l">区域合规率监控</div></div>
+    <div class="hero-stat"><div class="v">5</div><div class="l">新网点拓展档案</div></div>
+    <div class="hero-stat"><div class="v">8</div><div class="l">在途订单追踪</div></div>
+    <div class="hero-stat"><div class="v">10</div><div class="l">门店多维排名</div></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 四大功能 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="icon" style="background: linear-gradient(135deg, #1677FF, #2f8bff);">📡</div>
+      <h2>四大核心功能</h2>
+      <span class="desc">从渠道层视角管理全局</span>
+    </div>
+
+    <div class="feature-grid">
+      <!-- 功能1 -->
+      <div class="feature-card">
+        <div class="fc-head">
+          <div class="fc-icon" style="background: #e6f7ff; color: #1677FF;">📊</div>
+          <div class="fc-title">渠道标准化看板</div>
+        </div>
+        <div class="fc-desc">汇总全渠道巡检数据，按区域/门店类型/经销商排名合规率，生成全国合规率热力图，追踪整改完成率。数据来源于门店巡检模块自动上卷。</div>
+        <div class="fc-data">
+          <strong>监控维度：</strong>6大区域（华东/华南/华北/华西/东北/西南）合规率实时排名<br>
+          <strong>数据源：</strong>门店巡检模块 → 区域汇总 → 全国看板<br>
+          <div class="src">参考：东方雨虹"曙光计划"2026年从"规模扩张"转向"质量提升"</div>
+        </div>
+      </div>
+
+      <!-- 功能2 -->
+      <div class="feature-card">
+        <div class="fc-head">
+          <div class="fc-icon" style="background: #f6ffed; color: #52c41a;">📈</div>
+          <div class="fc-title">渠道拓展管理</div>
+        </div>
+        <div class="fc-desc">新网点开发全流程管理：选址评分（租金/客流/竞品密度）、开业进度跟踪（装修→铺货→培训→开业）、新店首月业绩追踪与扶持计划。</div>
+        <div class="fc-data">
+          <strong>选址数据：</strong>建材市场租金60-120元/㎡（一线城市），三线城市40+元/㎡<br>
+          <strong>开业周期：</strong>轻资产模式15天开业，100㎡开店投资10余万元<br>
+          <div class="src">数据来源：新浪财经建材市场报告 / 中国经济新闻网</div>
+        </div>
+      </div>
+
+      <!-- 功能3 -->
+      <div class="feature-card">
+        <div class="fc-head">
+          <div class="fc-icon" style="background: #fff7e6; color: #fa8c16;">⚡</div>
+          <div class="fc-title">智能分单与履约监控</div>
+        </div>
+        <div class="fc-desc">根据网点位置、库存充足度、配送能力、门店评分自动分配订单；实时监控履约进度（已下单→已发货→已到货→已施工），超时预警与断货预警。</div>
+        <div class="fc-data">
+          <strong>行业痛点：</strong>传统模式平均交付周期7-10天，紧急订单履约率不足60%<br>
+          <strong>库存风险：</strong>经销商备货失误率高达35%，库存周转率仅3.8次/年<br>
+          <div class="src">数据来源：数商云建材行业B2B报告 / 财经头条行业调研</div>
+        </div>
+      </div>
+
+      <!-- 功能4 -->
+      <div class="feature-card">
+        <div class="fc-head">
+          <div class="fc-icon" style="background: #f9f0ff; color: #722ed1;">💡</div>
+          <div class="fc-title">渠道经营洞察</div>
+        </div>
+        <div class="fc-desc">跨门店销售对比分析，省/市/县三级区域排名，产品动销TOP5分析（哪些产品在哪些区域卖得好），AI自动生成渠道经营洞察报告。</div>
+        <div class="fc-data">
+          <strong>数据维度：</strong>7大区域销售排名 + 产品动销TOP5 + 趋势分析<br>
+          <strong>AI能力：</strong>多维表格AI字段自动分析 + aily智能体对话式查询<br>
+          <div class="src">参考：东方雨虹2025年零售业务营收99.44亿元，占36.06%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 标准化看板图表 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="icon" style="background: linear-gradient(135deg, #1677FF, #2f8bff);">📊</div>
+      <h2>渠道标准化看板 — 区域合规率</h2>
+    </div>
+    <div class="chart-card">
+      <h3>全国6大区域巡检合规率排名</h3>
+      <div class="chart-box" id="chartCompliance"></div>
+    </div>
+    <div class="chart-card">
+      <h3>门店类型合规率对比</h3>
+      <div class="chart-box" id="chartStoreType"></div>
+    </div>
+  </div>
+
+  <!-- 智能分单 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="icon" style="background: linear-gradient(135deg, #fa8c16, #ffc53d);">⚡</div>
+      <h2>智能分单 — 履约风险监控</h2>
+    </div>
+    <div class="chart-card">
+      <h3>在途订单履约状态（8笔订单实时追踪）</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>订单号</th>
+            <th>产品</th>
+            <th>收货区域</th>
+            <th>分配网点</th>
+            <th>状态</th>
+            <th>预计交付</th>
+            <th>风险</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>DD-20260711-001</td>
+            <td>HCA-122 防水涂料×20桶</td>
+            <td>河南郑州</td>
+            <td>郑州新郑专卖店</td>
+            <td><span class="badge blue">已发货</span></td>
+            <td>2天</td>
+            <td><span class="badge green">正常</span></td>
+          </tr>
+          <tr>
+            <td>DD-20260710-003</td>
+            <td>SBS卷材×50卷</td>
+            <td>山东临沂</td>
+            <td>临沂兰山专卖店</td>
+            <td><span class="badge teal">已到货</span></td>
+            <td>已交付</td>
+            <td><span class="badge green">正常</span></td>
+          </tr>
+          <tr>
+            <td>DD-20260709-007</td>
+            <td>瓷砖胶×30包</td>
+            <td>四川成都</td>
+            <td>成都龙泉驿专卖店</td>
+            <td><span class="badge orange">已下单</span></td>
+            <td><strong style="color:#cf1322">已超时2天</strong></td>
+            <td><span class="badge red">超时预警</span></td>
+          </tr>
+          <tr>
+            <td>DD-20260710-005</td>
+            <td>美缝剂×40支</td>
+            <td>湖南长沙</td>
+            <td>长沙雨花专卖店</td>
+            <td><span class="badge blue">已发货</span></td>
+            <td>1天</td>
+            <td><span class="badge green">正常</span></td>
+          </tr>
+          <tr>
+            <td>DD-20260708-012</td>
+            <td>JS防水涂料×15桶</td>
+            <td>陕西西安</td>
+            <td>西安雁塔专卖店</td>
+            <td><span class="badge orange">已下单</span></td>
+            <td><strong style="color:#cf1322">已超时1天</strong></td>
+            <td><span class="badge red">超时预警</span></td>
+          </tr>
+          <tr>
+            <td>DD-20260710-008</td>
+            <td>聚氨酯防水×10桶</td>
+            <td>江苏南京</td>
+            <td>南京江宁专卖店</td>
+            <td><span class="badge teal">已到货</span></td>
+            <td>已交付</td>
+            <td><span class="badge green">正常</span></td>
+          </tr>
+          <tr>
+            <td>DD-20260711-002</td>
+            <td>SBS卷材×30卷</td>
+            <td>浙江杭州</td>
+            <td>杭州余杭专卖店</td>
+            <td><span class="badge blue">已发货</span></td>
+            <td>3天</td>
+            <td><span class="badge green">正常</span></td>
+          </tr>
+          <tr>
+            <td>DD-20260710-010</td>
+            <td>防水涂料×25桶</td>
+            <td>湖北武汉</td>
+            <td>武汉光谷专卖店</td>
+            <td><span class="badge blue">已发货</span></td>
+            <td>2天</td>
+            <td><span class="badge green">正常</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:12px;font-size:12px;color:var(--muted);">
+        <strong>行业对比：</strong>传统模式紧急订单履约率不足60%，本方案通过智能分单+实时监控，目标将履约率提升至86%+。数据来源：数商云建材行业B2B报告。
+      </div>
+    </div>
+  </div>
+
+  <!-- 渠道拓展 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="icon" style="background: linear-gradient(135deg, #52c41a, #95de64);">📈</div>
+      <h2>渠道拓展管理 — 新网点开发档案</h2>
+    </div>
+    <div class="chart-card">
+      <h3>2026年Q3新网点开发进度</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>网点名称</th>
+            <th>区域</th>
+            <th>选址评分</th>
+            <th>月租金评估</th>
+            <th>开业进度</th>
+            <th>预计开业</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>郑州新郑专卖店</td>
+            <td>华中</td>
+            <td><span class="badge green">92分</span></td>
+            <td>75元/㎡</td>
+            <td><span class="badge teal">铺货中</span></td>
+            <td>7月20日</td>
+          </tr>
+          <tr>
+            <td>临沂兰山专卖店</td>
+            <td>华东</td>
+            <td><span class="badge green">88分</span></td>
+            <td>80元/㎡</td>
+            <td><span class="badge orange">装修中</span></td>
+            <td>7月28日</td>
+          </tr>
+          <tr>
+            <td>成都龙泉驿专卖店</td>
+            <td>西南</td>
+            <td><span class="badge green">85分</span></td>
+            <td>55元/㎡</td>
+            <td><span class="badge orange">装修中</span></td>
+            <td>8月5日</td>
+          </tr>
+          <tr>
+            <td>长沙雨花专卖店</td>
+            <td>华中</td>
+            <td><span class="badge orange">78分</span></td>
+            <td>65元/㎡</td>
+            <td><span class="badge blue">选址确认</span></td>
+            <td>8月15日</td>
+          </tr>
+          <tr>
+            <td>西安雁塔专卖店</td>
+            <td>西北</td>
+            <td><span class="badge orange">76分</span></td>
+            <td>50元/㎡</td>
+            <td><span class="badge blue">选址确认</span></td>
+            <td>8月20日</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:12px;font-size:12px;color:var(--muted);">
+        <strong>选址评分模型：</strong>租金成本(30%) + 客流密度(25%) + 竞品距离(20%) + 交通便利(15%) + 市场潜力(10%)。参考数据：建材市场租金60-120元/㎡（一线），三线40+元/㎡。数据来源：新浪财经建材市场报告。
+      </div>
+    </div>
+  </div>
+
+  <!-- 经营洞察 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="icon" style="background: linear-gradient(135deg, #722ed1, #9254de);">💡</div>
+      <h2>渠道经营洞察 — 区域排名与动销分析</h2>
+    </div>
+    <div class="chart-card">
+      <h3>7大区域销售额排名（2026年Q2）</h3>
+      <div class="chart-box" id="chartRegion"></div>
+    </div>
+    <div class="chart-card">
+      <h3>产品动销TOP5（全渠道）</h3>
+      <div class="chart-box" id="chartProducts"></div>
+    </div>
+  </div>
+
+  <!-- 命题三大目标映射 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="icon" style="background: linear-gradient(135deg, #E8392B, #ff7875);">🎯</div>
+      <h2>命题三大目标映射</h2>
+      <span class="desc">5大模块完全覆盖命题12项能力</span>
+    </div>
+    <div class="mapping-card">
+      <h3>东方雨虹命题 → 我们的模块覆盖</h3>
+      <div class="mapping-row">
+        <div class="mapping-target"><span class="num">1</span>渠道标准化管理体系</div>
+        <div class="mapping-modules">
+          <span class="mod" style="background:#e6f7ff;color:#0958d9;">门店巡检模块</span>
+          <span class="mod" style="background:#e6f7ff;color:#0958d9;">渠道管理中枢-标准化看板</span>
+          <br><small style="color:#666;">AI巡检 · 陈列审核 · 整改跟踪 · 全渠道合规率排名</small>
+        </div>
+      </div>
+      <div class="mapping-row">
+        <div class="mapping-target"><span class="num">2</span>AI导购赋能平台</div>
+        <div class="mapping-modules">
+          <span class="mod" style="background:#f6ffed;color:#389e0d;">AI导购模块</span>
+          <br><small style="color:#666;">产品知识学习 · 销售话术训练 · 智能测评 · 产品效果图自动生成</small>
+          <br><small style="color:#999;">话术训练：AI陪练提升49%培训时效，降低32%成本（中关村科金数据）</small>
+          <br><small style="color:#999;">效果图生成：AI 10秒生成3D效果图，完整出图不超过10分钟</small>
+        </div>
+      </div>
+      <div class="mapping-row">
+        <div class="mapping-target"><span class="num">3</span>智能经营分析与预警中枢</div>
+        <div class="mapping-modules">
+          <span class="mod" style="background:#fff7e6;color:#d46b08;">门店运营模块</span>
+          <span class="mod" style="background:#f9f0ff;color:#722ed1;">客户维护模块</span>
+          <span class="mod" style="background:#e6f7ff;color:#0958d9;">渠道管理中枢-分单/履约/洞察</span>
+          <br><small style="color:#666;">会员价值分层 · 流失风险预警 · 个性化营销推荐 · 智能分单 · 履约风险监控</small>
+          <br><small style="color:#999;">智能分单：传统紧急履约率不足60%，本方案目标86%+</small>
+          <br><small style="color:#999;">履约监控：经销商备货失误率35%，AI预警可降低至8%以下</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 六层架构 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="icon" style="background: linear-gradient(135deg, #1a1a2e, #4a5568);">🏗️</div>
+      <h2>六层架构（新增渠道层）</h2>
+    </div>
+    <div class="arch-box">
+      <div class="arch-layer arch-new">
+        <span class="layer-name">渠道层</span>
+        <span class="layer-desc">渠道管理中枢：标准化看板 / 拓展管理 / 分单监控 / 经营洞察</span>
+        <span class="tag-new">新增</span>
+      </div>
+      <div class="arch-layer" style="background: #f0f5ff;">
+        <span class="layer-name">应用层</span>
+        <span class="layer-desc">Flask Web + 妙搭低代码：仪表盘 / 巡检 / AI导购 / 渠道管理 / 3515大屏</span>
+      </div>
+      <div class="arch-layer" style="background: #f6ffed;">
+        <span class="layer-name">AI层</span>
+        <span class="layer-desc">aily智能体 + 多维表格AI字段：自然语言对话 / AI分析 / 客户标签 / 话术训练</span>
+      </div>
+      <div class="arch-layer" style="background: #fff7e6;">
+        <span class="layer-name">数据层</span>
+        <span class="layer-desc">飞书多维表格（轻量ERP）：门店 / 巡检 / 库存 / 客户 / 销售 / 渠道管理</span>
+      </div>
+      <div class="arch-layer" style="background: #f9f0ff;">
+        <span class="layer-name">接口层</span>
+        <span class="layer-desc">飞书开放平台API：Token / Aily / Bitable / 妙搭</span>
+      </div>
+      <div class="arch-layer" style="background: #f0f0f0;">
+        <span class="layer-name">基建层</span>
+        <span class="layer-desc">GitHub Pages + 飞书云（无需自建服务器）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 真实数据来源 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="icon" style="background: linear-gradient(135deg, #13c2c2, #36cfc9);">📚</div>
+      <h2>数据来源与引用</h2>
+    </div>
+    <div class="chart-card" style="font-size: 13px; color: #555; line-height: 2;">
+      <p><strong>东方雨虹渠道数据：</strong>29万+分销网点、4500+零售经销商、3000+品牌专卖店、10000+终端网点、虹哥汇300万+会员、2025年零售营收99.44亿元 — 来源：东方雨虹2025年报（新浪财经2026-04-21）</p>
+      <p><strong>建材行业供应链数据：</strong>传统交付周期7-10天、紧急订单履约率不足60%、经销商备货失误率35%、库存周转率3.8次/年 — 来源：数商云建材行业B2B报告</p>
+      <p><strong>AI话术训练数据：</strong>AI陪练减少60%资料整理时间、培训时效提升49%、成本降低32%、成单转化率提升19% — 来源：中关村科金得助智能</p>
+      <p><strong>AI效果图生成数据：</strong>AI 10秒生成3D效果图、完整出图不超过10分钟 — 来源：什么值得买2026年AI装修工具评测</p>
+      <p><strong>渠道拓展数据：</strong>建材市场租金60-120元/㎡（一线）、三线城市40+元/㎡、轻资产模式15天开业 — 来源：新浪财经建材市场报告</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== 合规率柱状图 =====
+var chart1 = echarts.init(document.getElementById('chartCompliance'));
+chart1.setOption({
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+  grid: { left: 80, right: 40, top: 30, bottom: 40 },
+  xAxis: {
+    type: 'value', max: 100,
+    axisLabel: { formatter: '{value}%', fontSize: 12 }
+  },
+  yAxis: {
+    type: 'category',
+    data: ['东北区', '华西区', '华北区', '西南区', '华南区', '华东区'],
+    axisLabel: { fontSize: 13 }
+  },
+  series: [{
+    type: 'bar',
+    data: [
+      { value: 82, itemStyle: { color: '#ff7875' } },
+      { value: 85, itemStyle: { color: '#ffa940' } },
+      { value: 88, itemStyle: { color: '#ffc53d' } },
+      { value: 90, itemStyle: { color: '#bae637' } },
+      { value: 92, itemStyle: { color: '#73d13d' } },
+      { value: 95, itemStyle: { color: '#52c41a' } }
+    ],
+    barWidth: 24,
+    label: { show: true, position: 'right', formatter: '{c}%', fontSize: 13, fontWeight: 'bold' }
+  }]
+});
+
+// ===== 门店类型合规率 =====
+var chart2 = echarts.init(document.getElementById('chartStoreType'));
+chart2.setOption({
+  tooltip: { trigger: 'axis' },
+  legend: { data: ['合规率', '整改完成率'], top: 5 },
+  grid: { left: 50, right: 40, top: 50, bottom: 40 },
+  xAxis: {
+    type: 'category',
+    data: ['品牌专卖店', '零售经销商', '终端网点'],
+    axisLabel: { fontSize: 13 }
+  },
+  yAxis: {
+    type: 'value', max: 100,
+    axisLabel: { formatter: '{value}%', fontSize: 12 }
+  },
+  series: [
+    {
+      name: '合规率', type: 'bar', barWidth: 30,
+      data: [94, 89, 83],
+      itemStyle: { color: '#1677FF', borderRadius: [6,6,0,0] },
+      label: { show: true, position: 'top', formatter: '{c}%', fontSize: 12 }
+    },
+    {
+      name: '整改完成率', type: 'bar', barWidth: 30,
+      data: [96, 91, 78],
+      itemStyle: { color: '#52c41a', borderRadius: [6,6,0,0] },
+      label: { show: true, position: 'top', formatter: '{c}%', fontSize: 12 }
+    }
+  ]
+});
+
+// ===== 区域销售排名 =====
+var chart3 = echarts.init(document.getElementById('chartRegion'));
+chart3.setOption({
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+  grid: { left: 80, right: 40, top: 30, bottom: 40 },
+  xAxis: {
+    type: 'value',
+    axisLabel: { formatter: '{value}万', fontSize: 12 }
+  },
+  yAxis: {
+    type: 'category',
+    data: ['西北区', '东北区', '华西区', '西南区', '华北区', '华南区', '华东区'],
+    axisLabel: { fontSize: 13 }
+  },
+  series: [{
+    type: 'bar',
+    data: [
+      { value: 380, itemStyle: { color: '#ffa940' } },
+      { value: 450, itemStyle: { color: '#ffc53d' } },
+      { value: 620, itemStyle: { color: '#bae637' } },
+      { value: 780, itemStyle: { color: '#73d13d' } },
+      { value: 950, itemStyle: { color: '#36cfc9' } },
+      { value: 1180, itemStyle: { color: '#4096ff' } },
+      { value: 1520, itemStyle: { color: '#1677FF' } }
+    ],
+    barWidth: 24,
+    label: { show: true, position: 'right', formatter: '{c}万', fontSize: 12, fontWeight: 'bold' }
+  }]
+});
+
+// ===== 产品动销TOP5 =====
+var chart4 = echarts.init(document.getElementById('chartProducts'));
+chart4.setOption({
+  tooltip: { trigger: 'item' },
+  legend: { orient: 'vertical', left: 'right', top: 'center', fontSize: 13 },
+  series: [{
+    type: 'pie',
+    radius: ['40%', '70%'],
+    center: ['40%', '50%'],
+    data: [
+      { value: 3280, name: 'HCA-122 墙面防水涂料', itemStyle: { color: '#1677FF' } },
+      { value: 2650, name: 'SBS 改性沥青卷材', itemStyle: { color: '#52c41a' } },
+      { value: 1980, name: 'JS 防水涂料', itemStyle: { color: '#fa8c16' } },
+      { value: 1520, name: '瓷砖胶', itemStyle: { color: '#722ed1' } },
+      { value: 860, name: '美缝剂', itemStyle: { color: '#13c2c2' } }
+    ],
+    label: { fontSize: 12, formatter: '{b}\n{d}%' }
+  }]
+});
+
+// ===== 响应式 =====
+window.addEventListener('resize', function() {
+  chart1.resize(); chart2.resize(); chart3.resize(); chart4.resize();
+});
+</script>
+
+</body>
+</html>
