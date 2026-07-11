@@ -826,12 +826,33 @@ function svApproveConfirm() {
   }, 600));
 }
 
+function showToast(msg) {
+  var existing = document.getElementById('svToast');
+  if (existing) existing.remove();
+  var t = document.createElement('div');
+  t.id = 'svToast';
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;left:50%;top:24px;transform:translateX(-50%) translateY(-8px);' +
+    'background:#1a1a2e;color:#fff;padding:12px 22px;border-radius:8px;font-size:14px;font-weight:600;' +
+    'z-index:9999;box-shadow:0 6px 20px rgba(0,0,0,.25);opacity:0;transition:opacity .3s ease,transform .3s ease;';
+  document.body.appendChild(t);
+  requestAnimationFrame(function () {
+    t.style.opacity = '1';
+    t.style.transform = 'translateX(-50%) translateY(6px)';
+  });
+  setTimeout(function () {
+    t.style.opacity = '0';
+    t.style.transform = 'translateX(-50%) translateY(-8px)';
+    setTimeout(function () { t.remove(); }, 300);
+  }, 3000);
+}
+
 function svReject() {
-  // no-op for demo
+  showToast('整改申请已退回');
 }
 
 function svContact() {
-  // no-op for demo
+  showToast('已通知店长查看预警');
 }
 
 // ===== Manager: show notification =====

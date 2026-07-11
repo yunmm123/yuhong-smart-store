@@ -396,8 +396,8 @@
     <div class="yh-tab active" data-tab="tab1"><span class="tab-num">1</span>首页仪表盘</div>
     <div class="yh-tab" data-tab="tab2"><span class="tab-num">2</span>门店巡检</div>
     <div class="yh-tab" data-tab="tab3"><span class="tab-num">3</span>AI导购</div>
-    <div class="yh-tab" data-tab="tab5"><span class="tab-num">5</span>渠道管理中枢</div>
     <div class="yh-tab" data-tab="tab4"><span class="tab-num">4</span>3515县域大屏</div>
+    <div class="yh-tab" data-tab="tab5"><span class="tab-num">5</span>渠道管理中枢</div>
   </div>
 
   <!-- ============ TAB 1: 首页仪表盘 ============ -->
@@ -675,7 +675,7 @@
         <div class="row g-2">
           <div class="col"><div class="kpi-box"><div class="kpi-value" data-target="507" data-decimals="0">0</div><div class="kpi-label">目标县城</div></div></div>
           <div class="col"><div class="kpi-box"><div class="kpi-value" data-target="50" data-decimals="0" data-suffix="亿+">0</div><div class="kpi-label">目标产值</div></div></div>
-          <div class="col"><div class="kpi-box"><div class="kpi-value" data-target="29" data-decimals="0" data-suffix="万+">0</div><div class="kpi-label">覆盖网点</div></div></div>
+          <div class="col"><div class="kpi-box"><div class="kpi-value" data-target="29" data-decimals="0" data-suffix="万+">0</div><div class="kpi-label">分销网点</div></div></div>
           <div class="col"><div class="kpi-box"><div class="kpi-value" data-target="8" data-decimals="0" data-suffix="亿">0</div><div class="kpi-label">县域人口</div></div></div>
           <div class="col"><div class="kpi-box"><div class="kpi-value" data-target="10" data-decimals="0" data-suffix="分钟">0</div><div class="kpi-label">AI赋能上手</div></div></div>
         </div>
@@ -700,7 +700,7 @@
             <div id="progressBoard"></div>
           </div>
           <div class="dark-card dark-card-glow">
-            <div class="section-title">6大区域网点热力分布</div>
+            <div class="section-title">7大区域分销网点热力分布</div>
             <div class="region-map" id="regionMap"></div>
           </div>
         </div>
@@ -1082,7 +1082,9 @@
     if (recs.length === 0) { box.innerHTML = '<div class="text-muted small">暂无该场景推荐产品</div>'; return; }
     box.innerHTML = `<div class="small text-muted mb-2">场景【${scene}】面积${area}㎡，AI为您推荐以下产品方案：</div>` +
       recs.map(p => {
-        const qty = Math.ceil(area * (usageMap[p.id]||1));
+        const totalKg = area * (usageMap[p.id]||1);
+        const qty = Math.ceil(totalKg / 20);
+        const totalKgDisplay = Math.round(totalKg * 10) / 10;
         return `<div class="recommend-card">
           <div class="d-flex justify-content-between align-items-center">
             <div>
@@ -1091,13 +1093,13 @@
             </div>
             <div class="text-end">
               <div style="color:#E8392B;font-weight:700;">¥${p.price}/${p.unit}</div>
-              <div class="small">建议用量：<b>${qty}</b> ${p.unit}</div>
+              <div class="small">建议用量：<b>约${totalKgDisplay}kg（${qty}桶）</b></div>
               <div class="small text-muted">小计：¥${(qty*p.price).toLocaleString()}</div>
             </div>
           </div>
         </div>`;
       }).join('') +
-      `<div class="small" style="color:#1677FF;font-weight:600;">预算合计：约 ¥${recs.reduce((s,p)=>s+Math.ceil(area*(usageMap[p.id]||1))*p.price,0).toLocaleString()}</div>`;
+      `<div class="small" style="color:#1677FF;font-weight:600;">预算合计：约 ¥${recs.reduce((s,p)=>{const tk=area*(usageMap[p.id]||1);return s+Math.ceil(tk/20)*p.price;},0).toLocaleString()}</div>`;
   });
 
   /* =========================================================

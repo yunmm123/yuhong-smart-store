@@ -7,7 +7,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/飞书AI-已部署验证-success" alt="Feishu AI">
   <img src="https://img.shields.io/badge/GitHub%20Pages-在线可访问-blue" alt="GitHub Pages">
-  <img src="https://img.shields.io/badge/tests-23%20passed-brightgreen" alt="Tests">
+  <img src="https://img.shields.io/badge/tests-37%20passed-brightgreen" alt="Tests">
   <img src="https://img.shields.io/badge/API-22%20endpoints-blue" alt="API">
   <img src="https://img.shields.io/badge/license-MIT-lightgrey" alt="License">
 </p>
@@ -17,7 +17,7 @@
   <a href="https://yunmm123.github.io/yuhong-smart-store/%E8%A1%A5%E5%85%85%E6%9D%90%E6%96%99/yuhong-onepager/yuhong-onepager.html"><strong>📄 一页纸摘要</strong></a> ·
   <a href="https://yunmm123.github.io/yuhong-smart-store/%E8%A1%A5%E5%85%85%E6%9D%90%E6%96%99/yuhong-pitch/yuhong-pitch.html"><strong>📊 路演PPT</strong></a> ·
   <a href="https://yunmm123.github.io/yuhong-smart-store/%E8%A1%A5%E5%85%85%E6%9D%90%E6%96%99/Demo%E4%BA%A4%E4%BA%92%E6%BC%94%E7%A4%BA.html"><strong>🖥️ 交互Demo</strong></a> ·
-  <a href="https://yunmm123.github.io/yuhong-smart-store/%E8%A1%A5%E5%85%85%E6%9D%90%E6%96%99/%E8%AF%84%E5%A7%94%E5%AF%BC%E8%A7%88.html"><strong>🗺️ 项目导览</strong></a>
+  <a href="https://yunmm123.github.io/yuhong-smart-store/补充材料/项目导览.html"><strong>🗺️ 项目导览</strong></a>
 </p>
 
 ---
@@ -33,7 +33,7 @@
 | 覆盖网点 | 3000+专卖店 / 10000+终端网点 |
 | 五大模块 | 门店巡检 / AI导购 / 门店运营 / 客户维护 / 渠道管理中枢 |
 | 飞书AI能力 | aily智能体 + 多维表格AI + 妙搭低代码 |
-| 命题覆盖 | 三大目标12项能力全覆盖 |
+| 目标覆盖 | 三大目标12项能力全覆盖 |
 | 落地成本 | 软件约50元/店/年(仅API)；TCO规模化约1,140元/店 |
 | 可运行Demo | 5页面 + 22个API + 37个测试 |
 
@@ -48,13 +48,13 @@
 | 可落地性分析 | [打开](补充材料/可落地性分析.html) |
 | ROI计算器 | [打开](补充材料/ROI计算器.html) |
 
-### 命题三大目标映射
+### 三大目标映射
 
-| 命题目标 | 模块覆盖 |
+| 项目目标 | 模块覆盖 |
 |---------|---------|
 | 目标1：渠道标准化管理体系 | 门店巡检 + 渠道管理中枢-标准化看板 |
 | 目标2：AI导购赋能平台 | AI导购（含话术训练/智能测评/效果图生成） |
-| 目标3：智能经营分析预警中枢 | 门店运营 + 客户维护 + 渠道管理中枢-分单/履约/洞察 |
+| 目标3：智能经营分析与预警中枢 | 门店运营 + 客户维护 + 渠道管理中枢-分单/履约/洞察 |
 
 ---
 
@@ -64,9 +64,9 @@
 
 ## 解决方案 · 飞书AI五大模块
 
-方案围绕命题三大目标（渠道标准化管理体系、AI导购赋能平台、智能经营分析与预警中枢）构建五大模块：
+方案围绕三大目标（渠道标准化管理体系、AI导购赋能平台、智能经营分析与预警中枢）构建五大模块：
 
-| 模块 | 飞书AI能力 | 核心功能 | 命题目标 |
+| 模块 | 飞书AI能力 | 核心功能 | 项目目标 |
 |------|-----------|----------|---------|
 | 🔍 门店巡检 | 妙搭低代码 | 拍照→AI图像分析→异常识别→自动评分+改进建议 | 目标1-渠道标准化管理 |
 | 🏛️ 渠道管理中枢 | 多维表格AI + aily | 渠道标准化看板/拓展管理/智能分单与履约监控/经营洞察 | 目标1+目标3 |
@@ -81,7 +81,7 @@
 | 能力 | 部署成果 | 验证页面 |
 |------|---------|----------|
 | ✅ aily智能体 | 3个测试对话全部通过（卫生间漏水/SBS用量/JS施工） | [查看验证](补充材料/飞书aily智能体部署验证.html) |
-| ✅ 多维表格AI | 5表39条记录 + 2个AI字段 + 7个公式 + 4个仪表盘图表 | [查看验证](补充材料/飞书多维表格部署验证.html) |
+| ✅ 多维表格AI | 6表39条记录 + 2个AI字段 + 7个公式 + 4个仪表盘图表 | [查看验证](补充材料/飞书多维表格部署验证.html) |
 | ✅ 妙搭低代码 | AI生成1343行代码/33文件，测试提交91分优秀，已上线 | [查看验证](补充材料/飞书妙搭巡检应用验证.html) |
 
 **飞书应用直链：**
@@ -113,7 +113,7 @@
 │          自然语言对话 / AI分析 / 客户标签      │
 ├─────────────────────────────────────────────┤
 │  数据层  飞书多维表格（轻量ERP）              │
-│          5表39条记录 / 门店/巡检/库存/客户/销售/渠道管理 │
+│          6表39条记录 / 门店/巡检/库存/客户/销售/渠道管理 │
 ├─────────────────────────────────────────────┤
 │  接口层  飞书开放平台API                      │
 │          Token / Aily / Bitable / 妙搭       │
@@ -169,7 +169,19 @@ yuhong-smart-store/
 │   ├── 用户故事地图.html
 │   ├── 项目甘特图与时间线.html
 │   ├── 研究笔记与调研记录.html
-│   └── 相关项目经验与技术能力说明.html
+│   ├── 相关项目经验与技术能力说明.html
+│   ├── API文档.html
+│   ├── ROI计算器.html
+│   ├── 渠道管理中枢.html
+│   ├── 门店一日场景模拟.html
+│   ├── 项目导览.html
+│   ├── 竞品实名深度对比.html
+│   ├── 飞书生态深度集成地图.html
+│   ├── 智能预警闭环演示.html
+│   ├── 门店分批落地路线图.html
+│   ├── 多角色协同演示.html
+│   ├── 数据飞轮机制.html
+│   └── 成本可信度分析.html
 ├── data/                         # 本地演示数据（mock模式使用）
 │   ├── products.json             # 8个核心产品数据
 │   ├── stores.json               # 门店信息
@@ -187,12 +199,12 @@ yuhong-smart-store/
 | 后端 | Python Flask | Web应用框架，22个API接口 |
 | 前端 | Bootstrap 5 + Chart.js | 响应式UI + 数据可视化 |
 | AI对话 | 飞书aily智能体 | 自然语言交互，产品推荐+施工指导 |
-| 数据存储 | 飞书多维表格 | 轻量ERP，云端5表39条记录+AI字段 |
+| 数据存储 | 飞书多维表格 | 轻量ERP，云端6表39条记录+AI字段 |
 | 低代码 | 飞书妙搭 | AI生成巡检应用，1343行代码 |
 | API | 飞书开放平台 | tenant_access_token + Bitable + Aily |
 | 部署 | GitHub Pages + 飞书云 | 无需自建服务器 |
 
-> **数据口径说明：** 飞书多维表格云端存储5表39条真实记录（含2个AI字段、7个公式字段）；本地 `data/` 目录仅存放mock演示数据（产品/门店/巡检记录），供无飞书凭证时Demo运行使用。
+> **数据口径说明：** 飞书多维表格云端存储6表39条真实记录（含2个AI字段、7个公式字段）；本地 `data/` 目录仅存放mock演示数据（产品/门店/巡检记录），供无飞书凭证时Demo运行使用。
 
 ## 快速开始
 
@@ -211,7 +223,7 @@ cd yuhong-smart-store
 python -m pytest tests/test_core.py -v
 ```
 
-覆盖23个测试用例，包括：巡检评分逻辑（优秀/合格/不合格边界）、产品搜索（关键词/分类/空结果）、客户画像（会员等级/流失风险/标签生成）。
+覆盖37个测试用例，包括：巡检评分逻辑（优秀/合格/不合格边界）、产品搜索（关键词/分类/空结果）、客户画像（会员等级/流失风险/标签生成）。
 
 ## 在线预览
 
@@ -244,6 +256,12 @@ python -m pytest tests/test_core.py -v
 | 📅 项目甘特图与时间线 | [打开](补充材料/项目甘特图与时间线.html) |
 | 🔬 研究笔记与调研记录 | [打开](补充材料/研究笔记与调研记录.html) |
 | 💻 项目经验与技术能力 | [打开](补充材料/相关项目经验与技术能力说明.html) |
+| 🗺️ 飞书生态深度集成地图 | [打开](https://yunmm123.github.io/yuhong-smart-store/补充材料/飞书生态深度集成地图.html) |
+| 🔔 智能预警闭环演示 | [打开](https://yunmm123.github.io/yuhong-smart-store/补充材料/智能预警闭环演示.html) |
+| 📅 门店分批落地路线图 | [打开](https://yunmm123.github.io/yuhong-smart-store/补充材料/门店分批落地路线图.html) |
+| 👥 多角色协同演示 | [打开](https://yunmm123.github.io/yuhong-smart-store/补充材料/多角色协同演示.html) |
+| 🔄 数据飞轮机制 | [打开](https://yunmm123.github.io/yuhong-smart-store/补充材料/数据飞轮机制.html) |
+| 💰 成本可信度分析 | [打开](https://yunmm123.github.io/yuhong-smart-store/补充材料/成本可信度分析.html) |
 
 ## 竞争优势
 
