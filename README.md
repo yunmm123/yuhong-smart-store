@@ -1,6 +1,6 @@
 # 雨虹渠道智慧运营助手
 
-> **2026 AI先锋未来人才大赛 · 东方雨虹企业命题**
+> **东方雨虹渠道智慧运营解决方案**
 > 基于**飞书AI**的建材渠道智慧运营一体化方案 — 让3000余家专卖店和10000余家终端网点**10分钟拥有AI能力**
 > 零硬件 · 零代码 · 低门槛启动 · 完整TCO透明
 
@@ -17,7 +17,7 @@
   <a href="https://yunmm123.github.io/yuhong-smart-store/%E8%A1%A5%E5%85%85%E6%9D%90%E6%96%99/yuhong-onepager/yuhong-onepager.html"><strong>📄 一页纸摘要</strong></a> ·
   <a href="https://yunmm123.github.io/yuhong-smart-store/%E8%A1%A5%E5%85%85%E6%9D%90%E6%96%99/yuhong-pitch/yuhong-pitch.html"><strong>📊 路演PPT</strong></a> ·
   <a href="https://yunmm123.github.io/yuhong-smart-store/%E8%A1%A5%E5%85%85%E6%9D%90%E6%96%99/Demo%E4%BA%A4%E4%BA%92%E6%BC%94%E7%A4%BA.html"><strong>🖥️ 交互Demo</strong></a> ·
-  <a href="https://yunmm123.github.io/yuhong-smart-store/%E8%A1%A5%E5%85%85%E6%9D%90%E6%96%99/%E8%AF%84%E5%A7%94%E5%AF%BC%E8%A7%88.html"><strong>🗺️ 评委导览</strong></a>
+  <a href="https://yunmm123.github.io/yuhong-smart-store/%E8%A1%A5%E5%85%85%E6%9D%90%E6%96%99/%E8%AF%84%E5%A7%94%E5%AF%BC%E8%A7%88.html"><strong>🗺️ 项目导览</strong></a>
 </p>
 
 ---
@@ -37,11 +37,11 @@
 | 落地成本 | 软件约50元/店/年(仅API)；TCO规模化约1,140元/店 |
 | 可运行Demo | 5页面 + 22个API + 37个测试 |
 
-### 评委快速链接
+### 快速链接
 
 | 材料 | 链接 |
 |------|------|
-| 评委导览（3分钟看懂） | [打开](补充材料/评委导览.html) |
+| 项目导览（3分钟看懂） | [打开](补充材料/项目导览.html) |
 | 一页纸摘要 | [打开](补充材料/yuhong-onepager/yuhong-onepager.html) |
 | 路演PPT（15页） | [打开](补充材料/yuhong-pitch/yuhong-pitch.html) |
 | 渠道管理中枢展示 | [打开](补充材料/渠道管理中枢.html) |
@@ -152,7 +152,7 @@ yuhong-smart-store/
 │   ├── 02_技术方案架构设计文档.md
 │   ├── 03_用户需求调研报告.md
 │   ├── 04_实施路线图与里程碑.md
-│   ├── 05_差异化竞争策略与12强攻略.md
+│   ├── 05_差异化竞争策略与落地攻略.md
 │   └── 06_飞书AI实操配置手册.md
 ├── 补充材料/                      # 线上验证材料
 │   ├── yuhong-onepager/          # 一页纸执行摘要
@@ -215,14 +215,14 @@ python -m pytest tests/test_core.py -v
 
 ## 在线预览
 
-所有材料已部署在 GitHub Pages，评委可直接点击访问：
+所有材料已部署在 GitHub Pages，可直接点击访问：
 
 > **https://yunmm123.github.io/yuhong-smart-store/**
 
 | 材料 | 链接 |
 |------|------|
-| 🗺️ 评委导览（3分钟看懂） | [打开](补充材料/评委导览.html) |
-| 📄 一页纸执行摘要（评委必看） | [打开](补充材料/yuhong-onepager/yuhong-onepager.html) |
+| 🗺️ 项目导览（3分钟看懂） | [打开](补充材料/项目导览.html) |
+| 📄 一页纸执行摘要（重点推荐） | [打开](补充材料/yuhong-onepager/yuhong-onepager.html) |
 | 📊 路演PPT（15页） | [打开](补充材料/yuhong-pitch/yuhong-pitch.html) |
 | 🏪 门店一日场景模拟 | [打开](补充材料/门店一日场景模拟.html) |
 | 📈 可落地性分析 | [打开](补充材料/可落地性分析.html) |
@@ -313,7 +313,7 @@ python -m pytest tests/test_core.py -v
 
 ## 团队
 
-**智虹先锋队** — 2026 AI先锋未来人才大赛 · 东方雨虹企业命题
+**项目团队** — 东方雨虹渠道智慧运营解决方案
 
 ---
 

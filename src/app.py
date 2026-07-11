@@ -254,7 +254,7 @@ def api_channel_store_ranking():
 if __name__ == '__main__':
     print("=" * 50)
     print("  雨虹渠道智慧运营助手")
-    print("  2026 AI先锋未来人才大赛 - 东方雨虹命题")
+    print("  东方雨虹渠道智慧运营解决方案")
     print("=" * 50)
     print(f"  运行模式: {'模拟数据Demo' if Config.USE_MOCK_DATA else '飞书API对接'}")
     print(f"  访问地址: http://localhost:5000")
