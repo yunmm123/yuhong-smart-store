@@ -11,6 +11,10 @@ import json
 
 from flask import Flask, render_template, jsonify, request
 
+# 加载.env文件
+from dotenv import load_dotenv
+load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '.env'))
+
 # 添加项目根目录到路径
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
