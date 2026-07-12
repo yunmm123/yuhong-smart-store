@@ -216,7 +216,7 @@ class TestChannelManagement:
         assert "rectification_tracking" in result
         assert "ai_insight" in result
         assert isinstance(result["region_ranking"], list)
-        assert len(result["region_ranking"]) == 6
+        assert len(result["region_ranking"]) == 7
 
     def test_compliance_dashboard_region_data(self):
         """各区域合规率数据应完整"""
