@@ -95,7 +95,7 @@ class StoreInspectionModule:
             "安全合规得分": scores.get("safety", 0),
             "总分": total_score,
             "巡检结果": level,
-            "是否通过": "通过" if passed else "不通过",
+            "是否通过": "通过" if passed else "未通过",
             "备注": notes,
             "照片附件": photos or []
         }

@@ -265,7 +265,7 @@ app.get('/api/stats', async (req, res) => {
     const total = records.length;
     const passed = records.filter(r => {
       const p = val(r.fields, '是否通过');
-      return p && p.includes('通过') && !p.includes('不');
+      return p && p.includes('通过') && !p.includes('不') && !p.includes('未');
     }).length;
     
     const avgScore = total > 0 
