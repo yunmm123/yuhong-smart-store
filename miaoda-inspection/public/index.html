@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>雨虹门店巡检</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #1677FF;
+            --primary-light: #E6F0FF;
+            --success: #52c41a;
+            --warning: #fa8c16;
+            --danger: #ff4d4f;
+            --bg: #F5F6FA;
+            --card: #FFFFFF;
+            --text: #1A1A2E;
+            --text-2: #6B7280;
+            --border: #E8E8E8;
+            --radius: 12px;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        /* 顶部导航 */
+        .header {
+            background: linear-gradient(135deg, #1677FF 0%, #0052D9 100%);
+            color: white;
+            padding: 44px 20px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(22,119,255,0.15);
+        }
+        .header-title { font-size: 18px; font-weight: 600; }
+        .header-sub { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+
+        /* Tab导航 */
+        .tabs {
+            display: flex;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 90px;
+            z-index: 90;
+        }
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-2);
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
+        }
+        .tab.active { color: var(--primary); }
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 32px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        /* 页面容器 */
+        .page { display: none; padding: 16px; }
+        .page.active { display: block; }
+
+        /* 卡片 */
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        /* 统计卡片 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .stat-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .stat-num { font-size: 28px; font-weight: 700; }
+        .stat-num.blue { color: var(--primary); }
+        .stat-num.green { color: var(--success); }
+        .stat-num.orange { color: var(--warning); }
+        .stat-num.red { color: var(--danger); }
+        .stat-label { font-size: 12px; color: var(--text-2); margin-top: 4px; }
+
+        /* 表单元素 */
+        .form-group { margin-bottom: 16px; }
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .form-label .required { color: var(--danger); }
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 15px;
+            background: var(--card);
+            transition: border-color 0.2s;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .form-textarea { min-height: 80px; resize: vertical; }
+
+        /* 评分项 */
+        .score-item {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .score-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .score-name { font-size: 15px; font-weight: 600; }
+        .score-max { font-size: 12px; color: var(--text-2); }
+        .score-value {
+            font-size: 20px;
+            font-weight: 700;
+            min-width: 50px;
+            text-align: right;
+        }
+        .score-value.high { color: var(--success); }
+        .score-value.mid { color: var(--warning); }
+        .score-value.low { color: var(--danger); }
+
+        /* 滑块 */
+        .slider-wrap { display: flex; align-items: center; gap: 12px; }
+        .slider {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border);
+            outline: none;
+        }
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(22,119,255,0.4);
+        }
+
+        /* 检查要点 */
+        .check-points {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+        .check-point {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-2);
+            padding: 3px 0;
+        }
+        .check-point::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--primary);
+            flex-shrink: 0;
+        }
+
+        /* 总分显示 */
+        .total-score-bar {
+            background: linear-gradient(135deg, #1677FF 0%, #0052D9 100%);
+            border-radius: var(--radius);
+            padding: 20px;
+            color: white;
+            text-align: center;
+            margin-bottom: 16px;
+            position: sticky;
+            top: 140px;
+            z-index: 80;
+        }
+        .total-score-num { font-size: 36px; font-weight: 800; }
+        .total-score-label { font-size: 13px; opacity: 0.9; }
+        .total-score-level {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 4px;
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* 按钮 */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn:active { opacity: 0.8; }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 1.5px solid var(--primary);
+        }
+
+        /* 历史记录 */
+        .history-item {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 14px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .history-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        .history-store { font-size: 15px; font-weight: 600; }
+        .history-time { font-size: 12px; color: var(--text-2); }
+        .history-score {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .history-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .badge-excellent { background: #E8F8E0; color: var(--success); }
+        .badge-pass { background: var(--primary-light); color: var(--primary); }
+        .badge-fail { background: #FFF0F0; color: var(--danger); }
+        .history-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: var(--text-2);
+            margin-top: 6px;
+        }
+
+        /* 维度雷达小条 */
+        .dim-bars { margin-top: 10px; }
+        .dim-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        .dim-bar-label { font-size: 11px; color: var(--text-2); width: 60px; flex-shrink: 0; }
+        .dim-bar-track {
+            flex: 1;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .dim-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.6s ease;
+        }
+
+        /* 加载状态 */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-2);
+            font-size: 14px;
+        }
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* 弹窗 */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 28px 24px;
+            max-width: 340px;
+            width: 90%;
+            text-align: center;
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+        .modal-icon.success { background: #E8F8E0; }
+        .modal-icon.fail { background: #FFF0F0; }
+        .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+        .modal-desc { font-size: 14px; color: var(--text-2); margin-bottom: 16px; }
+        .modal-score {
+            font-size: 36px;
+            font-weight: 800;
+            margin: 8px 0;
+        }
+
+        /* 空状态 */
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-2);
+        }
+        .empty-icon { font-size: 48px; margin-bottom: 12px; }
+        .empty-text { font-size: 14px; }
+
+        /* 底部提交栏 */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            padding: 12px 16px;
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+        }
+        .bottom-bar .btn { flex: 1; }
+    </style>
+</head>
+<body>
+    <!-- 顶部 -->
+    <div class="header">
+        <div class="header-title">东方雨虹门店巡检</div>
+        <div class="header-sub">标准化巡检 - AI赋能 - 实时同步</div>
+    </div>
+
+    <!-- Tab导航 -->
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('inspect')">巡检填报</div>
+        <div class="tab" onclick="switchTab('history')">巡检历史</div>
+        <div class="tab" onclick="switchTab('stats')">统计看板</div>
+    </div>
+
+    <!-- 巡检填报页 -->
+    <div class="page active" id="page-inspect">
+        <!-- 基本信息 -->
+        <div class="card">
+            <div class="form-group">
+                <label class="form-label">选择门店 <span class="required">*</span></label>
+                <select class="form-select" id="storeSelect" onchange="onStoreChange()">
+                    <option value="">请选择门店...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">巡检人 <span class="required">*</span></label>
+                <input class="form-input" id="inspector" placeholder="请输入您的姓名" maxlength="20">
+            </div>
+        </div>
+
+        <!-- 总分条 -->
+        <div class="total-score-bar">
+            <div class="total-score-num" id="totalScore">0</div>
+            <div class="total-score-label">总分 / 100分</div>
+            <div class="total-score-level" id="scoreLevel">待评分</div>
+        </div>
+
+        <!-- 评分项容器 -->
+        <div id="scoreItems"></div>
+
+        <!-- 备注 -->
+        <div class="card">
+            <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">巡检备注</label>
+                <textarea class="form-textarea" id="notes" placeholder="问题描述、整改建议等..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- 巡检历史页 -->
+    <div class="page" id="page-history">
+        <div class="card" style="padding: 12px;">
+            <select class="form-select" id="historyStoreFilter" onchange="loadHistory()">
+                <option value="">全部门店</option>
+            </select>
+        </div>
+        <div id="historyList">
+            <div class="loading"><div class="spinner"></div>加载中...</div>
+        </div>
+    </div>
+
+    <!-- 统计看板页 -->
+    <div class="page" id="page-stats">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-num blue" id="statTotal">-</div>
+                <div class="stat-label">巡检总数</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num green" id="statPass">-</div>
+                <div class="stat-label">通过率</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num orange" id="statAvg">-</div>
+                <div class="stat-label">平均分</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num red" id="statFail">-</div>
+                <div class="stat-label">不合格数</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="form-label" style="margin-bottom:12px">各维度平均分</div>
+            <div id="dimBars"></div>
+        </div>
+    </div>
+
+    <!-- 底部提交按钮 -->
+    <div class="bottom-bar" id="bottomBar">
+        <button class="btn btn-outline" onclick="resetForm()">重置</button>
+        <button class="btn btn-primary" onclick="submitInspection()">提交巡检</button>
+    </div>
+
+    <!-- 提交成功弹窗 -->
+    <div class="modal-overlay" id="resultModal">
+        <div class="modal">
+            <div class="modal-icon" id="modalIcon"></div>
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-score" id="modalScore"></div>
+            <div class="modal-desc" id="modalDesc"></div>
+            <div style="display:flex;gap:10px">
+                <button class="btn btn-outline" onclick="closeModal()" style="flex:1">关闭</button>
+                <button class="btn btn-primary" onclick="closeModal();switchTab('history')" style="flex:1">查看记录</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== 全局状态 =====
+        var stores = [];
+        var template = null;
+        var scores = {};
+
+        // ===== API调用 =====
+        async function api(path, options) {
+            var resp = await fetch(path, options);
+            return resp.json();
+        }
+
+        // ===== 初始化 =====
+        async function init() {
+            try {
+                // 并行加载模板和门店列表
+                var [tmplResp, storesResp] = await Promise.all([
+                    api('/api/template'),
+                    api('/api/stores')
+                ]);
+
+                if (tmplResp.items) {
+                    template = tmplResp;
+                    renderScoreItems(tmplResp.items);
+                }
+
+                if (storesResp.ok) {
+                    stores = storesResp.data;
+                    renderStoreOptions(stores);
+                }
+            } catch (e) {
+                console.error('初始化失败:', e);
+            }
+        }
+
+        // ===== 渲染门店下拉 =====
+        function renderStoreOptions(storeList) {
+            var html = '<option value="">请选择门店...</option>';
+            storeList.forEach(function(s) {
+                html += '<option value="' + s.storeId + '" data-name="' + s.storeName + '" data-region="' + (s.region||'') + '">'
+                    + s.storeName + ' (' + s.storeId + ')</option>';
+            });
+            document.getElementById('storeSelect').innerHTML = html;
+
+            // 历史页筛选也填充
+            document.getElementById('historyStoreFilter').innerHTML = html;
+        }
+
+        // ===== 渲染评分项 =====
+        function renderScoreItems(items) {
+            var html = '';
+            items.forEach(function(item) {
+                scores[item.id] = 0;
+                html += '<div class="score-item">'
+                    + '<div class="score-header">'
+                    +     '<div><span class="score-name">' + item.name + '</span> <span class="score-max">/' + item.maxScore + '分</span></div>'
+                    +     '<div class="score-value" id="val-' + item.id + '">0</div>'
+                    + '</div>'
+                    + '<div class="slider-wrap">'
+                    +     '<input type="range" class="slider" min="0" max="' + item.maxScore + '" value="0"'
+                    +         ' oninput="onScoreChange(\'' + item.id + '\', this.value)">'
+                    + '</div>'
+                    + '<div class="check-points">';
+                item.checkPoints.forEach(function(cp) {
+                    html += '<div class="check-point">' + cp + '</div>';
+                });
+                html += '</div></div>';
+            });
+            document.getElementById('scoreItems').innerHTML = html;
+        }
+
+        // ===== 评分变化 =====
+        function onScoreChange(itemId, value) {
+            scores[itemId] = parseInt(value);
+            var valEl = document.getElementById('val-' + itemId);
+            valEl.textContent = value;
+
+            // 颜色分级
+            var item = template.items.find(function(i) { return i.id === itemId; });
+            var ratio = value / item.maxScore;
+            valEl.className = 'score-value';
+            if (ratio >= 0.85) valEl.classList.add('high');
+            else if (ratio >= 0.6) valEl.classList.add('mid');
+            else valEl.classList.add('low');
+
+            updateTotalScore();
+        }
+
+        // ===== 更新总分 =====
+        function updateTotalScore() {
+            var total = Object.values(scores).reduce(function(a, b) { return a + b; }, 0);
+            document.getElementById('totalScore').textContent = total;
+
+            var levelEl = document.getElementById('scoreLevel');
+            if (total >= 90) {
+                levelEl.textContent = '优秀';
+                levelEl.style.background = 'rgba(82,196,26,0.3)';
+            } else if (total >= 80) {
+                levelEl.textContent = '合格';
+                levelEl.style.background = 'rgba(255,255,255,0.2)';
+            } else {
+                levelEl.textContent = '不合格';
+                levelEl.style.background = 'rgba(255,77,79,0.3)';
+            }
+        }
+
+        // ===== 门店选择变化 =====
+        function onStoreChange() {
+            // 可添加门店详情展示
+        }
+
+        // ===== 提交巡检 =====
+        async function submitInspection() {
+            var storeSelect = document.getElementById('storeSelect');
+            var storeId = storeSelect.value;
+            var inspector = document.getElementById('inspector').value.trim();
+            var notes = document.getElementById('notes').value.trim();
+
+            if (!storeId) { alert('请选择门店'); return; }
+            if (!inspector) { alert('请输入巡检人姓名'); return; }
+
+            var selectedOption = storeSelect.options[storeSelect.selectedIndex];
+            var storeName = selectedOption.dataset.name || '';
+            var region = selectedOption.dataset.region || '';
+
+            var totalScore = Object.values(scores).reduce(function(a, b) { return a + b; }, 0);
+
+            try {
+                var resp = await api('/api/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        storeId: storeId,
+                        storeName: storeName,
+                        region: region,
+                        inspector: inspector,
+                        scores: scores,
+                        notes: notes
+                    })
+                });
+
+                if (resp.ok) {
+                    showResultModal(resp.data);
+                    resetForm();
+                } else {
+                    alert('提交失败: ' + (resp.error || '未知错误'));
+                }
+            } catch (e) {
+                alert('提交失败: ' + e.message);
+            }
+        }
+
+        // ===== 结果弹窗 =====
+        function showResultModal(data) {
+            var modal = document.getElementById('resultModal');
+            var icon = document.getElementById('modalIcon');
+            var title = document.getElementById('modalTitle');
+            var score = document.getElementById('modalScore');
+            var desc = document.getElementById('modalDesc');
+
+            if (data.passed) {
+                icon.className = 'modal-icon success';
+                icon.textContent = data.level === '优秀' ? '\u2705' : '\u2705';
+                title.textContent = data.level === '优秀' ? '巡检优秀' : '巡检通过';
+                score.textContent = data.totalScore + '分';
+                score.style.color = '#52c41a';
+                desc.textContent = '巡检记录已同步至飞书多维表格';
+            } else {
+                icon.className = 'modal-icon fail';
+                icon.textContent = '\u26A0\uFE0F';
+                title.textContent = '巡检不合格';
+                score.textContent = data.totalScore + '分';
+                score.style.color = '#ff4d4f';
+                desc.textContent = '请根据检查要点进行整改';
+            }
+
+            modal.classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('resultModal').classList.remove('show');
+        }
+
+        // ===== 重置表单 =====
+        function resetForm() {
+            document.getElementById('storeSelect').value = '';
+            document.getElementById('inspector').value = '';
+            document.getElementById('notes').value = '';
+            // 重置所有滑块
+            template.items.forEach(function(item) {
+                scores[item.id] = 0;
+                var slider = document.querySelector('input[oninput*="' + item.id + '"]');
+                if (slider) slider.value = 0;
+                var valEl = document.getElementById('val-' + item.id);
+                if (valEl) { valEl.textContent = '0'; valEl.className = 'score-value'; }
+            });
+            updateTotalScore();
+        }
+
+        // ===== 加载历史 =====
+        async function loadHistory() {
+            var container = document.getElementById('historyList');
+            container.innerHTML = '<div class="loading"><div class="spinner"></div>加载中...</div>';
+
+            var storeId = document.getElementById('historyStoreFilter').value;
+            var url = '/api/history?limit=50';
+            if (storeId) url += '&storeId=' + encodeURIComponent(storeId);
+
+            try {
+                var resp = await api(url);
+                if (resp.ok && resp.data.length > 0) {
+                    renderHistory(resp.data);
+                } else {
+                    container.innerHTML = '<div class="empty"><div class="empty-icon">\uD83D\uDCCB</div><div class="empty-text">暂无巡检记录</div></div>';
+                }
+            } catch (e) {
+                container.innerHTML = '<div class="empty"><div class="empty-icon">\u26A0\uFE0F</div><div class="empty-text">加载失败</div></div>';
+            }
+        }
+
+        function renderHistory(records) {
+            var html = '';
+            records.forEach(function(r) {
+                var score = r.totalScore || 0;
+                var level = r.result || (score >= 90 ? '优秀' : score >= 80 ? '合格' : '不合格');
+                var badgeClass = level.includes('优秀') ? 'badge-excellent' : level.includes('合格')||level.includes('通过') ? 'badge-pass' : 'badge-fail';
+
+                // 格式化时间
+                var timeStr = r.inspectTime;
+                if (typeof timeStr === 'number') {
+                    var d = new Date(timeStr);
+                    timeStr = (d.getMonth()+1) + '/' + d.getDate() + ' ' + d.getHours() + ':' + String(d.getMinutes()).padStart(2,'0');
+                } else if (typeof timeStr === 'string') {
+                    timeStr = timeStr.substring(5, 16).replace('T', ' ');
+                }
+
+                html += '<div class="history-item">'
+                    + '<div class="history-top">'
+                    +     '<div><div class="history-store">' + (r.storeName||r.storeId) + '</div>'
+                    +         '<div class="history-time">' + (r.inspector||'') + ' - ' + timeStr + '</div></div>'
+                    +     '<div style="text-align:right"><div class="history-score">' + score + '</div>'
+                    +         '<span class="history-badge ' + badgeClass + '">' + level + '</span></div>'
+                    + '</div>'
+                    + '<div class="history-meta">'
+                    +     '<span>陈列:' + (r.scores.display||0) + '</span>'
+                    +     '<span>卫生:' + (r.scores.cleanliness||0) + '</span>'
+                    +     '<span>价签:' + (r.scores.pricing||0) + '</span>'
+                    +     '<span>库存:' + (r.scores.inventory||0) + '</span>'
+                    +     '<span>服务:' + (r.scores.service||0) + '</span>'
+                    +     '<span>安全:' + (r.scores.safety||0) + '</span>'
+                    + '</div>';
+                if (r.notes) {
+                    html += '<div style="margin-top:6px;font-size:12px;color:#6B7280;background:#F5F6FA;padding:6px 8px;border-radius:6px">' + r.notes + '</div>';
+                }
+                html += '</div>';
+            });
+            document.getElementById('historyList').innerHTML = html;
+        }
+
+        // ===== 加载统计 =====
+        async function loadStats() {
+            try {
+                var resp = await api('/api/stats');
+                if (resp.ok) {
+                    var d = resp.data;
+                    document.getElementById('statTotal').textContent = d.total;
+                    document.getElementById('statPass').textContent = d.passRate + '%';
+                    document.getElementById('statAvg').textContent = d.avgScore;
+                    document.getElementById('statFail').textContent = d.failed;
+                    renderDimBars(d.dimensionAvg);
+                }
+            } catch (e) {
+                console.error('加载统计失败:', e);
+            }
+        }
+
+        function renderDimBars(dimAvg) {
+            var dims = [
+                {key: '陈列标准', max: 20, color: '#1677FF'},
+                {key: '卫生状况', max: 15, color: '#52c41a'},
+                {key: '价签物料', max: 15, color: '#fa8c16'},
+                {key: '库存样品', max: 20, color: '#722ED1'},
+                {key: '服务规范', max: 15, color: '#13C2C2'},
+                {key: '安全合规', max: 15, color: '#EB2F96'}
+            ];
+            var html = '';
+            dims.forEach(function(dim) {
+                var val = dimAvg[dim.key] || 0;
+                var pct = (val / dim.max * 100).toFixed(0);
+                html += '<div class="dim-bar-row">'
+                    + '<div class="dim-bar-label">' + dim.key + '</div>'
+                    + '<div class="dim-bar-track"><div class="dim-bar-fill" style="width:' + pct + '%;background:' + dim.color + '"></div></div>'
+                    + '<div style="font-size:11px;font-weight:600;width:35px;text-align:right">' + val + '/' + dim.max + '</div>'
+                    + '</div>';
+            });
+            document.getElementById('dimBars').innerHTML = html;
+        }
+
+        // ===== Tab切换 =====
+        function switchTab(name) {
+            document.querySelectorAll('.tab').forEach(function(t, i) {
+                t.classList.toggle('active', i === ['inspect','history','stats'].indexOf(name));
+            });
+            document.querySelectorAll('.page').forEach(function(p) {
+                p.classList.remove('active');
+            });
+            document.getElementById('page-' + name).classList.add('active');
+
+            // 底部栏只在巡检页显示
+            document.getElementById('bottomBar').style.display = name === 'inspect' ? 'flex' : 'none';
+
+            // 按需加载数据
+            if (name === 'history') loadHistory();
+            if (name === 'stats') loadStats();
+        }
+
+        // ===== 启动 =====
+        init();
+    </script>
+</body>
+</html>
