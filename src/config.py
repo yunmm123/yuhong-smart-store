@@ -25,9 +25,12 @@ class Config:
     BITABLE_INSPECTION_TABLE_ID = os.environ.get('BITABLE_INSPECTION_TABLE_ID', '')  # 巡检记录表
     BITABLE_CUSTOMER_TABLE_ID = os.environ.get('BITABLE_CUSTOMER_TABLE_ID', '')      # 客户表
     BITABLE_SALES_TABLE_ID = os.environ.get('BITABLE_SALES_TABLE_ID', '')            # 销售数据表
+    BITABLE_PRODUCT_TABLE_ID = os.environ.get('BITABLE_PRODUCT_TABLE_ID', '')        # 产品库存表
 
     # aily智能体配置（从 https://aily.feishu.cn 获取）
     AILY_APP_ID = os.environ.get('AILY_APP_ID', '')
+    AILY_APP_SECRET = os.environ.get('AILY_APP_SECRET', '')
+    AILY_AGENT_ID = os.environ.get('AILY_AGENT_ID', '')
 
     # 飞书API基础URL
     FEISHU_BASE_URL = 'https://open.feishu.cn/open-apis'

@@ -41,11 +41,14 @@ if not Config.USE_MOCK_DATA:
     from api.feishu_bitable import FeishuBitableClient
     from api.feishu_aily import FeishuAilyClient
     bitable_client = FeishuBitableClient(Config.FEISHU_APP_ID, Config.FEISHU_APP_SECRET, Config.BITABLE_APP_TOKEN)
-    if Config.AILY_APP_ID:
-        aily_client = FeishuAilyClient(Config.FEISHU_APP_ID, Config.FEISHU_APP_SECRET, Config.AILY_APP_ID)
+    if Config.AILY_APP_ID and Config.AILY_APP_SECRET:
+        aily_client = FeishuAilyClient(Config.AILY_APP_ID, Config.AILY_APP_SECRET, Config.AILY_APP_ID)
+        print("[INFO] aily智能体客户端已初始化")
+    else:
+        print("[INFO] 未配置aily凭证，AI对话功能将使用本地模式")
 
 # 初始化业务模块
-inspection_module = StoreInspectionModule(bitable_client, Config)
+inspection_module = StoreInspectionModule(bitable_client, Config, aily_client)
 guide_module = AIShoppingGuideModule(aily_client, bitable_client, Config)
 operation_module = StoreOperationModule(bitable_client, Config)
 customer_module = CustomerRelationModule(aily_client, bitable_client, Config)

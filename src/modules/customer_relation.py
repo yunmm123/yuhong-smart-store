@@ -11,6 +11,66 @@ import random
 from datetime import datetime, timedelta
 
 
+def _val(fields, key, default=""):
+    """通用值提取：兼容文本/数字/单选/公式等Bitable字段，单值取首个文本"""
+    v = fields.get(key, default)
+    if isinstance(v, list) and v:
+        return v[0].get("text", v[0]) if isinstance(v[0], dict) else v[0]
+    return v
+
+
+def _val_multi(fields, key):
+    """多选字段提取：返回所有文本组成的列表"""
+    v = fields.get(key, [])
+    if isinstance(v, list):
+        return [item.get("text", item) if isinstance(item, dict) else item for item in v]
+    return [v] if v else []
+
+
+def _date_to_str(v):
+    """将Bitable日期字段(毫秒时间戳)或字符串转换为%Y-%m-%d字符串"""
+    if isinstance(v, list) and v:
+        v = v[0].get("text", v[0]) if isinstance(v[0], dict) else v[0]
+    if isinstance(v, (int, float)) and v > 1000000000:
+        return datetime.fromtimestamp(v / 1000).strftime("%Y-%m-%d")
+    if not v:
+        return ""
+    return str(v)[:10]
+
+
+def _to_number(v, default=0):
+    """确保返回数字类型（兼容字符串数字）"""
+    if isinstance(v, bool):
+        return default
+    if isinstance(v, (int, float)):
+        return v
+    if isinstance(v, str):
+        try:
+            return float(v) if "." in v else int(v)
+        except ValueError:
+            return default
+    return default
+
+
+# 客户字段别名映射（兼容Bitable中文键与API英文键）
+_CUSTOMER_FIELD_ALIASES = {
+    "id": ["id", "customer_id", "客户编号"],
+    "name": ["name", "客户姓名"],
+    "phone": ["phone", "手机号"],
+    "customer_type": ["customer_type", "客户类型"],
+    "registration_date": ["registration_date", "注册日期"],
+    "total_purchase": ["total_purchase", "累计消费元", "lifetime_value"],
+    "purchase_count": ["purchase_count", "购买次数", "purchase_frequency"],
+    "last_purchase_date": ["last_purchase_date", "最近购买日期"],
+    "preferred_category": ["preferred_category", "偏好品类"],
+    "preferred_channel": ["preferred_channel", "偏好渠道"],
+    "needs": ["needs", "需求标签"],
+    "member_level": ["member_level", "会员等级"],
+    "churn_risk": ["churn_risk", "流失风险"],
+    "ai_tags": ["ai_tags", "AI客户标签"],
+}
+
+
 class CustomerRelationModule:
     """私域客户维护模块"""
 
@@ -19,24 +79,90 @@ class CustomerRelationModule:
         self.bitable = bitable_client
         self.config = config
 
+    def get_customers_from_bitable(self):
+        """从飞书多维表格客户表读取所有客户记录，返回标准化字典列表"""
+        if not (self.bitable and self.config and not self.config.USE_MOCK_DATA):
+            return []
+
+        try:
+            records = self.bitable.list_records(
+                self.config.BITABLE_CUSTOMER_TABLE_ID,
+                page_size=100
+            )
+        except Exception:
+            return []
+
+        customers = []
+        for r in records or []:
+            f = r.get("fields", {})
+            # 需求标签为多选字段，合并为字符串
+            needs_list = _val_multi(f, "需求标签")
+            customers.append({
+                "id": _val(f, "客户编号"),
+                "name": _val(f, "客户姓名"),
+                "phone": _val(f, "手机号"),
+                "customer_type": _val(f, "客户类型"),
+                "registration_date": _date_to_str(f.get("注册日期", "")),
+                "total_purchase": _to_number(_val(f, "累计消费元", 0)),
+                "purchase_count": _to_number(_val(f, "购买次数", 0)),
+                "last_purchase_date": _date_to_str(f.get("最近购买日期", "")),
+                "preferred_category": _val(f, "偏好品类"),
+                "preferred_channel": _val(f, "偏好渠道"),
+                "needs": "、".join(str(x) for x in needs_list if x),
+                "member_level": _val(f, "会员等级"),
+                "churn_risk": _val(f, "流失风险"),
+                "ai_tags": _val(f, "AI客户标签"),
+            })
+        return customers
+
     def build_customer_profile(self, customer_data):
-        """构建客户画像"""
+        """构建客户画像（兼容Bitable格式与API格式输入）"""
+        # 统一字段名映射，兼容Bitable中文键与API英文键
+        data = self._normalize_customer_data(customer_data)
+
+        # 会员等级：优先使用多维表格公式字段返回值，否则按累计消费计算
+        member_level = data.get("member_level") or self._calculate_member_level(
+            _to_number(data.get("total_purchase", 0)))
+        # 流失风险：优先使用多维表格公式字段返回值，否则按最近购买日期计算
+        churn_risk = data.get("churn_risk") or self._calculate_churn_risk(data)
+
         profile = {
-            "customer_id": customer_data.get("id", ""),
-            "name": customer_data.get("name", ""),
-            "phone": customer_data.get("phone", ""),
-            "registration_date": customer_data.get("registration_date", ""),
-            "tags": self._generate_tags(customer_data),
-            "lifetime_value": customer_data.get("total_purchase", 0),
-            "purchase_frequency": customer_data.get("purchase_count", 0),
-            "last_purchase_date": customer_data.get("last_purchase_date", ""),
-            "preferred_category": customer_data.get("preferred_category", "防水涂料"),
-            "preferred_channel": customer_data.get("preferred_channel", "门店"),
-            "member_level": self._calculate_member_level(customer_data.get("total_purchase", 0)),
-            "churn_risk": self._calculate_churn_risk(customer_data),
-            "next_purchase_prediction": self._predict_next_purchase(customer_data),
+            "customer_id": data.get("id", ""),
+            "name": data.get("name", ""),
+            "phone": data.get("phone", ""),
+            "registration_date": data.get("registration_date", ""),
+            "tags": self._generate_tags(data),
+            "lifetime_value": _to_number(data.get("total_purchase", 0)),
+            "purchase_frequency": _to_number(data.get("purchase_count", 0)),
+            "last_purchase_date": data.get("last_purchase_date", ""),
+            "preferred_category": data.get("preferred_category", "防水涂料"),
+            "preferred_channel": data.get("preferred_channel", "门店"),
+            "member_level": member_level,
+            "churn_risk": churn_risk,
+            "next_purchase_prediction": self._predict_next_purchase(data),
         }
         return profile
+
+    def _normalize_customer_data(self, customer_data):
+        """将Bitable格式或API格式的客户数据统一为标准字段名"""
+        if not isinstance(customer_data, dict):
+            return {}
+        normalized = {}
+        for canonical, aliases in _CUSTOMER_FIELD_ALIASES.items():
+            for alias in aliases:
+                if alias in customer_data:
+                    raw = customer_data[alias]
+                    # 兼容原始Bitable记录中可能存在的list值
+                    if isinstance(raw, list) and raw:
+                        raw = raw[0].get("text", raw[0]) if isinstance(raw[0], dict) else raw[0]
+                    if raw not in (None, "", []):
+                        normalized[canonical] = raw
+                        break
+        # 保留原始数据中未映射的字段
+        for k, v in customer_data.items():
+            if k not in normalized:
+                normalized.setdefault(k, v)
+        return normalized
 
     def _generate_tags(self, data):
         """自动生成客户标签"""
@@ -84,7 +210,9 @@ class CustomerRelationModule:
             return "高"
 
         try:
-            last_date = datetime.strptime(last_purchase, "%Y-%m-%d")
+            last_date = self._to_date(last_purchase)
+            if not last_date:
+                return "未知"
             days_since = (datetime.now() - last_date).days
 
             if days_since > 180:
@@ -97,21 +225,73 @@ class CustomerRelationModule:
             return "未知"
 
     def _predict_next_purchase(self, data):
-        """预测下次购买时间"""
-        count = data.get("purchase_count", 0)
-        if count < 2:
+        """基于购买次数和最近购买日期预测下次购买时间（非随机）"""
+        try:
+            count = int(_to_number(data.get("purchase_count", 0)))
+        except Exception:
+            count = 0
+        # 购买次数不足3次，样本不足以预测
+        if count < 3:
             return "数据不足"
 
-        # 模拟预测
-        days_ahead = random.randint(30, 90)
-        predicted_date = datetime.now() + timedelta(days=days_ahead)
-        return predicted_date.strftime("%Y-%m-%d")
+        last_date = self._to_date(data.get("last_purchase_date", ""))
+        if not last_date:
+            return "数据不足"
+
+        # 优先用注册日期推算平均购买间隔
+        reg_date = self._to_date(data.get("registration_date", ""))
+        if reg_date:
+            span_days = (last_date - reg_date).days
+            if count > 1 and span_days > 0:
+                avg_interval = span_days / (count - 1)
+                next_date = last_date + timedelta(days=avg_interval)
+                return self._future_date_str(next_date)
+
+        # 无注册日期时，根据购买频次估算复购间隔
+        if count >= 10:
+            interval = 30
+        elif count >= 5:
+            interval = 45
+        else:
+            interval = 60
+        next_date = last_date + timedelta(days=interval)
+        return self._future_date_str(next_date)
+
+    def _to_date(self, value):
+        """将日期字符串或毫秒时间戳转换为datetime，失败返回None"""
+        if not value:
+            return None
+        if isinstance(value, (int, float)) and value > 1000000000:
+            return datetime.fromtimestamp(value / 1000)
+        try:
+            return datetime.strptime(str(value)[:10], "%Y-%m-%d")
+        except Exception:
+            return None
+
+    def _future_date_str(self, next_date):
+        """若预测日期已过去，则从今天起算，返回%Y-%m-%d字符串"""
+        if next_date < datetime.now():
+            next_date = datetime.now() + timedelta(days=30)
+        return next_date.strftime("%Y-%m-%d")
 
     def generate_followup_script(self, customer_profile, scenario="repurchase"):
         """
         生成AI跟进话术
-        实际对接飞书aily，Demo模式使用模板生成
+        优先调用飞书aily生成个性化话术，aily不可用或失败时降级到模板生成
         """
+        # 优先调用飞书aily生成个性化话术
+        if self.aily:
+            try:
+                result = self.aily.chat(
+                    f"请为以下客户生成{scenario}场景的跟进话术："
+                    f"{json.dumps(customer_profile, ensure_ascii=False)}"
+                )
+                if result and result.get("reply"):
+                    return result["reply"]
+            except Exception:
+                pass  # 降级到模板生成
+
+        # 模板生成（fallback）
         name = customer_profile.get("name", "客户")
         level = customer_profile.get("member_level", "普通会员")
         preferred = customer_profile.get("preferred_category", "防水材料")

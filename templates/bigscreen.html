@@ -423,6 +423,130 @@
     </div>
 
     <script>
+        // ===== 全局数据（默认值，API返回后覆盖）=====
+        var counties = [
+            {name: "河南新郑市", sales: 86.5, growth: 35, ai: true, rank: 1},
+            {name: "山东沂南县", sales: 78.2, growth: 28, ai: true, rank: 2},
+            {name: "四川广安市", sales: 72.8, growth: 22, ai: true, rank: 3},
+            {name: "湖南邵东市", sales: 65.3, growth: 18, ai: true, rank: 4},
+            {name: "河北正定县", sales: 58.7, growth: 15, ai: false, rank: 5},
+            {name: "安徽肥东县", sales: 52.1, growth: 12, ai: false, rank: 6},
+            {name: "江苏邳州市", sales: 48.6, growth: 10, ai: true, rank: 7},
+            {name: "浙江安吉县", sales: 45.2, growth: 8, ai: false, rank: 8},
+            {name: "湖北仙桃市", sales: 41.8, growth: 6, ai: false, rank: 9},
+            {name: "江西丰城市", sales: 38.5, growth: 4, ai: false, rank: 10}
+        ];
+
+        var regions = [
+            { name: '华东', cities: 128, points: '8.2万', density: 1.0 },
+            { name: '华北', cities: 92,  points: '4.8万', density: 0.72 },
+            { name: '华南', cities: 85,  points: '5.2万', density: 0.66 },
+            { name: '西南', cities: 89,  points: '3.8万', density: 0.62 },
+            { name: '华西', cities: 65,  points: '4.2万', density: 0.51 },
+            { name: '东北', cities: 48,  points: '2.8万', density: 0.37 }
+        ];
+
+        var inventoryData = [45, 25, 15, 15];
+        var salesTrendLabels = ['1月','2月','3月','4月','5月','6月'];
+        var salesTrendAI = [120, 145, 180, 220, 268, 320];
+        var salesTrendTrad = [100, 98, 102, 95, 92, 88];
+        var aiInsights = [
+            "[县域机会识别]\n河南新郑县本月销售额环比增长35%，但库存周转天数高达45天（行业平均28天）。\n\n[AI建议]\n1. 该县瓷砖胶库存积压，建议启动\"买防水送瓷砖胶\"组合促销\n2. SBS卷材库存预警，建议立即补货80卷\n3. 该县工长复购率仅12%，建议启用aily智能体自动跟进",
+            "[督导效率分析]\n华北区域128家县域门店中，AI巡检覆盖率已达95%，但仍有6家门店连续3个月未巡检。\n\n[AI建议]\n1. 对6家未巡检门店自动生成督办任务\n2. 建议采用飞书妙搭移动巡检，店长自拍上传即可\n3. 对巡检得分低于80分的门店启动整改流程",
+            "[客户洞察]\n山东沂南县工长\"虹哥汇\"注册数达342人，但活跃率仅28%。\n\n[AI建议]\n1. 启用aily智能体对沉默工长自动发送个性化跟进消息\n2. 推送\"雨虹施工方案知识库\"提升工长专业能力\n3. 设置复购优惠券，预计可提升活跃率至45%"
+        ];
+
+        // ===== 从后端API加载真实数据 =====
+        async function loadBigScreenData() {
+            try {
+                // 并行请求多个API
+                var [rankingResp, insightResp, inventoryResp, complianceResp] = await Promise.allSettled([
+                    fetch('/api/channel/store-ranking?dimension=sales').then(r => r.json()),
+                    fetch('/api/channel/insight').then(r => r.json()),
+                    fetch('/api/operation/inventory/BJ-001').then(r => r.json()),
+                    fetch('/api/channel/compliance-dashboard').then(r => r.json())
+                ]);
+
+                // 1. 门店排名 -> 县域排行
+                if (rankingResp.status === 'fulfilled' && rankingResp.value.success) {
+                    var ranking = rankingResp.value.data.ranking || [];
+                    if (ranking.length > 0) {
+                        counties = ranking.slice(0, 10).map(function(s, i) {
+                            return {
+                                name: s.store_name || s.store_id || ('门店' + (i+1)),
+                                sales: s.sales_万元 || 0,
+                                growth: s.growth || 0,
+                                ai: s.sales_万元 > 100,
+                                rank: s.rank || (i + 1)
+                            };
+                        });
+                        renderCountyList();
+                    }
+                }
+
+                // 2. 渠道洞察 -> 区域分布 + 销售趋势
+                if (insightResp.status === 'fulfilled' && insightResp.value.success) {
+                    var insight = insightResp.value.data;
+                    // 区域排名
+                    if (insight.region_ranking && insight.region_ranking.length > 0) {
+                        var maxSales = Math.max.apply(null, insight.region_ranking.map(function(r) { return r.sales_万元 || 0; }));
+                        regions = insight.region_ranking.map(function(r) {
+                            return {
+                                name: r.region || '未知',
+                                cities: r.store_count || 0,
+                                points: (r.sales_万元 || 0).toFixed(0) + '万',
+                                density: maxSales > 0 ? (r.sales_万元 || 0) / maxSales : 0.3
+                            };
+                        });
+                        renderRegionMap();
+                    }
+                    // 销售趋势
+                    if (insight.trend_analysis) {
+                        var ta = insight.trend_analysis;
+                        if (ta.labels && ta.labels.length > 0) {
+                            salesTrendLabels = ta.labels;
+                            salesTrendAI = ta.ai_store_sales || ta.total_sales || [];
+                            salesTrendTrad = ta.traditional_store_sales || [];
+                            renderSalesTrendChart();
+                        }
+                    }
+                    // AI洞察文本
+                    if (insight.ai_insight) {
+                        aiInsights[0] = insight.ai_insight;
+                    }
+                }
+
+                // 3. 库存数据 -> 库存饼图
+                if (inventoryResp.status === 'fulfilled' && inventoryResp.value.success) {
+                    var inv = inventoryResp.value.data;
+                    if (inv.products && inv.products.length > 0) {
+                        var statusCount = { '正常': 0, '预警': 0, '紧急': 0, '积压': 0 };
+                        inv.products.forEach(function(p) {
+                            var st = p.status || '正常';
+                            if (statusCount.hasOwnProperty(st)) statusCount[st]++;
+                        });
+                        inventoryData = [statusCount['正常'], statusCount['预警'], statusCount['紧急'], statusCount['积压']];
+                        renderInventoryChart();
+                    }
+                }
+
+                // 4. 合规看板 -> 更新进度看板
+                if (complianceResp.status === 'fulfilled' && complianceResp.value.success) {
+                    var comp = complianceResp.value.data;
+                    if (comp.national_compliance_rate !== undefined) {
+                        var rateEl = document.querySelector('.progress-bar-fill[style*="95%"]');
+                        if (rateEl) {
+                            rateEl.style.width = comp.national_compliance_rate + '%';
+                        }
+                    }
+                }
+
+                console.log('[大屏] 数据加载完成');
+            } catch (e) {
+                console.warn('[大屏] 部分数据加载失败，使用默认数据:', e);
+            }
+        }
+
         // ===== CountUp Animation =====
         function countUp(el, target, duration, decimals, prefix, suffix) {
             var startTime = performance.now();
@@ -441,13 +565,11 @@
             requestAnimationFrame(update);
         }
 
-        // Trigger CountUp on load
         document.querySelectorAll('[data-target]').forEach(function(el) {
             var target = parseFloat(el.dataset.target);
             var decimals = parseInt(el.dataset.decimals || '0');
             var suffix = el.dataset.suffix || '';
             var prefix = el.dataset.prefix || '';
-            // Delay slightly for visual effect
             setTimeout(function() {
                 countUp(el, target, 2000, decimals, prefix, suffix);
             }, 200);
@@ -466,107 +588,94 @@
         updateClock();
         setInterval(updateClock, 1000);
 
-        // ===== County Ranking =====
-        var counties = [
-            {name: "河南新郑市", sales: 86.5, growth: 35, ai: true, rank: 1},
-            {name: "山东沂南县", sales: 78.2, growth: 28, ai: true, rank: 2},
-            {name: "四川广安市", sales: 72.8, growth: 22, ai: true, rank: 3},
-            {name: "湖南邵东市", sales: 65.3, growth: 18, ai: true, rank: 4},
-            {name: "河北正定县", sales: 58.7, growth: 15, ai: false, rank: 5},
-            {name: "安徽肥东县", sales: 52.1, growth: 12, ai: false, rank: 6},
-            {name: "江苏邳州市", sales: 48.6, growth: 10, ai: true, rank: 7},
-            {name: "浙江安吉县", sales: 45.2, growth: 8, ai: false, rank: 8},
-            {name: "湖北仙桃市", sales: 41.8, growth: 6, ai: false, rank: 9},
-            {name: "江西丰城市", sales: 38.5, growth: 4, ai: false, rank: 10}
-        ];
-
-        var countyHTML = '';
-        counties.forEach(function(c) {
-            var aiBadge = c.ai ? '<span class="badge bg-info ms-1" style="font-size:10px;">AI</span>' : '';
-            countyHTML += '<div class="county-card">' +
-                '<div class="d-flex justify-content-between align-items-center">' +
-                    '<div><span class="county-name">' + c.rank + '. ' + c.name + '</span>' + aiBadge + '</div>' +
-                    '<div style="color:' + (c.growth > 15 ? '#52c41a' : '#fa8c16') + '; font-size:13px; font-weight:600;">' + (c.growth > 0 ? '↑ ' : '') + c.growth + '%</div>' +
-                '</div>' +
-                '<div class="county-stat"><span>月销售额: ¥' + c.sales + '万</span><span>' + (c.ai ? '已AI赋能' : '待AI赋能') + '</span></div>' +
-            '</div>';
-        });
-        document.getElementById('countyList').innerHTML = countyHTML;
-
-        // ===== Regional Map (CSS blocks) =====
-        var regions = [
-            { name: '华东', cities: 128, points: '8.2万', density: 1.0 },
-            { name: '华北', cities: 92,  points: '4.8万', density: 0.72 },
-            { name: '华南', cities: 85,  points: '5.2万', density: 0.66 },
-            { name: '西南', cities: 89,  points: '3.8万', density: 0.62 },
-            { name: '华西', cities: 65,  points: '4.2万', density: 0.51 },
-            { name: '东北', cities: 48,  points: '2.8万', density: 0.37 }
-        ];
-
-        var regionHTML = '';
-        regions.forEach(function(r) {
-            regionHTML += '<div class="region-block" style="--density:' + r.density + ';" title="' + r.name + '：' + r.cities + '城 / ' + r.points + '网点">' +
-                '<div class="region-bg"></div>' +
-                '<div class="region-content">' +
-                    '<div class="region-name">' + r.name + '</div>' +
-                    '<div class="region-count">' + r.cities + '<small>城</small></div>' +
-                    '<div class="region-label">' + r.points + ' 网点</div>' +
-                    '<div class="region-density-bar"><div class="region-density-fill" style="width:0%;"></div></div>' +
-                '</div>' +
-            '</div>';
-        });
-        document.getElementById('regionMap').innerHTML = regionHTML;
-
-        // Animate density bars after render
-        setTimeout(function() {
-            var fills = document.querySelectorAll('.region-density-fill');
-            fills.forEach(function(fill, i) {
-                fill.style.width = (regions[i].density * 100) + '%';
+        // ===== County Ranking Render =====
+        function renderCountyList() {
+            var countyHTML = '';
+            counties.forEach(function(c) {
+                var aiBadge = c.ai ? '<span class="badge bg-info ms-1" style="font-size:10px;">AI</span>' : '';
+                countyHTML += '<div class="county-card">' +
+                    '<div class="d-flex justify-content-between align-items-center">' +
+                        '<div><span class="county-name">' + c.rank + '. ' + c.name + '</span>' + aiBadge + '</div>' +
+                        '<div style="color:' + (c.growth > 15 ? '#52c41a' : '#fa8c16') + '; font-size:13px; font-weight:600;">' + (c.growth > 0 ? '↑ ' : '') + c.growth + '%</div>' +
+                    '</div>' +
+                    '<div class="county-stat"><span>月销售额: ¥' + c.sales + '万</span><span>' + (c.ai ? '已AI赋能' : '待AI赋能') + '</span></div>' +
+                '</div>';
             });
-        }, 500);
+            document.getElementById('countyList').innerHTML = countyHTML;
+        }
+        renderCountyList();
+
+        // ===== Regional Map Render =====
+        function renderRegionMap() {
+            var regionHTML = '';
+            regions.forEach(function(r) {
+                regionHTML += '<div class="region-block" style="--density:' + r.density + ';" title="' + r.name + '：' + r.cities + '城 / ' + r.points + '网点">' +
+                    '<div class="region-bg"></div>' +
+                    '<div class="region-content">' +
+                        '<div class="region-name">' + r.name + '</div>' +
+                        '<div class="region-count">' + r.cities + '<small>城</small></div>' +
+                        '<div class="region-label">' + r.points + ' 网点</div>' +
+                        '<div class="region-density-bar"><div class="region-density-fill" style="width:0%;"></div></div>' +
+                    '</div>' +
+                '</div>';
+            });
+            document.getElementById('regionMap').innerHTML = regionHTML;
+            setTimeout(function() {
+                var fills = document.querySelectorAll('.region-density-fill');
+                fills.forEach(function(fill, i) {
+                    fill.style.width = (regions[i].density * 100) + '%';
+                });
+            }, 500);
+        }
+        renderRegionMap();
 
         // ===== Charts =====
-        new Chart(document.getElementById('inventoryChart'), {
-            type: 'doughnut',
-            data: {
-                labels: ['正常', '预警', '紧急', '积压'],
-                datasets: [{
-                    data: [45, 25, 15, 15],
-                    backgroundColor: ['#52c41a', '#fa8c16', '#ff4d4f', '#1677FF'],
-                    borderWidth: 0
-                }]
-            },
-            options: { plugins: { legend: { position: 'bottom', labels: { color: '#e0e6ed', font: { size: 11 } } } } }
-        });
+        var inventoryChart = null;
+        function renderInventoryChart() {
+            if (inventoryChart) inventoryChart.destroy();
+            inventoryChart = new Chart(document.getElementById('inventoryChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['正常', '预警', '紧急', '积压'],
+                    datasets: [{
+                        data: inventoryData,
+                        backgroundColor: ['#52c41a', '#fa8c16', '#ff4d4f', '#1677FF'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { plugins: { legend: { position: 'bottom', labels: { color: '#e0e6ed', font: { size: 11 } } } } }
+            });
+        }
+        renderInventoryChart();
 
-        new Chart(document.getElementById('salesTrendChart'), {
-            type: 'line',
-            data: {
-                labels: ['1月','2月','3月','4月','5月','6月'],
-                datasets: [
-                    { label: 'AI赋能门店', data: [120, 145, 180, 220, 268, 320], borderColor: '#00d4ff', backgroundColor: 'rgba(0,212,255,0.1)', fill: true, tension: 0.3 },
-                    { label: '未赋能门店', data: [100, 98, 102, 95, 92, 88], borderColor: 'rgba(255,255,255,0.3)', borderDash: [5,5], fill: false, tension: 0.3 }
-                ]
-            },
-            options: {
-                plugins: { legend: { labels: { color: '#e0e6ed', font: { size: 11 } } } },
-                scales: {
-                    x: { ticks: { color: 'rgba(255,255,255,0.4)' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-                    y: { ticks: { color: 'rgba(255,255,255,0.4)' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+        var salesTrendChart = null;
+        function renderSalesTrendChart() {
+            if (salesTrendChart) salesTrendChart.destroy();
+            salesTrendChart = new Chart(document.getElementById('salesTrendChart'), {
+                type: 'line',
+                data: {
+                    labels: salesTrendLabels,
+                    datasets: [
+                        { label: 'AI赋能门店', data: salesTrendAI, borderColor: '#00d4ff', backgroundColor: 'rgba(0,212,255,0.1)', fill: true, tension: 0.3 },
+                        { label: '未赋能门店', data: salesTrendTrad, borderColor: 'rgba(255,255,255,0.3)', borderDash: [5,5], fill: false, tension: 0.3 }
+                    ]
+                },
+                options: {
+                    plugins: { legend: { labels: { color: '#e0e6ed', font: { size: 11 } } } },
+                    scales: {
+                        x: { ticks: { color: 'rgba(255,255,255,0.4)' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { ticks: { color: 'rgba(255,255,255,0.4)' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                    }
                 }
-            }
-        });
+            });
+        }
+        renderSalesTrendChart();
 
         // ===== AI Insights =====
-        var insights = [
-            "[县域机会识别]\n河南新郑县本月销售额环比增长35%，但库存周转天数高达45天（行业平均28天）。\n\n[AI建议]\n1. 该县瓷砖胶库存积压，建议启动"买防水送瓷砖胶"组合促销\n2. SBS卷材库存预警，建议立即补货80卷\n3. 该县工长复购率仅12%，建议启用aily智能体自动跟进",
-            "[督导效率分析]\n华北区域128家县域门店中，AI巡检覆盖率已达95%，但仍有6家门店连续3个月未巡检。\n\n[AI建议]\n1. 对6家未巡检门店自动生成督办任务\n2. 建议采用飞书妙搭移动巡检，店长自拍上传即可\n3. 对巡检得分低于80分的门店启动整改流程",
-            "[客户洞察]\n山东沂南县工长"虹哥汇"注册数达342人，但活跃率仅28%。\n\n[AI建议]\n1. 启用aily智能体对沉默工长自动发送个性化跟进消息\n2. 推送"雨虹施工方案知识库"提升工长专业能力\n3. 设置复购优惠券，预计可提升活跃率至45%"
-        ];
         var insightIndex = 0;
         function refreshInsight() {
-            insightIndex = (insightIndex + 1) % insights.length;
-            document.getElementById('aiInsight').textContent = insights[insightIndex];
+            insightIndex = (insightIndex + 1) % aiInsights.length;
+            document.getElementById('aiInsight').textContent = aiInsights[insightIndex];
         }
 
         // ===== Real-time Data Stream =====
@@ -607,18 +716,20 @@
                 '</div>' +
                 '<span class="stream-time">' + getTimeStr() + '</span>';
             container.insertBefore(item, container.firstChild);
-            // Keep max 7 items
             while (container.children.length > 7) {
                 container.removeChild(container.lastChild);
             }
         }
 
-        // Initialize with a few messages
         for (var i = 0; i < 4; i++) {
             addStreamMessage();
         }
-        // Add new message every 3.5 seconds
         setInterval(addStreamMessage, 3500);
+
+        // ===== 启动：加载后端API数据 =====
+        loadBigScreenData();
+        // 每60秒刷新一次数据
+        setInterval(loadBigScreenData, 60000);
     </script>
 </body>
 </html>

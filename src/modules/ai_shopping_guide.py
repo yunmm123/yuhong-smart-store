@@ -21,16 +21,75 @@ class AIShoppingGuideModule:
         )
 
     def _load_products(self):
-        """加载产品知识库"""
+        """加载产品知识库（本地JSON：施工步骤、注意事项等详细数据）"""
         try:
             with open(self.mock_products_path, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except FileNotFoundError:
             return []
 
+    @staticmethod
+    def _val(fields, key, default=""):
+        """通用字段值提取：兼容文本/数字/单选/多选/日期/公式等Bitable字段类型"""
+        v = fields.get(key, default)
+        if isinstance(v, list) and v:
+            return v[0].get("text", v[0]) if isinstance(v[0], dict) else v[0]
+        return v
+
+    def _load_stock_from_bitable(self):
+        """
+        从飞书多维表格「产品库存表」读取实时库存数据。
+        返回以「产品编号」为key的库存信息字典，读取失败时返回空字典（降级到仅本地JSON）。
+        """
+        if not self.bitable or not self.config or self.config.USE_MOCK_DATA:
+            return {}
+
+        try:
+            table_id = self.config.BITABLE_PRODUCT_TABLE_ID
+            if not table_id:
+                print("[WARN] 未配置 BITABLE_PRODUCT_TABLE_ID，跳过实时库存读取")
+                return {}
+
+            records = self.bitable.list_records(table_id)
+            stock_map = {}
+            for record in records:
+                fields = record.get("fields", {})
+                product_code = self._val(fields, "产品编号")
+                if not product_code:
+                    continue
+                stock_map[product_code] = {
+                    "当前库存": self._val(fields, "当前库存", 0),
+                    "安全库存": self._val(fields, "安全库存", 0),
+                    "周转天数": self._val(fields, "周转天数", 0),
+                    "单价元": self._val(fields, "单价元", 0),
+                    "库存状态": self._val(fields, "库存状态", ""),
+                    "库存金额": self._val(fields, "库存金额", 0),
+                }
+            print(f"[INFO] 从Bitable读取到 {len(stock_map)} 条产品库存数据")
+            return stock_map
+        except Exception as e:
+            print(f"[WARN] 读取Bitable库存数据失败，降级使用本地JSON数据: {e}")
+            return {}
+
+    def _merge_stock_info(self, product, stock_map):
+        """将Bitable实时库存信息合并到产品字典中"""
+        if not stock_map:
+            return product
+        stock_info = stock_map.get(product.get("id"))
+        if stock_info:
+            product["current_stock"] = stock_info.get("当前库存", 0)
+            product["stock_status"] = stock_info.get("库存状态", "")
+            product["stock_info"] = stock_info
+        return product
+
     def search_products(self, keyword=None, category=None, application=None):
-        """搜索产品"""
+        """搜索产品（合并Bitable实时库存信息）"""
         products = self._load_products()
+        # 尝试从Bitable合并实时库存信息（失败时降级为仅本地数据）
+        stock_map = self._load_stock_from_bitable()
+        for p in products:
+            self._merge_stock_info(p, stock_map)
+
         results = products
 
         if keyword:
@@ -43,10 +102,13 @@ class AIShoppingGuideModule:
         return results
 
     def get_product_detail(self, product_id):
-        """获取产品详情"""
+        """获取产品详情（合并Bitable实时库存信息）"""
         products = self._load_products()
+        # 尝试从Bitable合并实时库存信息（失败时降级为仅本地数据）
+        stock_map = self._load_stock_from_bitable()
         for p in products:
             if p.get("id") == product_id:
+                self._merge_stock_info(p, stock_map)
                 return p
         return None
 

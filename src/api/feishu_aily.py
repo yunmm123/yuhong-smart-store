@@ -8,6 +8,8 @@
 
 import requests
 import json
+import time
+from datetime import datetime
 
 
 class FeishuAilyClient:
@@ -21,7 +23,7 @@ class FeishuAilyClient:
         self.access_token = None
 
     def _get_tenant_access_token(self):
-        """获取租户访问令牌"""
+        """获取租户访问令牌（使用aily应用自身的凭证）"""
         url = f"{self.base_url}/auth/v3/tenant_access_token/internal"
         payload = {
             "app_id": self.app_id,
@@ -31,12 +33,13 @@ class FeishuAilyClient:
         data = resp.json()
         if data.get("code") == 0:
             self.access_token = data["tenant_access_token"]
+            self._token_expire = datetime.now().timestamp() + data.get("expire", 7200) - 300
             return self.access_token
         else:
-            raise Exception(f"获取token失败: {data}")
+            raise Exception(f"获取aily token失败: {data}")
 
     def _get_headers(self):
-        if not self.access_token:
+        if not self.access_token or datetime.now().timestamp() > getattr(self, '_token_expire', 0):
             self._get_tenant_access_token()
         return {
             "Authorization": f"Bearer {self.access_token}",
@@ -89,23 +92,42 @@ class FeishuAilyClient:
         else:
             raise Exception(f"获取消息失败: {data}")
 
+    def _extract_content(self, msg):
+        """从aily消息中提取文本内容"""
+        content = msg.get("content", "")
+        if isinstance(content, str):
+            try:
+                parsed = json.loads(content)
+                if isinstance(parsed, dict):
+                    return parsed.get("content", content)
+            except (json.JSONDecodeError, TypeError):
+                pass
+        return content
+
     def chat(self, message, session_id=None, user_id=None):
         """
-        便捷对话方法：创建会话（如需要）+ 发送消息 + 返回回复
+        便捷对话方法：创建会话（如需要）+ 发送消息 + 轮询等待aily回复
         """
         if not session_id:
             session_id = self.create_session(user_id)
 
         self.send_message(session_id, message)
-        messages = self.list_messages(session_id)
 
-        # 获取最后一条aily回复
-        for msg in reversed(messages):
-            if msg.get("sender_type") == "aily":
-                return {
-                    "session_id": session_id,
-                    "reply": msg.get("content", ""),
-                    "raw": msg
-                }
+        # aily回复是异步生成的，需要轮询获取
+        for attempt in range(15):
+            time.sleep(1.5)
+            try:
+                messages = self.list_messages(session_id)
+                for msg in reversed(messages):
+                    if msg.get("sender_type") == "aily":
+                        reply = self._extract_content(msg)
+                        if reply:
+                            return {
+                                "session_id": session_id,
+                                "reply": reply,
+                                "raw": msg
+                            }
+            except Exception:
+                continue
 
-        return {"session_id": session_id, "reply": "", "raw": messages}
+        return {"session_id": session_id, "reply": "抱歉，我正在思考中，请稍后再试...", "raw": None}

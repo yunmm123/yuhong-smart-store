@@ -7,6 +7,7 @@
 
 import json
 import os
+import re
 from datetime import datetime, timedelta
 import random
 
@@ -55,9 +56,10 @@ INSPECTION_ITEMS = [
 class StoreInspectionModule:
     """门店巡检模块"""
 
-    def __init__(self, bitable_client=None, config=None):
+    def __init__(self, bitable_client=None, config=None, aily_client=None):
         self.bitable = bitable_client
         self.config = config
+        self.aily = aily_client
         self.mock_data_path = os.path.join(
             os.path.dirname(__file__), '..', '..', 'data', 'inspection_records.json'
         )
@@ -108,9 +110,75 @@ class StoreInspectionModule:
 
     def ai_detect_display_compliance(self, image_description):
         """
-        AI图像识别检测陈列合规性（模拟）
-        实际对接：调用飞书集成平台AI节点或外部CV模型
+        AI图像识别检测陈列合规性。
+        优先通过飞书aily智能体分析图片描述，未配置aily或调用失败时降级为模拟检测。
         """
+        # 优先使用aily智能体分析
+        if self.aily and self.config and not self.config.USE_MOCK_DATA:
+            try:
+                result = self.aily.chat(
+                    f"请分析以下门店陈列描述，评估货架利用率、价签覆盖率、卫生状况，并指出问题：{image_description}"
+                )
+                reply = result.get("reply", "")
+                # 尝试从aily回复中提取结构化信息，同时保留原始分析文本
+                detections = self._parse_aily_detection(reply, image_description)
+                print("[INFO] aily陈列合规性检测完成")
+                return detections
+            except Exception as e:
+                print(f"[WARN] aily分析失败，降级使用模拟检测: {e}")
+
+        # 降级：使用模拟AI检测
+        return self._mock_detect_display_compliance()
+
+    def _parse_aily_detection(self, reply, image_description):
+        """
+        解析aily智能体回复，提取结构化检测结果。
+        尝试从文本中匹配百分比/小数数值；无法提取的字段保留为None。
+        返回格式与模拟检测保持一致，额外附带aily原始分析文本。
+        """
+        def _extract_ratio(keywords):
+            """从回复中提取与关键词关联的比率值（0~1）"""
+            for kw in keywords:
+                # 匹配 "关键词...85%" 或 "关键词...0.85" 等模式
+                pattern = kw + r'[^\d]*?(\d+\.?\d*)\s*%'
+                m = re.search(pattern, reply)
+                if m:
+                    return round(float(m.group(1)) / 100, 2)
+                pattern2 = kw + r'[^\d]*?(0\.\d+)'
+                m = re.search(pattern2, reply)
+                if m:
+                    return round(float(m.group(1)), 2)
+            return None
+
+        shelf_utilization = _extract_ratio(["货架利用率", "利用率"])
+        price_tag_coverage = _extract_ratio(["价签覆盖率", "覆盖率"])
+        cleanliness_score = _extract_ratio(["卫生", "清洁"])
+
+        # 根据提取到的数值推断合规状态
+        issues = []
+        if shelf_utilization is not None and shelf_utilization < 0.8:
+            issues.append("部分货架利用率偏低，建议补充样品")
+        if price_tag_coverage is not None and price_tag_coverage < 0.9:
+            issues.append(f"约{int((1-price_tag_coverage)*100)}%的商品缺少价签")
+        if cleanliness_score is not None and cleanliness_score < 0.85:
+            issues.append("部分展架存在积灰，需及时清洁")
+
+        overall = "合规" if len(issues) == 0 else "需整改"
+
+        return {
+            "product_categories": [],
+            "shelf_utilization": shelf_utilization,
+            "price_tag_coverage": price_tag_coverage,
+            "cleanliness_score": cleanliness_score,
+            "issues_detected": issues,
+            "overall_compliance": overall,
+            "ai_suggestion": reply,
+            "aily_analysis": reply,
+            "source": "feishu_aily"
+        }
+
+    def _mock_detect_display_compliance(self):
+        """模拟AI检测结果（Demo模式 / aily不可用时的fallback）"""
         # 模拟AI检测结果
         detections = {
             "product_categories": ["防水涂料", "瓷砖胶", "密封胶", "美缝剂"],
