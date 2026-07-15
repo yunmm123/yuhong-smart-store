@@ -1,14 +1,16 @@
 # 雨虹渠道智慧运营助手
 
 > **东方雨虹渠道智慧运营解决方案**
-> 基于**飞书AI**的建材渠道智慧运营一体化方案 — 让3000余家专卖店和10000余家终端网点**10分钟拥有AI能力**
+> 基于**飞书AI**的建材渠道智慧运营一体化方案 — 飞行社全量部署 · aily智能体+知识库+术语库 · 全模块对接真实数据
+> 让3000余家专卖店和10000余家终端网点**10分钟拥有AI能力**
 > 零硬件 · 零代码 · 低门槛启动 · 完整TCO透明
 
 <p align="center">
-  <img src="https://img.shields.io/badge/飞书AI-已部署验证-success" alt="Feishu AI">
+  <img src="https://img.shields.io/badge/飞书AI-飞行社部署-success" alt="Feishu AI">
   <img src="https://img.shields.io/badge/GitHub%20Pages-在线可访问-blue" alt="GitHub Pages">
   <img src="https://img.shields.io/badge/tests-37%20passed-brightgreen" alt="Tests">
   <img src="https://img.shields.io/badge/API-22%20endpoints-blue" alt="API">
+  <img src="https://img.shields.io/badge/aily-知识库%2B术语库-green" alt="aily">
   <img src="https://img.shields.io/badge/license-MIT-lightgrey" alt="License">
 </p>
 
@@ -32,10 +34,10 @@
 |------|------|
 | 覆盖网点 | 3000+专卖店 / 10000+终端网点 |
 | 五大模块 | 门店巡检 / AI导购 / 门店运营 / 客户维护 / 渠道管理中枢 |
-| 飞书AI能力 | aily智能体 + 多维表格AI + 妙搭低代码 |
-| 目标覆盖 | 三大目标12项能力全覆盖 |
+| 飞书AI能力 | aily智能体(知识库+术语库) + 多维表格(6表46+条) + 妙搭低代码 |
+| 部署环境 | 飞行社(larkcommunity.feishu.cn) 全量部署 |
+| Flask后端 | 5大模块全部对接Bitable真实数据，37个测试通过 |
 | 落地成本 | 软件约50元/店/年(仅API)；TCO规模化约1,140元/店 |
-| 可运行Demo | 5页面 + 22个API + 37个测试 |
 
 ### 快速链接
 
@@ -74,19 +76,16 @@
 | 📊 门店运营 | 多维表格AI字段 | 数据汇总→AI趋势/异常/机会识别→经营报告推送 | 目标3-智能经营分析 |
 | 👥 客户维护 | AI标签+预测 | 画像分析→AI流失风险预测→个性化话术生成→定时跟进 | 目标3-智能经营分析 |
 
-## 飞书AI真实部署验证
+## 飞书AI真实部署验证（飞行社）
 
-三大飞书AI能力**全部真实部署并测试通过**，不是概念方案：
+三大飞书AI能力**全部在飞行社(larkcommunity.feishu.cn)真实部署并测试通过**：
 
-| 能力 | 部署成果 | 验证页面 |
+| 能力 | 部署成果 | 访问链接 |
 |------|---------|----------|
-| ✅ aily智能体 | 3个测试对话全部通过（卫生间漏水/SBS用量/JS施工） | [查看验证](补充材料/飞书aily智能体部署验证.html) |
-| ✅ 多维表格AI | 6表39条记录 + 2个AI字段 + 7个公式 + 4个仪表盘图表 | [查看验证](补充材料/飞书多维表格部署验证.html) |
-| ✅ 妙搭低代码 | AI生成1343行代码/33文件，测试提交91分优秀，已上线 | [查看验证](补充材料/飞书妙搭巡检应用验证.html) |
-
-**飞书应用直链：**
-- 多维表格：https://dcnlkmas0c30.feishu.cn/base/G2ZUbuYbUaJfFosDlt6cexF7nLz
-- 妙搭应用：https://dcnlkmas0c30.aiforce.cloud/app/app_179t2htks3d
+| ✅ aily智能体 | 雨虹AI导购小虹：产品知识库(8产品)+术语库(15条)+诊断推荐+用量计算+成本估算+智能追问 | [打开](https://aily.feishu.cn/agents/agent_4km3vtz85963q6x/detail) |
+| ✅ 多维表格 | 6表46+条记录(门店/巡检/客户/销售/产品库存/术语表) + 8个公式字段 | [打开](https://larkcommunity.feishu.cn/base/R7v9bKHNdaBsDFsDdvzcXICOnWh) |
+| ✅ 妙搭巡检应用 | 移动端6维度巡检评分+历史记录+统计看板，数据实时同步多维表格 | [源码](miaoda-inspection/) |
+| ✅ Flask全模块对接 | 5大模块全部对接Bitable真实数据 + aily智能体集成 + 大屏API调用 + 37测试通过 | [源码](src/) |
 
 ## 商业价值 · 3515战略对齐
 
@@ -128,66 +127,33 @@
 ```
 yuhong-smart-store/
 ├── src/                          # Flask主应用 (5页面 + 22API)
-│   ├── app.py                    # 主入口，22个API路由
-│   ├── config.py                 # 配置管理（飞书凭证 + mock模式检测）
+│   ├── app.py                    # 主入口，22个API路由，aily智能体集成
+│   ├── config.py                 # 配置管理（飞书凭证 + aily凭证 + mock模式检测）
 │   ├── api/                      # 飞书API封装层
-│   │   ├── feishu_aily.py        # aily智能体API封装
+│   │   ├── feishu_aily.py        # aily智能体API封装（token自动刷新+消息轮询）
 │   │   └── feishu_bitable.py     # 多维表格API封装
-│   └── modules/                  # 五大业务模块
-│       ├── store_inspection.py   # 门店巡检模块
-│       ├── ai_shopping_guide.py  # AI导购模块
-│       ├── store_operation.py    # 门店运营模块
-│       ├── customer_relation.py  # 客户维护模块
-│       └── channel_management.py # 渠道管理中枢模块（新增）
+│   └── modules/                  # 五大业务模块（全部对接Bitable真实数据）
+│       ├── store_inspection.py   # 门店巡检模块（AI陈列检测对接aily）
+│       ├── ai_shopping_guide.py  # AI导购模块（产品库存从Bitable实时读取）
+│       ├── store_operation.py    # 门店运营模块（库存/客流/销售真实数据）
+│       ├── customer_relation.py  # 客户维护模块（Bitable客户表+aily话术生成）
+│       └── channel_management.py # 渠道管理中枢模块（合规/洞察/拓展/分单真实数据）
 ├── templates/                    # 前端页面
 │   ├── index.html                # 首页仪表盘
 │   ├── inspection.html           # 门店巡检
 │   ├── guide.html                # AI导购
-│   ├── channel.html              # 渠道管理中枢（新增）
-│   └── bigscreen.html            # 3515县域大屏
+│   ├── channel.html              # 渠道管理中枢
+│   └── bigscreen.html            # 3515县域大屏（对接后端API实时数据）
+├── miaoda-inspection/            # 妙搭巡检移动应用
+│   ├── server.js                 # Node.js后端（Express + 飞书Bitable API）
+│   ├── public/index.html         # 移动端前端（巡检填报/历史/统计三Tab）
+│   └── README.md                 # 妙搭部署指南
 ├── tests/                        # 单元测试
-│   └── test_core.py              # 核心业务逻辑测试
+│   └── test_core.py              # 核心业务逻辑测试（37个用例）
 ├── docs/                         # 技术文档 (6份)
-│   ├── 01_行业研究与竞品分析报告.md
-│   ├── 02_技术方案架构设计文档.md
-│   ├── 03_用户需求调研报告.md
-│   ├── 04_实施路线图与里程碑.md
-│   ├── 05_差异化竞争策略与落地攻略.md
-│   └── 06_飞书AI实操配置手册.md
 ├── 补充材料/                      # 线上验证材料
-│   ├── yuhong-onepager/          # 一页纸执行摘要
-│   ├── yuhong-pitch/             # 15页路演PPT
-│   ├── yuhong-submission/        # 综合补充材料报告
-│   ├── Demo交互演示.html
-│   ├── 飞书aily智能体部署验证.html
-│   ├── 飞书多维表格部署验证.html
-│   ├── 飞书多维表格仪表盘验证.html
-│   ├── 飞书妙搭巡检应用验证.html
-│   ├── 技术架构图集.html
-│   ├── 竞品对比矩阵.html
-│   ├── 产品需求文档PRD.html
-│   ├── 用户故事地图.html
-│   ├── 项目甘特图与时间线.html
-│   ├── 研究笔记与调研记录.html
-│   ├── 相关项目经验与技术能力说明.html
-│   ├── API文档.html
-│   ├── ROI计算器.html
-│   ├── 渠道管理中枢.html
-│   ├── 门店一日场景模拟.html
-│   ├── 项目导览.html
-│   ├── 竞品实名深度对比.html
-│   ├── 飞书生态深度集成地图.html
-│   ├── 智能预警闭环演示.html
-│   ├── 门店分批落地路线图.html
-│   ├── 多角色协同演示.html
-│   ├── 数据飞轮机制.html
-│   └── 成本可信度分析.html
-├── data/                         # 本地演示数据（mock模式使用）
-│   ├── products.json             # 8个核心产品数据
-│   ├── stores.json               # 门店信息
-│   └── inspection_records.json   # 巡检记录
+├── data/                         # 本地演示数据（fallback使用）
 ├── requirements.txt
-├── run.sh                        # 一键启动脚本
 ├── .env.example                  # 环境变量模板
 └── index.html                    # GitHub Pages 首页导航
 ```
