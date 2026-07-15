@@ -5,10 +5,10 @@
   "runtime": "node",
   "entry": "server.js",
   "env": [
-    { "key": "FEISHU_APP_ID", "value": "cli_aadc44eb88f89cc4", "env": "online" },
-    { "key": "FEISHU_APP_SECRET", "value": "rknUZjLCegvpqAyzgL531f1CO712ejxw", "env": "online" },
-    { "key": "BITABLE_APP_TOKEN", "value": "R7v9bKHNdaBsDFsDdvzcXICOnWh", "env": "online" },
-    { "key": "TABLE_STORE", "value": "tblz4EvPXhpCVy6l", "env": "online" },
-    { "key": "TABLE_INSPECTION", "value": "tbl6WQHXuVF6Qgk9", "env": "online" }
+    { "key": "FEISHU_APP_ID", "value": "${FEISHU_APP_ID}", "env": "online" },
+    { "key": "FEISHU_APP_SECRET", "value": "${FEISHU_APP_SECRET}", "env": "online" },
+    { "key": "BITABLE_APP_TOKEN", "value": "${BITABLE_APP_TOKEN}", "env": "online" },
+    { "key": "TABLE_STORE", "value": "${TABLE_STORE}", "env": "online" },
+    { "key": "TABLE_INSPECTION", "value": "${TABLE_INSPECTION}", "env": "online" }
   ]
 }
