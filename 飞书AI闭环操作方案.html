@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>飞书AI闭环操作方案 · 雨虹渠道智慧运营助手</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", system-ui, sans-serif;
+  background: #f0f2f5; color: #1a1a2e; line-height: 1.8;
+  max-width: 960px; margin: 0 auto; padding: 24px 16px 80px;
+}
+h1 { font-size: 28px; text-align: center; margin-bottom: 8px; color: #1a1a2e; }
+.subtitle { text-align: center; color: #666; font-size: 15px; margin-bottom: 40px; }
+h2 {
+  font-size: 22px; margin: 48px 0 20px; padding-bottom: 10px;
+  border-bottom: 2px solid #4B3FE3; color: #1a1a2e;
+  display: flex; align-items: center; gap: 10px;
+}
+h2 .num {
+  background: #4B3FE3; color: #fff; width: 32px; height: 32px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+h3 { font-size: 18px; margin: 32px 0 16px; color: #333; }
+p { margin-bottom: 14px; font-size: 15px; }
+ul, ol { margin: 12px 0 20px 24px; }
+li { margin-bottom: 8px; font-size: 15px; }
+code {
+  background: #eef0f4; padding: 2px 6px; border-radius: 4px;
+  font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+  font-size: 13px; color: #c5313a;
+}
+.highlight-box {
+  background: #fff3cd; border-left: 4px solid #ffc107;
+  padding: 16px 20px; border-radius: 8px; margin: 20px 0;
+}
+.success-box {
+  background: #d4edda; border-left: 4px solid #28a745;
+  padding: 16px 20px; border-radius: 8px; margin: 20px 0;
+}
+.info-box {
+  background: #e7f0ff; border-left: 4px solid #4B3FE3;
+  padding: 16px 20px; border-radius: 8px; margin: 20px 0;
+}
+.danger-box {
+  background: #fde8e8; border-left: 4px solid #e8463a;
+  padding: 16px 20px; border-radius: 8px; margin: 20px 0;
+}
+table {
+  width: 100%; border-collapse: collapse; margin: 20px 0;
+  background: #fff; border-radius: 8px; overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+th {
+  background: #4B3FE3; color: #fff; padding: 12px 16px;
+  text-align: left; font-size: 14px; font-weight: 600;
+}
+td { padding: 12px 16px; border-bottom: 1px solid #eee; font-size: 14px; }
+tr:last-child td { border-bottom: none; }
+tr:nth-child(even) td { background: #fafafa; }
+
+/* 架构图 */
+.arch-diagram {
+  background: #fff; border-radius: 12px; padding: 32px 24px;
+  margin: 24px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.arch-flow { display: flex; flex-direction: column; gap: 0; align-items: center; }
+.arch-row {
+  display: flex; align-items: center; gap: 16px; width: 100%;
+  justify-content: center; position: relative;
+}
+.arch-node {
+  border-radius: 10px; padding: 14px 20px; text-align: center;
+  min-width: 180px; border: 2px solid; font-size: 14px;
+}
+.arch-node.stage { background: #f0eaff; border-color: #4B3FE3; }
+.arch-node.gap { background: #fff0f0; border-color: #e8463a; }
+.arch-node.fixed { background: #e8f8ee; border-color: #28a745; }
+.arch-node.hub {
+  background: #fff8e1; border-color: #ffc107; min-width: 220px;
+}
+.arch-node-title { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+.arch-node-sub { font-size: 12px; color: #666; }
+.arch-arrow {
+  width: 2px; height: 32px; background: #4B3FE3; position: relative;
+}
+.arch-arrow::after {
+  content: ''; position: absolute; bottom: -6px; left: -5px;
+  width: 0; height: 0; border-left: 6px solid transparent;
+  border-right: 6px solid transparent; border-top: 8px solid #4B3FE3;
+}
+.arch-arrow.danger { background: #e8463a; }
+.arch-arrow.danger::after { border-top-color: #e8463a; }
+.arch-arrow.success { background: #28a745; }
+.arch-arrow.success::after { border-top-color: #28a745; }
+.arch-label {
+  position: absolute; left: calc(50% + 20px); top: 50%;
+  transform: translateY(-50%); font-size: 12px; white-space: nowrap;
+}
+.arch-label.danger { color: #e8463a; }
+.arch-label.success { color: #28a745; }
+.arch-label.brand { color: #4B3FE3; }
+
+/* 步骤卡片 */
+.step-card {
+  background: #fff; border-radius: 12px; padding: 28px 24px;
+  margin: 24px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.step-header {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+}
+.step-badge {
+  background: #4B3FE3; color: #fff; padding: 4px 14px;
+  border-radius: 20px; font-size: 13px; font-weight: 600;
+}
+.step-title { font-size: 18px; font-weight: 600; }
+.step-num {
+  background: #e8463a; color: #fff; width: 28px; height: 28px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0; margin-right: 8px;
+}
+.config-block {
+  background: #f8f9fa; border-radius: 8px; padding: 20px;
+  margin: 16px 0; border: 1px solid #e9ecef;
+}
+.config-label {
+  font-size: 13px; font-weight: 600; color: #4B3FE3;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
+}
+.config-row {
+  display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px;
+  font-size: 14px;
+}
+.config-key {
+  min-width: 100px; font-weight: 600; color: #555;
+}
+.config-val { flex: 1; }
+.field-tag {
+  display: inline-block; background: #eef0f4; padding: 2px 8px;
+  border-radius: 4px; font-size: 12px; margin: 2px;
+}
+.brand-tag { background: #eef0ff; color: #4B3FE3; }
+.action-tag { background: #e8f8ee; color: #28a745; }
+.trigger-tag { background: #fff3cd; color: #856404; }
+
+/* 验证清单 */
+.checklist {
+  background: #fff; border-radius: 12px; padding: 24px;
+  margin: 24px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.check-item {
+  display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px;
+  font-size: 14px;
+}
+.check-icon {
+  width: 20px; height: 20px; border-radius: 50%; border: 2px solid #28a745;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  color: #28a745; font-size: 12px; margin-top: 2px;
+}
+.footer {
+  text-align: center; margin-top: 60px; padding-top: 24px;
+  border-top: 1px solid #ddd; color: #999; font-size: 13px;
+}
+</style>
+</head>
+<body>
+
+<h1>飞书AI闭环操作方案</h1>
+<p class="subtitle">雨虹渠道智慧运营助手 · 用飞书原生能力补齐3个断点 · 形成完整业务闭环</p>
+
+<!-- ==================== 架构总览 ==================== -->
+
+<h2><span class="num">0</span>方案总览</h2>
+
+<p>项目当前有5个模块、6张多维表格、1个aily智能体，数据链路基本打通，但存在<b>3个业务断点</b>导致流程无法自动闭环。本方案通过飞书多维表格的<b>自动化流程</b>和<b>工作流</b>功能，<b>零代码</b>补齐这3个断点。</p>
+
+<div class="arch-diagram">
+  <div class="arch-flow">
+
+    <!-- Stage 1 -->
+    <div class="arch-row">
+      <div class="arch-node stage">
+        <div class="arch-node-title">① 督导巡检</div>
+        <div class="arch-node-sub">妙搭App + AI陈列检测</div>
+      </div>
+      <div class="arch-node hub">
+        <div class="arch-node-title">飞书多维表格 · 数据中枢</div>
+        <div class="arch-node-sub">门店表 / 巡检表 / 销售表 / 客户表 / 产品库存表 / 整改任务表(新)</div>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;display:flex;justify-content:flex-start;padding-left:120px;">
+      <div class="arch-arrow danger"><span class="arch-label danger">断点1：巡检不合格 → 无整改</span></div>
+    </div>
+
+    <!-- Stage 2 -->
+    <div class="arch-row">
+      <div class="arch-node stage">
+        <div class="arch-node-title">② 客户到店咨询</div>
+        <div class="arch-node-sub">AI导购 + aily推荐</div>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;display:flex;justify-content:flex-start;padding-left:120px;">
+      <div class="arch-arrow danger"><span class="arch-label danger">断点2：推荐后无下单流程</span></div>
+    </div>
+
+    <!-- Stage 3 -->
+    <div class="arch-row">
+      <div class="arch-node stage">
+        <div class="arch-node-title">③ 成交与记录</div>
+        <div class="arch-node-sub">销售数据录入</div>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;display:flex;justify-content:flex-start;padding-left:120px;">
+      <div class="arch-arrow danger"><span class="arch-label danger">断点3：销售 → 库存不扣减</span></div>
+    </div>
+
+    <!-- Stage 4 -->
+    <div class="arch-row">
+      <div class="arch-node stage">
+        <div class="arch-node-title">④ 客户跟进维护</div>
+        <div class="arch-node-sub">客户画像 + AI话术</div>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;display:flex;justify-content:flex-start;padding-left:120px;">
+      <div class="arch-arrow success"><span class="arch-label success">已衔接：客户数据驱动分析</span></div>
+    </div>
+
+    <!-- Stage 5 -->
+    <div class="arch-row">
+      <div class="arch-node stage">
+        <div class="arch-node-title">⑤ 经营分析决策</div>
+        <div class="arch-node-sub">大屏看板 + 渠道洞察</div>
+      </div>
+    </div>
+
+    <div style="margin-top:28px;width:100%;">
+      <div style="background:#e8f8ee;border:2px solid #28a745;border-radius:10px;padding:16px 24px;text-align:center;">
+        <div style="font-size:15px;font-weight:600;color:#28a745;margin-bottom:6px;">补齐后完整闭环</div>
+        <div style="font-size:13px;color:#555;">巡检发现问题 → 自动创建整改任务 → 导购推荐 → 表单下单 → 自动扣减库存 → 客户跟进 → 经营分析</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="info-box">
+  <b>核心思路：</b>飞书多维表格的「自动化」功能提供 9 种触发器和 15+ 种执行动作，支持「新增/修改记录满足条件时」触发，执行「新增记录」「修改记录」「发送消息」「创建任务」「发送HTTP请求」「AI生成文本」等操作。3个断点全部可以用这些原生能力解决，<b>无需写任何代码</b>。
+</div>
+
+<!-- ==================== 前置准备 ==================== -->
+
+<h2><span class="num">1</span>前置准备</h2>
+
+<h3>1.1 新建第7张表：整改任务表</h3>
+
+<p>在多维表格中新增一张「整改任务表」，用于自动接收巡检不合格时生成的整改工单。</p>
+
+<div class="config-block">
+  <div class="config-label">整改任务表 · 字段设计</div>
+  <table>
+    <tr><th>字段名称</th><th>字段类型</th><th>说明</th></tr>
+    <tr><td>任务编号</td><td>自动编号</td><td>系统自动生成，如 ZG-0001</td></tr>
+    <tr><td>门店编号</td><td>单行文本</td><td>关联巡检记录的门店</td></tr>
+    <tr><td>门店名称</td><td>单行文本</td><td>自动带入</td></tr>
+    <tr><td>巡检分数</td><td>数字</td><td>触发整改的巡检分数</td></tr>
+    <tr><td>不合格维度</td><td>多选</td><td>陈列 / 卫生 / 价签 / 库存 / 服务 / 安全</td></tr>
+    <tr><td>整改负责人</td><td>人员</td><td>门店店长</td></tr>
+    <tr><td>整改截止日期</td><td>日期</td><td>巡检日期 + 7天</td></tr>
+    <tr><td>整改状态</td><td>单选</td><td>待整改 / 整改中 / 已完成</td></tr>
+    <tr><td>创建时间</td><td>创建时间</td><td>系统自动记录</td></tr>
+  </table>
+</div>
+
+<h3>1.2 新建第8张表：订单记录表</h3>
+
+<p>用于打通「AI推荐 → 下单 → 库存扣减」链路。店员在AI导购推荐后，通过表单视图快速创建订单。</p>
+
+<div class="config-block">
+  <div class="config-label">订单记录表 · 字段设计</div>
+  <table>
+    <tr><th>字段名称</th><th>字段类型</th><th>说明</th></tr>
+    <tr><td>订单编号</td><td>自动编号</td><td>系统自动生成，如 DD-0001</td></tr>
+    <tr><td>门店编号</td><td>单行文本</td><td>关联门店</td></tr>
+    <tr><td>客户姓名</td><td>单行文本</td><td>购买客户</td></tr>
+    <tr><td>产品编号</td><td>单行文本</td><td>关联产品库存表</td></tr>
+    <tr><td>产品名称</td><td>单行文本</td><td>购买的产品</td></tr>
+    <tr><td>购买数量</td><td>数字</td><td>本次购买数量</td></tr>
+    <tr><td>订单金额</td><td>货币 / 数字</td><td>单价 × 数量</td></tr>
+    <tr><td>订单状态</td><td>单选</td><td>待发货 / 已发货 / 已完成</td></tr>
+    <tr><td>创建时间</td><td>创建时间</td><td>系统自动记录</td></tr>
+  </table>
+</div>
+
+<div class="highlight-box">
+  <b>操作方法：</b>打开多维表格 → 左下角点击 <code>+</code> 新建数据表 → 按上表逐个添加字段 → 右键重命名表为「整改任务表」和「订单记录表」。
+</div>
+
+<!-- ==================== 断点1 ==================== -->
+
+<h2><span class="num">2</span>断点1：巡检不合格 → 自动创建整改任务</h2>
+
+<div class="step-card">
+  <div class="step-header">
+    <span class="step-badge">自动化流程 #1</span>
+    <span class="step-title">巡检不合格自动触发整改</span>
+  </div>
+
+  <h3>配置步骤</h3>
+
+  <div class="config-block">
+    <div class="config-label">触发条件</div>
+    <div class="config-row">
+      <span class="config-key">触发器类型</span>
+      <span class="config-val"><span class="field-tag trigger-tag">新增/修改的记录满足条件时</span></span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">数据表</span>
+      <span class="config-val">巡检记录表</span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">满足条件</span>
+      <span class="config-val"><code>总分</code> 字段 <code>&lt; 80</code></span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">关注的字段</span>
+      <span class="config-val">总分、门店编号、门店名称、督导姓名、巡检日期</span>
+    </div>
+  </div>
+
+  <div class="config-block">
+    <div class="config-label">执行动作 1：新增记录（创建整改工单）</div>
+    <div class="config-row">
+      <span class="config-key">操作类型</span>
+      <span class="config-val"><span class="field-tag action-tag">新增记录</span></span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">目标表</span>
+      <span class="config-val">整改任务表</span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">字段映射</span>
+      <span class="config-val">
+        <br>门店编号 ← 引用触发行「门店编号」
+        <br>门店名称 ← 引用触发行「门店名称」
+        <br>巡检分数 ← 引用触发行「总分」
+        <br>不合格维度 ← 引用触发行中得分最低的维度名称（手动配置）
+        <br>整改状态 ← 固定值「待整改」
+      </span>
+    </div>
+  </div>
+
+  <div class="config-block">
+    <div class="config-label">执行动作 2：发送飞书消息（通知店长+区域经理）</div>
+    <div class="config-row">
+      <span class="config-key">操作类型</span>
+      <span class="config-val"><span class="field-tag action-tag">发送飞书消息</span></span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">接收人</span>
+      <span class="config-val">引用触发行「门店店长」字段；同时发送到区域经理群</span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">消息内容</span>
+      <span class="config-val">
+        <br>标题：⚠ 巡检不合格整改通知
+        <br>正文：门店「<b>{门店名称}</b>」在 <b>{巡检日期}</b> 的巡检中得分 <b>{总分}</b> 分，低于合格线80分。
+        <br>请尽快登录系统查看详情并安排整改，截止日期：{创建时间+7天}。
+      </span>
+    </div>
+  </div>
+
+  <div class="config-block">
+    <div class="config-label">执行动作 3：创建飞书任务（分配给店长）</div>
+    <div class="config-row">
+      <span class="config-key">操作类型</span>
+      <span class="config-val"><span class="field-tag action-tag">创建飞书任务</span></span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">任务标题</span>
+      <span class="config-val">整改任务 - {门店名称} - 巡检分数 {总分}</span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">负责人</span>
+      <span class="config-val">引用触发行「门店店长」字段</span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">截止时间</span>
+      <span class="config-val">巡检日期 + 7天</span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">任务描述</span>
+      <span class="config-val">门店在巡检中得分{总分}分，不合格维度请查看巡检记录。请在截止日期前完成整改并申请复检。</span>
+    </div>
+  </div>
+
+  <h3>实际操作路径</h3>
+  <ol>
+    <li>打开多维表格 → 点击右上角 <b>自动化</b> 按钮</li>
+    <li>点击 <b>+ 创建自动化流程</b></li>
+    <li>左侧选择触发条件：<b>新增/修改的记录满足条件时</b></li>
+    <li>选择数据表：<b>巡检记录表</b>；设置条件：<code>总分 &lt; 80</code></li>
+    <li>右侧第一个操作选 <b>新增记录</b> → 选择「整改任务表」→ 配置字段映射</li>
+    <li>点击 <b>+</b> 添加第二个操作：<b>发送飞书消息</b> → 配置接收人和消息卡片</li>
+    <li>点击 <b>+</b> 添加第三个操作：<b>创建飞书任务</b> → 配置任务标题和负责人</li>
+    <li>点击 <b>保存并启用</b></li>
+  </ol>
+</div>
+
+<!-- ==================== 断点2 ==================== -->
+
+<h2><span class="num">3</span>断点2：AI推荐后无下单流程</h2>
+
+<p>这个断点需要两步解决：先创建一个「订单表单」让店员能快速下单，再配置自动化把订单同步到销售记录表。</p>
+
+<div class="step-card">
+  <div class="step-header">
+    <span class="step-badge">操作步骤</span>
+    <span class="step-title">创建订单表单视图 + 自动同步</span>
+  </div>
+
+  <h3>步骤1：创建订单表单视图</h3>
+  <ol>
+    <li>在「订单记录表」中，点击左上角视图切换 → <b>+ 添加视图</b> → 选择 <b>表单</b></li>
+    <li>命名为「快速下单表单」</li>
+    <li>勾选需要填写的字段：门店编号、客户姓名、产品编号、产品名称、购买数量、订单金额</li>
+    <li>设置「订单状态」默认值为「待发货」（在表单设置中固定）</li>
+    <li>点击 <b>分享</b> → 获取表单链接，分享到门店店员群</li>
+  </ol>
+
+  <div class="info-box">
+    <b>使用方式：</b>店员在AI导购中获得推荐产品后，直接打开表单链接，填写产品编号、数量、客户信息，30秒即可完成下单。订单自动写入「订单记录表」。
+  </div>
+
+  <h3>步骤2：配置自动化 - 订单同步到销售记录表</h3>
+
+  <div class="config-block">
+    <div class="config-label">触发条件</div>
+    <div class="config-row">
+      <span class="config-key">触发器类型</span>
+      <span class="config-val"><span class="field-tag trigger-tag">添加新记录时</span></span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">数据表</span>
+      <span class="config-val">订单记录表</span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">条件</span>
+      <span class="config-val">订单编号 不为空（避免空白记录触发）</span>
+    </div>
+  </div>
+
+  <div class="config-block">
+    <div class="config-label">执行动作：新增记录到销售记录表</div>
+    <div class="config-row">
+      <span class="config-key">操作类型</span>
+      <span class="config-val"><span class="field-tag action-tag">新增记录</span></span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">目标表</span>
+      <span class="config-val">销售记录表</span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">字段映射</span>
+      <span class="config-val">
+        <br>门店编号 ← 引用订单记录「门店编号」
+        <br>客户姓名 ← 引用订单记录「客户姓名」
+        <br>产品名称 ← 引用订单记录「产品名称」
+        <br>销售金额 ← 引用订单记录「订单金额」
+        <br>销售日期 ← 引用订单记录「创建时间」
+        <br>订单来源 ← 固定值「AI导购推荐」
+      </span>
+    </div>
+  </div>
+
+  <h3>步骤3（可选）：AI生成文本 - 智能推荐关联</h3>
+
+  <div class="config-block">
+    <div class="config-label">执行动作：AI生成文本（订单摘要）</div>
+    <div class="config-row">
+      <span class="config-key">操作类型</span>
+      <span class="config-val"><span class="field-tag action-tag">AI 生成文本</span></span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">指令</span>
+      <span class="config-val">
+        <br>请根据以下订单信息，生成一段50字以内的客户购买摘要，用于客户画像分析：
+        <br>客户：{客户姓名}，产品：{产品名称}，金额：{订单金额}元
+      </span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">输出到</span>
+      <span class="config-val">订单记录表「购买摘要」字段（需提前新建该文本字段）</span>
+    </div>
+  </div>
+
+  <div class="success-box">
+    <b>效果：</b>店员在AI导购推荐后 → 打开表单30秒下单 → 订单自动同步到销售记录表 → AI自动生成购买摘要 → 客户跟进模块可直接读取。推荐转化率可追踪。
+  </div>
+</div>
+
+<!-- ==================== 断点3 ==================== -->
+
+<h2><span class="num">4</span>断点3：销售/订单 → 库存自动扣减</h2>
+
+<div class="step-card">
+  <div class="step-header">
+    <span class="step-badge">自动化流程 #3</span>
+    <span class="step-title">订单创建时自动扣减产品库存</span>
+  </div>
+
+  <p>当订单记录表中新增一条订单时，自动在产品库存表中找到对应产品，将「当前库存」减去购买数量。</p>
+
+  <div class="config-block">
+    <div class="config-label">触发条件</div>
+    <div class="config-row">
+      <span class="config-key">触发器类型</span>
+      <span class="config-val"><span class="field-tag trigger-tag">添加新记录时</span></span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">数据表</span>
+      <span class="config-val">订单记录表</span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">条件</span>
+      <span class="config-val">产品编号 不为空</span>
+    </div>
+  </div>
+
+  <div class="config-block">
+    <div class="config-label">执行动作 1：查找记录（定位产品库存）</div>
+    <div class="config-row">
+      <span class="config-key">操作类型</span>
+      <span class="config-val"><span class="field-tag action-tag">查找记录</span></span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">目标表</span>
+      <span class="config-val">产品库存表</span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">筛选条件</span>
+      <span class="config-val">产品编号 = 引用订单记录的「产品编号」</span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">查找内容</span>
+      <span class="config-val">当前库存、安全库存、产品编号</span>
+    </div>
+  </div>
+
+  <div class="config-block">
+    <div class="config-label">执行动作 2：修改记录（扣减库存）</div>
+    <div class="config-row">
+      <span class="config-key">操作类型</span>
+      <span class="config-val"><span class="field-tag action-tag">修改记录</span></span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">目标表</span>
+      <span class="config-val">产品库存表</span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">修改范围</span>
+      <span class="config-val">选择「之前步骤中对应的记录」（即上一步查找到的记录）</span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">修改字段</span>
+      <span class="config-val">
+        <br>当前库存 ← <code>查找记录的「当前库存」 - 订单记录的「购买数量」</code>
+        <br><span style="color:#999;font-size:12px;">（在字段值设置中，使用引用值相减的方式填入）</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="config-block">
+    <div class="config-label">执行动作 3（可选）：库存预警通知</div>
+    <div class="config-row">
+      <span class="config-key">操作类型</span>
+      <span class="config-val"><span class="field-tag action-tag">条件判断 (If/Else)</span> + <span class="field-tag action-tag">发送飞书消息</span></span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">条件</span>
+      <span class="config-val">如果扣减后「当前库存」&lt; 「安全库存」</span>
+    </div>
+    <div class="config-row">
+      <span class="config-key">执行</span>
+      <span class="config-val">发送消息到库存管理群：「产品{产品名称}库存不足！当前{当前库存}，安全库存{安全库存}，请尽快补货。」</span>
+    </div>
+  </div>
+
+  <div class="success-box">
+    <b>效果：</b>订单创建 → 自动查找产品 → 扣减库存 → 如果低于安全库存自动预警。全程零代码，全自动，避免超卖。
+  </div>
+</div>
+
+<!-- ==================== aily AI增强 ==================== -->
+
+<h2><span class="num">5</span>aily智能体AI增强配置</h2>
+
+<p>除了3个断点的自动化修复，aily智能体可以在飞书内进一步深化AI能力，让闭环更加智能。</p>
+
+<h3>5.1 aily连接多维表格（知识库 + 数据源）</h3>
+
+<ol>
+  <li>进入 <a href="https://aily.feishu.cn">aily.feishu.cn</a> → 打开你的智能体</li>
+  <li>左侧菜单选择 <b>知识库</b> → <b>添加知识库</b> → 选择 <b>飞书多维表格</b></li>
+  <li>选择项目多维表格文件 → 勾选所有数据表</li>
+  <li>aily会自动索引表格数据，支持自然语言查询（如"本月哪个区域合规率最低？"）</li>
+</ol>
+
+<h3>5.2 aily任务模式 - 定期经营分析</h3>
+
+<ol>
+  <li>在aily中点击 <b>任务</b> → <b>创建任务</b></li>
+  <li>设置定时触发：<b>每周一上午9:00</b></li>
+  <li>任务指令示例：</li>
+</ol>
+
+<div class="config-block">
+  <div class="config-label">aily任务指令模板</div>
+  <div style="background:#1a1a2e;color:#a5d6a7;padding:16px;border-radius:8px;font-family:monospace;font-size:13px;line-height:1.6;">
+你是东方雨虹渠道运营分析师。请完成以下工作：<br><br>
+1. 从多维表格中读取本周所有门店的巡检记录、销售记录、整改任务完成情况<br>
+2. 计算各区域合规率排名、销售额排名、整改完成率<br>
+3. 识别本周合规率下降的门店和库存预警产品<br>
+4. 生成一份《本周渠道运营周报》，包含：<br>
+   - 整体数据概览（巡检合格率、总销售额、平均客单价）<br>
+   - 区域排名（合规率TOP3和BOTTOM3）<br>
+   - 风险预警（库存不足产品、未完成整改门店）<br>
+   - 下周建议（基于数据给出3条行动建议）<br>
+5. 将周报发送到「渠道运营管理」群
+  </div>
+</div>
+
+<h3>5.3 自动化流程中调用aily（AI生成文本）</h3>
+
+<p>飞书多维表格自动化流程内置了 <b>AI生成文本</b> 和 <b>AI分类</b> 动作，底层调用的就是飞书AI能力。可以在以下场景中使用：</p>
+
+<table>
+  <tr><th>场景</th><th>触发</th><th>AI动作</th><th>输出</th></tr>
+  <tr>
+    <td>巡检报告生成</td>
+    <td>巡检记录提交后</td>
+    <td>AI生成文本</td>
+    <td>自动生成巡检分析摘要，写入巡检记录表「AI分析」字段</td>
+  </tr>
+  <tr>
+    <td>客户意向分类</td>
+    <td>客户表新增记录</td>
+    <td>AI分类</td>
+    <td>根据客户需求和购买记录，自动打上"高意向/中意向/低意向"标签</td>
+  </tr>
+  <tr>
+    <td>整改建议生成</td>
+    <td>整改任务创建后</td>
+    <td>AI生成文本</td>
+    <td>根据不合格维度自动生成整改建议，写入整改任务表</td>
+  </tr>
+</table>
+
+<!-- ==================== 完整闭环验证 ==================== -->
+
+<h2><span class="num">6</span>完整闭环验证清单</h2>
+
+<p>全部配置完成后，按以下步骤走一遍完整流程，验证闭环是否生效：</p>
+
+<div class="checklist">
+  <div style="font-size:16px;font-weight:600;margin-bottom:16px;color:#4B3FE3;">验证步骤（约15分钟）</div>
+
+  <div class="check-item">
+    <div class="check-icon">✓</div>
+    <div><b>Step 1 - 提交一条低分巡检：</b>用妙搭巡检App或直接在巡检记录表中手动添加一条总分=65的记录</div>
+  </div>
+  <div class="check-item">
+    <div class="check-icon">✓</div>
+    <div><b>Step 2 - 验证断点1：</b>检查「整改任务表」是否自动新增了一条记录；店长是否收到飞书消息和任务</div>
+  </div>
+  <div class="check-item">
+    <div class="check-icon">✓</div>
+    <div><b>Step 3 - 提交一笔订单：</b>打开订单表单视图，填写一笔订单（产品编号填写产品库存表中已存在的产品）</div>
+  </div>
+  <div class="check-item">
+    <div class="check-icon">✓</div>
+    <div><b>Step 4 - 验证断点2：</b>检查「销售记录表」是否自动新增了对应的销售记录</div>
+  </div>
+  <div class="check-item">
+    <div class="check-icon">✓</div>
+    <div><b>Step 5 - 验证断点3：</b>检查「产品库存表」中对应产品的「当前库存」是否自动减少了购买数量</div>
+  </div>
+  <div class="check-item">
+    <div class="check-icon">✓</div>
+    <div><b>Step 6 - 验证大屏：</b>打开大屏看板页面，确认数据已更新（新订单的销售额、新巡检的合规率）</div>
+  </div>
+  <div class="check-item">
+    <div class="check-icon">✓</div>
+    <div><b>Step 7 - 验证aily：</b>在aily对话框输入"本周巡检合规率如何？"，确认能返回真实数据</div>
+  </div>
+</div>
+
+<!-- ==================== 自动化汇总表 ==================== -->
+
+<h2><span class="num">7</span>全部自动化流程汇总</h2>
+
+<table>
+  <tr>
+    <th>序号</th>
+    <th>自动化名称</th>
+    <th>触发器</th>
+    <th>数据表</th>
+    <th>执行动作</th>
+    <th>解决的断点</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>巡检不合格整改</td>
+    <td>满足条件：总分&lt;80</td>
+    <td>巡检记录表</td>
+    <td>新增记录→整改任务表 + 发消息 + 创建任务</td>
+    <td>断点1</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>订单同步销售记录</td>
+    <td>添加新记录</td>
+    <td>订单记录表</td>
+    <td>新增记录→销售记录表 + AI生成摘要</td>
+    <td>断点2</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>库存自动扣减</td>
+    <td>添加新记录</td>
+    <td>订单记录表</td>
+    <td>查找记录→产品库存表 + 修改记录 + 预警消息</td>
+    <td>断点3</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>巡检AI分析（可选）</td>
+    <td>添加新记录</td>
+    <td>巡检记录表</td>
+    <td>AI生成文本→写入AI分析字段</td>
+    <td>AI增强</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>客户意向分类（可选）</td>
+    <td>添加新记录</td>
+    <td>客户信息表</td>
+    <td>AI分类→写入意向标签字段</td>
+    <td>AI增强</td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>整改建议生成（可选）</td>
+    <td>添加新记录</td>
+    <td>整改任务表</td>
+    <td>AI生成文本→写入整改建议字段</td>
+    <td>AI增强</td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>运营周报定时推送（可选）</td>
+    <td>定时：每周一9:00</td>
+    <td>全部表</td>
+    <td>查找记录 + AI生成文本→发送消息到群</td>
+    <td>AI增强</td>
+  </tr>
+</table>
+
+<!-- ==================== 关键提醒 ==================== -->
+
+<h2><span class="num">8</span>注意事项</h2>
+
+<div class="danger-box">
+  <b>1. 字段名称必须完全一致：</b>自动化流程中引用的字段名必须与多维表格中的字段名完全匹配（包括括号、空格）。建议先在表格中确认字段名，再配置自动化。
+</div>
+
+<div class="highlight-box">
+  <b>2. 自动化运行次数限制：</b>飞书多维表格自动化流程有月度运行次数限制（根据企业版套餐不同，通常为每月数万次）。本项目7条自动化流程日常运行量不大，一般不会超限。
+</div>
+
+<div class="info-box">
+  <b>3. 「查找记录」+「修改记录」的串联：</b>断点3的库存扣减需要先「查找记录」再「修改记录」，两个动作必须在同一个自动化流程中串联配置，第二个动作选择「之前步骤中对应的记录」才能正确关联。
+</div>
+
+<div class="highlight-box">
+  <b>4. 工作流 vs 自动化流程：</b>飞书多维表格有两种流程引擎。「自动化流程」适合简单场景（1个触发器+1-3个动作）；「工作流」支持条件判断、循环、多分支等复杂逻辑，适合需要If/Else判断的场景（如库存预警）。在多维表格左下角可切换。
+</div>
+
+<div class="info-box">
+  <b>5. 测试方法：</b>每条自动化配置完成后，可以在对应数据表中手动添加一条测试记录，观察是否触发了后续动作。也可以在自动化面板中点击「运行日志」查看执行记录和报错信息。
+</div>
+
+<div class="footer">
+  雨虹渠道智慧运营助手 · 飞书AI闭环操作方案<br>
+  配置完成后即可形成完整闭环：巡检→整改→导购→下单→扣库存→客户跟进→经营分析
+</div>
+
+</body>
+</html>
