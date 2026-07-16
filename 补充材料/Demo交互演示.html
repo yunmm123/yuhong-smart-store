@@ -289,7 +289,7 @@
     .region-density-bar { height: 5px; background: rgba(255,255,255,.08); border-radius: 3px; margin-top: 8px; overflow: hidden; }
     .region-density-fill { height: 100%; border-radius: 3px; transition: width 1.5s ease; }
 
-    /* 六层架构3D */
+    /* 四层架构3D */
     .arch-3d-wrap {
       perspective: 800px;
       display: flex; flex-direction: column; align-items: center;
@@ -732,9 +732,9 @@
         <div id="effectList"></div>
       </div>
 
-      <!-- 六层架构3D -->
+      <!-- 四层架构3D -->
       <div class="dark-card dark-card-glow mt-3">
-        <div class="section-title">六层架构（新增渠道层）</div>
+        <div class="section-title">四层架构</div>
         <div class="arch-3d-wrap" id="arch3d"></div>
       </div>
 
@@ -1264,7 +1264,7 @@
     }, 300);
   }
 
-  // 六层架构3D
+  // 四层架构3D
   const ARCH_LAYERS = [
     { name:'渠道层', desc:'标准化看板/渠道洞察/合规排名与库存预警/经营洞察', isNew:true, color:'rgba(255,193,7,.2)' },
     { name:'应用层', desc:'Flask Web + 妙搭: 5页面22API', isNew:false, color:'rgba(22,119,255,.15)' },
