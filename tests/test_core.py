@@ -235,7 +235,7 @@ class TestChannelManagement:
         assert 0 < result["national_compliance_rate"] <= 100
 
     def test_smart_dispatch_returns_recommended_store(self):
-        """智能分单应返回推荐网点"""
+        """合规排名应返回推荐网点"""
         order_info = {
             "product": "雨虹JS复合防水涂料",
             "quantity": 10,
@@ -262,21 +262,21 @@ class TestChannelManagement:
         assert "紧急" in result["delivery_plan"]
 
     def test_smart_dispatch_alternative_stores(self):
-        """智能分单应返回备选网点"""
+        """合规排名应返回备选网点"""
         order_info = {"product": "雨虹密封胶", "quantity": 5}
         result = self.module.smart_dispatch(order_info)
         assert "alternative_stores" in result
         assert isinstance(result["alternative_stores"], list)
 
     def test_fulfillment_monitor_overdue_alerts(self):
-        """履约监控应返回预警列表"""
+        """库存预警应返回预警列表"""
         result = self.module.get_fulfillment_monitor()
         assert "overdue_alerts" in result
         assert isinstance(result["overdue_alerts"], list)
         assert len(result["overdue_alerts"]) >= 1
 
     def test_fulfillment_monitor_orders_count(self):
-        """履约监控应返回8个在途订单"""
+        """库存预警应返回8个在途订单"""
         result = self.module.get_fulfillment_monitor()
         assert len(result["orders"]) == 8
         assert result["summary"]["total_in_transit"] == 8

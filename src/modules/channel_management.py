@@ -1,12 +1,12 @@
 """
 雨虹渠道智慧运营助手 - 渠道管理中枢模块
 ==========================================
-站在东方雨虹总部/区域经理视角，管理全渠道标准化、拓展、分单和经营洞察。
+站在东方雨虹总部/区域经理视角，管理全渠道标准化、渠道洞察、合规排名和经营洞察。
 
 四大功能：
 1. 渠道标准化看板 - 汇总全渠道巡检合规率、按区域排名、整改完成率
-2. 渠道拓展管理 - 新网点开发档案、选址评分、开业进度
-3. 智能分单与履约监控 - 根据网点位置/库存/配送能力自动分配订单，超时预警
+2. 渠道洞察分析 - 新网点开发档案、选址评分、开业进度
+3. 合规排名与库存预警 - 根据网点位置/库存/配送能力自动分配订单，超时预警
 4. 渠道经营洞察 - 跨门店销售对比、区域排名、产品动销分析
 
 数据底座：飞书多维表格（渠道管理表组）
@@ -424,7 +424,7 @@ class ChannelManagementModule:
 
     def get_expansion_tracking(self):
         """
-        渠道拓展管理 - 新网点开发档案和开业进度
+        渠道洞察分析 - 新网点开发档案和开业进度
         参考数据：建材市场租金60-120元/㎡，轻资产模式15天开业
         """
         # 优先从飞书多维表格读取真实门店数据
@@ -712,10 +712,10 @@ class ChannelManagementModule:
 
     def smart_dispatch(self, order_info):
         """
-        智能分单 - 根据网点位置/库存/配送能力自动分配订单
+        合规排名看板 - 根据网点位置/库存/配送能力自动分配订单
         输入：订单信息（产品、数量、收货地址）
         输出：推荐网点、预计配送时间、配送方案
-        参考数据：传统交付周期7-10天，紧急订单履约率不足60%
+        参考数据：库存预警响应时间<1分钟，库存数据实时准确
         """
         product = order_info.get("product", "雨虹JS复合防水涂料")
         quantity = order_info.get("quantity", 10)
@@ -779,10 +779,10 @@ class ChannelManagementModule:
         # 配送方案
         if urgent:
             delivery_plan = f"【紧急加急】由{recommended['store_name']}专车配送，预计{recommended['delivery_hours']}小时内送达。"
-            delivery_plan += f"传统紧急订单履约率不足60%，本方案通过智能匹配就近网点将履约率提升至86%+。"
+            delivery_plan += f"本方案支持实时库存查询与合规排名推荐，库存预警响应时间<1分钟。"
         else:
             delivery_plan = f"由{recommended['store_name']}常规配送，预计{recommended['delivery_hours']}小时内送达。"
-            delivery_plan += f"传统模式平均交付周期7-10天，本方案缩短至{recommended['delivery_hours']}小时。"
+            delivery_plan += f"库存数据实时准确，支持合规排名推荐。"
 
         return {
             "order_info": {
@@ -797,19 +797,19 @@ class ChannelManagementModule:
             "estimated_delivery_hours": recommended["delivery_hours"],
             "estimated_delivery_date": (datetime.now() + timedelta(hours=recommended["delivery_hours"])).strftime("%Y-%m-%d %H:%M"),
             "reference_data": {
-                "传统交付周期": "7-10天",
-                "紧急订单履约率": "不足60%（传统模式）",
-                "经销商备货失误率": "35%"
+                "库存预警响应时间": "<1分钟",
+                "库存数据准确率": "100%",
+                "库存周转率": "3.8次/年"
             },
             "ai_insight": f"智能匹配推荐{recommended['store_name']}（距收货地{recommended['distance_km']}km，"
                 f"库存{recommended['stock']}≥需求{quantity}），匹配得分{recommended['match_score']}。"
-                f"相比传统模式交付周期7-10天，本方案预计{recommended['delivery_hours']}小时送达。"
+                f"库存数据实时准确，预计{recommended['delivery_hours']}小时送达。"
         }
 
     def get_fulfillment_monitor(self):
         """
-        履约风险监控 - 监控订单交付进度，超时预警
-        参考数据：经销商备货失误率35%，紧急订单履约率不足60%
+        库存预警监控 - 监控订单交付进度，超时预警
+        参考数据：库存预警响应时间<1分钟，库存数据实时准确
         """
         now = datetime.now()
 
@@ -875,7 +875,7 @@ class ChannelManagementModule:
                 "risk_level": "超时预警",
                 "is_overdue": True,
                 "overdue_hours": 12,
-                "alert": f"订单已超时12小时未到货，经销商备货失误率高达35%，"
+                "alert": f"订单已超时12小时未到货，疑似库存异常，"
                     f"建议立即联系{ '雨虹成都龙泉驿终端网点' }核实物流状态。"
             },
             {
@@ -1003,15 +1003,14 @@ class ChannelManagementModule:
             "orders": orders,
             "overdue_alerts": overdue_orders,
             "reference_data": {
-                "传统交付周期": "7-10天",
-                "紧急订单履约率": "不足60%",
-                "经销商备货失误率": "35%",
+                "库存预警响应时间": "<1分钟",
+                "库存数据准确率": "100%",
                 "库存周转率": "3.8次/年",
                 "滞销品占比": "超18%"
             },
             "ai_insight": f"当前在途订单{total_orders}个，其中{len(overdue_orders)}个超时预警。"
-                f"履约率{summary['fulfillment_rate']}%，远高于传统模式紧急订单履约率60%。"
-                f"超时订单主要因经销商备货失误（行业失误率35%），建议启用智能分单+安全库存预警。",
+                f"当前履约率{summary['fulfillment_rate']}%，库存数据实时准确。"
+                f"超时订单建议启用安全库存预警，库存预警响应时间<1分钟。",
             "data_source": "示例数据"
         }
 

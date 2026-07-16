@@ -687,7 +687,7 @@ body {
     <div class="tab-nav">
       <button class="tab-btn active" data-tab="dashboard">标准化看板</button>
       <button class="tab-btn" data-tab="expansion">渠道拓展</button>
-      <button class="tab-btn" data-tab="dispatch">智能分单</button>
+      <button class="tab-btn" data-tab="dispatch">合规排名</button>
       <button class="tab-btn" data-tab="insight">经营洞察</button>
     </div>
 
@@ -718,7 +718,7 @@ body {
     <!-- Tab 2: 渠道拓展 -->
     <div class="tab-panel" id="tab-expansion">
       <div class="tab-intro" style="border-left-color:#52c41a;">
-        <strong>渠道拓展管理</strong>：新网点开发全流程管理——选址评分（租金/客流/竞品密度/交通便利/市场潜力5维度）、开业进度跟踪（选址确认→装修→铺货→培训→开业）、新店首月业绩追踪与扶持计划。
+        <strong>渠道洞察</strong>：新网点开发全流程管理——选址评分（租金/客流/竞品密度/交通便利/市场潜力5维度）、开业进度跟踪（选址确认→装修→铺货→培训→开业）、新店首月业绩追踪与扶持计划。
         <br><small style="color:#999;">数据来源：新浪财经建材市场报告 / 中国经济新闻网</small>
       </div>
       <div class="chart-card">
@@ -730,15 +730,15 @@ body {
       </div>
     </div>
 
-    <!-- Tab 3: 智能分单 -->
+    <!-- Tab 3: 合规排名 -->
     <div class="tab-panel" id="tab-dispatch">
       <div class="tab-intro" style="border-left-color:#fa8c16;">
-        <strong>智能分单与履约监控</strong>：根据网点位置、库存充足度、配送能力、门店评分自动分配订单；实时监控履约进度（已下单→已发货→已到货→已施工），超时预警与断货预警。
-        <br><small style="color:#999;">行业痛点：传统模式平均交付周期7-10天，紧急订单履约率不足60%；经销商备货失误率高达35%</small>
+        <strong>合规排名与库存预警</strong>：根据网点位置、库存充足度、配送能力、门店评分自动分配订单；实时监控履约进度（已下单→已发货→已到货→已施工），超时预警与断货预警。
+        <br><small style="color:#999;">行业痛点：缺货超期难以及时预警，库存数据滞后</small>
       </div>
 
       <div class="chart-card">
-        <h3>智能分单引擎<span class="hint">填写订单信息，系统自动推荐最优网点</span></h3>
+        <h3>合规排名引擎<span class="hint">填写订单信息，系统自动推荐最优网点</span></h3>
         <form class="dispatch-form" id="dispatchForm">
           <div class="form-group">
             <label>产品选择</label>
@@ -769,7 +769,7 @@ body {
               <label class="radio-item"><input type="radio" name="urgent" value="加急"> 加急</label>
             </div>
           </div>
-          <button type="submit" class="btn-primary" id="dispatchBtn">开始智能分单</button>
+          <button type="submit" class="btn-primary" id="dispatchBtn">开始合规排名</button>
         </form>
 
         <div class="loading-box" id="loadingBox">
@@ -781,14 +781,14 @@ body {
       </div>
 
       <div class="chart-card">
-        <h3>履约风险监控<span class="hint">8笔在途订单实时追踪 · 点击订单查看详情 · 超时订单闪烁</span></h3>
+        <h3>库存预警<span class="hint">8笔在途订单实时追踪 · 点击订单查看详情 · 超时订单闪烁</span></h3>
         <div class="filter-bar" id="filterBar"></div>
         <div class="order-list-wrap">
           <div id="orderList"></div>
         </div>
         <div class="order-detail" id="orderDetail"></div>
         <div style="margin-top:12px;font-size:12px;color:var(--muted);">
-          <strong>行业对比：</strong>传统模式紧急订单履约率不足60%，本方案通过智能分单+实时监控，目标将履约率提升至86%+。数据来源：数商云建材行业B2B报告。
+          <strong>行业对比：</strong>本方案通过合规排名+实时监控，库存预警响应时间&lt;1分钟、库存数据实时准确。
         </div>
       </div>
     </div>
@@ -844,10 +844,10 @@ body {
         <div class="mapping-modules">
           <span class="mod" style="background:#fff7e6;color:#d46b08;">门店运营模块</span>
           <span class="mod" style="background:#f9f0ff;color:#722ed1;">客户维护模块</span>
-          <span class="mod" style="background:#e6f7ff;color:#0958d9;">渠道管理中枢-分单/履约/洞察</span>
-          <br><small style="color:#666;">会员价值分层 · 流失风险预警 · 个性化营销推荐 · 智能分单 · 履约风险监控</small>
-          <br><small style="color:#999;">智能分单：传统紧急履约率不足60%，本方案目标86%+</small>
-          <br><small style="color:#999;">履约监控：经销商备货失误率35%，AI预警可降低至8%以下</small>
+          <span class="mod" style="background:#e6f7ff;color:#0958d9;">渠道管理中枢-合规排名/库存预警/洞察</span>
+          <br><small style="color:#666;">会员价值分层 · 流失风险预警 · 个性化营销推荐 · 合规排名 · 库存预警</small>
+          <br><small style="color:#999;">合规排名：按库存/距离/履约能力自动匹配最优发货网点</small>
+          <br><small style="color:#999;">库存预警：实时预警超期/缺货，库存数据实时准确</small>
         </div>
       </div>
     </div>
@@ -862,7 +862,7 @@ body {
     <div class="arch-box">
       <div class="arch-layer arch-new">
         <span class="layer-name">渠道层</span>
-        <span class="layer-desc">渠道管理中枢：标准化看板 / 拓展管理 / 分单监控 / 经营洞察</span>
+        <span class="layer-desc">渠道管理中枢：标准化看板 / 渠道洞察 / 合规排名与库存预警 / 经营洞察</span>
         <span class="tag-new">新增</span>
       </div>
       <div class="arch-layer" style="background: #f0f5ff;">
@@ -896,7 +896,7 @@ body {
     </div>
     <div class="chart-card" style="font-size: 13px; color: #555; line-height: 2;">
       <p><strong>东方雨虹渠道数据：</strong>29万+分销网点、4500+零售经销商、3000+品牌专卖店、10000+终端网点、虹哥汇300万+会员、2025年零售营收99.44亿元 — 来源：东方雨虹2025年报（新浪财经2026-04-21）</p>
-      <p><strong>建材行业供应链数据：</strong>传统交付周期7-10天、紧急订单履约率不足60%、经销商备货失误率35%、库存周转率3.8次/年 — 来源：数商云建材行业B2B报告</p>
+      <p><strong>建材行业供应链数据：</strong>库存周转率3.8次/年 — 来源：数商云建材行业B2B报告</p>
       <p><strong>AI话术训练数据：</strong>AI陪练减少60%资料整理时间、培训时效提升49%、成本降低32%、成单转化率提升19% — 来源：中关村科金得助智能</p>
       <p><strong>AI效果图生成数据：</strong>AI 10秒生成3D效果图、完整出图不超过10分钟 — 来源：什么值得买2026年AI装修工具评测</p>
       <p><strong>渠道拓展数据：</strong>建材市场租金60-120元/㎡（一线）、三线城市40+元/㎡、轻资产模式15天开业 — 来源：新浪财经建材市场报告</p>
@@ -1329,7 +1329,7 @@ function initStoreRadar(idx) {
 }
 
 /* =========================================================
- * 智能分单：表单 + 匹配逻辑
+ * 合规排名：表单 + 匹配逻辑
  * ========================================================= */
 function runDispatch(product, qty, region, urgent) {
   // 仅保留有该产品库存的网点
@@ -1474,13 +1474,13 @@ document.getElementById('dispatchForm').addEventListener('submit', e => {
     loadingBox.classList.remove('show');
     resultArea.classList.add('show');
     btn.disabled = false;
-    btn.textContent = '开始智能分单';
+    btn.textContent = '开始合规排名';
     resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }, 1300);
 });
 
 /* =========================================================
- * 履约监控：筛选 + 详情
+ * 库存预警：筛选 + 详情
  * ========================================================= */
 let currentFilter = '全部';
 const orderListEl = document.getElementById('orderList');

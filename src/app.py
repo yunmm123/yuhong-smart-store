@@ -225,20 +225,20 @@ def api_channel_compliance_dashboard():
 
 @app.route('/api/channel/expansion-tracking')
 def api_channel_expansion_tracking():
-    """渠道拓展管理 - 新网点开发档案和开业进度"""
+    """渠道洞察分析 - 新网点开发档案和开业进度"""
     result = channel_module.get_expansion_tracking()
     return jsonify({"success": True, "data": result})
 
 @app.route('/api/channel/smart-dispatch', methods=['POST'])
 def api_channel_smart_dispatch():
-    """智能分单 - 根据网点位置/库存/配送能力自动分配订单"""
+    """合规排名看板 - 根据网点位置/库存/配送能力自动分配订单"""
     data = request.json or {}
     result = channel_module.smart_dispatch(data)
     return jsonify({"success": True, "data": result})
 
 @app.route('/api/channel/fulfillment-monitor')
 def api_channel_fulfillment_monitor():
-    """履约风险监控 - 监控订单交付进度，超时预警"""
+    """库存预警监控 - 监控订单交付进度，超时预警"""
     result = channel_module.get_fulfillment_monitor()
     return jsonify({"success": True, "data": result})
 

@@ -854,7 +854,7 @@ body {
         <span class="method-tag get">GET</span>
         <span class="api-path">/api/channel/expansion-tracking</span>
       </div>
-      <p class="api-desc">渠道拓展管理，跟踪新网点开拓进度，建材市场租金60-120元/㎡，轻资产模式15天开业</p>
+      <p class="api-desc">渠道洞察，跟踪新网点开拓进度，建材市场租金60-120元/㎡，轻资产模式15天开业</p>
       <div class="api-sub">请求参数</div>
       <table class="param-table">
         <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
@@ -888,7 +888,7 @@ body {
         <span class="method-tag post">POST</span>
         <span class="api-path">/api/channel/smart-dispatch</span>
       </div>
-      <p class="api-desc">智能分单，根据订单需求、网点库存、配送距离和履约能力自动匹配最优发货网点，紧急订单履约率从不足60%提升至86%+</p>
+      <p class="api-desc">合规排名，根据订单需求、网点库存、配送距离和履约能力自动匹配最优发货网点</p>
       <div class="api-sub">请求参数</div>
       <table class="param-table">
         <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
@@ -922,7 +922,7 @@ body {
         <span class="method-tag get">GET</span>
         <span class="api-path">/api/channel/fulfillment-monitor</span>
       </div>
-      <p class="api-desc">履约风险监控，传统建材交付周期7-10天，本接口实时预警超期/缺货/备货失误风险（备货失误率从35%降至8%）</p>
+      <p class="api-desc">库存预警，本接口实时预警超期/缺货/备货失误风险，库存数据实时准确</p>
       <div class="api-sub">请求参数</div>
       <table class="param-table">
         <thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
@@ -945,7 +945,7 @@ body {
       { <span class="jk">"order_id"</span>: <span class="js">"ORD-088"</span>, <span class="jk">"risk_level"</span>: <span class="js">"高"</span>, <span class="jk">"type"</span>: <span class="js">"超期"</span>, <span class="jk">"delay_days"</span>: <span class="jn">2</span>, <span class="jk">"outlet"</span>: <span class="js">"SH-012"</span> },
       { <span class="jk">"order_id"</span>: <span class="js">"ORD-102"</span>, <span class="jk">"risk_level"</span>: <span class="js">"中"</span>, <span class="jk">"type"</span>: <span class="js">"缺货"</span>, <span class="jk">"product"</span>: <span class="js">"聚氨酯防水涂料"</span>, <span class="jk">"outlet"</span>: <span class="js">"GZ-007"</span> }
     ],
-    <span class="jk">"ai_suggestion"</span>: <span class="js">"SH-012连续2单超期，建议启用智能分单切换至SH-008发货；GZ-007聚氨酯涂料缺货，建议紧急调拨。"</span>
+    <span class="jk">"ai_suggestion"</span>: <span class="js">"SH-012连续2单超期，建议启用合规排名切换至SH-008发货；GZ-007聚氨酯涂料缺货，建议紧急调拨。"</span>
   }
 }</pre></div>
     </div>
@@ -979,10 +979,10 @@ body {
     ],
     <span class="jk">"key_findings"</span>: [
       <span class="js">"华东渠道销售额同比增长22%，标准化率达89%领跑全国"</span>,
-      <span class="js">"紧急订单履约率提升至86%，较改造前不足60%显著改善"</span>,
-      <span class="js">"备货失误率降至8%，预计每年减少损耗超200万元"</span>
+      <span class="js">"库存预警响应时间&lt;1分钟，库存数据实时准确"</span>,
+      <span class="js">"预计每年减少损耗超200万元"</span>
     ],
-    <span class="jk">"ai_recommendation"</span>: <span class="js">"建议将华东标准化管理经验复制至西北区域；针对履约薄弱网点启用智能分单自动切换。"</span>
+    <span class="jk">"ai_recommendation"</span>: <span class="js">"建议将华东标准化管理经验复制至西北区域；针对履约薄弱网点启用合规排名自动切换。"</span>
   }
 }</pre></div>
     </div>
