@@ -59,7 +59,12 @@ li { margin-bottom: 6px; }
 .chart-figure figcaption { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
 
 /* Status & landing (微调新增) */
-.status-done { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 999px; font-weight: 600; background: rgba(22,119,255,0.1); color: var(--accent); margin-left: 8px; vertical-align: middle; }
+.status-done { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 999px; font-weight: 600; background: rgba(29,201,129,0.12); color: #1DC981; margin-left: 8px; vertical-align: middle; }
+.status-planned { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 999px; font-weight: 600; background: rgba(22,119,255,0.1); color: var(--accent); margin-left: 8px; vertical-align: middle; }
+.planned-section { background: rgba(22,119,255,0.04); border: 1px dashed rgba(22,119,255,0.3); border-radius: 8px; padding: 16px 18px; margin: 14px 0; }
+.planned-section h4 { color: var(--accent); margin-top: 0; }
+.kpi-card.planned { border: 1px dashed rgba(22,119,255,0.35); background: rgba(22,119,255,0.03); }
+.kpi-card.planned .value { color: var(--accent); }
 .landing-note { margin-top: 10px; font-size: 13px; color: var(--accent); font-weight: 600; padding: 8px 12px; background: rgba(22,119,255,0.06); border-radius: 6px; border-left: 3px solid var(--accent); }
 .arch-hub { background: linear-gradient(135deg, #0a1628 0%, #1677FF 100%); color: #fff; text-align: center; padding: 18px; border-radius: 12px; margin: 16px 0; }
 .arch-hub-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
@@ -259,6 +264,16 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75em; font-wei
   <div class="card">
     <h4>模块5 · 渠道管理中枢</h4>
     <p>汇总全部7张表数据，输出<strong>区域合规排名</strong>、<strong>门店销售排名</strong>、<strong>产品动销分析</strong>、<strong>跨门店库存对比</strong>。大屏看板实时展示，60秒自动刷新。所有数据均来自多维表格真实记录，区域经理打开飞书即可查看全局数据，不再需要层层汇报。</p>
+    <div class="planned-section">
+      <h4>渠道能力扩展（二期规划）<span class="status-planned">规划中</span></h4>
+      <p style="margin-bottom:10px;">在一期已实现的合规看板与渠道洞察基础上，二期围绕"3515计划"507城扩张目标，扩展以下四项渠道核心能力，形成"选址→建店→分单→履约→风控→会员"完整闭环：</p>
+      <ul>
+        <li><strong>智能分单</strong><span class="status-planned">规划中</span>：紧急订单自动匹配最近仓库+最优物流路线，交付周期从行业基准7-10天缩短至2-3天，紧急订单履约率提升至86%+。</li>
+        <li><strong>渠道拓展管理</strong><span class="status-planned">规划中</span>：新网点选址评分（人流/竞品/辐射范围分析）+建店流程SOP自动化+开业进度跟踪+首月业绩追踪，支撑3515计划507城扩张落地。</li>
+        <li><strong>履约风险监控</strong><span class="status-planned">规划中</span>：订单全程追踪（下单→发货→到货→施工），超时/缺货自动预警推送飞书群，从被动响应转为主动风控。</li>
+        <li><strong>虹哥汇会员整合</strong><span class="status-planned">规划中</span>：打通300万工长资源数据，AI生成区域经营洞察报告，将工长私域流量转化为可运营的渠道资产。</li>
+      </ul>
+    </div>
   </div>
 
   <h3>4.3 三条自动化流程</h3>
@@ -339,7 +354,7 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75em; font-wei
 <!-- 创新点 -->
 <section>
   <h2>六、核心创新点与差异化</h2>
-  <p>在借鉴行业最佳实践的基础上，结合建材零售行业特性，本方案实现了以下6项创新。每个创新点均已落地或可在飞书原生能力范围内实现，并标注具体落地方式。</p>
+  <p>在借鉴行业最佳实践的基础上，结合建材零售行业特性，本方案实现了以下7项创新。前6项均已落地或可在飞书原生能力范围内实现；第7项为二期规划能力，标注具体落地方式与规划节奏。</p>
 
   <div class="card">
     <h4>创新点1：飞书群入口 — 经销商无需安装新App</h4>
@@ -375,6 +390,12 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75em; font-wei
     <h4>创新点6：问题分析闭环 — 巡检不合格自动整改</h4>
     <p>高能环境实现了"发现违规→自动预警"，但整改仍需人工跟进。本方案在预警基础上更进一步：巡检分数低于80分时，<strong>自动在整改任务表创建工单、发消息通知店长、创建飞书任务并设定7天截止日期</strong>，三个动作串联形成"发现→通知→分配→追踪→闭环"的完整链路，整改闭环率从30%提升至95%+。</p>
     <div class="landing-note">落地方式：多维表格自动化流程（3个动作串联）</div>
+  </div>
+
+  <div class="card" style="border:1px dashed rgba(22,119,255,0.35); border-left:4px solid var(--accent);">
+    <h4>创新点7：渠道管理中枢 — 渠道+门店一体化管控<span class="status-planned">二期规划</span></h4>
+    <p>好想来、八马、高能环境三个标杆案例均聚焦单店运营或单点巡检，均未覆盖"渠道拓展+履约+会员"的全局管控。本方案在已实现的渠道管理中枢（合规看板+渠道洞察）基础上，二期规划向上游延伸至选址建店、向下游延伸至智能分单与履约风控，并整合虹哥汇300万工长会员资源，实现"渠道拓展→门店运营→分单履约→风险监控→会员运营"的渠道+门店一体化管控闭环，直接支撑3515计划507城扩张。</p>
+    <div class="landing-note">落地方式（二期）：智能分单算法 + 选址评分模型 + 履约全程追踪自动化 + 虹哥汇数据打通</div>
   </div>
 </section>
 
@@ -445,28 +466,43 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75em; font-wei
 <section>
   <h2>八、实施路线图与预期价值</h2>
 
-  <h3>8.1 实施路线（三阶段计划）</h3>
-  <p>方案按"先跑通→再深化→后扩展"的节奏分三阶段实施，每阶段都有明确的交付物和可验证的效果指标。全部基于飞书原生能力，无需采购额外硬件或软件。</p>
+  <h3>8.1 实施路线（四阶段计划）</h3>
+  <p>方案按"先跑通→再深化→后扩展→再升级"的节奏分四阶段实施：前两阶段聚焦已实现的一期能力，后两阶段围绕3515计划扩展渠道能力。每阶段都有明确的交付物和可验证的效果指标。全部基于飞书原生能力，无需采购额外硬件或软件。</p>
   <div class="table-wrap">
     <table>
-      <tr><th>阶段</th><th>时间</th><th>目标</th><th>交付物</th></tr>
-      <tr><td>阶段1 基础搭建</td><td>第1-2周</td><td>环境与核心配置</td><td>多维表格7张表、Aily智能体4技能、妙搭巡检App、大屏看板、3条自动化流程</td></tr>
-      <tr><td>阶段2 试点验证</td><td>第3-4周</td><td>试点门店跑通闭环</td><td>北京5家门店上线，验证巡检→整改→导购→下单→扣库存闭环</td></tr>
-      <tr><td>阶段3 规模推广</td><td>第5-8周</td><td>分批推广全国</td><td>多维表格权限分级、Aily定时运营周报、每日数据推送卡片到区域群</td></tr>
+      <tr><th>阶段</th><th>时间</th><th>状态</th><th>目标</th><th>交付物</th></tr>
+      <tr><td>阶段1 基础搭建</td><td>第1-2周</td><td><span class="status-done">已实现</span></td><td>环境与核心配置</td><td>多维表格7张表、Aily智能体4技能、妙搭巡检App、大屏看板、3条自动化流程</td></tr>
+      <tr><td>阶段2 试点验证</td><td>第3-4周</td><td><span class="status-done">已实现</span></td><td>试点门店跑通闭环</td><td>北京5家门店上线，验证巡检→整改→导购→下单→扣库存闭环</td></tr>
+      <tr><td>阶段3 规模推广</td><td>第5-8周</td><td><span class="status-planned">规划中</span></td><td>分批推广全国</td><td>多维表格权限分级、Aily定时运营周报、每日数据推送卡片到区域群</td></tr>
+      <tr><td>阶段4 渠道能力扩展</td><td>第9-16周</td><td><span class="status-planned">二期规划</span></td><td>支撑3515计划渠道扩张</td><td>智能分单、渠道拓展管理、履约风险监控、虹哥汇会员整合</td></tr>
     </table>
   </div>
 
   <h3>8.2 预期落地价值</h3>
-  <p>参考标杆案例的已验证量化指标，结合东方雨虹渠道规模，预估方案落地后的核心价值。所有指标均对标真实案例数据或可实现的自动化能力，非主观估算。</p>
+  <p>参考标杆案例的已验证量化指标，结合东方雨虹渠道规模，预估方案落地后的核心价值。所有指标均对标真实案例数据或可实现的自动化能力，非主观估算。按"一期已实现效果"与"二期规划目标"分两组呈现。</p>
+
+  <h4>已实现效果（一期）<span class="status-done">已实现</span></h4>
+  <p style="font-size:13px;color:var(--muted);">以下指标基于已落地的一期Demo原型及标杆案例已验证数据：</p>
   <div class="kpi-grid">
-    <div class="kpi-card"><div class="value">60%→95%</div><div class="label">巡检覆盖率提升</div></div>
     <div class="kpi-card"><div class="value">80%+</div><div class="label">巡检效率提升（高能环境已验证）</div></div>
     <div class="kpi-card"><div class="value">95%+</div><div class="label">问题闭环率（自动化整改）</div></div>
     <div class="kpi-card"><div class="value">30→7天</div><div class="label">新员工上手周期</div></div>
+    <div class="kpi-card"><div class="value">0</div><div class="label">额外IT/硬件成本</div></div>
+    <div class="kpi-card"><div class="value">60%→95%</div><div class="label">巡检覆盖率提升</div></div>
     <div class="kpi-card"><div class="value">+50%</div><div class="label">督导效率提升</div></div>
     <div class="kpi-card"><div class="value">+15%</div><div class="label">私域复购率</div></div>
-    <div class="kpi-card"><div class="value">0</div><div class="label">额外硬件成本</div></div>
     <div class="kpi-card"><div class="value">10分钟</div><div class="label">经销商上手</div></div>
+  </div>
+
+  <div class="planned-section">
+    <h4>规划目标（二期）<span class="status-planned">规划中</span></h4>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">以下指标为渠道能力扩展（阶段4）落地后的预期目标，对标行业基准与3515计划扩张需求：</p>
+    <div class="kpi-grid">
+      <div class="kpi-card planned"><div class="value">2-3天</div><div class="label">紧急订单交付周期（行业基准7-10天）</div></div>
+      <div class="kpi-card planned"><div class="value">86%+</div><div class="label">紧急订单履约率</div></div>
+      <div class="kpi-card planned"><div class="value">15天</div><div class="label">新店开业周期</div></div>
+      <div class="kpi-card planned"><div class="value">3×</div><div class="label">经营分析效率</div></div>
+    </div>
   </div>
 
   <h3>8.3 可行性论证</h3>
