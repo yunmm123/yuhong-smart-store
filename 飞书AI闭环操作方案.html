@@ -252,7 +252,7 @@ tr:nth-child(even) td { background: #fafafa; }
 
 <h2><span class="num">1</span>前置准备</h2>
 
-<h3>1.1 新建第7张表：整改任务表</h3>
+<h3>1.1 新建第7张表：整改任务表（第8张表：区域月度统计表由巡检应用自动更新）</h3>
 
 <p>在多维表格中新增一张「整改任务表」，用于自动接收巡检不合格时生成的整改工单。</p>
 
@@ -261,7 +261,7 @@ tr:nth-child(even) td { background: #fafafa; }
   <table>
     <tr><th>字段名称</th><th>字段类型</th><th>说明</th></tr>
     <tr><td>任务编号</td><td>自动编号</td><td>系统自动生成，如 ZG-0001</td></tr>
-    <tr><td>门店编号</td><td>单行文本</td><td>关联巡检记录的门店</td></tr>
+    <tr><td>门店编号</td><td>单行文本</td><td>门店编号（文本）</td></tr>
     <tr><td>门店名称</td><td>单行文本</td><td>自动带入</td></tr>
     <tr><td>巡检分数</td><td>数字</td><td>触发整改的巡检分数</td></tr>
     <tr><td>不合格维度</td><td>多选</td><td>陈列 / 卫生 / 价签 / 库存 / 服务 / 安全</td></tr>
@@ -281,7 +281,7 @@ tr:nth-child(even) td { background: #fafafa; }
   <table>
     <tr><th>字段名称</th><th>字段类型</th><th>说明</th></tr>
     <tr><td>订单编号</td><td>自动编号</td><td>系统自动生成，如 DD-0001</td></tr>
-    <tr><td>门店编号</td><td>单行文本</td><td>关联门店</td></tr>
+    <tr><td>门店编号</td><td>单行文本</td><td>门店编号（文本）</td></tr>
     <tr><td>客户姓名</td><td>单行文本</td><td>购买客户</td></tr>
     <tr><td>产品编号</td><td>单行文本</td><td>关联产品库存表</td></tr>
     <tr><td>产品名称</td><td>单行文本</td><td>购买的产品</td></tr>
