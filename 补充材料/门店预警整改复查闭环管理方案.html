@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>门店预警整改复查闭环管理方案 - 雨虹门店智慧运营</title>
+<style>
+:root {
+  --accent: #E60012;
+  --accent2: #1DC981;
+  --purple: #722ED1;
+  --blue: #1677FF;
+  --dark: #1a1a1a;
+  --muted: #666;
+  --light: #f5f5f5;
+  --border: #e0e0e0;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--light);
+  color: var(--dark);
+  line-height: 1.8;
+  padding: 40px 20px;
+}
+.container { max-width: 900px; margin: 0 auto; background: #fff; border-radius: 16px; padding: 48px; box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
+h1 { font-size: 32px; color: var(--accent); margin-bottom: 8px; }
+.subtitle { font-size: 15px; color: var(--muted); margin-bottom: 32px; }
+h2 { font-size: 22px; color: var(--dark); margin: 32px 0 16px; padding-left: 12px; border-left: 4px solid var(--accent); }
+h3 { font-size: 18px; color: var(--dark); margin: 24px 0 12px; }
+p { margin-bottom: 12px; color: #333; font-size: 15px; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin-bottom: 8px; color: #333; font-size: 15px; }
+.highlight-box { background: rgba(230,0,18,0.05); border: 1px solid rgba(230,0,18,0.2); border-radius: 12px; padding: 20px 24px; margin: 16px 0; }
+.highlight-box-purple { background: rgba(114,46,209,0.05); border: 1px solid rgba(114,46,209,0.2); border-radius: 12px; padding: 20px 24px; margin: 16px 0; }
+.highlight-box-green { background: rgba(29,201,129,0.05); border: 1px solid rgba(29,201,129,0.2); border-radius: 12px; padding: 20px 24px; margin: 16px 0; }
+.phase-flow { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.phase-card { flex: 1; min-width: 180px; border-radius: 12px; padding: 20px; text-align: center; }
+.phase-1 { background: linear-gradient(135deg, #fff5f5, #ffe8e8); border: 1px solid rgba(230,0,18,0.2); }
+.phase-2 { background: linear-gradient(135deg, #fff8e6, #ffefcc); border: 1px solid rgba(250,173,20,0.3); }
+.phase-3 { background: linear-gradient(135deg, #f0f5ff, #e6f7ff); border: 1px solid rgba(22,119,255,0.2); }
+.phase-4 { background: linear-gradient(135deg, #f6ffed, #f0ffe0); border: 1px solid rgba(29,201,129,0.2); }
+.phase-num { font-size: 28px; font-weight: bold; margin-bottom: 4px; }
+.phase-1 .phase-num { color: var(--accent); }
+.phase-2 .phase-num { color: #fa8c16; }
+.phase-3 .phase-num { color: var(--blue); }
+.phase-4 .phase-num { color: var(--accent2); }
+.phase-title { font-size: 14px; font-weight: 600; color: var(--dark); margin-bottom: 6px; }
+.phase-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+.value-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0; }
+.value-card { background: var(--light); border-radius: 12px; padding: 20px; text-align: center; }
+.value-icon { font-size: 32px; margin-bottom: 8px; }
+.value-title { font-size: 14px; font-weight: 600; color: var(--dark); margin-bottom: 6px; }
+.value-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+.link-section { background: linear-gradient(135deg, #f0f5ff, #e6f7ff); border: 1px solid rgba(22,119,255,0.2); border-radius: 12px; padding: 24px; margin: 24px 0; text-align: center; }
+.link-btn { display: inline-block; background: var(--blue); color: #fff; text-decoration: none; padding: 12px 32px; border-radius: 8px; font-size: 15px; font-weight: 600; margin-top: 12px; transition: all 0.2s; }
+.link-btn:hover { background: #0958d9; transform: translateY(-1px); }
+.callout { background: rgba(230,0,18,0.05); border-left: 4px solid var(--accent); border-radius: 8px; padding: 16px 20px; margin: 16px 0; }
+.callout-label { font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 6px; }
+.flow-arrow { text-align: center; font-size: 24px; color: var(--muted); margin: 8px 0; }
+.footer { text-align: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; }
+@media (max-width: 600px) {
+  .container { padding: 24px 16px; }
+  .phase-flow { flex-direction: column; }
+  .value-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>门店预警整改复查闭环管理方案</h1>
+  <p class="subtitle">雨虹渠道智慧运营助手 · 整改终审与闭环验证机制</p>
+
+  <div class="highlight-box">
+    <p style="margin:0; font-size:15px;"><strong>核心定位：</strong>本看板作为"复查与销项"的核心载体，承接店长初步整改后的二次实地核验。<strong>店长整改 ≠ 预警结束</strong>，只有经过复查人员现场确认无误后，系统看板才会正式取消预警，达成业务闭环。</p>
+  </div>
+
+  <h2>一、方案背景与痛点</h2>
+  <p>在传统的门店管理中，预警问题下发后往往面临"整改流于形式"、"缺乏二次核验"等痛点。为了确保门店问题真实解决，特建立<strong>"店长初审整改 + 专人实地复查"</strong>的双重闭环机制。</p>
+  <p>本看板作为<strong>"复查与销项"</strong>的核心载体，旨在通过数字化看板，追踪每一项预警的最终落地结果。</p>
+
+  <h2>二、四阶段标准化运作流程</h2>
+  <p>方案实行"四步走"流程，确保权责清晰、过程可追溯：</p>
+
+  <div class="phase-flow">
+    <div class="phase-card phase-1">
+      <div class="phase-num">01</div>
+      <div class="phase-title">触发预警</div>
+      <div class="phase-desc">督导日常检查或系统自动抓取问题，触发红灯预警并录入系统</div>
+    </div>
+    <div class="phase-card phase-2">
+      <div class="phase-num">02</div>
+      <div class="phase-title">初步整改</div>
+      <div class="phase-desc">店长接单，在规定时间内组织店内人员完成初步整改</div>
+    </div>
+    <div class="phase-card phase-3">
+      <div class="phase-num">03</div>
+      <div class="phase-title">二次复查</div>
+      <div class="phase-desc">专职复查人员根据看板提示前往门店实地复查，逐项核验并拍照记录</div>
+    </div>
+    <div class="phase-card phase-4">
+      <div class="phase-num">04</div>
+      <div class="phase-title">看板销警</div>
+      <div class="phase-desc">复查合格→看板取消预警（红灯变绿灯）；不合格→驳回重新整改</div>
+    </div>
+  </div>
+
+  <div class="highlight-box-purple">
+    <p style="margin:0 0 8px; font-size:13px; font-weight:600; color:var(--purple);">第三阶段 · 本看板核心功能</p>
+    <p style="margin:0; font-size:14px; color:#333;">组内安排专职复查人员（如运营督导/品控）根据看板提示，前往门店进行<strong>实地二次复查</strong>，对照整改标准逐项核验并拍照/记录。</p>
+  </div>
+
+  <div class="highlight-box-green">
+    <p style="margin:0 0 8px; font-size:13px; font-weight:600; color:var(--accent2);">第四阶段 · 闭环销警</p>
+    <p style="margin:0; font-size:14px; color:#333;"><strong>复查合格：</strong>复查人员在表格中确认，看板同步取消预警（红灯变绿灯/移出待办）。</p>
+    <p style="margin:8px 0 0; font-size:14px; color:#333;"><strong>复查不合格：</strong>驳回整改结果，重新退回店长端，继续预警。</p>
+  </div>
+
+  <h2>三、看板核心管理价值</h2>
+  <div class="value-grid">
+    <div class="value-card">
+      <div class="value-icon">🛡️</div>
+      <div class="value-title">防止虚假整改</div>
+      <div class="value-desc">引入第三方/管理层复查机制，确保整改质量真实有效</div>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">📊</div>
+      <div class="value-title">进度实时可视</div>
+      <div class="value-desc">组长及管理层可通过仪表盘实时监控各门店的"整改率"与"复查合格率"，精准管控风险</div>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">📁</div>
+      <div class="value-title">沉淀历史数据</div>
+      <div class="value-desc">自动记录门店高频问题，为后续的门店培训和考核提供数据支撑</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">与整改管家的关系</div>
+    <p style="margin:0; font-size:14px;">整改管家App完成的是<strong>第二阶段（店长初步整改）</strong>，本看板完成的是<strong>第三、四阶段（复查与销警）</strong>。两者衔接形成完整的四阶段闭环：巡检触发→店长整改→专人复查→看板销警，确保问题彻底解决，防止门店应付检查。</p>
+  </div>
+
+  <h2>四、系统链接</h2>
+  <div class="link-section">
+    <p style="margin:0 0 4px; font-size:15px; font-weight:600; color:var(--dark);">门店整改复查执行总链</p>
+    <p style="margin:0; font-size:13px; color:var(--muted);">飞书多维表格仪表盘 · 需飞书登录访问</p>
+    <a class="link-btn" href="https://larkcommunity.feishu.cn/share/base/dashboard/shrcntqXs0XhdJJ4mSNWSeGs3sh" target="_blank">打开复查追踪看板 →</a>
+  </div>
+
+  <div class="footer">
+    项目团队 · 东方雨虹渠道智慧运营解决方案 · 2026年7月
+  </div>
+</div>
+</body>
+</html>
