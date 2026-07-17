@@ -26,6 +26,7 @@ class Config:
     BITABLE_CUSTOMER_TABLE_ID = os.environ.get('BITABLE_CUSTOMER_TABLE_ID', '')      # 客户表
     BITABLE_SALES_TABLE_ID = os.environ.get('BITABLE_SALES_TABLE_ID', '')            # 销售数据表
     BITABLE_PRODUCT_TABLE_ID = os.environ.get('BITABLE_PRODUCT_TABLE_ID', '')        # 产品库存表
+    BITABLE_RECTIFICATION_TABLE_ID = os.environ.get('BITABLE_RECTIFICATION_TABLE_ID', '')  # 整改任务表
 
     # aily智能体配置（从 https://aily.feishu.cn 获取）
     AILY_APP_ID = os.environ.get('AILY_APP_ID', '')

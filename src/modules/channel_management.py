@@ -147,16 +147,40 @@ class ChannelManagementModule:
                     "rectification_rate": round(stats["passed"] / stats["total"] * 100, 1) if stats["total"] else 0
                 })
 
-            # 整改追踪
-            total_issues = sum(r["failed_stores"] for r in region_compliance)
+            # 整改追踪 - 从整改任务表读取真实状态
             rectification_tracking = {
                 "total_issues": total_issues,
-                "resolved": round(total_issues * 0.8),
-                "in_progress": round(total_issues * 0.15),
-                "overdue": round(total_issues * 0.05),
-                "completion_rate": 80.0,
-                "overdue_rate": 5.0
+                "resolved": 0,
+                "in_progress": 0,
+                "overdue": 0,
+                "completion_rate": 0.0,
+                "overdue_rate": 0.0
             }
+            try:
+                rect_table_id = getattr(self.config, 'BITABLE_RECTIFICATION_TABLE_ID', '') or os.environ.get('BITABLE_RECTIFICATION_TABLE_ID', '')
+                if rect_table_id and self.bitable:
+                    rect_records = self.bitable.list_records(rect_table_id, page_size=500)
+                    if rect_records:
+                        status_counts = {"已完成": 0, "整改中": 0, "已接收": 0, "待处理": 0, "已超期": 0}
+                        for rr in rect_records:
+                            rf = rr.get("fields", {})
+                            status = _val(rf, "任务状态", "")
+                            if status in status_counts:
+                                status_counts[status] += 1
+                        total_rect = sum(status_counts.values())
+                        resolved = status_counts["已完成"]
+                        in_progress = status_counts["已接收"] + status_counts["整改中"]
+                        overdue = status_counts["已超期"] + status_counts["待处理"]
+                        rectification_tracking = {
+                            "total_issues": total_rect or total_issues,
+                            "resolved": resolved,
+                            "in_progress": in_progress,
+                            "overdue": overdue,
+                            "completion_rate": round(resolved / total_rect * 100, 1) if total_rect else 0.0,
+                            "overdue_rate": round(overdue / total_rect * 100, 1) if total_rect else 0.0
+                        }
+            except Exception:
+                pass
 
             return {
                 "update_time": datetime.now().strftime("%Y-%m-%d %H:%M"),
@@ -1037,9 +1061,11 @@ class ChannelManagementModule:
             except Exception:
                 pass
 
-            # 按区域汇总销售额
+            # 按区域汇总销售额，并按月记录用于环比计算
             region_sales = {}
+            region_monthly = {}  # {区域: {月份: 销售额}}
             product_sales = {}
+            product_monthly = {}  # {产品: {月份: 销售额}}
             monthly_sales = {}
 
             for r in sales_records:
@@ -1056,6 +1082,26 @@ class ChannelManagementModule:
                 product_sales[product_name] = product_sales.get(product_name, 0) + amount
                 monthly_sales[month] = monthly_sales.get(month, 0) + amount
 
+                # 按区域+月份记录
+                if region not in region_monthly:
+                    region_monthly[region] = {}
+                region_monthly[region][month] = region_monthly[region].get(month, 0) + amount
+
+                # 按产品+月份记录
+                if product_name not in product_monthly:
+                    product_monthly[product_name] = {}
+                product_monthly[product_name][month] = product_monthly[product_name].get(month, 0) + amount
+
+            def _calc_growth(monthly_dict):
+                """计算最近两个月环比增长率"""
+                sorted_m = sorted(monthly_dict.keys())
+                if len(sorted_m) >= 2:
+                    curr = monthly_dict[sorted_m[-1]]
+                    prev = monthly_dict[sorted_m[-2]]
+                    if prev > 0:
+                        return round((curr - prev) / prev * 100, 1)
+                return 0.0
+
             # 区域排名
             region_ranking = []
             for region, sales in sorted(region_sales.items(), key=lambda x: x[1], reverse=True):
@@ -1063,7 +1109,7 @@ class ChannelManagementModule:
                     "rank": len(region_ranking) + 1,
                     "region": region,
                     "sales_万元": round(sales / 10000, 1),
-                    "growth": 0,
+                    "growth": _calc_growth(region_monthly.get(region, {})),
                     "store_count": sum(1 for s, r in store_region_map.items() if r == region),
                     "avg_per_store": round(sales / 10000 / max(1, sum(1 for s, r in store_region_map.items() if r == region)), 1)
                 })
@@ -1077,10 +1123,9 @@ class ChannelManagementModule:
                     "product": pname,
                     "sales_万元": round(psales / 10000, 1),
                     "share": round(psales / total_product_sales * 100, 1) if total_product_sales else 0,
-                    "growth": 0,
+                    "growth": _calc_growth(product_monthly.get(pname, {})),
                     "hot_regions": [],
                     "turnover_days": 0
-                })
 
             # 月度趋势
             sorted_months = sorted(monthly_sales.keys())
@@ -1100,7 +1145,7 @@ class ChannelManagementModule:
                     "insight": f"基于{len(sales_records)}条销售记录分析，总销售额{round(total_sales/10000, 1)}万元。"
                 },
                 "total_sales_万元": round(total_sales / 10000, 1),
-                "avg_growth": 0,
+                "avg_growth": round(sum(r["growth"] for r in region_ranking) / len(region_ranking), 1) if region_ranking else 0,
                 "ai_insight": f"全国渠道总销售额{round(total_sales/10000, 1)}万元。"
                     f"TOP1产品为{product_sales_top5[0]['product'] if product_sales_top5 else '无'}"
                     f"（占比{product_sales_top5[0]['share'] if product_sales_top5 else 0}%）。",
