@@ -85,7 +85,8 @@
 |------|---------|----------|
 | ✅ aily智能体 | 雨虹AI导购小虹：产品知识库(8产品)+术语库(15条)+诊断推荐+用量计算+成本估算+智能追问 | [打开](https://aily.feishu.cn/agents/agent_4km3vtz85963q6x/detail) |
 | ✅ 多维表格 | 9表54+条记录(门店/巡检/客户/销售/产品库存/术语表/整改任务/区域月度统计/区域年度汇总) + 8个公式字段 | [打开](https://larkcommunity.feishu.cn/base/R7v9bKHNdaBsDFsDdvzcXICOnWh) |
-| ✅ 妙搭巡检应用 | 移动端6维度巡检评分+历史记录+统计看板，数据实时同步多维表格 | [源码](miaoda-inspection/) |
+| ✅ 妙搭巡检应用 | 移动端6维度巡检评分+历史记录+统计看板，数据实时同步多维表格 | [打开](https://dcniaqwtmoca.feishuapp.com/app/app_17a5vu5md7x) |
+| ✅ 妙搭整改管家 | 店长接收整改任务+AI整改建议+提交整改结果，按手机号自动隔离门店数据 | [打开](https://dcniaqwtmoca.feishuapp.com/app/app_17a7r9xk9k3) |
 | ✅ Flask全模块对接 | 5大模块全部对接Bitable真实数据 + aily智能体集成 + 大屏API调用 + 37测试通过 | [源码](src/) |
 
 ## 商业价值 · 3515战略对齐
