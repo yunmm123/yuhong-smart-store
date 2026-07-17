@@ -28,6 +28,7 @@
 | BITABLE_APP_TOKEN | R7v9bKHNdaBsDFsDdvzcXICOnWh |
 | TABLE_STORE | tblz4EvPXhpCVy6l |
 | TABLE_INSPECTION | tbl6WQHXuVF6Qgk9 |
+| TABLE_REGION_STATS | tblyoXE0QKYtfEAR |
 
 ### 3. 初始化本地仓库
 

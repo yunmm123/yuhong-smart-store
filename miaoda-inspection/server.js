@@ -23,6 +23,7 @@ const CONFIG = {
   BITABLE_APP_TOKEN: process.env.BITABLE_APP_TOKEN || 'R7v9bKHNdaBsDFsDdvzcXICOnWh',
   TABLE_STORE: process.env.TABLE_STORE || 'tblz4EvPXhpCVy6l',
   TABLE_INSPECTION: process.env.TABLE_INSPECTION || 'tbl6WQHXuVF6Qgk9',
+  TABLE_REGION_STATS: process.env.TABLE_REGION_STATS || 'tblyoXE0QKYtfEAR',
   PORT: process.env.PORT || 3000
 };
 
@@ -103,6 +104,93 @@ const INSPECTION_ITEMS = [
   ]}
 ];
 
+// ===== 区域月度统计：提交后自动更新区域月度统计表 =====
+
+async function updateRegionStats(region) {
+  try {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const monthKey = `${year}-${month}`;
+
+    // 1. 查询巡检记录表中该区域的所有记录
+    const resp = await bitableRequest('get', `/tables/${CONFIG.TABLE_INSPECTION}/records?page_size=500`);
+    if (resp.code !== 0) {
+      console.error('区域统计-查询巡检记录失败:', resp.msg);
+      return;
+    }
+
+    const allRegionRecords = (resp.data.items || []).filter(r => val(r.fields, '区域') === region);
+
+    // 2. 筛选当月记录
+    const monthStart = new Date(year, now.getMonth(), 1).getTime();
+    const monthEnd = new Date(year, now.getMonth() + 1, 1).getTime();
+    const monthRecords = allRegionRecords.filter(r => {
+      const t = toNum(r.fields, '巡检时间');
+      return t >= monthStart && t < monthEnd;
+    });
+
+    const monthTotal = monthRecords.length;
+    const monthPassed = monthRecords.filter(r => toNum(r.fields, '总分') >= 80).length;
+    const monthFailed = monthTotal - monthPassed;
+    const monthPassRate = monthTotal > 0 ? monthPassed / monthTotal : 0;
+    const monthAvgScore = monthTotal > 0
+      ? monthRecords.reduce((sum, r) => sum + toNum(r.fields, '总分'), 0) / monthTotal
+      : 0;
+
+    // 3. 筛选当年记录，计算年度巡检总条数
+    const yearStart = new Date(year, 0, 1).getTime();
+    const yearRecords = allRegionRecords.filter(r => toNum(r.fields, '巡检时间') >= yearStart);
+    const yearTotal = yearRecords.length;
+
+    // 4. 查找区域月度统计表中该区域+该月的记录行
+    const statsResp = await bitableRequest('get', `/tables/${CONFIG.TABLE_REGION_STATS}/records?page_size=500`);
+    if (statsResp.code !== 0) {
+      console.error('区域统计-查询统计表失败:', statsResp.msg);
+      return;
+    }
+
+    let statRecord = (statsResp.data.items || []).find(r =>
+      val(r.fields, '区域') === region && val(r.fields, '统计月份') === monthKey
+    );
+
+    // 5. 如果当月行不存在，则新建
+    if (!statRecord) {
+      const createResp = await bitableRequest('post', `/tables/${CONFIG.TABLE_REGION_STATS}/records`, {
+        fields: { '区域': region, '统计月份': monthKey }
+      });
+      if (createResp.code === 0) {
+        statRecord = createResp.data.record;
+        console.log(`区域统计-新建「${region} ${monthKey}」记录行`);
+      } else {
+        console.error('区域统计-新建记录行失败:', createResp.msg);
+        return;
+      }
+    }
+
+    // 6. 更新该行
+    const updateResp = await bitableRequest('patch', `/tables/${CONFIG.TABLE_REGION_STATS}/records/${statRecord.record_id}`, {
+      fields: {
+        '月度巡检条数': monthTotal,
+        '月度合格条数': monthPassed,
+        '月度不合格条数': monthFailed,
+        '月度通过率': monthPassRate,
+        '月度平均分': Math.round(monthAvgScore * 100) / 100,
+        '年度巡检总条数': yearTotal,
+        '更新时间': Date.now()
+      }
+    });
+
+    if (updateResp.code === 0) {
+      console.log(`区域统计-已更新「${region} ${monthKey}」: 月度条数=${monthTotal} 合格=${monthPassed} 通过率=${(monthPassRate * 100).toFixed(1)}% 平均分=${monthAvgScore.toFixed(1)} 年度总条数=${yearTotal}`);
+    } else {
+      console.error('区域统计-更新失败:', updateResp.msg);
+    }
+  } catch (e) {
+    console.error('区域统计-异常:', e.message);
+  }
+}
+
 // ===== API路由 =====
 
 // 健康检查
@@ -174,6 +262,11 @@ app.post('/api/submit', async (req, res) => {
     
     if (resp.code !== 0) {
       return res.status(500).json({ ok: false, error: resp.msg });
+    }
+    
+    // 异步更新区域统计表（不阻塞响应）
+    if (region) {
+      updateRegionStats(region).catch(e => console.error('区域统计更新异常:', e.message));
     }
     
     res.json({

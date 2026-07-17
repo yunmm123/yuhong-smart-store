@@ -9,6 +9,7 @@
     { "key": "FEISHU_APP_SECRET", "value": "${FEISHU_APP_SECRET}", "env": "online" },
     { "key": "BITABLE_APP_TOKEN", "value": "${BITABLE_APP_TOKEN}", "env": "online" },
     { "key": "TABLE_STORE", "value": "${TABLE_STORE}", "env": "online" },
-    { "key": "TABLE_INSPECTION", "value": "${TABLE_INSPECTION}", "env": "online" }
+    { "key": "TABLE_INSPECTION", "value": "${TABLE_INSPECTION}", "env": "online" },
+    { "key": "TABLE_REGION_STATS", "value": "${TABLE_REGION_STATS}", "env": "online" }
   ]
 }
