@@ -272,12 +272,12 @@ tr:nth-child(even) td { background: #fafafa; }
   </table>
 </div>
 
-<h3>1.2 新建第8张表：订单记录表</h3>
+<h3>1.2 新建第9张表：区域年度汇总表（由巡检应用自动更新年度统计数据）</h3>
 
 <p>用于打通「AI推荐 → 下单 → 库存扣减」链路。店员在AI导购推荐后，通过表单视图快速创建订单。</p>
 
 <div class="config-block">
-  <div class="config-label">订单记录表 · 字段设计</div>
+  <div class="config-label">销售记录表 · 字段设计</div>
   <table>
     <tr><th>字段名称</th><th>字段类型</th><th>说明</th></tr>
     <tr><td>订单编号</td><td>自动编号</td><td>系统自动生成，如 DD-0001</td></tr>
@@ -293,7 +293,7 @@ tr:nth-child(even) td { background: #fafafa; }
 </div>
 
 <div class="highlight-box">
-  <b>操作方法：</b>打开多维表格 → 左下角点击 <code>+</code> 新建数据表 → 按上表逐个添加字段 → 右键重命名表为「整改任务表」和「订单记录表」。
+  <b>操作方法：</b>打开多维表格 → 左下角点击 <code>+</code> 新建数据表 → 按上表逐个添加字段 → 右键重命名表为「整改任务表」和「销售记录表」。
 </div>
 
 <!-- ==================== 断点1 ==================== -->
@@ -421,7 +421,7 @@ tr:nth-child(even) td { background: #fafafa; }
 
   <h3>步骤1：创建订单表单视图</h3>
   <ol>
-    <li>在「订单记录表」中，点击左上角视图切换 → <b>+ 添加视图</b> → 选择 <b>表单</b></li>
+    <li>在「销售记录表」中，点击左上角视图切换 → <b>+ 添加视图</b> → 选择 <b>表单</b></li>
     <li>命名为「快速下单表单」</li>
     <li>勾选需要填写的字段：门店编号、客户姓名、产品编号、产品名称、购买数量、订单金额</li>
     <li>设置「订单状态」默认值为「待发货」（在表单设置中固定）</li>
@@ -429,7 +429,7 @@ tr:nth-child(even) td { background: #fafafa; }
   </ol>
 
   <div class="info-box">
-    <b>使用方式：</b>店员在AI导购中获得推荐产品后，直接打开表单链接，填写产品编号、数量、客户信息，30秒即可完成下单。订单自动写入「订单记录表」。
+    <b>使用方式：</b>店员在AI导购中获得推荐产品后，直接打开表单链接，填写产品编号、数量、客户信息，30秒即可完成下单。订单自动写入「销售记录表」。
   </div>
 
   <h3>步骤2：配置自动化 - 订单同步到销售记录表</h3>
@@ -442,7 +442,7 @@ tr:nth-child(even) td { background: #fafafa; }
     </div>
     <div class="config-row">
       <span class="config-key">数据表</span>
-      <span class="config-val">订单记录表</span>
+      <span class="config-val">销售记录表</span>
     </div>
     <div class="config-row">
       <span class="config-key">条件</span>
@@ -490,7 +490,7 @@ tr:nth-child(even) td { background: #fafafa; }
     </div>
     <div class="config-row">
       <span class="config-key">输出到</span>
-      <span class="config-val">订单记录表「购买摘要」字段（需提前新建该文本字段）</span>
+      <span class="config-val">销售记录表「购买摘要」字段（需提前新建该文本字段）</span>
     </div>
   </div>
 
@@ -509,7 +509,7 @@ tr:nth-child(even) td { background: #fafafa; }
     <span class="step-title">订单创建时自动扣减产品库存</span>
   </div>
 
-  <p>当订单记录表中新增一条订单时，自动在产品库存表中找到对应产品，将「当前库存」减去购买数量。</p>
+  <p>当销售记录表中新增一条订单时，自动在产品库存表中找到对应产品，将「当前库存」减去购买数量。</p>
 
   <div class="config-block">
     <div class="config-label">触发条件</div>
@@ -519,7 +519,7 @@ tr:nth-child(even) td { background: #fafafa; }
     </div>
     <div class="config-row">
       <span class="config-key">数据表</span>
-      <span class="config-val">订单记录表</span>
+      <span class="config-val">销售记录表</span>
     </div>
     <div class="config-row">
       <span class="config-key">条件</span>
@@ -720,7 +720,7 @@ tr:nth-child(even) td { background: #fafafa; }
     <td>2</td>
     <td>订单同步销售记录</td>
     <td>添加新记录</td>
-    <td>订单记录表</td>
+    <td>销售记录表</td>
     <td>新增记录→销售记录表 + AI生成摘要</td>
     <td>断点2</td>
   </tr>
@@ -728,7 +728,7 @@ tr:nth-child(even) td { background: #fafafa; }
     <td>3</td>
     <td>库存自动扣减</td>
     <td>添加新记录</td>
-    <td>订单记录表</td>
+    <td>销售记录表</td>
     <td>查找记录→产品库存表 + 修改记录 + 预警消息</td>
     <td>断点3</td>
   </tr>

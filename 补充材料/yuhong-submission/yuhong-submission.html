@@ -202,7 +202,7 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75em; font-wei
     <table>
       <tr><th>飞书AI能力</th><th>成熟度</th><th>本方案对接模块</th><th>对接方式</th></tr>
       <tr><td>Aily智能体</td><td>生产就绪</td><td>AI导购 + AI陈列检测 + AI话术生成 + AI经营分析</td><td>配置1个智能体挂载4个技能，对接多维表格知识库，支持多轮对话与上下文记忆</td></tr>
-      <tr><td>多维表格AI</td><td>生产就绪</td><td>数据中枢 + 自动化流程 + 经营看板</td><td>8张表统一存储；9种触发器+15+种执行动作，零代码配置自动化流程</td></tr>
+      <tr><td>多维表格AI</td><td>生产就绪</td><td>数据中枢 + 自动化流程 + 经营看板</td><td>9张表统一存储；9种触发器+15+种执行动作，零代码配置自动化流程</td></tr>
       <tr><td>妙搭低代码</td><td>生产就绪</td><td>督导巡检模块</td><td>搭建移动端巡检App，6维度100分制打分，结果实时写入多维表格</td></tr>
       <tr><td>Flask分析服务</td><td>自研（已实现）</td><td>门店运营分析 + 渠道管理中枢</td><td>从多维表格读取数据，计算库存健康度/销售趋势，驱动大屏60秒刷新</td></tr>
     </table>
@@ -224,7 +224,7 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75em; font-wei
     <p>妙搭巡检App（移动端6维度打分） · Aily智能体（自然语言问答入口） · 大屏看板（实时经营数据可视化） · 表单下单（30秒快速创建订单）</p>
     <div class="arch-hub">
       <div class="arch-hub-title">飞书多维表格 · 统一数据中枢</div>
-      <div class="arch-hub-desc">门店信息表 · 巡检记录表 · 销售记录表 · 客户信息表 · 产品库存表 · 术语表 · 整改任务表 · 区域月度统计表 —— 8张表共享一个数据源，所有模块读写同一份数据</div>
+      <div class="arch-hub-desc">门店信息表 · 巡检记录表 · 销售记录表 · 客户信息表 · 产品库存表 · 术语表 · 整改任务表 · 区域月度统计表 · 区域年度汇总表 —— 9张表共享一个数据源，所有模块读写同一份数据</div>
     </div>
     <h4>AI能力层</h4>
     <p>AI陈列检测（Aily图像识别输出合规率） · AI导购问答（产品知识+施工方案） · AI话术生成（个性化客户跟进脚本） · AI经营分析（自动生成运营周报）</p>
@@ -267,7 +267,7 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75em; font-wei
   </div>
   <div class="card">
     <h4>模块5 · 渠道管理中枢</h4>
-    <p>汇总全部8张表数据，输出<strong>区域合规排名</strong>、<strong>门店销售排名</strong>、<strong>产品动销分析</strong>、<strong>跨门店库存对比</strong>。大屏看板实时展示，60秒自动刷新。所有数据均来自多维表格真实记录，区域经理打开飞书即可查看全局数据，不再需要层层汇报。</p>
+    <p>汇总全部9张表数据，输出<strong>区域合规排名</strong>、<strong>门店销售排名</strong>、<strong>产品动销分析</strong>、<strong>跨门店库存对比</strong>。大屏看板实时展示，60秒自动刷新。所有数据均来自多维表格真实记录，区域经理打开飞书即可查看全局数据，不再需要层层汇报。</p>
     <div class="planned-section">
       <h4>渠道能力扩展（二期规划）<span class="status-planned">规划中</span></h4>
       <p style="margin-bottom:10px;">在一期已实现的合规看板与渠道洞察基础上，二期围绕"3515计划"507城扩张目标，扩展以下四项渠道核心能力，形成"选址→建店→分单→履约→风控→会员"完整闭环：</p>
@@ -288,11 +288,11 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75em; font-wei
   </div>
   <div class="card card-red">
     <h4>流程2：AI推荐 → 表单下单 → 同步销售记录 + 客户画像</h4>
-    <p><strong>方案：</strong>在订单记录表创建「表单视图」，店员扫码30秒下单 → <strong>触发条件：</strong>订单记录新增 → <strong>自动执行：</strong>① 同步到销售记录表 ② AI生成购买摘要写入客户画像。<strong>效果：</strong>推荐转化率可追踪，从"推荐完就断"到"推荐→下单→跟进"全链路数据可查。</p>
+    <p><strong>方案：</strong>在销售记录表创建「表单视图」，店员扫码30秒下单 → <strong>触发条件：</strong>订单记录新增 → <strong>自动执行：</strong>① 同步到销售记录表 ② AI生成购买摘要写入客户画像。<strong>效果：</strong>推荐转化率可追踪，从"推荐完就断"到"推荐→下单→跟进"全链路数据可查。</p>
   </div>
   <div class="card card-red">
     <h4>流程3：订单 → 自动扣减库存 + 低于安全库存预警</h4>
-    <p><strong>触发条件：</strong>订单记录表新增记录 → <strong>自动执行：</strong>① 查找产品库存表对应产品 ② 当前库存减去购买数量 ③ 若低于安全库存，自动发消息到库存管理群预警。<strong>效果：</strong>库存数据实时准确，超卖风险降为零，库存预警从人工巡检变为自动触发。</p>
+    <p><strong>触发条件：</strong>销售记录表新增记录 → <strong>自动执行：</strong>① 查找产品库存表对应产品 ② 当前库存减去购买数量 ③ 若低于安全库存，自动发消息到库存管理群预警。<strong>效果：</strong>库存数据实时准确，超卖风险降为零，库存预警从人工巡检变为自动触发。</p>
   </div>
   <div class="insight-box">
     <div class="label">完整闭环</div>
@@ -369,13 +369,13 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75em; font-wei
   <div class="card">
     <h4>创新点2：一店一码下单 — 打通推荐到成交全链路</h4>
     <p>每个门店生成专属表单二维码，店员扫码30秒完成下单，订单自动同步到销售记录表并更新客户画像。好想来的闭环止步于"审批→建档"，八马止步于"问答→知识沉淀"，本方案打通了"AI推荐产品→表单下单→自动扣库存→客户跟进→复购预测"的完整转化漏斗，每一步都可量化、可追踪。</p>
-    <div class="landing-note">落地方式：多维表格订单记录表 + 自动化流程 + 销售记录表联动</div>
+    <div class="landing-note">落地方式：多维表格销售记录表 + 自动化流程 + 销售记录表联动</div>
   </div>
 
   <div class="card">
     <h4>创新点3：统一数据中枢 — 三维数据资产沉淀</h4>
-    <p>7张多维表格（门店信息、巡检记录、销售记录、客户信息、产品库存、整改任务、订单记录）共享一个数据源，配合Aily知识库和本地产品JSON库，所有模块读写同一份数据，告别销售在ERP、库存在WMS、巡检在纸质表的三套系统割裂。同时沉淀三个维度：客户资产、产品知识、巡检标准。</p>
-    <div class="landing-note">落地方式：多维表格8张表 + Aily知识库 + 产品知识本地库</div>
+    <p>9张多维表格（门店信息、巡检记录、销售记录、客户信息、产品库存、术语表、整改任务、区域月度统计、区域年度汇总）共享一个数据源，配合Aily知识库和本地产品JSON库，所有模块读写同一份数据，告别销售在ERP、库存在WMS、巡检在纸质表的三套系统割裂。同时沉淀三个维度：客户资产、产品知识、巡检标准。</p>
+    <div class="landing-note">落地方式：多维表格9张表 + Aily知识库 + 产品知识本地库</div>
   </div>
 
   <div class="card">
@@ -475,7 +475,7 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75em; font-wei
   <div class="table-wrap">
     <table>
       <tr><th>阶段</th><th>时间</th><th>状态</th><th>目标</th><th>交付物</th></tr>
-      <tr><td>阶段1 基础搭建</td><td>第1-2周</td><td><span class="status-done">已实现</span></td><td>环境与核心配置</td><td>多维表格8张表、Aily智能体4技能、妙搭巡检App、大屏看板、3条自动化流程</td></tr>
+      <tr><td>阶段1 基础搭建</td><td>第1-2周</td><td><span class="status-done">已实现</span></td><td>环境与核心配置</td><td>多维表格9张表、Aily智能体4技能、妙搭巡检App、大屏看板、3条自动化流程</td></tr>
       <tr><td>阶段2 试点验证</td><td>第3-4周</td><td><span class="status-done">已实现</span></td><td>试点门店跑通闭环</td><td>北京5家门店上线，验证巡检→整改→导购→下单→扣库存闭环</td></tr>
       <tr><td>阶段3 规模推广</td><td>第5-8周</td><td><span class="status-planned">规划中</span></td><td>分批推广全国</td><td>多维表格权限分级、Aily定时运营周报、每日数据推送卡片到区域群</td></tr>
       <tr><td>阶段4 渠道能力扩展</td><td>第9-16周</td><td><span class="status-planned">二期规划</span></td><td>支撑3515计划渠道扩张</td><td>智能分单、渠道拓展管理、履约风险监控、虹哥汇会员整合</td></tr>
