@@ -1126,6 +1126,7 @@ class ChannelManagementModule:
                     "growth": _calc_growth(product_monthly.get(pname, {})),
                     "hot_regions": [],
                     "turnover_days": 0
+                })
 
             # 月度趋势
             sorted_months = sorted(monthly_sales.keys())

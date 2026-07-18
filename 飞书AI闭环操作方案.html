@@ -174,7 +174,7 @@ tr:nth-child(even) td { background: #fafafa; }
 
 <h2><span class="num">0</span>方案总览</h2>
 
-<p>项目当前有5个模块、6张多维表格、1个aily智能体，数据链路基本打通，但存在<b>3个业务断点</b>导致流程无法自动闭环。本方案通过飞书多维表格的<b>自动化流程</b>和<b>工作流</b>功能，<b>零代码</b>补齐这3个断点。</p>
+<p>项目当前有5个模块、9张多维表格、1个aily智能体，数据链路基本打通，但存在<b>3个业务断点</b>导致流程无法自动闭环。本方案通过飞书多维表格的<b>自动化流程</b>和<b>工作流</b>功能，<b>零代码</b>补齐这3个断点。</p>
 
 <div class="arch-diagram">
   <div class="arch-flow">
@@ -187,7 +187,7 @@ tr:nth-child(even) td { background: #fafafa; }
       </div>
       <div class="arch-node hub">
         <div class="arch-node-title">飞书多维表格 · 数据中枢</div>
-        <div class="arch-node-sub">门店表 / 巡检表 / 销售表 / 客户表 / 产品库存表 / 整改任务表(新)</div>
+        <div class="arch-node-sub">门店信息 / 巡检记录 / 产品库存 / 客户信息 / 销售记录 / 术语表 / 整改任务 / 区域月度统计 / 区域年度汇总</div>
       </div>
     </div>
     <div style="position:relative;width:100%;display:flex;justify-content:flex-start;padding-left:120px;">
@@ -252,7 +252,7 @@ tr:nth-child(even) td { background: #fafafa; }
 
 <h2><span class="num">1</span>前置准备</h2>
 
-<h3>1.1 新建第7张表：整改任务表（第8张表：区域月度统计表由巡检应用自动更新）</h3>
+<h3>1.1 整改任务表（第7张表，已部署；第8张表：区域月度统计表由巡检应用自动更新）</h3>
 
 <p>在多维表格中新增一张「整改任务表」，用于自动接收巡检不合格时生成的整改工单。</p>
 
@@ -272,7 +272,7 @@ tr:nth-child(even) td { background: #fafafa; }
   </table>
 </div>
 
-<h3>1.2 新建第9张表：区域年度汇总表（由巡检应用自动更新年度统计数据）</h3>
+<h3>1.2 区域年度汇总表（第9张表，已部署；由巡检应用自动更新年度统计数据）</h3>
 
 <p>用于按区域汇总各区域的全年巡检数据，包括年度巡检总条数、合格总条数、不合格总条数、年度通过率和年度平均分，与区域月度统计表配合实现"月度自动更新+年度汇总展示"的双层统计体系。</p>
 
