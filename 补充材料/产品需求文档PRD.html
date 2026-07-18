@@ -325,7 +325,7 @@
         </thead>
         <tbody>
           <tr><td class="fr-id">FR-01</td><td><span class="mod">门店巡检</span></td><td>移动巡检任务</td><td class="c"><span class="pri p0">P0</span></td><td>店员通过飞书接收巡检任务，到店扫码签到并按检查项逐项执行。</td><td>任务下发至店员飞书IM；签到定位误差≤50m；检查项可逐项拍照记录，完成后自动归档。</td></tr>
-          <tr><td class="fr-id">FR-02</td><td><span class="mod">门店巡检</span></td><td>AI陈列分析整改</td><td class="c"><span class="pri p0">P0</span></td><td>拍照后AI自动识别陈列、价签、卫生等问题并生成整改单。</td><td>识别准确率≥90%；问题分类≤8类；整改单自动派发责任人并跟踪闭环。</td></tr>
+          <tr><td class="fr-id">FR-02</td><td><span class="mod">门店巡检</span></td><td>AI图像识别整改</td><td class="c"><span class="pri p0">P0</span></td><td>拍照后AI自动识别陈列、价签、卫生等问题并生成整改单。</td><td>识别准确率≥90%；问题分类≤8类；整改单自动派发责任人并跟踪闭环。</td></tr>
           <tr><td class="fr-id">FR-03</td><td><span class="mod">AI导购</span></td><td>产品知识问答</td><td class="c"><span class="pri p0">P0</span></td><td>基于雨虹产品知识库的智能问答，支持自然语言提问。</td><td>响应≤3s；Top3召回准确率≥95%；无答案时引导转人工。</td></tr>
           <tr><td class="fr-id">FR-04</td><td><span class="mod">AI导购</span></td><td>施工方案推荐</td><td class="c"><span class="pri p1">P1</span></td><td>根据户型/部位/工艺自动生成防水施工方案与用料清单。</td><td>支持≥6类施工场景；方案可导出PDF；用料量误差≤5%。</td></tr>
           <tr><td class="fr-id">FR-05</td><td><span class="mod">AI导购</span></td><td>客户偏好记忆</td><td class="c"><span class="pri p1">P1</span></td><td>记录并结构化客户画像与历史偏好，辅助复购转化。</td><td>客户标签≥20维；偏好跨会话保留；授权后可被导购引用。</td></tr>
@@ -423,7 +423,7 @@
         </thead>
         <tbody>
           <tr><td>移动巡检任务</td><td>多维表格 + 任务卡片消息 + 审批流</td><td><code>多维表格API</code></td><td>任务以多维表格为数据底座，卡片消息下发到店员，整改走审批流闭环。</td></tr>
-          <tr><td>AI陈列分析整改</td><td>飞书多模态大模型（视觉理解）+ 智能伙伴</td><td><code>智能伙伴</code></td><td>拍照触发视觉模型识别陈列/价签问题，智能伙伴生成整改建议。</td></tr>
+          <tr><td>AI图像识别整改</td><td>飞书多模态大模型（视觉理解）+ 智能伙伴</td><td><code>智能伙伴</code></td><td>拍照触发视觉模型识别陈列/价签问题，智能伙伴生成整改建议。</td></tr>
           <tr><td>产品知识问答</td><td>飞书智能伙伴（知识库 RAG）</td><td><code>智能伙伴</code></td><td>接入雨虹产品手册知识库，RAG 检索生成精准回答。</td></tr>
           <tr><td>施工方案推荐</td><td>智能伙伴 + 文档AI</td><td><code>智能伙伴</code></td><td>智能伙伴按场景生成方案，文档AI排版输出可下载PDF。</td></tr>
           <tr><td>客户偏好记忆</td><td>多维表格AI字段 + 智能伙伴记忆</td><td><code>多维表格AI字段</code></td><td>AI字段自动抽取偏好标签，智能伙伴跨会话持久记忆。</td></tr>
@@ -471,7 +471,7 @@
           <div class="goal">交付 9 项 P0 功能，单店 3 天上线，首批 50 家县域门店试点。</div>
           <ul>
             <li>移动巡检任务</li>
-            <li>AI陈列分析整改</li>
+            <li>AI图像识别整改</li>
             <li>产品知识问答</li>
             <li>建材专业知识库</li>
             <li>销售数据分析</li>

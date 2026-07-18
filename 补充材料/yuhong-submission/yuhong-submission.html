@@ -201,7 +201,7 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75em; font-wei
   <div class="table-wrap">
     <table>
       <tr><th>飞书AI能力</th><th>成熟度</th><th>本方案对接模块</th><th>对接方式</th></tr>
-      <tr><td>Aily智能体</td><td>生产就绪</td><td>AI导购 + AI陈列分析 + AI话术生成 + AI经营分析</td><td>配置1个智能体挂载4个技能，对接多维表格知识库，支持多轮对话与上下文记忆</td></tr>
+      <tr><td>Aily智能体</td><td>生产就绪</td><td>AI导购 + AI陈列检测 + AI话术生成 + AI经营分析</td><td>配置1个智能体挂载4个技能，对接多维表格知识库，支持多轮对话与上下文记忆</td></tr>
       <tr><td>多维表格AI</td><td>生产就绪</td><td>数据中枢 + 自动化流程 + 经营看板</td><td>9张表统一存储；9种触发器+15+种执行动作，零代码配置自动化流程</td></tr>
       <tr><td>妙搭低代码</td><td>生产就绪</td><td>督导巡检模块</td><td>搭建移动端巡检App，6维度100分制打分，结果实时写入多维表格</td></tr>
       <tr><td>Flask分析服务</td><td>自研（已实现）</td><td>门店运营分析 + 渠道管理中枢</td><td>从多维表格读取数据，计算库存健康度/销售趋势，驱动大屏60秒刷新</td></tr>
@@ -227,7 +227,7 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75em; font-wei
       <div class="arch-hub-desc">门店信息表 · 巡检记录表 · 销售记录表 · 客户信息表 · 产品库存表 · 术语表 · 整改任务表 · 区域月度统计表 · 区域年度汇总表 —— 9张表共享一个数据源，所有模块读写同一份数据</div>
     </div>
     <h4>AI能力层</h4>
-    <p>AI陈列分析（Aily智能体输出合规率） · AI导购问答（产品知识+施工方案） · AI话术生成（个性化客户跟进脚本） · AI经营分析（自动生成运营周报）</p>
+    <p>AI陈列检测（Aily图像识别输出合规率） · AI导购问答（产品知识+施工方案） · AI话术生成（个性化客户跟进脚本） · AI经营分析（自动生成运营周报）</p>
     <h4>自动化引擎层</h4>
     <p>巡检→整改（分数&lt;80自动创建任务） · 订单→库存（下单自动扣减库存） · 定时推送（每日数据卡片到群） · 预警通知（库存不足自动告警）</p>
   </div>
@@ -237,7 +237,7 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75em; font-wei
   <div class="table-wrap">
     <table>
       <tr><th>模块</th><th>状态</th><th>飞书能力</th><th>核心功能</th></tr>
-      <tr><td>督导巡检</td><td><span class="status-done">已实现</span></td><td>妙搭App + Aily</td><td>移动端6维度打分、AI陈列分析、≥90优秀≥80合格&lt;80不合格、不合格自动创建整改任务</td></tr>
+      <tr><td>督导巡检</td><td><span class="status-done">已实现</span></td><td>妙搭App + Aily</td><td>移动端6维度打分、AI陈列检测、≥90优秀≥80合格&lt;80不合格、不合格自动创建整改任务</td></tr>
       <tr><td>AI导购</td><td><span class="status-done">已实现</span></td><td>Aily智能体 + 多维表格</td><td>产品知识问答、施工方案推荐、实时库存、表单30秒下单</td></tr>
       <tr><td>门店运营分析</td><td><span class="status-done">已实现</span></td><td>多维表格 + Flask</td><td>库存健康度红黄绿预警、销售趋势、大屏60秒刷新、运营报告</td></tr>
       <tr><td>客户关系管理</td><td><span class="status-done">已实现</span></td><td>Aily + 多维表格</td><td>客户画像自动构建、AI话术生成、复购预测、跟进任务</td></tr>
@@ -247,7 +247,7 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75em; font-wei
 
   <div class="card">
     <h4>模块1 · 督导巡检</h4>
-    <p>督导用<strong>妙搭巡检App</strong>到店打分，6个维度（陈列展示、卫生环境、价签规范、库存管理、服务质量、安全隐患）100分制。AI陈列分析调用Aily智能体，自动输出陈列合规率。结果实时写入多维表格巡检记录表。评分标准：<strong>≥90优秀，≥80合格，&lt;80不合格</strong>，不合格自动创建整改任务并飞书通知店长。</p>
+    <p>督导用<strong>妙搭巡检App</strong>到店打分，6个维度（陈列展示、卫生环境、价签规范、库存管理、服务质量、安全隐患）100分制。AI陈列检测调用Aily智能体，自动输出陈列合规率。结果实时写入多维表格巡检记录表。评分标准：<strong>≥90优秀，≥80合格，&lt;80不合格</strong>，不合格自动创建整改任务并飞书通知店长。</p>
     <div style="margin-top:12px; padding:12px 16px; background:rgba(29,201,129,0.06); border:1px solid rgba(29,201,129,0.2); border-radius:8px;">
       <p style="margin:0 0 6px; font-size:13px; font-weight:600; color:#1DC981;">已验证 · 妙搭与多维表格双向数据联动</p>
       <p style="margin:0; font-size:13px; color:var(--muted);">门店信息表增减门店 → 巡检应用自动更新门店列表；应用提交数据 → 自动写入巡检记录表；删除记录表数据 → 应用同步更新；督导仅需选择门店，应用自动从门店信息表提取区域、门店编号补全巡检记录。应用地址：https://dcniaqwtmoca.feishuapp.com/app/app_17a5vu5md7x</p>
@@ -453,7 +453,7 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75em; font-wei
         <td>人工+系统辅助</td>
         <td>营运经理巡店</td>
         <td>AI 24h逐帧巡检<sup><a href="#cite-9">[9]</a></sup></td>
-        <td>妙搭App+AI陈列分析+自动整改</td>
+        <td>妙搭App+AI陈列检测+自动整改</td>
       </tr>
       <tr>
         <td><strong>数据推送</strong></td>
@@ -466,7 +466,7 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75em; font-wei
         <td><strong>AI能力</strong></td>
         <td>Aily智能问答+知识库</td>
         <td>Aily"数字旺财"智能体<sup><a href="#cite-8">[8]</a></sup></td>
-        <td>Aily智能体巡检分析</td>
+        <td>Aily图像识别巡检</td>
         <td>Aily四场景（检测+导购+话术+分析）</td>
       </tr>
       <tr>
@@ -552,7 +552,7 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75em; font-wei
       <tr><th>页面</th><th>功能</th><th>访问地址</th></tr>
       <tr><td>首页仪表盘</td><td>数据概览、五大模块入口、销售趋势图、AI洞察报告</td><td>/</td></tr>
       <tr><td>大屏看板</td><td>区域/门店排名、AI经营洞察、库存看板、60秒刷新</td><td>/bigscreen</td></tr>
-      <tr><td>督导巡检</td><td>巡检表单填写、AI陈列分析、历史记录、整改任务</td><td>/inspection</td></tr>
+      <tr><td>督导巡检</td><td>巡检表单填写、AI陈列检测、历史记录、整改任务</td><td>/inspection</td></tr>
       <tr><td>AI导购</td><td>智能问答对话、产品搜索、实时库存、表单下单</td><td>/guide</td></tr>
       <tr><td>渠道管理中枢</td><td>合规看板、渠道洞察、库存看板、数据来源标注</td><td>/channel</td></tr>
     </table>
