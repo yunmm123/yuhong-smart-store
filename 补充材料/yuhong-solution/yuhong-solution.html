@@ -381,7 +381,7 @@ sup a:hover { text-decoration: underline; }
     <div class="module-block">
       <div class="module-num">1</div>
       <div class="module-content">
-        <h3>督导巡检模块<span class="module-status done">已实现</span></h3>
+        <h3>督导巡检模块<span class="module-status done">已部署</span></h3>
         <p>督导用<strong>妙搭巡检App</strong>到店打分，6个维度（陈列展示、卫生环境、价签规范、库存管理、服务质量、安全隐患）100分制。AI陈列检测调用Aily智能体，自动输出陈列合规率。结果实时写入多维表格巡检记录表。</p>
         <div class="module-features">
           <div class="module-feature"><strong>移动端填报：</strong>妙搭App，3分钟完成一家店</div>
@@ -425,13 +425,13 @@ sup a:hover { text-decoration: underline; }
     <div class="module-block">
       <div class="module-num">2</div>
       <div class="module-content">
-        <h3>AI导购模块<span class="module-status done">已实现</span></h3>
-        <p>店员用AI导购搜索产品、咨询施工方案。系统从<strong>产品库存表</strong>读取实时库存和价格，<strong>Aily智能体</strong>回答专业问题（如"卫生间防水怎么做"、"SBS卷材和聚氨酯涂料怎么选"），推荐合适产品。推荐后通过表单30秒下单，订单自动同步到销售记录表。</p>
+        <h3>AI导购模块<span class="module-status done">已部署</span></h3>
+        <p>店员用AI导购搜索产品、咨询施工方案。系统从<strong>产品库存表</strong>读取实时库存和价格，<strong>Aily智能体</strong>回答专业问题（如"卫生间防水怎么做"、"SBS卷材和聚氨酯涂料怎么选"），推荐合适产品。后续可通过表单30秒下单（方案设计），订单自动同步到销售记录表。</p>
         <div class="module-features">
           <div class="module-feature"><strong>产品知识库：</strong>覆盖防水卷材/涂料/砂浆等全品类</div>
           <div class="module-feature"><strong>实时库存：</strong>推荐时展示真实库存状态</div>
           <div class="module-feature"><strong>施工方案：</strong>Aily根据场景推荐施工工艺</div>
-          <div class="module-feature"><strong>一键下单：</strong>表单视图30秒创建订单</div>
+          <div class="module-feature"><strong>一键下单：</strong>表单视图30秒创建订单（方案设计）</div>
         </div>
         <div class="callout">
           <div class="callout-label">对标八马茶业</div>
@@ -444,8 +444,8 @@ sup a:hover { text-decoration: underline; }
     <div class="module-block">
       <div class="module-num">3</div>
       <div class="module-content">
-        <h3>门店运营分析模块<span class="module-status done">已实现</span></h3>
-        <p>Flask后端从多维表格读取销售、库存、巡检数据，自动生成运营分析报告。包括库存健康度评分（安全库存预警）、客流分析（基于销售频次推导）、动销排名等。<strong>大屏看板</strong>60秒自动刷新，区域经理随时掌握全局。</p>
+        <h3>门店运营分析模块<span class="module-status doing">原型已验证</span></h3>
+        <p>Flask后端从多维表格读取销售、库存、巡检数据，自动生成运营分析报告（Demo原型）。包括库存健康度评分（安全库存预警）、客流分析（基于销售频次推导）、动销排名等。<strong>大屏看板</strong>60秒自动刷新，区域经理随时掌握全局。</p>
         <div class="module-features">
           <div class="module-feature"><strong>库存健康度：</strong>红/黄/绿三级预警</div>
           <div class="module-feature"><strong>销售趋势：</strong>按日/周/月自动统计</div>
@@ -459,8 +459,8 @@ sup a:hover { text-decoration: underline; }
     <div class="module-block">
       <div class="module-num">4</div>
       <div class="module-content">
-        <h3>客户关系管理模块<span class="module-status done">已实现</span></h3>
-        <p>从<strong>客户信息表</strong>+<strong>销售记录表</strong>自动构建客户画像（消费偏好、购买频次、流失风险），<strong>Aily生成个性化跟进话术</strong>，预测下次复购时间。将客户资产从店员个人微信沉淀到企业数据中台。</p>
+        <h3>客户关系管理模块<span class="module-status doing">原型已验证</span></h3>
+        <p>从<strong>客户信息表</strong>+<strong>销售记录表</strong>自动构建客户画像（消费偏好、购买频次、流失风险），<strong>Aily生成个性化跟进话术</strong>，预测下次复购时间（Demo原型）。将客户资产从店员个人微信沉淀到企业数据中台。</p>
         <div class="module-features">
           <div class="module-feature"><strong>客户画像：</strong>自动标签（高/中/低意向）</div>
           <div class="module-feature"><strong>AI话术：</strong>Aily生成个性化跟进脚本</div>
@@ -474,8 +474,8 @@ sup a:hover { text-decoration: underline; }
     <div class="module-block">
       <div class="module-num">5</div>
       <div class="module-content">
-        <h3>渠道管理中枢模块<span class="module-status done">已实现</span> <span class="module-status planned">二期扩展中</span></h3>
-        <p>汇总全部9张表数据，输出<strong>区域合规排名</strong>、<strong>门店销售排名</strong>、<strong>产品动销分析</strong>。大屏看板实时展示，60秒自动刷新。区域经理打开飞书即可查看全局数据，不再需要层层汇报。二期规划新增智能分单、渠道拓展、履约监控三项能力，支撑3515计划507城扩张。</p>
+        <h3>渠道管理中枢模块<span class="module-status doing">原型已验证</span> <span class="module-status planned">二期扩展中</span></h3>
+        <p>汇总全部9张表数据，输出<strong>区域合规排名</strong>、<strong>门店销售排名</strong>、<strong>产品动销分析</strong>（Demo原型）。大屏看板实时展示，60秒自动刷新。区域经理打开飞书即可查看全局数据，不再需要层层汇报。二期规划新增智能分单、渠道拓展、履约监控三项能力，支撑3515计划507城扩张。</p>
         <div class="module-features">
           <div class="module-feature"><strong>合规看板：</strong>按区域/门店排名</div>
           <div class="module-feature"><strong>渠道洞察：</strong>区域/产品双维度分析</div>
@@ -502,7 +502,7 @@ sup a:hover { text-decoration: underline; }
   <div class="container">
     <div class="section-label">第四章</div>
     <h2 class="section-title">三条自动化流程 · 补齐业务断点形成闭环</h2>
-    <p class="section-desc">通过飞书多维表格的「自动化流程」功能，零代码配置三条自动化链路，将原本断裂的业务环节串联起来，实现"巡检→整改→导购→下单→扣库存→客户跟进→经营分析"的完整闭环。这三条流程全部使用飞书原生功能，配置后自动运行，无需运维。</p>
+    <p class="section-desc">通过飞书多维表格的「自动化流程」功能，零代码配置三条自动化链路，将原本断裂的业务环节串联起来，实现"巡检→整改→导购→下单→扣库存→客户跟进→经营分析"的完整闭环。以下三条流程均基于飞书原生能力设计，入围后可快速配置上线，无需额外开发。</p>
 
     <div class="flow-diagram">
       <div class="flow-step">
@@ -535,7 +535,7 @@ sup a:hover { text-decoration: underline; }
       <div class="flow-step">
         <div class="flow-dot success">✓</div>
         <div class="flow-content">
-          <h4>完整闭环<span class="flow-tag auto">已打通</span></h4>
+          <h4>完整闭环<span class="flow-tag auto">方案设计</span></h4>
           <p>巡检发现问题 → 自动创建整改任务 → 导购推荐产品 → 表单下单成交 → 自动扣减库存 → 客户画像更新 → AI生成跟进话术 → 经营分析看板实时更新</p>
         </div>
       </div>
@@ -635,7 +635,7 @@ sup a:hover { text-decoration: underline; }
       <div class="innov-card">
         <div class="innov-badge">创新 01</div>
         <h4>全链路转化追踪</h4>
-        <p>好想来的闭环止步于"审批→建档"，八马止步于"问答→知识沉淀"。本方案打通了从"AI推荐产品→表单下单→自动扣库存→客户跟进→复购预测"的完整转化漏斗，每一步都可量化、可追踪、可优化。</p>
+        <p>好想来的闭环止步于"审批→建档"，八马止步于"问答→知识沉淀"。本方案设计了从"AI推荐产品→表单下单→自动扣库存→客户跟进→复购预测"的完整转化漏斗（方案设计，基于飞书原生能力可实现），每一步都可量化、可追踪。</p>
         <div class="innov-beyond">落地方式：多维表格销售记录表 + 自动化流程 + 销售记录表联动</div>
       </div>
 
@@ -689,30 +689,30 @@ sup a:hover { text-decoration: underline; }
   <div class="container">
     <div class="section-label">第七章</div>
     <h2 class="section-title">四阶段落地路线图</h2>
-    <p class="section-desc">方案按"先跑通→再深化→后扩展→全覆盖"的节奏分四阶段实施。一期（已实现）聚焦核心闭环验证，二期规划扩展渠道管理能力，支撑3515计划507城战略。全部基于飞书原生能力，无需采购额外硬件或软件。</p>
+    <p class="section-desc">方案按"先跑通→再深化→后扩展→全覆盖"的节奏分四阶段实施。一期（原型已验证）聚焦核心闭环验证，二期规划扩展渠道管理能力，支撑3515计划507城战略。全部基于飞书原生能力，无需采购额外硬件或软件。</p>
 
     <div class="roadmap" style="grid-template-columns: repeat(2, 1fr);">
       <div class="roadmap-phase">
         <div class="roadmap-phase-num">01</div>
-        <h4>基础搭建 <span style="font-size:12px;color:#1DC981;font-weight:600;">已实现</span></h4>
+        <h4>基础搭建 <span style="font-size:12px;color:#1DC981;font-weight:600;">部分已部署</span></h4>
         <div class="duration">第1-2周</div>
         <ul>
           <li>多维表格9张表创建+字段配置</li>
           <li>Aily智能体搭建+知识库导入</li>
           <li>妙搭巡检App部署</li>
-          <li>大屏看板上线</li>
-          <li>3条自动化流程配置</li>
+          <li>大屏看板原型搭建</li>
+          <li>3条自动化流程（方案设计）</li>
         </ul>
       </div>
       <div class="roadmap-phase">
         <div class="roadmap-phase-num">02</div>
-        <h4>试点验证 <span style="font-size:12px;color:#1DC981;font-weight:600;">已实现</span></h4>
+        <h4>试点验证 <span style="font-size:12px;color:#EFAA17;font-weight:600;">原型验证</span></h4>
         <div class="duration">第3-4周</div>
         <ul>
-          <li>选取北京5家门店试点</li>
+          <li>Flask Demo原型验证闭环逻辑</li>
           <li>督导使用妙搭App巡检</li>
-          <li>店员使用AI导购+表单下单</li>
-          <li>验证3条自动化流程闭环</li>
+          <li>店员使用AI导购</li>
+          <li>验证3条自动化流程设计</li>
           <li>收集反馈迭代优化</li>
         </ul>
       </div>
@@ -749,10 +749,10 @@ sup a:hover { text-decoration: underline; }
   <div class="container">
     <div class="section-label">第八章</div>
     <h2 class="section-title">预期价值</h2>
-    <p class="section-desc">参考标杆案例的已验证量化指标，结合东方雨虹渠道规模，预估方案落地后的核心价值。已实现指标基于当前系统真实数据，规划指标对标行业基准。</p>
+    <p class="section-desc">参考标杆案例的已验证量化指标，结合东方雨虹渠道规模，预估方案落地后的核心价值。原型验证指标基于当前Demo原型真实数据，规划指标对标行业基准。</p>
 
     <div class="callout" style="margin-bottom: 24px;">
-      <div class="callout-label">已实现效果（一期）</div>
+      <div class="callout-label">原型验证效果（一期）</div>
     </div>
     <div class="metrics-row">
       <div class="metric-card">
