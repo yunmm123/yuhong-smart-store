@@ -221,7 +221,7 @@ class CustomerRelationModule:
                 return "中"
             else:
                 return "低"
-        except:
+        except Exception:
             return "未知"
 
     def _predict_next_purchase(self, data):

@@ -1320,7 +1320,7 @@ class ChannelManagementModule:
                 monthly_sales = _val("月销售额元", 0)
                 if isinstance(monthly_sales, str):
                     try: monthly_sales = float(monthly_sales)
-                    except: monthly_sales = 0
+                    except (ValueError, TypeError): monthly_sales = 0
 
                 stores.append({
                     "store_id": store_id,
