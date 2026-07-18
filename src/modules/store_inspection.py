@@ -110,7 +110,7 @@ class StoreInspectionModule:
 
     def ai_detect_display_compliance(self, image_description):
         """
-        AI图像识别检测陈列合规性。
+        AI陈列分析检测陈列合规性。
         优先通过飞书aily智能体分析图片描述，未配置aily或调用失败时降级为模拟检测。
         """
         # 优先使用aily智能体分析

@@ -111,7 +111,7 @@ def api_inspection_history(store_id):
 
 @app.route('/api/inspection/ai-detect', methods=['POST'])
 def api_inspection_ai_detect():
-    """AI陈列检测"""
+    """AI陈列分析"""
     data = request.json
     result = inspection_module.ai_detect_display_compliance(data.get('image_description', ''))
     return jsonify({"success": True, "data": result})
