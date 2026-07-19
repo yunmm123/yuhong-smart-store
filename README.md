@@ -87,7 +87,7 @@
 | ✅ 多维表格 | 9表54+条记录(门店/巡检/客户/销售/产品库存/术语表/整改任务/区域月度统计/区域年度汇总) + 8个公式字段 | [打开](https://larkcommunity.feishu.cn/base/R7v9bKHNdaBsDFsDdvzcXICOnWh) |
 | ✅ 妙搭巡检应用 | 移动端6维度巡检评分+历史记录+统计看板，数据实时同步多维表格 | [打开](https://dcniaqwtmoca.feishuapp.com/app/app_17a5vu5md7x) |
 | ✅ 妙搭整改管家 | 店长接收整改任务+AI整改建议+提交整改结果，按手机号自动隔离门店数据 | [打开](https://dcniaqwtmoca.feishuapp.com/app/app_17a7r9xk9k3) |
-| ✅ 复查闭环看板 | 店长整改≠预警结束，专人实地复查→看板销警，四阶段闭环防止虚假整改 | [打开](https://larkcommunity.feishu.cn/share/base/dashboard/shrcntqXs0XhdJJ4mSNWSeGs3sh) |
+| ✅ 复查闭环看板 | 店长整改≠预警结束，专人实地复查→看板销警，四阶段闭环防止虚假整改 | [打开](https://larkcommunity.feishu.cn/wiki/IRU1wjn0zi6tzmkaRO5cfvfbnff) |
 | ✅ Flask全模块对接 | 5大模块全部对接Bitable真实数据 + aily智能体集成 + 大屏API调用 + 37测试通过 | [源码](src/) |
 
 ## 商业价值 · 3515战略对齐
