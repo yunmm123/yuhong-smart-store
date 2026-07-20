@@ -8,7 +8,7 @@
 import json
 import os
 import re
-from datetime import datetime, timedelta
+from datetime import datetime
 import random
 
 
@@ -239,9 +239,18 @@ class StoreInspectionModule:
         trend = "上升" if len(recent_scores) >= 2 and recent_scores[0] > recent_scores[-1] else "下降" if len(recent_scores) >= 2 and recent_scores[0] < recent_scores[-1] else "平稳"
 
         # 薄弱项分析
+        item_record_keys = {
+            "display": "陈列标准得分",
+            "cleanliness": "卫生状况得分",
+            "pricing": "价签物料得分",
+            "inventory": "库存样品得分",
+            "service": "服务规范得分",
+            "safety": "安全合规得分"
+        }
         category_scores = {}
         for item in INSPECTION_ITEMS:
-            scores = [r.get(f"{item['name'].replace('标准','').replace('状况','').strip()}得分", 0) for r in history]
+            record_key = item_record_keys.get(item["id"], f"{item['name']}得分")
+            scores = [r.get(record_key, 0) for r in history]
             if scores:
                 category_scores[item["name"]] = sum(scores) / len(scores)
 

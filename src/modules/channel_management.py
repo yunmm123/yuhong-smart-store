@@ -13,10 +13,8 @@
 AI能力：aily智能体（渠道经营分析对话）+ 多维表格AI字段
 """
 
-import json
 import os
 from datetime import datetime, timedelta
-import random
 
 
 def _val(fields, key, default=""):
@@ -148,6 +146,7 @@ class ChannelManagementModule:
                 })
 
             # 整改追踪 - 从整改任务表读取真实状态
+            total_issues = total_stores - total_passed
             rectification_tracking = {
                 "total_issues": total_issues,
                 "resolved": 0,

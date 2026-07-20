@@ -5,8 +5,6 @@
 对接飞书多维表格AI（数据分析工作流）。
 """
 
-import json
-import os
 import random
 from datetime import datetime, timedelta
 

@@ -39,6 +39,9 @@ class Config:
     # 是否使用模拟数据（未配置API凭证时自动启用）
     USE_MOCK_DATA = True
 
+    # 调试模式（生产环境应为False）
+    DEBUG = os.environ.get('FLASK_DEBUG', 'False').lower() in ('true', '1', 'yes')
+
     # 模拟模式开关检查
     @classmethod
     def check_mock_mode(cls):

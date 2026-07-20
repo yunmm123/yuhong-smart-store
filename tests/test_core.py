@@ -67,7 +67,7 @@ class TestStoreInspection:
         result = self.module.submit_inspection("S003", "王督导", scores)
         assert result["总分"] == 52
         assert result["巡检结果"] == "不合格"
-        assert result["是否通过"] == "不通过"
+        assert result["是否通过"] == "未通过"
 
     def test_inspection_record_fields(self):
         """巡检记录应包含所有必要字段"""

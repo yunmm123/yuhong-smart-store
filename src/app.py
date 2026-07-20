@@ -7,7 +7,6 @@
 
 import os
 import sys
-import json
 
 from flask import Flask, render_template, jsonify, request
 
@@ -42,7 +41,7 @@ if not Config.USE_MOCK_DATA:
     from api.feishu_aily import FeishuAilyClient
     bitable_client = FeishuBitableClient(Config.FEISHU_APP_ID, Config.FEISHU_APP_SECRET, Config.BITABLE_APP_TOKEN)
     if Config.AILY_APP_ID and Config.AILY_APP_SECRET:
-        aily_client = FeishuAilyClient(Config.AILY_APP_ID, Config.AILY_APP_SECRET, Config.AILY_APP_ID)
+        aily_client = FeishuAilyClient(Config.AILY_APP_ID, Config.AILY_APP_SECRET, Config.AILY_AGENT_ID)
         print("[INFO] aily智能体客户端已初始化")
     else:
         print("[INFO] 未配置aily凭证，AI对话功能将使用本地模式")
@@ -267,4 +266,4 @@ if __name__ == '__main__':
     print(f"  访问地址: http://localhost:5000")
     print("=" * 50)
 
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=Config.DEBUG)
